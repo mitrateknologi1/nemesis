@@ -16,7 +16,7 @@ class PerencanaanKeongController extends Controller
      */
     public function index()
     {
-        return view('dashboard/pages/intervensi/perencanaan/keong/index');
+        return view('dashboard.pages.intervensi.perencanaan.keong.index');
     }
 
     /**

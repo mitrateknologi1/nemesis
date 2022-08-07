@@ -145,6 +145,7 @@
     <!-- Atlantis JS -->
     <script src="{{ asset('assets/dashboard') }}/js/atlantis.min.js"></script>
 
+
     <script>
         Circles.create({
             id: 'circles-1',
@@ -239,6 +240,9 @@
             fillColor: 'rgba(255, 165, 52, .14)'
         });
     </script>
+
+    @stack('scripts')
+
 </body>
 
 </html>

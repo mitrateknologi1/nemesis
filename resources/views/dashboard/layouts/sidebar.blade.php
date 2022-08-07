@@ -39,8 +39,8 @@
                  </div>
              </div>
              <ul class="nav nav-primary">
-                 <li class="nav-item active">
-                     <a data-toggle="collapse" href="#dashboard" class="collapsed" aria-expanded="false">
+                 <li class="nav-item" id="nav-dashboard">
+                     <a href="{{ url('/') }}">
                          <i class="fas fa-home"></i>
                          <p>Dashboard</p>
                      </a>
@@ -51,7 +51,7 @@
                      </span>
                      <h4 class="text-section">Intervensi</h4>
                  </li>
-                 <li class="nav-item">
+                 <li class="nav-item" id="nav-perencanaan">
                      <a data-toggle="collapse" href="#perencanaan">
                          <i class="fas fa-layer-group"></i>
                          <p>Perencanaan</p>
@@ -59,17 +59,17 @@
                      </a>
                      <div class="collapse" id="perencanaan">
                          <ul class="nav nav-collapse">
-                             <li>
+                             <li id="li-keong">
                                  <a href="{{ url('rencana-intervensi-keong') }}">
                                      <span class="sub-item">Keong</span>
                                  </a>
                              </li>
-                             <li>
+                             <li id="li-manusia">
                                  <a href="components/buttons.html">
                                      <span class="sub-item">Manusia</span>
                                  </a>
                              </li>
-                             <li>
+                             <li id="li-hewan">
                                  <a href="components/gridsystem.html">
                                      <span class="sub-item">Hewan</span>
                                  </a>

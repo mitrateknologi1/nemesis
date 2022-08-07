@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\intervensi\perencanaan\PerencanaanKeongController;
 use App\Models\Perencanaan;
 use Illuminate\Support\Facades\Route;
@@ -15,8 +16,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('dashboard/pages/dashboard');
-});
+Route::resource('/', DashboardController::class);
 
 Route::resource('rencana-intervensi-keong', PerencanaanKeongController::class);

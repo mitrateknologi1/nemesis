@@ -60,7 +60,7 @@
                      <div class="collapse" id="perencanaan">
                          <ul class="nav nav-collapse">
                              <li>
-                                 <a href="components/avatars.html">
+                                 <a href="{{ url('rencana-intervensi-keong') }}">
                                      <span class="sub-item">Keong</span>
                                  </a>
                              </li>

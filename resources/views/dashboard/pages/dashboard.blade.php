@@ -524,3 +524,9 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $('#nav-dashboard').addClass('active');
+    </script>
+@endpush

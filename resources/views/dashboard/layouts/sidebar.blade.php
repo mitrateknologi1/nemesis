@@ -122,6 +122,31 @@
                          <p>Hewan</p>
                      </a>
                  </li>
+
+                 <li class="nav-section">
+                     <span class="sidebar-mini-icon">
+                         <i class="fa fa-ellipsis-h"></i>
+                     </span>
+                     <h4 class="text-section">Master Data</h4>
+                 </li>
+
+                 <li class="nav-item" id="nav-lokasi">
+                     <a data-toggle="collapse" href="#lokasi">
+                         <i class="far fa-map"></i>
+                         <p>Lokasi</p>
+                         <span class="caret"></span>
+                     </a>
+                     <div class="collapse" id="lokasi">
+                         <ul class="nav nav-collapse">
+                             <li id="li-desa">
+                                 <a href="{{ url('master-data/lokasi/desa') }}">
+                                     <span class="sub-item">Desa</span>
+                                 </a>
+                             </li>
+                         </ul>
+                     </div>
+                 </li>
+
              </ul>
          </div>
      </div>

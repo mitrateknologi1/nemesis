@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class KeongSeeder extends Seeder
+class RealisasiKeongSeeder extends Seeder
 {
     /**
      * Run the database seeds.

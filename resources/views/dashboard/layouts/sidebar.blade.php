@@ -77,7 +77,7 @@
                          </ul>
                      </div>
                  </li>
-                 <li class="nav-item">
+                 <li class="nav-item" id="nav-realisasi">
                      <a data-toggle="collapse" href="#realisasi">
                          <i class="fas fa-layer-group"></i>
                          <p>Realisasi</p>
@@ -85,8 +85,8 @@
                      </a>
                      <div class="collapse" id="realisasi">
                          <ul class="nav nav-collapse">
-                             <li>
-                                 <a href="components/avatars.html">
+                             <li id="li-keong-2">
+                                 <a href="{{ url('realisasi-intervensi-keong') }}">
                                      <span class="sub-item">Keong</span>
                                  </a>
                              </li>
@@ -109,6 +109,12 @@
                          <i class="fa fa-ellipsis-h"></i>
                      </span>
                      <h4 class="text-section">Hasil Realisasi</h4>
+                 </li>
+                 <li class="nav-item">
+                     <a href="projects.html">
+                         <i class="fas fa-map-pin"></i>
+                         <p>Habitat Keong</p>
+                     </a>
                  </li>
                  <li class="nav-item">
                      <a href="projects.html">

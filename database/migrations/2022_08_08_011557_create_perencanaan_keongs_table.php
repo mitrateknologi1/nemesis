@@ -13,8 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('perencanaan_keongs', function (Blueprint $table) {
-            $table->id();
+        Schema::create('perencanaan_keong', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('opd_id');
+            $table->string('sub_indikator');
+            $table->integer('status'); // 0/1/2
             $table->timestamps();
         });
     }
@@ -26,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('perencanaan_keongs');
+        Schema::dropIfExists('perencanaan_keong');
     }
 };

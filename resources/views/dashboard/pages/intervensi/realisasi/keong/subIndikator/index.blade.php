@@ -35,11 +35,12 @@
                                     <thead>
                                         <tr class="text-center fw-bold">
                                             <th>No</th>
+                                            <th>Tanggal Disetujui</th>
                                             <th>Sub Indikator</th>
                                             <th>OPD</th>
-                                            <th>Total Dokumen</th>
+                                            {{-- <th>Total Dokumen</th> --}}
                                             <th>Titik Lokasi</th>
-                                            <th>Presentase (%)</th>
+                                            <th>Persentase (%)</th>
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -49,7 +50,7 @@
                                             <td>1</td>
                                             <td>Pembersihan Habitat Keong</td>
                                             <td class="text-center">Dinas Kebersihan</td>
-                                            <td class="text-center">7</td>
+                                            {{-- <td class="text-center">7</td> --}}
                                             <td class="text-center">8</td>
                                             <td class="text-center"><span
                                                     class="badge font-weight-bold badge-count">100</span></td>
@@ -76,7 +77,7 @@
                                             <td>2</td>
                                             <td>Pemusnahan Keong</td>
                                             <td class="text-center">Dinas Kesehatan</td>
-                                            <td class="text-center">3</td>
+                                            {{-- <td class="text-center">3</td> --}}
                                             <td class="text-center">7</td>
                                             <td class="text-center"><span
                                                     class="badge font-weight-bold badge-count">100</span></td>
@@ -95,7 +96,7 @@
                                             <td>3</td>
                                             <td>Penaburan Obat</td>
                                             <td class="text-center">Dinas Kesehatan</td>
-                                            <td class="text-center">0</td>
+                                            {{-- <td class="text-center">0</td> --}}
                                             <td class="text-center">2</td>
                                             <td class="text-center"><span
                                                     class="badge font-weight-bold badge-count">100</span></td>
@@ -114,7 +115,7 @@
                                             <td>4</td>
                                             <td>Penyuluhan Masyarakat</td>
                                             <td class="text-center">Dinas Sosial</td>
-                                            <td class="text-center">3</td>
+                                            {{-- <td class="text-center">3</td> --}}
                                             <td class="text-center">6</td>
                                             <td class="text-center"><span
                                                     class="badge font-weight-bold badge-count">90</span></td>

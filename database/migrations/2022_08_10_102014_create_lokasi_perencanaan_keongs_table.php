@@ -13,8 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('dokumen_perencanaans', function (Blueprint $table) {
-            $table->id();
+        Schema::create('lokasi_perencanaan_keong', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('perencanaan_keong_id');
+            $table->uuid('lokasi_keong_id');
+            $table->integer('status'); // 0/1 = Belum/Selesai
             $table->timestamps();
         });
     }
@@ -26,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dokumen_perencanaans');
+        Schema::dropIfExists('lokasi_perencanaan_keong');
     }
 };

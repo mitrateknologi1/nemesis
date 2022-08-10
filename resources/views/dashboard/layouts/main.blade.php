@@ -32,8 +32,135 @@
     <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/css/atlantis.css">
 
-    <!-- CSS Just for demo purpose, don't include it in your project -->
-    <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/css/demo.css">
+    <style>
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100000;
+            width: 100%;
+            height: 100%;
+            display: none;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .cv-spinner {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px #ddd solid;
+            border-top: 4px #2e93e6 solid;
+            border-radius: 50%;
+            animation: sp-anime 0.8s infinite linear;
+        }
+
+        @keyframes sp-anime {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media screen and (max-width:600px) {
+            .dataTables_filter {
+                margin-top: 10px;
+            }
+        }
+
+        .dataTables_filter {
+            display: inline !important;
+            float: right !important;
+        }
+
+        .dataTables_filter.col-sm {
+            margin-top: 10px;
+        }
+
+        .dt-buttons {
+            display: inline !important;
+
+            margin-left: 10px !important;
+            float: left !important;
+            ;
+
+        }
+
+        .dt-button-collection {
+            margin-top: 10px !important;
+            margin-bottom: 10px !important;
+        }
+
+        .buttons-columnVisibility {
+            margin-bottom: 5px;
+            background-color: rgba(var(--danger-rgb), 0.15);
+            color: var(--danger-color);
+            border-color: transparent;
+            display: inline-block;
+            font-weight: 400;
+            line-height: 1.5;
+            ont-size: 14px;
+            border-radius: 2rem;
+            padding: .25rem .5rem;
+            text-align: center;
+            text-decoration: none;
+            vertical-align: middle;
+            user-select: none;
+            border: 0.1px solid grey;
+            transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        }
+
+        .buttons-columnVisibility:hover {
+            background-color: rgba(var(--primary-rgb), 0.15);
+            color: var(--primary-color);
+            border: 0.1px solid transparent;
+        }
+
+        .dt-button-collection .active {
+            margin-bottom: 5px;
+            background-color: rgba(var(--primary-rgb), 0.15);
+            color: var(--primary-color);
+            border-color: transparent;
+            display: inline-block;
+            font-weight: 400;
+            line-height: 1.5;
+            ont-size: 14px;
+            border-radius: 2rem;
+            padding: .25rem .5rem;
+            text-align: center;
+            text-decoration: none;
+            vertical-align: middle;
+            user-select: none;
+            border: 1px solid transparent;
+            border-top-color: transparent;
+            border-right-color: transparent;
+            border-bottom-color: transparent;
+            border-left-color: transparent;
+            transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        }
+
+        .dataTables_length {
+            display: inline !important;
+            margin-bottom: 5px !important;
+            float: left;
+        }
+
+        .paginate_button {
+            font-size: 12px !important;
+        }
+
+        .dataTables_paginate {
+            margin-top: 10px !important;
+        }
+
+        .btn:focus {
+            color: white
+        }
+    </style>
 </head>
 
 <body>
@@ -83,6 +210,8 @@
 
     <!-- Moment JS -->
     <script src="{{ asset('assets/dashboard') }}/js/plugin/moment/moment.min.js"></script>
+    <script src="{{ asset('assets/dashboard') }}/js/plugin/moment/moment-with-locales.min.js"></script>
+
 
     <!-- Chart JS -->
     <script src="{{ asset('assets/dashboard') }}/js/plugin/chart.js/chart.min.js"></script>
@@ -95,6 +224,13 @@
 
     <!-- Datatables -->
     <script src="{{ asset('assets/dashboard') }}/js/plugin/datatables/datatables.min.js"></script>
+
+    {{-- DataTables Extensions --}}
+    <script src="{{ asset('assets/dashboard') }}/js/plugin/datatables/dataTables.buttons.min.js"></script>
+    <script src="{{ asset('assets/dashboard') }}/js/plugin/datatables/jszip.min.js"></script>
+    <script src="{{ asset('assets/dashboard') }}/js/plugin/datatables/buttons.html5.min.js"></script>
+    <script src="{{ asset('assets/dashboard') }}/js/plugin/datatables/buttons.print.min.js"></script>
+    <script src="{{ asset('assets/dashboard') }}/js/plugin/datatables/buttons.colVis.min.js"></script>
 
     <!-- Bootstrap Notify -->
     <script src="{{ asset('assets/dashboard') }}/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
@@ -146,99 +282,18 @@
     <script src="{{ asset('assets/dashboard') }}/js/atlantis.min.js"></script>
 
 
+
+
     <script>
-        Circles.create({
-            id: 'circles-1',
-            radius: 45,
-            value: 60,
-            maxValue: 100,
-            width: 7,
-            text: 5,
-            colors: ['#f1f1f1', '#FF9E27'],
-            duration: 400,
-            wrpClass: 'circles-wrp',
-            textClass: 'circles-text',
-            styleWrapper: true,
-            styleText: true
+        $(function() {
+            moment.locale('id');
+            $('.tanggal').mask('00-00-0000');
+            $('.rupiah').mask('000.000.000.000.000', {
+                reverse: true
+            })
+            $('.waktu').mask('00:00');
+            $('.angka').mask('00000000000000000000');
         })
-
-        Circles.create({
-            id: 'circles-2',
-            radius: 45,
-            value: 70,
-            maxValue: 100,
-            width: 7,
-            text: 36,
-            colors: ['#f1f1f1', '#2BB930'],
-            duration: 400,
-            wrpClass: 'circles-wrp',
-            textClass: 'circles-text',
-            styleWrapper: true,
-            styleText: true
-        })
-
-        Circles.create({
-            id: 'circles-3',
-            radius: 45,
-            value: 40,
-            maxValue: 100,
-            width: 7,
-            text: 12,
-            colors: ['#f1f1f1', '#F25961'],
-            duration: 400,
-            wrpClass: 'circles-wrp',
-            textClass: 'circles-text',
-            styleWrapper: true,
-            styleText: true
-        })
-
-        var totalIncomeChart = document.getElementById('totalIncomeChart').getContext('2d');
-
-        var mytotalIncomeChart = new Chart(totalIncomeChart, {
-            type: 'bar',
-            data: {
-                labels: ["S", "M", "T", "W", "T", "F", "S", "S", "M", "T"],
-                datasets: [{
-                    label: "Total Income",
-                    backgroundColor: '#ff9e27',
-                    borderColor: 'rgb(23, 125, 255)',
-                    data: [6, 4, 9, 5, 4, 6, 4, 3, 8, 10],
-                }],
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                legend: {
-                    display: false,
-                },
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            display: false //this will remove only the label
-                        },
-                        gridLines: {
-                            drawBorder: false,
-                            display: false
-                        }
-                    }],
-                    xAxes: [{
-                        gridLines: {
-                            drawBorder: false,
-                            display: false
-                        }
-                    }]
-                },
-            }
-        });
-
-        $('#lineChart').sparkline([105, 103, 123, 100, 95, 105, 115], {
-            type: 'line',
-            height: '70',
-            width: '100%',
-            lineWidth: '2',
-            lineColor: '#ffa534',
-            fillColor: 'rgba(255, 165, 52, .14)'
-        });
     </script>
 
     @stack('scripts')

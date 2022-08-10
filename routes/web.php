@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\intervensi\perencanaan\PerencanaanKeongController;
+use App\Http\Controllers\intervensi\perencanaan\keong\PerencanaanKeongController;
 use App\Http\Controllers\intervensi\realisasi\keong\RealisasiKeongController;
 use App\Models\Perencanaan;
 use Illuminate\Support\Facades\Route;

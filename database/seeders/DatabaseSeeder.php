@@ -9,21 +9,16 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     *
-     * @return void
-     */
-    public function run()
-    {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-
-        $this->call(OPDSeeder::class);
-        $this->call(PerencanaanKeongSeeder::class);
-    }
+        /**
+         * Seed the application's database.
+         *
+         * @return void
+         */
+        public function run()
+        {
+                $this->call(OPDSeeder::class);
+                $this->call(PerencanaanKeongSeeder::class);
+                $this->call(DesaSeeder::class);
+                $this->call(HewanSeeder::class);
+        }
 }

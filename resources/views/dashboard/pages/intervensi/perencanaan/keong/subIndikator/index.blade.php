@@ -35,16 +35,16 @@
                                     <thead>
                                         <tr class="text-center fw-bold">
                                             <th>No</th>
+                                            <th>Tanggal Pembuatan</th>
                                             <th>Sub Indikator</th>
                                             <th>OPD</th>
-                                            <th>Titik Lokasi</th>
-                                            <th>Total Berkas/File</th>
+                                            <th>Jumlah Titik Lokasi</th>
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+                                        {{-- <tr>
                                             <td>1</td>
                                             <td>Pembersihan Kolam</td>
                                             <td class="text-center">Dinas Kebersihan</td>
@@ -105,7 +105,7 @@
                                                 </div>
 
                                             </td>
-                                        </tr>
+                                        </tr> --}}
                                     </tbody>
                                 </table>
                             </div>
@@ -122,5 +122,70 @@
         $('#nav-perencanaan').addClass('active');
         $('#nav-perencanaan .collapse').addClass('show');
         $('#nav-perencanaan .collapse #li-keong').addClass('active');
+
+        var table = $('#dataTables').DataTable({
+            processing: true,
+            serverSide: true,
+            lengthMenu: [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"]
+            ],
+            ajax: {
+                url: "{{ route('rencana-intervensi-keong.index') }}",
+                // data: function(d) {
+                //     d.lokasiTugas = $('#lokasi-tugas').val();
+                //     d.search = $('input[type="search"]').val();
+                // }
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                    className: 'text-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'created_at',
+                    name: 'created_at',
+                },
+                {
+                    data: 'sub_indikator',
+                    name: 'sub_indikator',
+                },
+                {
+                    data: 'opd',
+                    name: 'opd',
+                },
+                {
+                    data: 'titik_lokasi',
+                    name: 'titik_lokasi',
+                },
+                {
+                    data: 'status',
+                    name: 'status',
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false,
+                    className: 'text-center'
+                },
+
+
+
+            ],
+            columnDefs: [{
+                    targets: [3, 5],
+                    className: 'text-center',
+                },
+                {
+                    targets: [1],
+                    render: function(data) {
+                        return moment(data).format('LL');
+                    }
+                },
+            ],
+        });
     </script>
 @endpush

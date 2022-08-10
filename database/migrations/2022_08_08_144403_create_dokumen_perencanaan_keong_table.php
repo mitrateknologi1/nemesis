@@ -13,8 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('dokumen_realisasis', function (Blueprint $table) {
-            $table->id();
+        Schema::create('dokumen_perencanaan_keong', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('perencanaan_keong_id');
+            $table->text('nama');
+            $table->text('file');
             $table->timestamps();
         });
     }
@@ -26,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dokumen_realisasis');
+        Schema::dropIfExists('dokumen_perencanaan_keong');
     }
 };

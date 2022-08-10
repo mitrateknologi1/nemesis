@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\intervensi\perencanaan;
+namespace App\Http\Controllers\masterData;
 
-use App\Models\Keong;
+use App\Models\LokasiKeong;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreKeongRequest;
-use App\Http\Requests\UpdateKeongRequest;
+use App\Http\Requests\StoreLokasiKeongRequest;
+use App\Http\Requests\UpdateLokasiKeongRequest;
 
-class PerencanaanKeongController extends Controller
+class LokasiKeongController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class PerencanaanKeongController extends Controller
      */
     public function index()
     {
-        return view('dashboard.pages.intervensi.perencanaan.keong.index');
+        //
     }
 
     /**
@@ -32,10 +32,10 @@ class PerencanaanKeongController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreKeongRequest  $request
+     * @param  \App\Http\Requests\StoreLokasiKeongRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreKeongRequest $request)
+    public function store(StoreLokasiKeongRequest $request)
     {
         //
     }
@@ -43,10 +43,10 @@ class PerencanaanKeongController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Keong  $keong
+     * @param  \App\Models\LokasiKeong  $lokasiKeong
      * @return \Illuminate\Http\Response
      */
-    public function show(Keong $keong)
+    public function show(LokasiKeong $lokasiKeong)
     {
         //
     }
@@ -54,10 +54,10 @@ class PerencanaanKeongController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Keong  $keong
+     * @param  \App\Models\LokasiKeong  $lokasiKeong
      * @return \Illuminate\Http\Response
      */
-    public function edit(Keong $keong)
+    public function edit(LokasiKeong $lokasiKeong)
     {
         //
     }
@@ -65,11 +65,11 @@ class PerencanaanKeongController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateKeongRequest  $request
-     * @param  \App\Models\Keong  $keong
+     * @param  \App\Http\Requests\UpdateLokasiKeongRequest  $request
+     * @param  \App\Models\LokasiKeong  $lokasiKeong
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateKeongRequest $request, Keong $keong)
+    public function update(UpdateLokasiKeongRequest $request, LokasiKeong $lokasiKeong)
     {
         //
     }
@@ -77,10 +77,10 @@ class PerencanaanKeongController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Keong  $keong
+     * @param  \App\Models\LokasiKeong  $lokasiKeong
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Keong $keong)
+    public function destroy(LokasiKeong $lokasiKeong)
     {
         //
     }

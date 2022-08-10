@@ -32,9 +32,6 @@
     <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/css/atlantis.css">
 
-    <!-- CSS Just for demo purpose, don't include it in your project -->
-    <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/css/demo.css">
-
     {{-- Leaflet --}}
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
         integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
@@ -42,6 +39,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
     <link rel="stylesheet"
         href="https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css" />
+
     <style>
         #overlay {
             position: fixed;
@@ -74,6 +72,101 @@
             100% {
                 transform: rotate(360deg);
             }
+        }
+
+        @media screen and (max-width:600px) {
+            .dataTables_filter {
+                margin-top: 10px;
+            }
+        }
+
+        .dataTables_filter {
+            display: inline !important;
+            float: right !important;
+        }
+
+        .dataTables_filter.col-sm {
+            margin-top: 10px;
+        }
+
+        .dt-buttons {
+            display: inline !important;
+
+            margin-left: 10px !important;
+            float: left !important;
+            ;
+
+        }
+
+        .dt-button-collection {
+            margin-top: 10px !important;
+            margin-bottom: 10px !important;
+        }
+
+        .buttons-columnVisibility {
+            margin-bottom: 5px;
+            background-color: rgba(var(--danger-rgb), 0.15);
+            color: var(--danger-color);
+            border-color: transparent;
+            display: inline-block;
+            font-weight: 400;
+            line-height: 1.5;
+            ont-size: 14px;
+            border-radius: 2rem;
+            padding: .25rem .5rem;
+            text-align: center;
+            text-decoration: none;
+            vertical-align: middle;
+            user-select: none;
+            border: 0.1px solid grey;
+            transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        }
+
+        .buttons-columnVisibility:hover {
+            background-color: rgba(var(--primary-rgb), 0.15);
+            color: var(--primary-color);
+            border: 0.1px solid transparent;
+        }
+
+        .dt-button-collection .active {
+            margin-bottom: 5px;
+            background-color: rgba(var(--primary-rgb), 0.15);
+            color: var(--primary-color);
+            border-color: transparent;
+            display: inline-block;
+            font-weight: 400;
+            line-height: 1.5;
+            ont-size: 14px;
+            border-radius: 2rem;
+            padding: .25rem .5rem;
+            text-align: center;
+            text-decoration: none;
+            vertical-align: middle;
+            user-select: none;
+            border: 1px solid transparent;
+            border-top-color: transparent;
+            border-right-color: transparent;
+            border-bottom-color: transparent;
+            border-left-color: transparent;
+            transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        }
+
+        .dataTables_length {
+            display: inline !important;
+            margin-bottom: 5px !important;
+            float: left;
+        }
+
+        .paginate_button {
+            font-size: 12px !important;
+        }
+
+        .dataTables_paginate {
+            margin-top: 10px !important;
+        }
+
+        .btn:focus {
+            color: white
         }
     </style>
     @stack('styles')
@@ -132,6 +225,8 @@
 
     <!-- Moment JS -->
     <script src="{{ asset('assets/dashboard') }}/js/plugin/moment/moment.min.js"></script>
+    <script src="{{ asset('assets/dashboard') }}/js/plugin/moment/moment-with-locales.min.js"></script>
+
 
     <!-- Chart JS -->
     <script src="{{ asset('assets/dashboard') }}/js/plugin/chart.js/chart.min.js"></script>
@@ -144,6 +239,13 @@
 
     <!-- Datatables -->
     <script src="{{ asset('assets/dashboard') }}/js/plugin/datatables/datatables.min.js"></script>
+
+    {{-- DataTables Extensions --}}
+    <script src="{{ asset('assets/dashboard') }}/js/plugin/datatables/dataTables.buttons.min.js"></script>
+    <script src="{{ asset('assets/dashboard') }}/js/plugin/datatables/jszip.min.js"></script>
+    <script src="{{ asset('assets/dashboard') }}/js/plugin/datatables/buttons.html5.min.js"></script>
+    <script src="{{ asset('assets/dashboard') }}/js/plugin/datatables/buttons.print.min.js"></script>
+    <script src="{{ asset('assets/dashboard') }}/js/plugin/datatables/buttons.colVis.min.js"></script>
 
     <!-- Bootstrap Notify -->
     <script src="{{ asset('assets/dashboard') }}/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
@@ -207,36 +309,38 @@
     <script src="{{ asset('assets/dashboard') }}/js/jquery.mask.js"></script>
 
 
-    <script>
-        Circles.create({
-            id: 'circles-1',
-            radius: 45,
-            value: 60,
-            maxValue: 100,
-            width: 7,
-            text: 5,
-            colors: ['#f1f1f1', '#FF9E27'],
-            duration: 400,
-            wrpClass: 'circles-wrp',
-            textClass: 'circles-text',
-            styleWrapper: true,
-            styleText: true
-        })
 
-        Circles.create({
-            id: 'circles-2',
-            radius: 45,
-            value: 70,
-            maxValue: 100,
-            width: 7,
-            text: 36,
-            colors: ['#f1f1f1', '#2BB930'],
-            duration: 400,
-            wrpClass: 'circles-wrp',
-            textClass: 'circles-text',
-            styleWrapper: true,
-            styleText: true
-        })
+
+    <script>
+        $(function() {
+                moment.locale('id');
+                $('.tanggal').mask('00-00-0000');
+                $('.rupiah').mask('000.000.000.000.000', {
+                    reverse: true
+                })
+                $('.waktu').mask('00:00');
+                $('.angka').mask('00000000000000000000');
+            }) <<
+            <<
+            <<
+            < HEAD ===
+            ===
+            =
+
+            Circles.create({
+                id: 'circles-2',
+                radius: 45,
+                value: 70,
+                maxValue: 100,
+                width: 7,
+                text: 36,
+                colors: ['#f1f1f1', '#2BB930'],
+                duration: 400,
+                wrpClass: 'circles-wrp',
+                textClass: 'circles-text',
+                styleWrapper: true,
+                styleText: true
+            })
 
         Circles.create({
             id: 'circles-3',
@@ -328,7 +432,10 @@
                 ribuan = reverse.match(/\d{1,3}/g);
             ribuan = ribuan.join('.').split('').reverse().join('');
             return ribuan;
-        }
+        } >>>
+        >>>
+        >
+        keong / main
     </script>
 
     @stack('scripts')

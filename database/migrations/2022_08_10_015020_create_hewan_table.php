@@ -13,14 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('desa', function (Blueprint $table) {
+        Schema::create('hewan', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->text('nama');
-            $table->string('luas');
-            $table->json('polygon')->nullable();
-            $table->string('warna_polygon')->nullable();
-            $table->softDeletes();
+            $table->string('nama');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -31,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('desa');
+        Schema::dropIfExists('hewan');
     }
 };

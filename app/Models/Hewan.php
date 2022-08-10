@@ -7,17 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Desa extends Model
+class Hewan extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use TraitUuid;
+    use SoftDeletes;
 
-    protected $table = 'desa';
-    protected $appends = ['koordinatPolygon'];
-
-    public function getKoordinatPolygonAttribute()
-    {
-        return json_decode($this->polygon);
-    }
+    protected $table = 'hewan';
 }

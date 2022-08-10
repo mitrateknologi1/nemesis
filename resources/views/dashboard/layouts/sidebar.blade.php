@@ -136,7 +136,7 @@
                      <h4 class="text-section">Master Data</h4>
                  </li>
 
-                 <li class="nav-item" id="nav-lokasi">
+                 <li class="nav-item" id="nav-master-lokasi">
                      <a data-toggle="collapse" href="#lokasi">
                          <i class="far fa-map"></i>
                          <p>Lokasi</p>
@@ -151,6 +151,18 @@
                              </li>
                          </ul>
                      </div>
+                 </li>
+                 <li class="nav-item" id="nav-master-opd">
+                     <a href="{{ url('master-data/opd') }}">
+                         <i class="fas fa-building"></i>
+                         <p>OPD</p>
+                     </a>
+                 </li>
+                 <li class="nav-item" id="nav-master-hewan">
+                     <a href="{{ url('master-data/hewan') }}">
+                         <i class="fas fa-paw"></i>
+                         <p>Hewan</p>
+                     </a>
                  </li>
 
              </ul>

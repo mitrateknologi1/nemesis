@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(OPDSeeder::class);
         $this->call(DesaSeeder::class);
+        $this->call(HewanSeeder::class);
     }
 }

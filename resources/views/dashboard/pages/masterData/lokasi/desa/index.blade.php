@@ -375,8 +375,8 @@
     </script>
 
     <script>
-        $('#nav-lokasi').addClass('active');
-        $('#nav-lokasi .collapse').addClass('show');
-        $('#nav-lokasi .collapse #li-desa').addClass('active');
+        $('#nav-master-lokasi').addClass('active');
+        $('#nav-master-lokasi .collapse').addClass('show');
+        $('#nav-master-lokasi .collapse #li-desa').addClass('active');
     </script>
 @endpush

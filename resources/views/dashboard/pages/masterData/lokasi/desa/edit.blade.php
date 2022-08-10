@@ -114,37 +114,57 @@
         $('#form-tambah').submit(function(e) {
             e.preventDefault();
             resetError();
-            $.ajax({
-                url: "{{ url('master-data/lokasi/desa' . '/' . $desa->id) }}",
-                type: 'POST',
-                data: $(this).serialize(),
-                success: function(response) {
-                    if (response.status == 'success') {
-                        swal("Berhasil", "Data Berhasil Disimpan", {
-                            icon: "success",
-                            buttons: false,
-                            timer: 1000,
-                        }).then(function() {
-                            window.location.href =
-                                "{{ url('master-data/lokasi/desa') }}";
-                        })
-                    } else {
-                        swal("Periksa Kembali Data Anda", {
-                            buttons: false,
-                            timer: 1500,
-                            icon: "warning",
-                        });
-                        printErrorMsg(response.error);
+            swal({
+                title: 'Apakah Anda Yakin ?',
+                icon: 'warning',
+                text: "Apakah Anda Yakin ?",
+                type: 'warning',
+                buttons: {
+                    confirm: {
+                        text: 'Ya',
+                        className: 'btn btn-success'
+                    },
+                    cancel: {
+                        visible: true,
+                        text: 'Batal',
+                        className: 'btn btn-danger'
                     }
-                },
-                error: function(response) {
-                    swal("Gagal", "Terjadi Kesalahan", {
-                        icon: "error",
-                        buttons: false,
-                        timer: 1000,
-                    });
                 }
-            })
+            }).then((Update) => {
+                if (Update) {
+                    $.ajax({
+                        url: "{{ url('master-data/lokasi/desa' . '/' . $desa->id) }}",
+                        type: 'POST',
+                        data: $(this).serialize(),
+                        success: function(response) {
+                            if (response.status == 'success') {
+                                swal("Berhasil", "Data Berhasil Disimpan", {
+                                    icon: "success",
+                                    buttons: false,
+                                    timer: 1000,
+                                }).then(function() {
+                                    window.location.href =
+                                        "{{ url('master-data/lokasi/desa') }}";
+                                })
+                            } else {
+                                swal("Periksa Kembali Data Anda", {
+                                    buttons: false,
+                                    timer: 1500,
+                                    icon: "warning",
+                                });
+                                printErrorMsg(response.error);
+                            }
+                        },
+                        error: function(response) {
+                            swal("Gagal", "Terjadi Kesalahan", {
+                                icon: "error",
+                                buttons: false,
+                                timer: 1000,
+                            });
+                        }
+                    })
+                }
+            });
         })
 
         $(document).ready(function() {
@@ -485,8 +505,8 @@
     </script>
 
     <script>
-        $('#nav-lokasi').addClass('active');
-        $('#nav-lokasi .collapse').addClass('show');
-        $('#nav-lokasi .collapse #li-desa').addClass('active');
+        $('#nav-master-lokasi').addClass('active');
+        $('#nav-master-lokasi .collapse').addClass('show');
+        $('#nav-master-lokasi .collapse #li-desa').addClass('active');
     </script>
 @endpush

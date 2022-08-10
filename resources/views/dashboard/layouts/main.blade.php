@@ -42,10 +42,50 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
     <link rel="stylesheet"
         href="https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css" />
+    <style>
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100000;
+            width: 100%;
+            height: 100%;
+            display: none;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .cv-spinner {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px #ddd solid;
+            border-top: 4px #2e93e6 solid;
+            border-radius: 50%;
+            animation: sp-anime 0.8s infinite linear;
+        }
+
+        @keyframes sp-anime {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
     @stack('styles')
 </head>
 
 <body>
+    <div id="overlay">
+        <div class="cv-spinner">
+            <span class="spinner"></span>
+        </div>
+    </div>
+
     <div class="wrapper">
         <div class="main-header">
             @include('dashboard.layouts.logoHeader')
@@ -164,6 +204,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
+    <script src="{{ asset('assets/dashboard') }}/js/jquery.mask.js"></script>
 
 
     <script>
@@ -212,44 +253,44 @@
             styleText: true
         })
 
-        var totalIncomeChart = document.getElementById('totalIncomeChart').getContext('2d');
+        // var totalIncomeChart = document.getElementById('totalIncomeChart').getContext('2d');
 
-        var mytotalIncomeChart = new Chart(totalIncomeChart, {
-            type: 'bar',
-            data: {
-                labels: ["S", "M", "T", "W", "T", "F", "S", "S", "M", "T"],
-                datasets: [{
-                    label: "Total Income",
-                    backgroundColor: '#ff9e27',
-                    borderColor: 'rgb(23, 125, 255)',
-                    data: [6, 4, 9, 5, 4, 6, 4, 3, 8, 10],
-                }],
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                legend: {
-                    display: false,
-                },
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            display: false //this will remove only the label
-                        },
-                        gridLines: {
-                            drawBorder: false,
-                            display: false
-                        }
-                    }],
-                    xAxes: [{
-                        gridLines: {
-                            drawBorder: false,
-                            display: false
-                        }
-                    }]
-                },
-            }
-        });
+        // var mytotalIncomeChart = new Chart(totalIncomeChart, {
+        //     type: 'bar',
+        //     data: {
+        //         labels: ["S", "M", "T", "W", "T", "F", "S", "S", "M", "T"],
+        //         datasets: [{
+        //             label: "Total Income",
+        //             backgroundColor: '#ff9e27',
+        //             borderColor: 'rgb(23, 125, 255)',
+        //             data: [6, 4, 9, 5, 4, 6, 4, 3, 8, 10],
+        //         }],
+        //     },
+        //     options: {
+        //         responsive: true,
+        //         maintainAspectRatio: false,
+        //         legend: {
+        //             display: false,
+        //         },
+        //         scales: {
+        //             yAxes: [{
+        //                 ticks: {
+        //                     display: false //this will remove only the label
+        //                 },
+        //                 gridLines: {
+        //                     drawBorder: false,
+        //                     display: false
+        //                 }
+        //             }],
+        //             xAxes: [{
+        //                 gridLines: {
+        //                     drawBorder: false,
+        //                     display: false
+        //                 }
+        //             }]
+        //         },
+        //     }
+        // });
 
         $('#lineChart').sparkline([105, 103, 123, 100, 95, 105, 115], {
             type: 'line',
@@ -259,6 +300,35 @@
             lineColor: '#ffa534',
             fillColor: 'rgba(255, 165, 52, .14)'
         });
+
+
+        var overlay = $('#overlay').hide();
+        $(document)
+            .ajaxStart(function() {
+                overlay.show();
+            })
+            .ajaxStop(function() {
+                overlay.hide();
+            });
+
+        $('.numerik').on('input', function(e) {
+            var val = $(this).val();
+            if (isNaN(val)) {
+                val = val.replace(/[^0-9\.]/g, '');
+            }
+            $(this).val(val);
+        });
+
+        $('.uang').mask('000.000.000.000.000.000.000', {
+            reverse: true
+        });
+
+        function formatRupiah(angka) {
+            var reverse = angka.toString().split('').reverse().join(''),
+                ribuan = reverse.match(/\d{1,3}/g);
+            ribuan = ribuan.join('.').split('').reverse().join('');
+            return ribuan;
+        }
     </script>
 
     @stack('scripts')

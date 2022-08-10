@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\masterData;
 
-use App\Models\OPD;
 use App\Http\Controllers\Controller;
+use App\Models\Hewan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
 
-class OPDController extends Controller
+class HewanController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,7 +19,7 @@ class OPDController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = OPD::orderBy('created_at', 'desc')->get();
+            $data = Hewan::orderBy('created_at', 'desc')->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -30,7 +30,7 @@ class OPDController extends Controller
                 ->make(true);
         }
 
-        return view('dashboard.pages.masterData.opd.index');
+        return view('dashboard.pages.masterData.hewan.index');
     }
 
     /**
@@ -46,7 +46,7 @@ class OPDController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreOPDRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -54,11 +54,11 @@ class OPDController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'nama' => ['required', Rule::unique('opd')->withoutTrashed()],
+                'nama' => ['required', Rule::unique('hewan')->withoutTrashed()],
             ],
             [
-                'nama.required' => 'Nama OPD tidak boleh kosong',
-                'nama.unique' => 'Nama OPD sudah ada',
+                'nama.required' => 'Nama Hewan tidak boleh kosong',
+                'nama.unique' => 'Nama Hewan sudah ada',
             ]
         );
 
@@ -66,9 +66,9 @@ class OPDController extends Controller
             return response()->json(['error' => $validator->errors()]);
         }
 
-        $opd = new OPD();
-        $opd->nama = $request->nama;
-        $opd->save();
+        $hewan = new Hewan();
+        $hewan->nama = $request->nama;
+        $hewan->save();
 
         return response()->json(['status' => 'success']);
     }
@@ -76,10 +76,10 @@ class OPDController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\OPD  $oPD
+     * @param  \App\Models\Hewan  $hewan
      * @return \Illuminate\Http\Response
      */
-    public function show(OPD $opd)
+    public function show(Hewan $hewan)
     {
         //
     }
@@ -87,31 +87,31 @@ class OPDController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\OPD  $oPD
+     * @param  \App\Models\Hewan  $hewan
      * @return \Illuminate\Http\Response
      */
-    public function edit(OPD $opd)
+    public function edit(Hewan $hewan)
     {
-        return response()->json($opd);
+        return response()->json($hewan);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateOPDRequest  $request
-     * @param  \App\Models\OPD  $oPD
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Hewan  $hewan
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, OPD $opd)
+    public function update(Request $request, Hewan $hewan)
     {
         $validator = Validator::make(
             $request->all(),
             [
-                'nama' => ['required', Rule::unique('opd')->ignore($opd->id)->withoutTrashed()],
+                'nama' => ['required', Rule::unique('hewan')->ignore($hewan->id)->withoutTrashed()],
             ],
             [
-                'nama.required' => 'Nama OPD tidak boleh kosong',
-                'nama.unique' => 'Nama OPD sudah ada',
+                'nama.required' => 'Nama Hewan tidak boleh kosong',
+                'nama.unique' => 'Nama Hewan sudah ada',
             ]
         );
 
@@ -119,8 +119,8 @@ class OPDController extends Controller
             return response()->json(['error' => $validator->errors()]);
         }
 
-        $opd->nama = $request->nama;
-        $opd->save();
+        $hewan->nama = $request->nama;
+        $hewan->save();
 
         return response()->json(['status' => 'success']);
     }
@@ -128,12 +128,12 @@ class OPDController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\OPD  $oPD
+     * @param  \App\Models\Hewan  $hewan
      * @return \Illuminate\Http\Response
      */
-    public function destroy(OPD $opd)
+    public function destroy(Hewan $hewan)
     {
-        $opd->delete();
+        $hewan->delete();
 
         return response()->json(['status' => 'success']);
     }

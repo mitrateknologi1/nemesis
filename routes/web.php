@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Route;
 Route::resource('/', DashboardController::class);
 
 Route::resource('rencana-intervensi-keong', PerencanaanKeongController::class);
+Route::resource('realisasi-intervensi-keong', RealisasiKeongController::class);
 
 // Master Data
 // Lokasi

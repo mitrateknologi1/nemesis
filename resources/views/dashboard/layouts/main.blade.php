@@ -39,6 +39,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
     <link rel="stylesheet"
         href="https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css" />
+
     <style>
         #overlay {
             position: fixed;
@@ -73,7 +74,7 @@
             }
         }
 
-        <<<<<<< HEAD @media screen and (max-width:600px) {
+        @media screen and (max-width:600px) {
             .dataTables_filter {
                 margin-top: 10px;
             }
@@ -168,10 +169,7 @@
             color: white
         }
     </style>
-    =======
-    </style>
     @stack('styles')
-    >>>>>>> keong/main
 </head>
 
 <body>
@@ -323,8 +321,11 @@
                 $('.waktu').mask('00:00');
                 $('.angka').mask('00000000000000000000');
             }) <<
-            << << < HEAD ===
-            === =
+            <<
+            <<
+            < HEAD ===
+            ===
+            =
 
             Circles.create({
                 id: 'circles-2',
@@ -432,7 +433,9 @@
             ribuan = ribuan.join('.').split('').reverse().join('');
             return ribuan;
         } >>>
-        >>> > keong / main
+        >>>
+        >
+        keong / main
     </script>
 
     @stack('scripts')

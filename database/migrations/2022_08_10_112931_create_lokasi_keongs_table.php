@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('lokasi_keong', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->bigInteger('desa_id');
+            $table->uuid('desa_id');
             $table->string('nama');
             $table->string('latitude');
             $table->string('longitude');

@@ -187,7 +187,7 @@
         </div>
     </div>
 
-    <div class="wrapper">
+    <div class="wrapper fullheight-side sidebar_minimize">
         <div class="main-header">
             @include('dashboard.layouts.logoHeader')
             @include('dashboard.layouts.navbarHeader')

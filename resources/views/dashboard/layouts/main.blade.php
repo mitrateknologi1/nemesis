@@ -168,6 +168,14 @@
         .btn:focus {
             color: white
         }
+
+        .labelPolygon {
+            background-color: transparent;
+            border-color: transparent;
+            box-shadow: none;
+            z-index: 999;
+            font-weight: bold;
+        }
     </style>
     @stack('styles')
 </head>
@@ -308,10 +316,12 @@
     <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
     <script src="{{ asset('assets/dashboard') }}/js/jquery.mask.js"></script>
 
-
-
-
     <script>
+        $('.select2').select2({
+            placeholder: "- Pilih Salah Satu -",
+            theme: "bootstrap",
+        })
+
         $(function() {
             moment.locale('id');
             $('.tanggal').mask('00-00-0000');
@@ -320,11 +330,6 @@
             })
             $('.waktu').mask('00:00');
             $('.angka').mask('00000000000000000000');
-        })
-
-        $('.select2').select2({
-            placeholder: "- Pilih Salah Satu -",
-            theme: "bootstrap"
         })
 
         Circles.create({
@@ -418,7 +423,7 @@
         $('.numerik').on('input', function(e) {
             var val = $(this).val();
             if (isNaN(val)) {
-                val = val.replace(/[^0-9\.]/g, '');
+                val = val.replace(/[^0-9\.-]/g, '');
             }
             $(this).val(val);
         });
@@ -432,7 +437,8 @@
                 ribuan = reverse.match(/\d{1,3}/g);
             ribuan = ribuan.join('.').split('').reverse().join('');
             return ribuan;
-        }
+        } <<
+        << << < HEAD
 
         function validation(formValidation) {
             $('.error-text').html('');
@@ -469,7 +475,9 @@
                 });
                 e.preventDefault()
             }
-        }
+        } ===
+        === = >>>
+        >>> > keong / main
     </script>
 
     @stack('scripts')

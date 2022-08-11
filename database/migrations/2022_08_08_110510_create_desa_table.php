@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('desa', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->text('nama');
+            $table->string('kode');
             $table->string('luas');
             $table->json('polygon')->nullable();
             $table->string('warna_polygon')->nullable();

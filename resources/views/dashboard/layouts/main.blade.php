@@ -168,6 +168,14 @@
         .btn:focus {
             color: white
         }
+
+        .labelPolygon {
+            background-color: transparent;
+            border-color: transparent;
+            box-shadow: none;
+            z-index: 999;
+            font-weight: bold;
+        }
     </style>
     @stack('styles')
 </head>
@@ -179,7 +187,7 @@
         </div>
     </div>
 
-    <div class="wrapper">
+    <div class="wrapper fullheight-side sidebar_minimize">
         <div class="main-header">
             @include('dashboard.layouts.logoHeader')
             @include('dashboard.layouts.navbarHeader')
@@ -308,39 +316,36 @@
     <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
     <script src="{{ asset('assets/dashboard') }}/js/jquery.mask.js"></script>
 
-
-
-
     <script>
-        $(function() {
-                moment.locale('id');
-                $('.tanggal').mask('00-00-0000');
-                $('.rupiah').mask('000.000.000.000.000', {
-                    reverse: true
-                })
-                $('.waktu').mask('00:00');
-                $('.angka').mask('00000000000000000000');
-            }) <<
-            <<
-            <<
-            < HEAD ===
-            ===
-            =
+        $('.select2').select2({
+            placeholder: "- Pilih Salah Satu -",
+            theme: "bootstrap",
+        })
 
-            Circles.create({
-                id: 'circles-2',
-                radius: 45,
-                value: 70,
-                maxValue: 100,
-                width: 7,
-                text: 36,
-                colors: ['#f1f1f1', '#2BB930'],
-                duration: 400,
-                wrpClass: 'circles-wrp',
-                textClass: 'circles-text',
-                styleWrapper: true,
-                styleText: true
+        $(function() {
+            moment.locale('id');
+            $('.tanggal').mask('00-00-0000');
+            $('.rupiah').mask('000.000.000.000.000', {
+                reverse: true
             })
+            $('.waktu').mask('00:00');
+            $('.angka').mask('00000000000000000000');
+        })
+
+        Circles.create({
+            id: 'circles-2',
+            radius: 45,
+            value: 70,
+            maxValue: 100,
+            width: 7,
+            text: 36,
+            colors: ['#f1f1f1', '#2BB930'],
+            duration: 400,
+            wrpClass: 'circles-wrp',
+            textClass: 'circles-text',
+            styleWrapper: true,
+            styleText: true
+        })
 
         Circles.create({
             id: 'circles-3',
@@ -418,7 +423,7 @@
         $('.numerik').on('input', function(e) {
             var val = $(this).val();
             if (isNaN(val)) {
-                val = val.replace(/[^0-9\.]/g, '');
+                val = val.replace(/[^0-9\.-]/g, '');
             }
             $(this).val(val);
         });
@@ -432,10 +437,7 @@
                 ribuan = reverse.match(/\d{1,3}/g);
             ribuan = ribuan.join('.').split('').reverse().join('');
             return ribuan;
-        } >>>
-        >>>
-        >
-        keong / main
+        }
     </script>
 
     @stack('scripts')

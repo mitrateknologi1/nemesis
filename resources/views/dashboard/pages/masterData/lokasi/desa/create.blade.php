@@ -66,6 +66,18 @@
                                                 ])
                                             @endcomponent
                                         </div>
+                                        <div class="col-12">
+                                            @component('dashboard.components.formElements.input',
+                                                [
+                                                    'label' => 'Kode',
+                                                    'type' => 'text',
+                                                    'id' => 'kode',
+                                                    'name' => 'kode',
+                                                    'wajib' => '<sup class="text-danger">*</sup>',
+                                                    'placeholder' => 'Masukkan Kode',
+                                                ])
+                                            @endcomponent
+                                        </div>
                                         <div class="col-12 my-2">
                                             @component('dashboard.components.formElements.input',
                                                 [
@@ -366,11 +378,17 @@
         var warna = $('#warna').val();
         var center = [-1.3618072, 120.1619337];
 
-        var map = L.map("map").setView(center, 10);
+        var map = L.map("map", {
+            maxBounds: [
+                [-1.511127, 119.9637063],
+                [-1.21458, 120.2912363]
+            ]
+        }).setView(center, 11);
 
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
             attribution: 'Data © <a href="http://osm.org/copyright">OpenStreetMap</a>',
             maxZoom: 18,
+            minZoom: 11
         }).addTo(map);
 
         var drawnItems = new L.FeatureGroup();
@@ -434,6 +452,11 @@
                                     opacity: 1,
                                     fillOpacity: 0.5
                                 })
+                                .bindTooltip(response.data[i].nama + " (" + response.data[i].luas +
+                                    "m<sup>2</sup>) ", {
+                                        permanent: true,
+                                        direction: "center"
+                                    })
                                 .addTo(map)
                                 .bindPopup(response.data[i].nama);
                         }
@@ -515,6 +538,6 @@
     <script>
         $('#nav-master-lokasi').addClass('active');
         $('#nav-master-lokasi .collapse').addClass('show');
-        $('#nav-master-lokasi .collapse #li-desa').addClass('active');
+        $('#nav-master-lokasi .collapse #li-lokasi-desa').addClass('active');
     </script>
 @endpush

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('perencanaan_keong_id');
             $table->integer('status'); // 0/1/2
+            $table->text('alasan_ditolak')->nullable(); // 0/1/2
             $table->timestamps();
         });
     }

@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>@yield('title')</title>
+    <title>Schistosomiasis | @yield('title')</title>
     <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -179,7 +179,7 @@
         </div>
     </div>
 
-    <div class="wrapper">
+    <div class="wrapper fullheight-side sidebar_minimize">
         <div class="main-header">
             @include('dashboard.layouts.logoHeader')
             @include('dashboard.layouts.navbarHeader')
@@ -193,7 +193,7 @@
                         <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
                             <div>
                                 <h2 class="text-white fw-bold">@yield('titlePanelHeader')</h2>
-                                <h5 class="text-white">@yield('subTitlePanelHeader')</h5>
+                                <h4 class="text-white">@yield('subTitlePanelHeader')</h4>
                             </div>
                             <div class="ml-md-auto py-2 py-md-0">
                                 @yield('buttonPanelHeader')
@@ -313,34 +313,34 @@
 
     <script>
         $(function() {
-                moment.locale('id');
-                $('.tanggal').mask('00-00-0000');
-                $('.rupiah').mask('000.000.000.000.000', {
-                    reverse: true
-                })
-                $('.waktu').mask('00:00');
-                $('.angka').mask('00000000000000000000');
-            }) <<
-            <<
-            <<
-            < HEAD ===
-            ===
-            =
-
-            Circles.create({
-                id: 'circles-2',
-                radius: 45,
-                value: 70,
-                maxValue: 100,
-                width: 7,
-                text: 36,
-                colors: ['#f1f1f1', '#2BB930'],
-                duration: 400,
-                wrpClass: 'circles-wrp',
-                textClass: 'circles-text',
-                styleWrapper: true,
-                styleText: true
+            moment.locale('id');
+            $('.tanggal').mask('00-00-0000');
+            $('.rupiah').mask('000.000.000.000.000', {
+                reverse: true
             })
+            $('.waktu').mask('00:00');
+            $('.angka').mask('00000000000000000000');
+        })
+
+        $('.select2').select2({
+            placeholder: "- Pilih Salah Satu -",
+            theme: "bootstrap"
+        })
+
+        Circles.create({
+            id: 'circles-2',
+            radius: 45,
+            value: 70,
+            maxValue: 100,
+            width: 7,
+            text: 36,
+            colors: ['#f1f1f1', '#2BB930'],
+            duration: 400,
+            wrpClass: 'circles-wrp',
+            textClass: 'circles-text',
+            styleWrapper: true,
+            styleText: true
+        })
 
         Circles.create({
             id: 'circles-3',
@@ -432,10 +432,44 @@
                 ribuan = reverse.match(/\d{1,3}/g);
             ribuan = ribuan.join('.').split('').reverse().join('');
             return ribuan;
-        } >>>
-        >>>
-        >
-        keong / main
+        }
+
+        function validation(formValidation) {
+            $('.error-text').html('');
+            $('.req').removeClass('is-invalid');
+            let count = 0
+            $.each(formValidation, function(i, field) {
+                let getAttr = document.getElementsByName(field.name);
+                let getNodeName = getAttr[0].nodeName;
+                let attr = $(getNodeName + "[name=" + field.name + "]");
+                console.log(attr)
+                if ((attr.val() == "")) {
+                    if (attr.hasClass('req garis datar')) {
+                        $('.' + field.name + '-error').html('<b>' + attr.data('label') +
+                            '</b> tidak boleh kosong. Berikan garis datar (-) apabila ingin tetap mengosongkannya.'
+                        );
+                    } else if (attr.hasClass('req')) {
+                        $('.' + field.name + '-error').html('<b>' + attr.data('label') +
+                            '</b> tidak boleh kosong.'
+                        );
+                    }
+                    count++;
+                    attr.addClass('is-invalid')
+                }
+            });
+            if (count > 0) {
+                swal({
+                    title: "Gagal!",
+                    text: "Terdapat " + count + " kolom yang tidak boleh kosong.",
+                    icon: "error"
+                }).then(function() {
+                    $('.rupiah').mask('000.000.000.000.000', {
+                        reverse: true
+                    })
+                });
+                e.preventDefault()
+            }
+        }
     </script>
 
     @stack('scripts')

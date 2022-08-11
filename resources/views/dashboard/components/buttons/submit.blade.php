@@ -1,1 +1,2 @@
-<button type="submit" class="btn btn-success {{ $class ?? '' }}">{!! $icon ?? '<i class="fa-solid fa-floppy-disk"></i>' !!} {{ $label }}</button>
+<button type="submit" class="btn btn-secondary {{ $class ?? '' }}">{!! $icon ?? '<i class="fas fa-save"></i> ' !!}
+    {{ $label ?? 'Simpan' }}</button>

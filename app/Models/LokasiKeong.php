@@ -13,4 +13,9 @@ class LokasiKeong extends Model
 
     protected $table = 'lokasi_keong';
     protected $guarded = ['id'];
+
+    public function desa()
+    {
+        return $this->belongsTo(Desa::class, 'desa_id');
+    }
 }

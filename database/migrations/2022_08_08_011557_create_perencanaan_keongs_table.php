@@ -18,6 +18,7 @@ return new class extends Migration
             $table->uuid('opd_id');
             $table->string('sub_indikator');
             $table->integer('status'); // 0/1/2
+            $table->text('alasan_ditolak')->nullable();
             $table->timestamps();
         });
     }

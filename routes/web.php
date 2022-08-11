@@ -23,6 +23,8 @@ use Illuminate\Support\Facades\Route;
 Route::resource('/', DashboardController::class);
 
 Route::resource('rencana-intervensi-keong', PerencanaanKeongController::class);
+Route::post('rencana-intervensi-keong/konfirmasi/{rencana_intervensi_keong}', PerencanaanKeongController::class . '@konfirmasi');
+
 Route::resource('realisasi-intervensi-keong', RealisasiKeongController::class);
 
 // Master Data

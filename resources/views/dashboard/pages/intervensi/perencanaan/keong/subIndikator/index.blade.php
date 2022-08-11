@@ -1,5 +1,9 @@
 @extends('dashboard.layouts.main')
 
+@section('title')
+    Perencanaan Intervensi Keong
+@endsection
+
 @section('titlePanelHeader')
     Perencanaan Intervensi Keong
 @endsection
@@ -38,7 +42,7 @@
                                             <th>Tanggal Pembuatan</th>
                                             <th>Sub Indikator</th>
                                             <th>OPD</th>
-                                            <th>Jumlah Titik Lokasi</th>
+                                            <th>Lokasi</th>
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -157,8 +161,8 @@
                     name: 'opd',
                 },
                 {
-                    data: 'titik_lokasi',
-                    name: 'titik_lokasi',
+                    data: 'lokasi_keong',
+                    name: 'lokasi_keong',
                 },
                 {
                     data: 'status',

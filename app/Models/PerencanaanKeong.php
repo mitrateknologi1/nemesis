@@ -18,4 +18,14 @@ class PerencanaanKeong extends Model
     {
         return $this->belongsTo(OPD::class, 'opd_id');
     }
+
+    public function lokasi_perencanaan_keong()
+    {
+        return $this->hasMany(LokasiPerencanaanKeong::class, 'perencanaan_keong_id');
+    }
+
+    public function dokumen_perencanaan_keong()
+    {
+        return $this->hasMany(DokumenPerencanaanKeong::class, 'perencanaan_keong_id');
+    }
 }

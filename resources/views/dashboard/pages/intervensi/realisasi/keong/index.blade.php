@@ -121,6 +121,6 @@
     <script>
         $('#nav-lokasi').addClass('active');
         $('#nav-lokasi .collapse').addClass('show');
-        $('#nav-lokasi .collapse #li-desa').addClass('active');
+        $('#nav-lokasi .collapse #li-lokasi-desa').addClass('active');
     </script>
 @endpush

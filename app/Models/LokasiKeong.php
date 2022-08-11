@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\masterData\lokasi\DesaController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,4 +14,9 @@ class LokasiKeong extends Model
 
     protected $table = 'lokasi_keong';
     protected $guarded = ['id'];
+
+    public function desa()
+    {
+        return $this->belongsTo(Desa::class);
+    }
 }

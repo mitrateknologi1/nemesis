@@ -144,9 +144,14 @@
                      </a>
                      <div class="collapse" id="lokasi">
                          <ul class="nav nav-collapse">
-                             <li id="li-desa">
+                             <li id="li-lokasi-desa">
                                  <a href="{{ url('master-data/lokasi/desa') }}">
                                      <span class="sub-item">Desa</span>
+                                 </a>
+                             </li>
+                             <li id="li-lokasi-keong">
+                                 <a href="{{ url('master-data/lokasi/keong') }}">
+                                     <span class="sub-item">Habitat Keong</span>
                                  </a>
                              </li>
                          </ul>

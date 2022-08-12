@@ -9,7 +9,7 @@
 
 <div class="d-flex">
     <select class="form-select {{ $class ?? '' }} col-12" id="{{ $id ?? '' }}" aria-hidden="true"
-        {{ $attribute ?? '' }} name="{{ $name ?? '' }}" autocomplete="off">
+        {{ $attribute ?? '' }} name="{{ $name ?? '' }}" autocomplete="off" data-label={{ $label ?? '' }}>
         @if ($class == 'filter')
             <option value="">Semua</option>
         @else
@@ -17,8 +17,6 @@
         @endif
         {{ $options ?? '' }}
     </select>
-
-
 </div>
 
 <span class="text-danger error-text {{ $name }}-error"></span>

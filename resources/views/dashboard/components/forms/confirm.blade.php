@@ -52,8 +52,7 @@
         $('#form').submit(function(e) {
             e.preventDefault();
             const formValidation = $('#form .req').serializeArray()
-            // validation(formValidation)
-
+            validation(formValidation)
             let formData = new FormData(this);
             swal({
                 title: 'Konfirmasi Data Ini ?',

@@ -42,7 +42,7 @@
                                             <th>Tanggal Pembuatan</th>
                                             <th>Sub Indikator</th>
                                             <th>OPD</th>
-                                            <th>Lokasi</th>
+                                            <th>Jumlah Lokasi</th>
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -161,9 +161,13 @@
                     name: 'opd',
                 },
                 {
-                    data: 'lokasi_keong',
-                    name: 'lokasi_keong',
+                    data: 'jumlah_lokasi',
+                    name: 'jumlah_lokasi',
                 },
+                // {
+                //     data: 'lokasi_keong',
+                //     name: 'lokasi_keong',
+                // },
                 {
                     data: 'status',
                     name: 'status',
@@ -180,7 +184,7 @@
 
             ],
             columnDefs: [{
-                    targets: [3, 5],
+                    targets: [3, 4, 5],
                     className: 'text-center',
                 },
                 {

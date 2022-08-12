@@ -11,6 +11,7 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StorePerencanaanKeongRequest;
 use App\Http\Requests\UpdatePerencanaanKeongRequest;
+use App\Models\LokasiKeong;
 
 class PerencanaanKeongController extends Controller
 {
@@ -36,13 +37,17 @@ class PerencanaanKeongController extends Controller
                     }
                 })
 
-                ->addColumn('lokasi_keong', function ($row) {
-                    $lokasi_keong = '<ul>';
-                    foreach ($row->lokasi_perencanaan_keong as $l) {
-                        $lokasi_keong .= '<li>' . $l->lokasi_keong->nama . ' (<span class="font-weight-bold">' . $l->lokasi_keong->desa->nama . '</span>) </li>';
-                    }
-                    $lokasi_keong .= '</ul>';
-                    return $lokasi_keong;
+                // ->addColumn('lokasi_keong', function ($row) {
+                //     $lokasi_keong = '<ul>';
+                //     foreach ($row->lokasi_perencanaan_keong as $l) {
+                //         $lokasi_keong .= '<li>' . $l->lokasi_keong->nama . ' (<span class="font-weight-bold">' . $l->lokasi_keong->desa->nama . '</span>) </li>';
+                //     }
+                //     $lokasi_keong .= '</ul>';
+                //     return $lokasi_keong;
+                // })
+
+                ->addColumn('jumlah_lokasi', function ($row) {
+                    return $row->lokasi_perencanaan_keong->count();
                 })
 
                 ->addColumn('opd', function ($row) {
@@ -158,5 +163,12 @@ class PerencanaanKeongController extends Controller
 
         $rencana_intervensi_keong->update($request->all());
         return response()->json(['success' => 'Berhasil mengkonfirmasi']);
+    }
+
+    public function map(PerencanaanKeong $rencana_intervensi_keong)
+    {
+        $getLokasiKeong = $rencana_intervensi_keong->lokasi_perencanaan_keong->pluck('lokasi_keong_id')->toArray();
+        $lokasiKeong = LokasiKeong::with('desa')->whereIn('id', $getLokasiKeong)->get();
+        return response()->json(['status' => 'success', 'data' => $lokasiKeong]);
     }
 }

@@ -26,6 +26,7 @@ Route::resource('/', DashboardController::class);
 
 Route::resource('rencana-intervensi-keong', PerencanaanKeongController::class);
 Route::post('rencana-intervensi-keong/konfirmasi/{rencana_intervensi_keong}', PerencanaanKeongController::class . '@konfirmasi');
+Route::get('rencana-intervensi-keong/map/{rencana_intervensi_keong}', PerencanaanKeongController::class . '@map');
 
 Route::resource('realisasi-intervensi-keong', RealisasiKeongController::class);
 

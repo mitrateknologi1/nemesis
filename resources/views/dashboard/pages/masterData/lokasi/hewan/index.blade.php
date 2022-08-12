@@ -1,11 +1,11 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Desa
+    Hewan
 @endsection
 
 @section('titlePanelHeader')
-    Desa
+    Hewan
 @endsection
 
 @section('subTitlePanelHeader')
@@ -32,11 +32,11 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Data Desa</div>
+                        <div class="card-title">Data Hewan</div>
                         <div class="card-tools">
                             @component('dashboard.components.buttons.add',
                                 [
-                                    'url' => url('master-data/lokasi/desa/create'),
+                                    'url' => url('master-data/lokasi/hewan/create'),
                                 ])
                             @endcomponent
                         </div>
@@ -71,7 +71,7 @@
                                                 @component('dashboard.components.dataTables.index',
                                                     [
                                                         'id' => 'table-data',
-                                                        'th' => ['No', 'Nama', 'Kode', 'Luas', 'Polygon', 'Warna Polygon', 'Aksi'],
+                                                        'th' => ['No', 'Nama', 'Desa', 'Deskripsi', 'Status', 'Aksi'],
                                                     ])
                                                 @endcomponent
                                             </div>
@@ -119,6 +119,22 @@
                 minZoom: 11
             }).addTo(map);
 
+            var pin = L.Icon.extend({
+                options: {
+                    iconSize: [50, 50],
+                    iconAnchor: [22, 94],
+                    shadowAnchor: [4, 62],
+                    popupAnchor: [-3, -76],
+                },
+            });
+
+            var pinIcon = new pin({
+                iconUrl: "{{ asset('assets/dashboard/img/pin/pin_red_x.png') }}",
+                iconSize: [40, 40],
+                iconAnchor: [25, 20],
+                popupAnchor: [-4, -20]
+            });
+
             map.invalidateSize();
 
             $.ajax({
@@ -133,18 +149,35 @@
                                     opacity: 1,
                                     fillOpacity: 0.5
                                 })
-                                .addTo(map)
-                                .bindTooltip(response.data[i].nama + " (" + response.data[i].luas +
-                                    "m<sup>2</sup>) ", {
-                                        permanent: true,
-                                        direction: "center"
-                                    })
+                                .bindTooltip(response.data[i].nama, {
+                                    permanent: true,
+                                    direction: "center",
+                                    className: 'labelPolygon'
+                                })
+                                .addTo(map);
+                        }
+                    }
+                },
+            })
+
+            $.ajax({
+                url: "{{ url('/map/hewan') }}",
+                type: "GET",
+                success: function(response) {
+                    if (response.status == 'success') {
+                        for (var i = 0; i < response.data.length; i++) {
+                            icon = pinIcon;
+                            L.marker([response.data[i].latitude, response.data[i].longitude], {
+                                    icon: icon
+                                })
                                 .bindPopup(
                                     "<p class='fw-bold my-0 text-center'>" + response.data[i].nama +
                                     "</p><hr>" +
-                                    "<p class='my-0'>Kode : " + response.data[i].kode + "</p>" +
-                                    "<p class='my-0'>Luas : " + response.data[i].luas + "m<sup>2</sup></p>"
-                                );
+                                    "<p class='my-0'>Desa : " + response.data[i].desa
+                                    .nama + "</p>"
+                                )
+                                // .on('click', L.bind(petaKlik, null, data[0][i].id))
+                                .addTo(map);
                         }
                     }
                 },
@@ -172,7 +205,7 @@
             }).then((Delete) => {
                 if (Delete) {
                     $.ajax({
-                        url: "{{ url('master-data/lokasi/desa') }}" + '/' + id,
+                        url: "{{ url('master-data/lokasi/hewan') }}" + '/' + id,
                         type: 'DELETE',
                         data: {
                             '_token': '{{ csrf_token() }}'
@@ -205,7 +238,7 @@
         var table = $('#table-data').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ url('master-data/lokasi/desa') }}",
+            ajax: "{{ url('master-data/lokasi/hewan') }}",
             columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex'
@@ -215,23 +248,17 @@
                     name: 'nama'
                 },
                 {
-                    data: 'kode',
-                    name: 'kode',
+                    data: 'desa',
+                    name: 'desa',
                     class: 'text-center'
                 },
                 {
-                    data: 'luas',
-                    name: 'luas',
-                    class: 'text-center'
+                    data: 'deskripsi',
+                    name: 'deskripsi',
                 },
                 {
-                    data: 'statusPolygon',
-                    name: 'statusPolygon',
-                    class: 'text-center'
-                },
-                {
-                    data: 'warnaPolygon',
-                    name: 'warnaPolygon',
+                    data: 'status',
+                    name: 'status',
                     class: 'text-center'
                 },
                 {
@@ -252,6 +279,6 @@
     <script>
         $('#nav-master-lokasi').addClass('active');
         $('#nav-master-lokasi .collapse').addClass('show');
-        $('#nav-master-lokasi .collapse #li-lokasi-desa').addClass('active');
+        $('#nav-master-lokasi .collapse #li-lokasi-hewan').addClass('active');
     </script>
 @endpush

@@ -10,7 +10,7 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class KeongController extends Controller
+class LokasiKeongController extends Controller
 {
     /**
      * Display a listing of the resource.

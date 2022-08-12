@@ -91,6 +91,13 @@
     <script>
         var map = null;
 
+        $('#pills-home-tab-nobd').click(function() {
+            setTimeout(
+                function() {
+                    initializeMap();
+                }, 500);
+        })
+
         function initializeMap() {
             if (map != undefined || map != null) {
                 map.remove();

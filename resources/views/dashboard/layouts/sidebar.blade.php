@@ -154,6 +154,11 @@
                                      <span class="sub-item">Habitat Keong</span>
                                  </a>
                              </li>
+                             <li id="li-lokasi-hewan">
+                                 <a href="{{ url('master-data/lokasi/hewan') }}">
+                                     <span class="sub-item">Hewan</span>
+                                 </a>
+                             </li>
                          </ul>
                      </div>
                  </li>

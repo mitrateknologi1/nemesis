@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>@yield('title')</title>
+    <title>Schistosomiasis | @yield('title')</title>
     <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -201,7 +201,7 @@
                         <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
                             <div>
                                 <h2 class="text-white fw-bold">@yield('titlePanelHeader')</h2>
-                                <h5 class="text-white">@yield('subTitlePanelHeader')</h5>
+                                <h4 class="text-white">@yield('subTitlePanelHeader')</h4>
                             </div>
                             <div class="ml-md-auto py-2 py-md-0">
                                 @yield('buttonPanelHeader')
@@ -332,85 +332,6 @@
             $('.angka').mask('00000000000000000000');
         })
 
-        Circles.create({
-            id: 'circles-2',
-            radius: 45,
-            value: 70,
-            maxValue: 100,
-            width: 7,
-            text: 36,
-            colors: ['#f1f1f1', '#2BB930'],
-            duration: 400,
-            wrpClass: 'circles-wrp',
-            textClass: 'circles-text',
-            styleWrapper: true,
-            styleText: true
-        })
-
-        Circles.create({
-            id: 'circles-3',
-            radius: 45,
-            value: 40,
-            maxValue: 100,
-            width: 7,
-            text: 12,
-            colors: ['#f1f1f1', '#F25961'],
-            duration: 400,
-            wrpClass: 'circles-wrp',
-            textClass: 'circles-text',
-            styleWrapper: true,
-            styleText: true
-        })
-
-        // var totalIncomeChart = document.getElementById('totalIncomeChart').getContext('2d');
-
-        // var mytotalIncomeChart = new Chart(totalIncomeChart, {
-        //     type: 'bar',
-        //     data: {
-        //         labels: ["S", "M", "T", "W", "T", "F", "S", "S", "M", "T"],
-        //         datasets: [{
-        //             label: "Total Income",
-        //             backgroundColor: '#ff9e27',
-        //             borderColor: 'rgb(23, 125, 255)',
-        //             data: [6, 4, 9, 5, 4, 6, 4, 3, 8, 10],
-        //         }],
-        //     },
-        //     options: {
-        //         responsive: true,
-        //         maintainAspectRatio: false,
-        //         legend: {
-        //             display: false,
-        //         },
-        //         scales: {
-        //             yAxes: [{
-        //                 ticks: {
-        //                     display: false //this will remove only the label
-        //                 },
-        //                 gridLines: {
-        //                     drawBorder: false,
-        //                     display: false
-        //                 }
-        //             }],
-        //             xAxes: [{
-        //                 gridLines: {
-        //                     drawBorder: false,
-        //                     display: false
-        //                 }
-        //             }]
-        //         },
-        //     }
-        // });
-
-        $('#lineChart').sparkline([105, 103, 123, 100, 95, 105, 115], {
-            type: 'line',
-            height: '70',
-            width: '100%',
-            lineWidth: '2',
-            lineColor: '#ffa534',
-            fillColor: 'rgba(255, 165, 52, .14)'
-        });
-
-
         var overlay = $('#overlay').hide();
         $(document)
             .ajaxStart(function() {
@@ -437,6 +358,43 @@
                 ribuan = reverse.match(/\d{1,3}/g);
             ribuan = ribuan.join('.').split('').reverse().join('');
             return ribuan;
+        }
+
+        function validation(formValidation) {
+            $('.error-text').html('');
+            $('.req').removeClass('is-invalid');
+            let count = 0
+            $.each(formValidation, function(i, field) {
+                let getAttr = document.getElementsByName(field.name);
+                let getNodeName = getAttr[0].nodeName;
+                let attr = $(getNodeName + "[name=" + field.name + "]");
+                console.log(attr)
+                if ((attr.val() == "")) {
+                    if (attr.hasClass('req garis datar')) {
+                        $('.' + field.name + '-error').html('<b>' + attr.data('label') +
+                            '</b> tidak boleh kosong. Berikan garis datar (-) apabila ingin tetap mengosongkannya.'
+                        );
+                    } else if (attr.hasClass('req')) {
+                        $('.' + field.name + '-error').html('<b>' + attr.data('label') +
+                            '</b> tidak boleh kosong.'
+                        );
+                    }
+                    count++;
+                    attr.addClass('is-invalid')
+                }
+            });
+            if (count > 0) {
+                swal({
+                    title: "Gagal!",
+                    text: "Terdapat " + count + " kolom yang tidak boleh kosong.",
+                    icon: "error"
+                }).then(function() {
+                    $('.rupiah').mask('000.000.000.000.000', {
+                        reverse: true
+                    })
+                });
+                e.preventDefault()
+            }
         }
     </script>
 

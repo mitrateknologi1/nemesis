@@ -35,7 +35,7 @@
                                     <thead>
                                         <tr class="text-center fw-bold">
                                             <th>No</th>
-                                            <th>Tanggal Disetujui</th>
+                                            {{-- <th>Tanggal Disetujui</th> --}}
                                             <th>Sub Indikator</th>
                                             <th>OPD</th>
                                             {{-- <th>Total Dokumen</th> --}}

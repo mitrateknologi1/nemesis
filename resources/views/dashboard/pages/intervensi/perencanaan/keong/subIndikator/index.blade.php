@@ -13,8 +13,8 @@
 @endsection
 
 @section('buttonPanelHeader')
-    {{-- <a href="#" class="btn btn-secondary btn-round"><i class="fas fa-plus"></i>
-        Tambah</a> --}}
+    <a href="{{ route('rencana-intervensi-keong.create') }}" class="btn btn-secondary btn-round"><i class="fas fa-plus"></i>
+        Tambah</a>
 @endsection
 
 @section('contents')
@@ -48,68 +48,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {{-- <tr>
-                                            <td>1</td>
-                                            <td>Pembersihan Kolam</td>
-                                            <td class="text-center">Dinas Kebersihan</td>
-                                            <td class="text-center">5</td>
-                                            <td class="text-center">2</td>
-                                            <td class="text-center"><span class="badge badge-success">Disetujui</span></td>
-                                            <td class="text-center">
-                                                <div class="my-2">
-                                                    <a href="#" class="btn btn-sm shadow btn-round btn-info"
-                                                        data-toggle="tooltip" data-placement="top" title="Lihat">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a> <a href="#" class="btn btn-sm shadow btn-round btn-warning"
-                                                        data-toggle="tooltip" data-placement="top" title="Ubah">
-                                                        <i class="fa fa-edit"></i>
-                                                    </a> <a href="#" class="btn btn-sm shadow btn-round btn-danger"
-                                                        data-toggle="tooltip" data-placement="top" title="Hapus">
-                                                        <i class="fa fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Pemusnahan Keong</td>
-                                            <td class="text-center">Dinas Kesehatan</td>
-                                            <td class="text-center">7</td>
-                                            <td class="text-center">3</td>
-                                            <td class="text-center"><span class="badge badge-warning">Belum
-                                                    Dikonfirmasi</span></td>
-                                            <td class="text-center">
-                                                <div class="my-2">
-                                                    <a href="#" class="btn btn-sm shadow btn-round btn-secondary"
-                                                        data-toggle="tooltip" data-placement="top" title="Konfirmasi">
-                                                        <i class="fas fa-lg fa-clipboard-check"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>Penaburan Obat</td>
-                                            <td class="text-center">Dinas Kesehatan</td>
-                                            <td class="text-center">2</td>
-                                            <td class="text-center">0</td>
-                                            <td class="text-center"><span class="badge badge-danger">Ditolak</span></td>
-                                            <td class="text-center">
-                                                <div class="my-2">
-                                                    <a href="#" class="btn btn-sm shadow btn-round btn-info"
-                                                        data-toggle="tooltip" data-placement="top" title="Lihat">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a> <a href="#" class="btn btn-sm shadow btn-round btn-warning"
-                                                        data-toggle="tooltip" data-placement="top" title="Ubah">
-                                                        <i class="fa fa-edit"></i>
-                                                    </a> <a href="#" class="btn btn-sm shadow btn-round btn-danger"
-                                                        data-toggle="tooltip" data-placement="top" title="Hapus">
-                                                        <i class="fa fa-trash"></i>
-                                                    </a>
-                                                </div>
-
-                                            </td>
-                                        </tr> --}}
                                     </tbody>
                                 </table>
                             </div>

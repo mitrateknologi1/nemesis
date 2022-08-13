@@ -33,11 +33,14 @@ class LokasiKeongController extends Controller
                         return '<span class="badge bg-danger text-light border-none">Tidak Aktif</span>';
                     }
                 })
+                ->addColumn('koordinat', function ($row) {
+                    return $row->latitude . ' / ' . $row->longitude;
+                })
                 ->addColumn('action', function ($row) {
                     $actionBtn = '<a href="' . url('master-data/lokasi/keong' . '/' . $row->id . '/edit') . '" class="btn btn-warning btn-round btn-sm mr-1" value="' . $row->id . '"><i class="fa fa-edit"></i></a><button id="btn-delete" class="btn btn-danger btn-round btn-sm mr-1" value="' . $row->id . '" ><i class="fa fa-trash"></i></button>';
                     return $actionBtn;
                 })
-                ->rawColumns(['action', 'status', 'warnaPolygon', 'luas'])
+                ->rawColumns(['action', 'status', 'warnaPolygon', 'luas', 'koordinat'])
                 ->make(true);
         }
 

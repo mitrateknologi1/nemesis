@@ -35,6 +35,6 @@ class ListController extends Controller
             }
         }
 
-        return response()->json(['status' => 'success', 'data' => $hewan]);
+        return response()->json(['status' => 'success', 'data' => $hewan, 'id' => $id]);
     }
 }

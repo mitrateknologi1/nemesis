@@ -20,7 +20,7 @@
 @push('styles')
     <style>
         #map {
-            height: 350px;
+            height: 400px;
             margin-top: 0px;
         }
     </style>
@@ -132,6 +132,8 @@
                                         <hr size="10px" width="100%" color="black" class="mt-3">
                                         <div class="col-12">
                                             <label class="form-label my-2 fw-bold"> Tambahkan Hewan Ternak</label>
+                                            <br>
+                                            <span class="text-danger error-text hewan-kosong-error"></span>
                                             <div id="list-hewan">
                                                 <div id="form-hewan-1" class="row">
                                                     <div class="col-5">
@@ -156,7 +158,8 @@
                                                             placeholder="Masukkan Jumlah Hewan Ternak" autocomplete="off">
                                                         <span class="text-danger error-text jumlah_hewan-error"></span>
                                                     </div>
-                                                    <div class="col-2 d-flex align-items-end">
+                                                    <div class="col-2">
+                                                        <label for="TextInput" class="form-label my-2">&nbsp;</label>
                                                         <button class="btn btn-danger col-12 fw-bold"
                                                             onclick="hapusFormHewan(1)" type="button"><i
                                                                 class="fas fa-trash-alt"></i> Hapus</button>
@@ -215,6 +218,7 @@
                         type: 'POST',
                         data: $(this).serialize(),
                         success: function(response) {
+                            console.log(response);
                             if (response.status == 'success') {
                                 swal("Berhasil", "Data Berhasil Disimpan", {
                                     icon: "success",
@@ -249,23 +253,33 @@
 
     <script>
         function printErrorMsg(msg) {
-            $.each(msg, function(key, value) {
-                $('.' + key + '-error').removeClass('d-none');
-                $('.' + key + '-error').text(value);
+            $.each(msg, function(keyError, valueError) {
+                var totalError = valueError.length;
+                var indexError = 0;
+                $.each(valueError, function(key, value) {
+                    if (keyError.split(".").length > 1) {
+                        $('.' + keyError.split(".")[0] + '-error')[keyError.split(".")[1]].innerHTML = $(
+                            '.' +
+                            keyError.split(".")[0] + '-error')[keyError.split(".")[1]].innerHTML + value;
+                        if ((indexError + 1) != totalError) {
+                            $('.' + keyError.split(".")[0] + '-error')[keyError.split(".")[1]].innerHTML =
+                                $(
+                                    '.' +
+                                    keyError.split(".")[0] + '-error')[keyError.split(".")[1]].innerHTML +
+                                ", ";
+                        }
+                    } else {
+                        $('.' + keyError + '-error').text(value);
+                    }
+                    indexError++;
+                });
             });
         }
 
         function resetError() {
-            resetErrorElement('nama');
-            resetErrorElement('deskripsi');
-            resetErrorElement('desa_id');
-            resetErrorElement('latitude');
-            resetErrorElement('longitude');
-            resetErrorElement('status');
-        }
-
-        function resetErrorElement(key) {
-            $('.' + key + '-error').addClass('d-none');
+            $(".error-text").each(function() {
+                $(this).html('');
+            })
         }
     </script>
 
@@ -399,7 +413,7 @@
                 '<div id="form-hewan-' + totalHewan +
                 '" class="row" style="display: none;"><div class="col-5"><div class="d-inline"><label class="form-label my-2">Hewan Ternak</label></div><div class="d-flex"><select class="form-select col-12 select2" id="select-hewan-' +
                 totalHewan +
-                '" aria-hidden="true" name="hewan_id[]" autocomplete="off"></select></div><span class="text-danger error-text hewan_id-error"></span></div><div class="col-5"><label for="TextInput" class="form-label my-2">Jumlah Hewan Ternak</label><input type="text" name="jumlah_hewan[]" class="form-control numerik" placeholder="Masukkan Jumlah Hewan Ternak" autocomplete="off"><span class="text-danger error-text jumlah_hewan-error"></span></div><div class="col-2 d-flex align-items-end"><button class="btn btn-danger col-12 fw-bold" onclick="hapusFormHewan(' +
+                '" aria-hidden="true" name="hewan_id[]" autocomplete="off"></select></div><span class="text-danger error-text hewan_id-error"></span></div><div class="col-5"><label for="TextInput" class="form-label my-2">Jumlah Hewan Ternak</label><input type="text" name="jumlah_hewan[]" class="form-control numerik" placeholder="Masukkan Jumlah Hewan Ternak" autocomplete="off"><span class="text-danger error-text jumlah_hewan-error"></span></div><div class="col-2"><label for="TextInput" class="form-label my-2">&nbsp;</label><button class="btn btn-danger col-12 fw-bold" onclick="hapusFormHewan(' +
                 totalHewan + ')" type="button"><i class="fas fa-trash-alt"></i> Hapus</button></div></div>';
 
             return formListHewan;

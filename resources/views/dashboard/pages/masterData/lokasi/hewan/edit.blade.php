@@ -20,7 +20,7 @@
 @push('styles')
     <style>
         #map {
-            height: 300px;
+            height: 400px;
             margin-top: 0px;
         }
 
@@ -140,6 +140,87 @@
                                                 @endslot
                                             @endcomponent
                                         </div>
+                                        <hr size="10px" width="100%" color="black" class="mt-3">
+                                        <div class="col-12">
+                                            <label class="form-label my-2 fw-bold"> Daftar Hewan Ternak</label>
+                                            <br>
+                                            <span class="text-danger error-text hewan-kosong-error"></span>
+                                            <div id="list-hewan">
+                                                @forelse ($lokasiHewan->jumlahHewan as $jumlah)
+                                                    <div id="form-hewan-{{ $loop->iteration }}" class="row">
+                                                        <div class="col-5">
+                                                            <div class="d-inline">
+                                                                <label class="form-label my-2">Hewan Ternak
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="d-flex">
+                                                                <select class="form-select col-12 select2"
+                                                                    id="select-hewan-{{ $loop->iteration }}"
+                                                                    aria-hidden="true" name="hewan_id[]" autocomplete="off">
+                                                                </select>
+                                                            </div>
+
+                                                            <span class="text-danger error-text hewan_id-error"></span>
+                                                        </div>
+                                                        <div class="col-5">
+                                                            <label for="TextInput" class="form-label my-2">Jumlah Hewan
+                                                                Ternak</label>
+                                                            <input type="text" name="jumlah_hewan[]"
+                                                                class="form-control numerik"
+                                                                placeholder="Masukkan Jumlah Hewan Ternak"
+                                                                autocomplete="off" value="{{ $jumlah->jumlah }}">
+                                                            <span class="text-danger error-text jumlah_hewan-error"></span>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <label for="TextInput" class="form-label my-2">&nbsp;</label>
+                                                            <button class="btn btn-danger col-12 fw-bold"
+                                                                onclick="hapusFormHewan({{ $loop->iteration }})"
+                                                                type="button"><i class="fas fa-trash-alt"></i>
+                                                                Hapus</button>
+                                                        </div>
+                                                    </div>
+                                                @empty
+                                                    <div id="form-hewan-1" class="row">
+                                                        <div class="col-5">
+                                                            <div class="d-inline">
+                                                                <label class="form-label my-2">Hewan Ternak
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="d-flex">
+                                                                <select class="form-select col-12 select2"
+                                                                    id="select-hewan-1" aria-hidden="true" name="hewan_id[]"
+                                                                    autocomplete="off">
+                                                                </select>
+                                                            </div>
+
+                                                            <span class="text-danger error-text hewan_id-error"></span>
+                                                        </div>
+                                                        <div class="col-5">
+                                                            <label for="TextInput" class="form-label my-2">Jumlah Hewan
+                                                                Ternak</label>
+                                                            <input type="text" name="jumlah_hewan[]"
+                                                                class="form-control numerik"
+                                                                placeholder="Masukkan Jumlah Hewan Ternak"
+                                                                autocomplete="off">
+                                                            <span class="text-danger error-text jumlah_hewan-error"></span>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <label for="TextInput" class="form-label my-2">&nbsp;</label>
+                                                            <button class="btn btn-danger col-12 fw-bold"
+                                                                onclick="hapusFormHewan(1)" type="button"><i
+                                                                    class="fas fa-trash-alt"></i> Hapus</button>
+                                                        </div>
+                                                    </div>
+                                                @endforelse
+                                            </div>
+                                        </div>
+                                        <div class="col-12 my-3">
+                                            <button class="btn btn-primary btn-rounded col-12 fw-bold" id="btn-tambah-hewan"
+                                                type="button"><i class="fas fa-plus-circle"></i> Tambah Hewan
+                                                Ternak</button>
+                                        </div>
                                         <div class="col-12 d-flex justify-content-end mt-3">
                                             @component('dashboard.components.buttons.submit',
                                                 [
@@ -193,6 +274,7 @@
                         type: 'POST',
                         data: $(this).serialize(),
                         success: function(response) {
+                            console.log(response);
                             if (response.status == 'success') {
                                 swal("Berhasil", "Data Berhasil Disimpan", {
                                     icon: "success",
@@ -227,23 +309,33 @@
 
     <script>
         function printErrorMsg(msg) {
-            $.each(msg, function(key, value) {
-                $('.' + key + '-error').removeClass('d-none');
-                $('.' + key + '-error').text(value);
+            $.each(msg, function(keyError, valueError) {
+                var totalError = valueError.length;
+                var indexError = 0;
+                $.each(valueError, function(key, value) {
+                    if (keyError.split(".").length > 1) {
+                        $('.' + keyError.split(".")[0] + '-error')[keyError.split(".")[1]].innerHTML = $(
+                            '.' +
+                            keyError.split(".")[0] + '-error')[keyError.split(".")[1]].innerHTML + value;
+                        if ((indexError + 1) != totalError) {
+                            $('.' + keyError.split(".")[0] + '-error')[keyError.split(".")[1]].innerHTML =
+                                $(
+                                    '.' +
+                                    keyError.split(".")[0] + '-error')[keyError.split(".")[1]].innerHTML +
+                                ", ";
+                        }
+                    } else {
+                        $('.' + keyError + '-error').text(value);
+                    }
+                    indexError++;
+                });
             });
         }
 
         function resetError() {
-            resetErrorElement('nama');
-            resetErrorElement('deskripsi');
-            resetErrorElement('desa_id');
-            resetErrorElement('latitude');
-            resetErrorElement('longitude');
-            resetErrorElement('status');
-        }
-
-        function resetErrorElement(key) {
-            $('.' + key + '-error').addClass('d-none');
+            $(".error-text").each(function() {
+                $(this).html('');
+            })
         }
     </script>
 
@@ -277,6 +369,7 @@
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
             attribution: 'Data © <a href="http://osm.org/copyright">OpenStreetMap</a>',
             maxZoom: 18,
+            minZoom: 11
         }).addTo(map);
 
         var drawnItems = new L.FeatureGroup();
@@ -309,6 +402,10 @@
             updateMarker($("#latitude").val(), $("#longitude").val());
         })
 
+        var optionHewan = '<option></option>';
+        var jumlahHewan = {!! json_encode($lokasiHewan->jumlahHewan) !!};
+        var totalHewan = {{ count($lokasiHewan->jumlahHewan) }};
+
         $(document).ready(function() {
             $.ajax({
                 url: "{{ url('/map/desa') }}",
@@ -332,7 +429,91 @@
                     }
                 },
             })
+
+            var promises = [];
+            if (totalHewan > 0) {
+                for (var j = 0; j < totalHewan; j++) {
+                    var indexId = 1;
+                    promises.push($.ajax({
+                        url: "{{ url('/list/hewan') }}",
+                        type: "GET",
+                        data: {
+                            'id': jumlahHewan[j].hewan_id
+                        },
+                        success: function(response) {},
+                    }))
+                }
+            } else {
+                totalHewan = 1;
+                $.ajax({
+                    url: "{{ url('/list/hewan') }}",
+                    type: "GET",
+                    success: function(response) {
+                        if (response.status == 'success') {
+                            for (var i = 0; i < response.data.length; i++) {
+                                optionHewan += '<option value="' + response.data[i].id + '">' + response
+                                    .data[i].nama + '</option>';
+                            }
+                            setOptionHewan(totalHewan);
+                        }
+                    },
+                })
+            }
+
+            Promise.all(promises)
+                .then(response => {
+                    for (var j = 0; j < response.length; j++) {
+                        optionHewan = '<option></option>';
+                        if (response[j].status == 'success') {
+                            for (var i = 0; i < response[j].data.length; i++) {
+                                optionHewan += '<option value="' + response[j].data[i].id +
+                                    '">' +
+                                    response[j]
+                                    .data[i].nama + '</option>';
+                            }
+                            setOptionHewan(j + 1);
+                            $('#select-hewan-' + (j + 1)).val(jumlahHewan[j]
+                                    .hewan_id)
+                                .trigger(
+                                    'change');
+                        }
+                    }
+                })
         })
+    </script>
+
+    <script>
+        function setOptionHewan(id) {
+            $('#select-hewan-' + id).append(optionHewan);
+            $('#select-hewan-' + id).select2({
+                placeholder: "- Pilih Salah Satu -",
+                theme: "bootstrap",
+            })
+        }
+
+        $('#btn-tambah-hewan').click(function() {
+            totalHewan++;
+            $('#list-hewan').append(tambahListHewan(totalHewan));
+            $('#form-hewan-' + totalHewan).fadeIn("slow");
+            setOptionHewan(totalHewan);
+        })
+
+        function tambahListHewan(totalHewan) {
+            var formListHewan =
+                '<div id="form-hewan-' + totalHewan +
+                '" class="row" style="display: none;"><div class="col-5"><div class="d-inline"><label class="form-label my-2">Hewan Ternak</label></div><div class="d-flex"><select class="form-select col-12 select2" id="select-hewan-' +
+                totalHewan +
+                '" aria-hidden="true" name="hewan_id[]" autocomplete="off"></select></div><span class="text-danger error-text hewan_id-error"></span></div><div class="col-5"><label for="TextInput" class="form-label my-2">Jumlah Hewan Ternak</label><input type="text" name="jumlah_hewan[]" class="form-control numerik" placeholder="Masukkan Jumlah Hewan Ternak" autocomplete="off"><span class="text-danger error-text jumlah_hewan-error"></span></div><div class="col-2"><label for="TextInput" class="form-label my-2">&nbsp;</label><button class="btn btn-danger col-12 fw-bold" onclick="hapusFormHewan(' +
+                totalHewan + ')" type="button"><i class="fas fa-trash-alt"></i> Hapus</button></div></div>';
+
+            return formListHewan;
+        }
+
+        function hapusFormHewan(id) {
+            $('#form-hewan-' + id).fadeOut("slow", function() {
+                $("#form-hewan-" + id).remove();
+            });
+        }
     </script>
 
     <script>

@@ -71,7 +71,7 @@
                                                 @component('dashboard.components.dataTables.index',
                                                     [
                                                         'id' => 'table-data',
-                                                        'th' => ['No', 'Nama', 'Desa', 'Deskripsi', 'Status', 'Aksi'],
+                                                        'th' => ['No', 'Nama', 'Desa', 'Deskripsi', 'Latitude / Longitude', 'Status', 'Aksi'],
                                                     ])
                                                 @endcomponent
                                             </div>
@@ -255,6 +255,11 @@
                 {
                     data: 'deskripsi',
                     name: 'deskripsi',
+                },
+                {
+                    data: 'koordinat',
+                    name: 'koordinat',
+                    className: 'text-center'
                 },
                 {
                     data: 'status',

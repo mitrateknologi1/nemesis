@@ -71,7 +71,7 @@
                                                 @component('dashboard.components.dataTables.index',
                                                     [
                                                         'id' => 'table-data',
-                                                        'th' => ['No', 'Nama', 'Desa', 'Deskripsi', 'Status', 'Aksi'],
+                                                        'th' => ['No', 'Nama', 'Desa', 'Deskripsi', 'Latitude / Longitude', 'Jumlah Hewan', 'Status', 'Aksi'],
                                                     ])
                                                 @endcomponent
                                             </div>
@@ -164,8 +164,20 @@
                 url: "{{ url('/map/hewan') }}",
                 type: "GET",
                 success: function(response) {
+                    console.log(response);
                     if (response.status == 'success') {
                         for (var i = 0; i < response.data.length; i++) {
+                            var jumlahHewan = '';
+
+                            if (response.data[i].jumlah_hewan.length > 0) {
+                                jumlahHewan += '<hr>';
+                                jumlahHewan += "<p class='my-0'>Jumlah Hewan : </p>";
+                                for (var j = 0; j < response.data[i].jumlah_hewan.length; j++) {
+                                    jumlahHewan += "<p class='my-0'>" + response.data[i].jumlah_hewan[j].hewan
+                                        .nama + " : " + response.data[i].jumlah_hewan[j].jumlah + "</p>";
+                                }
+                            }
+
                             icon = pinIcon;
                             L.marker([response.data[i].latitude, response.data[i].longitude], {
                                     icon: icon
@@ -174,7 +186,7 @@
                                     "<p class='fw-bold my-0 text-center'>" + response.data[i].nama +
                                     "</p><hr>" +
                                     "<p class='my-0'>Desa : " + response.data[i].desa
-                                    .nama + "</p>"
+                                    .nama + "</p>" + jumlahHewan
                                 )
                                 // .on('click', L.bind(petaKlik, null, data[0][i].id))
                                 .addTo(map);
@@ -241,7 +253,8 @@
             ajax: "{{ url('master-data/lokasi/hewan') }}",
             columns: [{
                     data: 'DT_RowIndex',
-                    name: 'DT_RowIndex'
+                    name: 'DT_RowIndex',
+                    class: 'text-center'
                 },
                 {
                     data: 'nama',
@@ -255,6 +268,15 @@
                 {
                     data: 'deskripsi',
                     name: 'deskripsi',
+                },
+                {
+                    data: 'koordinat',
+                    name: 'koordinat',
+                    class: 'text-center'
+                },
+                {
+                    data: 'jumlah_hewan',
+                    name: 'jumlah_hewan',
                 },
                 {
                     data: 'status',

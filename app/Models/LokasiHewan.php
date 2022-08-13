@@ -19,4 +19,9 @@ class LokasiHewan extends Model
     {
         return $this->belongsTo(Desa::class)->withTrashed();
     }
+
+    public function jumlahHewan()
+    {
+        return $this->hasMany(JumlahHewan::class);
+    }
 }

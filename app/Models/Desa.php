@@ -20,4 +20,9 @@ class Desa extends Model
     {
         return json_decode($this->polygon);
     }
+
+    public function lokasiKeong()
+    {
+        return $this->hasMany(LokasiKeong::class, 'desa_id')->orderBy('nama');
+    }
 }

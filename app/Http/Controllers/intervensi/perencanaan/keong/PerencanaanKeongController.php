@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\intervensi\perencanaan\keong;
 
+use App\Models\OPD;
+use App\Models\Desa;
+use App\Models\LokasiKeong;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Models\PerencanaanKeong;
@@ -11,7 +14,6 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StorePerencanaanKeongRequest;
 use App\Http\Requests\UpdatePerencanaanKeongRequest;
-use App\Models\LokasiKeong;
 
 class PerencanaanKeongController extends Controller
 {
@@ -84,7 +86,11 @@ class PerencanaanKeongController extends Controller
      */
     public function create()
     {
-        //
+        $data = [
+            'desa' => Desa::all(),
+            'opd' => OPD::orderBy('nama')->get()
+        ];
+        return view('dashboard.pages.intervensi.perencanaan.keong.subIndikator.create', $data);
     }
 
     /**
@@ -93,9 +99,57 @@ class PerencanaanKeongController extends Controller
      * @param  \App\Http\Requests\StorePerencanaanKeongRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePerencanaanKeongRequest $request)
+    public function store(Request $request)
     {
-        //
+        // return $request;
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'sub_indikator' => 'required',
+                'lokasi' => 'required',
+            ],
+            [
+                'sub_indikator.required' => 'Sub Indikator harus diisi',
+                'lokasi.required' => 'Lokasi harus diisi',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()]);
+        }
+
+
+        if ($request->nama_dokumen != null) {
+            $countFileDokumen = count($request->file_dokumen ?? []);
+            $countNamaDokumen = count($request->nama_dokumen);
+
+            if ($countFileDokumen == $countNamaDokumen) {
+                if (in_array(null, $request->nama_dokumen)) {
+                    return 'nama_dokumen_kosong';
+                }
+            } else {
+                return 'nama_dokumen_kosong_dan_file_dokumen_kosong';
+            }
+        }
+
+        $insert = [
+            'sub_indikator' => $request->sub_indikator,
+            'lokasi' => $request->lokasi,
+        ];
+
+        if ($request->opd_terkait != '') {
+            $insert['opd_terkati'] = $request->opd_terkait;
+        }
+
+
+
+        return $insert;
+
+
+
+
+        return $request;
     }
 
     /**

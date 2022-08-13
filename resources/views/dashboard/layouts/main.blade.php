@@ -322,6 +322,12 @@
             theme: "bootstrap",
         })
 
+        function clearTextError() {
+            $('.error-text').html('')
+            $('.nama-dokumen').removeClass('is-invalid')
+            $('.file-dokumen').removeClass('is-invalid')
+        }
+
         $(function() {
             moment.locale('id');
             $('.tanggal').mask('00-00-0000');

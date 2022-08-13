@@ -223,7 +223,6 @@
                 url: "{{ url('rencana-intervensi-keong/map/' . $rencana_intervensi_keong->id) }}",
                 type: "GET",
                 success: function(response) {
-                    console.log(response);
                     if (response.status == 'success') {
                         for (var i = 0; i < response.data.length; i++) {
                             icon = pinIcon;

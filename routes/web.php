@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ImportController;
 use App\Http\Controllers\intervensi\perencanaan\keong\PerencanaanKeongController;
 use App\Http\Controllers\intervensi\realisasi\keong\RealisasiKeongController;
+use App\Http\Controllers\ListController;
 use App\Http\Controllers\masterData\HewanController;
-use App\Http\Controllers\masterData\lokasi\DesaController;
-use App\Http\Controllers\masterData\lokasi\KeongController;
-use App\Http\Controllers\masterData\LokasiKeongController;
+use App\Http\Controllers\masterData\lokasi\LokasiDesaController;
+use App\Http\Controllers\masterData\lokasi\LokasiHewanController;
+use App\Http\Controllers\masterData\lokasi\LokasiKeongController;
 use App\Http\Controllers\masterData\OPDController;
 use App\Models\Perencanaan;
 use Illuminate\Support\Facades\Route;
@@ -32,14 +34,25 @@ Route::resource('realisasi-intervensi-keong', RealisasiKeongController::class);
 
 // Master Data
 // Lokasi
-Route::get('master-data/lokasi/desa/tabel', [DesaController::class, 'tabel']);
-Route::resource('master-data/lokasi/desa', DesaController::class);
-Route::resource('master-data/lokasi/keong', KeongController::class)->parameters(
+Route::get('master-data/lokasi/desa/tabel', [LokasiDesaController::class, 'tabel']);
+Route::resource('master-data/lokasi/desa', LokasiDesaController::class);
+Route::resource('master-data/lokasi/keong', LokasiKeongController::class)->parameters(
     [
         'keong' => 'lokasi_keong'
     ]
 );
+Route::resource('master-data/lokasi/hewan', LokasiHewanController::class)->parameters(
+    [
+        'hewan' => 'lokasi_hewan'
+    ]
+);
+
 Route::resource('master-data/opd', OPDController::class);
 Route::resource('master-data/hewan', HewanController::class);
-Route::get('map/desa', [DesaController::class, 'getMapData']);
-Route::get('map/keong', [KeongController::class, 'getMapData']);
+Route::get('map/desa', [LokasiDesaController::class, 'getMapData']);
+Route::get('map/keong', [LokasiKeongController::class, 'getMapData']);
+Route::get('map/hewan', [LokasiHewanController::class, 'getMapData']);
+
+// List
+Route::get('list/desa', [ListController::class, 'desa']);
+Route::get('list/hewan', [ListController::class, 'hewan']);

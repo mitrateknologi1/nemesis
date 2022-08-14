@@ -1,11 +1,11 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Habitat Keong
+    Hewan
 @endsection
 
 @section('titlePanelHeader')
-    Habitat Keong
+    Hewan
 @endsection
 
 @section('subTitlePanelHeader')
@@ -32,11 +32,11 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Data Habitat Keong</div>
+                        <div class="card-title">Data Hewan</div>
                         <div class="card-tools">
                             @component('dashboard.components.buttons.add',
                                 [
-                                    'url' => url('master-data/lokasi/keong/create'),
+                                    'url' => url('master-data/lokasi/hewan/create'),
                                 ])
                             @endcomponent
                         </div>
@@ -71,7 +71,17 @@
                                                 @component('dashboard.components.dataTables.index',
                                                     [
                                                         'id' => 'table-data',
-                                                        'th' => ['No', 'Nama', 'Desa', 'Deskripsi', 'Latitude / Longitude', 'Pemilik', 'Status', 'Aksi'],
+                                                        'th' => [
+                                                            'No',
+                                                            'Nama',
+                                                            'Desa',
+                                                            'Deskripsi',
+                                                            'Latitude / Longitude',
+                                                            'Jumlah Hewan',
+                                                            'Pemilik',
+                                                            'Status',
+                                                            'Aksi',
+                                                        ],
                                                     ])
                                                 @endcomponent
                                             </div>
@@ -161,20 +171,29 @@
             })
 
             $.ajax({
-                url: "{{ url('/map/keong') }}",
+                url: "{{ url('/map/hewan') }}",
                 type: "GET",
                 success: function(response) {
                     if (response.status == 'success') {
-
                         for (var i = 0; i < response.data.length; i++) {
-                            var pemilikKeong = '';
-                            if (response.data[i].pemilik_lokasi_keong.length > 0) {
-                                pemilikKeong += '<hr class="my-1">';
-                                pemilikKeong += "<p class='my-0 fw-bold'>Pemilik : </p>";
-                                for (var j = 0; j < response.data[i].pemilik_lokasi_keong.length; j++) {
-                                    pemilikKeong += "<p class='my-0'> -" + response.data[i]
-                                        .pemilik_lokasi_keong[
-                                            j].penduduk.nama + "</p>";
+                            var jumlahHewan = '';
+                            var pemilikHewan = '';
+
+                            if (response.data[i].jumlah_hewan.length > 0) {
+                                jumlahHewan += '<hr class="my-1">';
+                                jumlahHewan += "<p class='my-0 fw-bold'>Jumlah Hewan : </p>";
+                                for (var j = 0; j < response.data[i].jumlah_hewan.length; j++) {
+                                    jumlahHewan += "<p class='my-0'>" + response.data[i].jumlah_hewan[j].hewan
+                                        .nama + " : " + response.data[i].jumlah_hewan[j].jumlah + "</p>";
+                                }
+                            }
+
+                            if (response.data[i].pemilik_lokasi_hewan.length > 0) {
+                                pemilikHewan += '<hr class="my-1">';
+                                pemilikHewan += "<p class='my-0 fw-bold'>Pemilik : </p>";
+                                for (var j = 0; j < response.data[i].pemilik_lokasi_hewan.length; j++) {
+                                    pemilikHewan += "<p class='my-0'>" + response.data[i].pemilik_lokasi_hewan[
+                                        j].penduduk.nama + "</p>";
                                 }
                             }
 
@@ -187,7 +206,7 @@
                                     "</p><hr class='my-1'>" +
                                     "<p class='my-0 fw-bold'>Desa : </p>" +
                                     "<p class='my-0'>" + response.data[i].desa
-                                    .nama + "</p>" + pemilikKeong
+                                    .nama + "</p>" + jumlahHewan + pemilikHewan
                                 )
                                 // .on('click', L.bind(petaKlik, null, data[0][i].id))
                                 .addTo(map);
@@ -218,7 +237,7 @@
             }).then((Delete) => {
                 if (Delete) {
                     $.ajax({
-                        url: "{{ url('master-data/lokasi/keong') }}" + '/' + id,
+                        url: "{{ url('master-data/lokasi/hewan') }}" + '/' + id,
                         type: 'DELETE',
                         data: {
                             '_token': '{{ csrf_token() }}'
@@ -251,10 +270,11 @@
         var table = $('#table-data').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ url('master-data/lokasi/keong') }}",
+            ajax: "{{ url('master-data/lokasi/hewan') }}",
             columns: [{
                     data: 'DT_RowIndex',
-                    name: 'DT_RowIndex'
+                    name: 'DT_RowIndex',
+                    class: 'text-center'
                 },
                 {
                     data: 'nama',
@@ -272,7 +292,11 @@
                 {
                     data: 'koordinat',
                     name: 'koordinat',
-                    className: 'text-center'
+                    class: 'text-center'
+                },
+                {
+                    data: 'jumlah_hewan',
+                    name: 'jumlah_hewan',
                 },
                 {
                     data: 'pemilik',
@@ -301,6 +325,6 @@
     <script>
         $('#nav-master-lokasi').addClass('active');
         $('#nav-master-lokasi .collapse').addClass('show');
-        $('#nav-master-lokasi .collapse #li-lokasi-keong').addClass('active');
+        $('#nav-master-lokasi .collapse #li-lokasi-hewan').addClass('active');
     </script>
 @endpush

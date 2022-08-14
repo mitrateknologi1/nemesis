@@ -5,12 +5,14 @@ namespace App\Http\Controllers\masterData\lokasi;
 use App\Http\Controllers\Controller;
 use App\Models\Desa;
 use App\Models\LokasiKeong;
+use App\Models\PemilikLokasiKeong;
+use App\Models\Penduduk;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class KeongController extends Controller
+class LokasiKeongController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -33,11 +35,25 @@ class KeongController extends Controller
                         return '<span class="badge bg-danger text-light border-none">Tidak Aktif</span>';
                     }
                 })
+                ->addColumn('koordinat', function ($row) {
+                    return $row->latitude . ' / ' . $row->longitude;
+                })
+                ->addColumn('pemilik', function ($row) {
+                    $pemilikKeong = '';
+                    if (count($row->pemilikLokasiKeong) > 0) {
+                        foreach ($row->pemilikLokasiKeong as $pemilik) {
+                            $pemilikKeong .= '<p class="my-0"> -' . $pemilik->penduduk->nama . '</p>';
+                        }
+                        return $pemilikKeong;
+                    } else {
+                        return '-';
+                    }
+                })
                 ->addColumn('action', function ($row) {
                     $actionBtn = '<a href="' . url('master-data/lokasi/keong' . '/' . $row->id . '/edit') . '" class="btn btn-warning btn-round btn-sm mr-1" value="' . $row->id . '"><i class="fa fa-edit"></i></a><button id="btn-delete" class="btn btn-danger btn-round btn-sm mr-1" value="' . $row->id . '" ><i class="fa fa-trash"></i></button>';
                     return $actionBtn;
                 })
-                ->rawColumns(['action', 'status', 'warnaPolygon', 'luas'])
+                ->rawColumns(['action', 'status', 'warnaPolygon', 'luas', 'koordinat', 'pemilik'])
                 ->make(true);
         }
 
@@ -51,7 +67,7 @@ class KeongController extends Controller
      */
     public function create()
     {
-        $daftarDesa = Desa::orderBy('nama', 'asc')->get();
+        $daftarDesa = Desa::with(['penduduk'])->orderBy('nama', 'asc')->get();
         return view('dashboard.pages.masterData.lokasi.keong.create', compact(['daftarDesa']));
     }
 
@@ -96,6 +112,13 @@ class KeongController extends Controller
         $lokasiKeong->status = $request->status;
         $lokasiKeong->save();
 
+        for ($i = 0; $i < count($request->penduduk_id); $i++) {
+            $pemilikLokasiKeong = new PemilikLokasiKeong();
+            $pemilikLokasiKeong->lokasi_keong_id = $lokasiKeong->id;
+            $pemilikLokasiKeong->penduduk_id = $request->penduduk_id[$i];
+            $pemilikLokasiKeong->save();
+        }
+
         return response()->json(['status' => 'success']);
     }
 
@@ -118,8 +141,19 @@ class KeongController extends Controller
      */
     public function edit(LokasiKeong $lokasiKeong)
     {
+        $arrPemilik = $lokasiKeong->pemilikLokasiKeong->pluck('penduduk_id')->toArray();
+        $arrPendudukHapus = Penduduk::whereIn('id', $arrPemilik)->onlyTrashed()->get()->toArray();
+
+        $id = $lokasiKeong->desa_id;
         $daftarDesa = Desa::orderBy('nama', 'asc')->get();
-        return view('dashboard.pages.masterData.lokasi.keong.edit', compact(['daftarDesa', 'lokasiKeong']));
+
+        if ($id) {
+            $desaHapus = Desa::where('id', $id)->withTrashed()->first();
+            if ($desaHapus->trashed()) {
+                $daftarDesa->push($desaHapus);
+            }
+        }
+        return view('dashboard.pages.masterData.lokasi.keong.edit', compact(['daftarDesa', 'lokasiKeong', 'arrPendudukHapus']));
     }
 
     /**
@@ -163,6 +197,14 @@ class KeongController extends Controller
         $lokasiKeong->status = $request->status;
         $lokasiKeong->save();
 
+        $pemilikLokasi = PemilikLokasiKeong::where('lokasi_keong_id', $lokasiKeong->id)->whereNotIn('penduduk_id', $request->penduduk_id)->forceDelete();
+        for ($i = 0; $i < count($request->penduduk_id); $i++) {
+            $pemilikLokasi = PemilikLokasiKeong::updateOrCreate(
+                ['lokasi_keong_id' => $lokasiKeong->id, 'penduduk_id' => $request->penduduk_id[$i]],
+                []
+            );
+        }
+
         return response()->json(['status' => 'success']);
     }
 
@@ -175,6 +217,7 @@ class KeongController extends Controller
     public function destroy(LokasiKeong $lokasiKeong)
     {
         $lokasiKeong->delete();
+        $lokasiKeong->pemilikLokasiKeong()->delete();
 
         return response()->json(['status' => 'success']);
     }
@@ -182,9 +225,9 @@ class KeongController extends Controller
     public function getMapData(Request $request)
     {
         if ($request->id) {
-            $keong = LokasiKeong::with(['desa'])->find($request->id);
+            $keong = LokasiKeong::with(['desa', 'pemilikLokasiKeong', 'pemilikLokasiKeong.penduduk'])->find($request->id);
         } else {
-            $keong = LokasiKeong::with(['desa'])->orderBy('id', 'desc')->get();
+            $keong = LokasiKeong::with(['desa', 'pemilikLokasiKeong', 'pemilikLokasiKeong.penduduk'])->orderBy('id', 'desc')->get();
         }
 
         if ($keong) {

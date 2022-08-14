@@ -140,6 +140,25 @@
                                                 @endslot
                                             @endcomponent
                                         </div>
+                                        <hr size="10px" width="100%" color="black" class="mt-3">
+                                        <div class="col-12">
+                                            <label class="form-label my-2 fw-bold"> Tambahkan Pemilik Lokasi Keong</label>
+                                            <div class="select2-input select2-primary">
+                                                <select id="penduduk_id" name="penduduk_id[]" class="form-control multiple"
+                                                    multiple="multiple" data-label="Titik Lokasi">
+                                                    @foreach ($daftarDesa as $desa)
+                                                        <optgroup label="Desa {{ $desa->nama }}"
+                                                            id="desa-{{ $desa->id }}">
+                                                            @foreach ($desa->penduduk as $penduduk)
+                                                                <option value="{{ $penduduk->id }}">{{ $penduduk->nama }}
+                                                                </option>
+                                                            @endforeach
+                                                        </optgroup>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <span class="text-danger error-text penduduk_id-error"></span>
+                                        </div>
                                         <div class="col-12 d-flex justify-content-end mt-3">
                                             @component('dashboard.components.buttons.submit',
                                                 [
@@ -160,9 +179,28 @@
 
 @push('scripts')
     <script>
+        var arrayPenduduk = {!! json_encode($lokasiKeong->pemilikLokasiKeong->pluck('penduduk_id')->toArray()) !!};
+        var arrayPendudukHapus = {!! json_encode($arrPendudukHapus) !!};
+        var optionPendudukHapus = '';
+
+        $('.multiple').select2({
+            placeholder: "- Bisa Pilih Lebih Dari Satu -",
+            theme: "bootstrap",
+        })
+
+        if (arrayPendudukHapus.length > 0) {
+            for (var i = 0; i < arrayPendudukHapus.length; i++) {
+                optionPendudukHapus = '';
+                optionPendudukHapus = '<option value="' + arrayPendudukHapus[i].id + '">' + arrayPendudukHapus[i].nama +
+                    '</option>';
+                $('#desa-' + arrayPendudukHapus[i].desa_id).append(optionPendudukHapus);
+            }
+        }
+
         $(document).ready(function() {
             $('#status').val('{{ $lokasiKeong->status }}').trigger('change');
             $('#desa_id').val('{{ $lokasiKeong->desa_id }}').trigger('change');
+            $('#penduduk_id').val(arrayPenduduk).trigger('change');
         })
     </script>
 
@@ -320,7 +358,7 @@
                                     color: response.data[i].warna_polygon,
                                     weight: 1,
                                     opacity: 1,
-                                    fillOpacity: 0.5
+                                    fillOpacity: 1
                                 })
                                 .bindTooltip(response.data[i].nama, {
                                     permanent: true,

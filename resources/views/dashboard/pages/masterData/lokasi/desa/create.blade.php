@@ -33,13 +33,6 @@
                 <div class="card-header">
                     <div class="card-head-row">
                         <div class="card-title">Data Desa</div>
-                        <div class="card-tools">
-                            @component('dashboard.components.buttons.add',
-                                [
-                                    'url' => url('master-data/lokasi/desa/create'),
-                                ])
-                            @endcomponent
-                        </div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -450,7 +443,7 @@
                                     color: response.data[i].warna_polygon,
                                     weight: 1,
                                     opacity: 1,
-                                    fillOpacity: 0.5
+                                    fillOpacity: 1
                                 })
                                 .bindTooltip(response.data[i].nama + " (" + response.data[i].luas +
                                     "m<sup>2</sup>) ", {

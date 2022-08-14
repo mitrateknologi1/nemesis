@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Desa;
 use App\Models\JumlahHewan;
 use App\Models\LokasiHewan;
+use App\Models\PemilikLokasiHewan;
+use App\Models\Penduduk;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
@@ -45,14 +47,25 @@ class LokasiHewanController extends Controller
                         }
                         return $jumlah_hewan;
                     } else {
-                        return 'te ada';
+                        return '-';
+                    }
+                })
+                ->addColumn('pemilik', function ($row) {
+                    $pemilikHewan = '';
+                    if (count($row->pemilikLokasiHewan) > 0) {
+                        foreach ($row->pemilikLokasiHewan as $pemilik) {
+                            $pemilikHewan .= '<p class="my-0"> -' . $pemilik->penduduk->nama . '</p>';
+                        }
+                        return $pemilikHewan;
+                    } else {
+                        return '-';
                     }
                 })
                 ->addColumn('action', function ($row) {
                     $actionBtn = '<a href="' . url('master-data/lokasi/hewan' . '/' . $row->id . '/edit') . '" class="btn btn-warning btn-round btn-sm mr-1" value="' . $row->id . '"><i class="fa fa-edit"></i></a><button id="btn-delete" class="btn btn-danger btn-round btn-sm mr-1" value="' . $row->id . '" ><i class="fa fa-trash"></i></button>';
                     return $actionBtn;
                 })
-                ->rawColumns(['action', 'status', 'warnaPolygon', 'luas', 'koordinat', 'jumlah_hewan'])
+                ->rawColumns(['action', 'status', 'warnaPolygon', 'luas', 'koordinat', 'jumlah_hewan', 'pemilik'])
                 ->make(true);
         }
 
@@ -66,7 +79,7 @@ class LokasiHewanController extends Controller
      */
     public function create()
     {
-        $daftarDesa = Desa::orderBy('nama', 'asc')->get();
+        $daftarDesa = Desa::with(['penduduk'])->orderBy('nama', 'asc')->get();
         return view('dashboard.pages.masterData.lokasi.hewan.create', compact(['daftarDesa']));
     }
 
@@ -88,7 +101,8 @@ class LokasiHewanController extends Controller
                 'longitude' => 'required',
                 'status' => 'required',
                 'hewan_id.*' => 'required',
-                'jumlah_hewan.*' => 'required'
+                'jumlah_hewan.*' => 'required',
+                'penduduk_id' => 'required',
             ],
             [
                 'nama.required' => 'Nama Lokasi tidak boleh kosong',
@@ -98,7 +112,8 @@ class LokasiHewanController extends Controller
                 'longitude.required' => 'Longitude tidak boleh kosong',
                 'status.required' => 'Status tidak boleh kosong',
                 'hewan_id.*.required' => 'Hewan Tidak Boleh Kosong',
-                'jumlah_hewan.*.required' => 'Jumlah Hewan Tidak Boleh Kosong'
+                'jumlah_hewan.*.required' => 'Jumlah Hewan Tidak Boleh Kosong',
+                'penduduk_id.required' => 'Pemilik Hewan Tidak Boleh Kosong'
             ]
         );
 
@@ -151,6 +166,13 @@ class LokasiHewanController extends Controller
             $jumlahHewan->save();
         }
 
+        for ($i = 0; $i < count($request->penduduk_id); $i++) {
+            $pemilikLokasiHewan = new PemilikLokasiHewan();
+            $pemilikLokasiHewan->lokasi_hewan_id = $lokasiHewan->id;
+            $pemilikLokasiHewan->penduduk_id = $request->penduduk_id[$i];
+            $pemilikLokasiHewan->save();
+        }
+
         return response()->json(['status' => 'success']);
     }
 
@@ -173,8 +195,19 @@ class LokasiHewanController extends Controller
      */
     public function edit(LokasiHewan $lokasiHewan)
     {
+        $arrPemilik = $lokasiHewan->pemilikLokasiHewan->pluck('penduduk_id')->toArray();
+        $arrPendudukHapus = Penduduk::whereIn('id', $arrPemilik)->onlyTrashed()->get()->toArray();
+
+        $id = $lokasiHewan->desa_id;
         $daftarDesa = Desa::orderBy('nama', 'asc')->get();
-        return view('dashboard.pages.masterData.lokasi.hewan.edit', compact(['daftarDesa', 'lokasiHewan']));
+
+        if ($id) {
+            $desaHapus = Desa::where('id', $id)->withTrashed()->first();
+            if ($desaHapus->trashed()) {
+                $daftarDesa->push($desaHapus);
+            }
+        }
+        return view('dashboard.pages.masterData.lokasi.hewan.edit', compact(['daftarDesa', 'lokasiHewan', 'arrPendudukHapus']));
     }
 
     /**
@@ -196,7 +229,8 @@ class LokasiHewanController extends Controller
                 'longitude' => 'required',
                 'status' => 'required',
                 'hewan_id.*' => 'required',
-                'jumlah_hewan.*' => 'required'
+                'jumlah_hewan.*' => 'required',
+                'penduduk_id' => 'required',
             ],
             [
                 'nama.required' => 'Nama Lokasi tidak boleh kosong',
@@ -206,7 +240,8 @@ class LokasiHewanController extends Controller
                 'longitude.required' => 'Longitude tidak boleh kosong',
                 'status.required' => 'Status tidak boleh kosong',
                 'hewan_id.*.required' => 'Hewan Tidak Boleh Kosong',
-                'jumlah_hewan.*.required' => 'Jumlah Hewan Tidak Boleh Kosong'
+                'jumlah_hewan.*.required' => 'Jumlah Hewan Tidak Boleh Kosong',
+                'penduduk_id.required' => 'Pemilik Hewan Tidak Boleh Kosong'
             ]
         );
 
@@ -252,12 +287,20 @@ class LokasiHewanController extends Controller
 
         // $deleteJumlahHewan = JumlahHewan::where('lokasi_hewan_id', $lokasiHewan->id)->whereNotIn('hewan_id', $request->hewan_id)->delete();
 
-        $jumlahHewan = JumlahHewan::where('lokasi_hewan_id', $lokasiHewan->id)->whereNotIn('hewan_id', $request->hewan_id)->delete();
+        $jumlahHewan = JumlahHewan::where('lokasi_hewan_id', $lokasiHewan->id)->whereNotIn('hewan_id', $request->hewan_id)->forceDelete();
 
         for ($i = 0; $i < count($request->hewan_id); $i++) {
             $jumlahHewan = JumlahHewan::updateOrCreate(
                 ['lokasi_hewan_id' => $lokasiHewan->id, 'hewan_id' => $request->hewan_id[$i]],
                 ['jumlah' => $request->jumlah_hewan[$i]]
+            );
+        }
+
+        $pemilikLokasi = PemilikLokasiHewan::where('lokasi_hewan_id', $lokasiHewan->id)->whereNotIn('penduduk_id', $request->penduduk_id)->forceDelete();
+        for ($i = 0; $i < count($request->penduduk_id); $i++) {
+            $pemilikLokasi = PemilikLokasiHewan::updateOrCreate(
+                ['lokasi_hewan_id' => $lokasiHewan->id, 'penduduk_id' => $request->penduduk_id[$i]],
+                []
             );
         }
 
@@ -274,15 +317,18 @@ class LokasiHewanController extends Controller
     {
         $lokasiHewan->delete();
 
+        $lokasiHewan->jumlahHewan()->delete();
+        $lokasiHewan->pemilikLokasiHewan()->delete();
+
         return response()->json(['status' => 'success']);
     }
 
     public function getMapData(Request $request)
     {
         if ($request->id) {
-            $keong = LokasiHewan::with(['desa', 'jumlahHewan', 'jumlahHewan.hewan'])->find($request->id);
+            $keong = LokasiHewan::with(['desa', 'jumlahHewan', 'jumlahHewan.hewan', 'pemilikLokasiHewan', 'pemilikLokasiHewan.penduduk'])->find($request->id);
         } else {
-            $keong = LokasiHewan::with(['desa', 'jumlahHewan', 'jumlahHewan.hewan'])->orderBy('id', 'desc')->get();
+            $keong = LokasiHewan::with(['desa', 'jumlahHewan', 'jumlahHewan.hewan', 'pemilikLokasiHewan', 'pemilikLokasiHewan.penduduk'])->orderBy('id', 'desc')->get();
         }
 
         if ($keong) {

@@ -71,7 +71,17 @@
                                                 @component('dashboard.components.dataTables.index',
                                                     [
                                                         'id' => 'table-data',
-                                                        'th' => ['No', 'Nama', 'Desa', 'Deskripsi', 'Latitude / Longitude', 'Jumlah Hewan', 'Status', 'Aksi'],
+                                                        'th' => [
+                                                            'No',
+                                                            'Nama',
+                                                            'Desa',
+                                                            'Deskripsi',
+                                                            'Latitude / Longitude',
+                                                            'Jumlah Hewan',
+                                                            'Pemilik',
+                                                            'Status',
+                                                            'Aksi',
+                                                        ],
                                                     ])
                                                 @endcomponent
                                             </div>
@@ -147,7 +157,7 @@
                                     color: response.data[i].warna_polygon,
                                     weight: 1,
                                     opacity: 1,
-                                    fillOpacity: 0.5
+                                    fillOpacity: 1
                                 })
                                 .bindTooltip(response.data[i].nama, {
                                     permanent: true,
@@ -164,17 +174,26 @@
                 url: "{{ url('/map/hewan') }}",
                 type: "GET",
                 success: function(response) {
-                    console.log(response);
                     if (response.status == 'success') {
                         for (var i = 0; i < response.data.length; i++) {
                             var jumlahHewan = '';
+                            var pemilikHewan = '';
 
                             if (response.data[i].jumlah_hewan.length > 0) {
-                                jumlahHewan += '<hr>';
-                                jumlahHewan += "<p class='my-0'>Jumlah Hewan : </p>";
+                                jumlahHewan += '<hr class="my-1">';
+                                jumlahHewan += "<p class='my-0 fw-bold'>Jumlah Hewan : </p>";
                                 for (var j = 0; j < response.data[i].jumlah_hewan.length; j++) {
                                     jumlahHewan += "<p class='my-0'>" + response.data[i].jumlah_hewan[j].hewan
                                         .nama + " : " + response.data[i].jumlah_hewan[j].jumlah + "</p>";
+                                }
+                            }
+
+                            if (response.data[i].pemilik_lokasi_hewan.length > 0) {
+                                pemilikHewan += '<hr class="my-1">';
+                                pemilikHewan += "<p class='my-0 fw-bold'>Pemilik : </p>";
+                                for (var j = 0; j < response.data[i].pemilik_lokasi_hewan.length; j++) {
+                                    pemilikHewan += "<p class='my-0'>" + response.data[i].pemilik_lokasi_hewan[
+                                        j].penduduk.nama + "</p>";
                                 }
                             }
 
@@ -184,9 +203,10 @@
                                 })
                                 .bindPopup(
                                     "<p class='fw-bold my-0 text-center'>" + response.data[i].nama +
-                                    "</p><hr>" +
-                                    "<p class='my-0'>Desa : " + response.data[i].desa
-                                    .nama + "</p>" + jumlahHewan
+                                    "</p><hr class='my-1'>" +
+                                    "<p class='my-0 fw-bold'>Desa : </p>" +
+                                    "<p class='my-0'>" + response.data[i].desa
+                                    .nama + "</p>" + jumlahHewan + pemilikHewan
                                 )
                                 // .on('click', L.bind(petaKlik, null, data[0][i].id))
                                 .addTo(map);
@@ -277,6 +297,10 @@
                 {
                     data: 'jumlah_hewan',
                     name: 'jumlah_hewan',
+                },
+                {
+                    data: 'pemilik',
+                    name: 'pemilik',
                 },
                 {
                     data: 'status',

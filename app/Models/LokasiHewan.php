@@ -22,6 +22,11 @@ class LokasiHewan extends Model
 
     public function jumlahHewan()
     {
-        return $this->hasMany(JumlahHewan::class);
+        return $this->hasMany(JumlahHewan::class)->withTrashed();
+    }
+
+    public function pemilikLokasiHewan()
+    {
+        return $this->hasMany(PemilikLokasiHewan::class)->withTrashed();
     }
 }

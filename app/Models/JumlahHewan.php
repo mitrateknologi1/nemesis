@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class JumlahHewan extends Model
 {
     use HasFactory;
-    // use SoftDeletes;
+    use SoftDeletes;
     use TraitUuid;
 
     protected $table = 'jumlah_hewan';

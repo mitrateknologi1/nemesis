@@ -18,4 +18,9 @@ class LokasiKeong extends Model
     {
         return $this->belongsTo(Desa::class)->withTrashed();
     }
+
+    public function pemilikLokasiKeong()
+    {
+        return $this->hasMany(PemilikLokasiKeong::class);
+    }
 }

@@ -71,7 +71,7 @@
                                                 @component('dashboard.components.dataTables.index',
                                                     [
                                                         'id' => 'table-data',
-                                                        'th' => ['No', 'Nama', 'Desa', 'Deskripsi', 'Latitude / Longitude', 'Status', 'Aksi'],
+                                                        'th' => ['No', 'Nama', 'Desa', 'Deskripsi', 'Latitude / Longitude', 'Pemilik', 'Status', 'Aksi'],
                                                     ])
                                                 @endcomponent
                                             </div>
@@ -147,7 +147,7 @@
                                     color: response.data[i].warna_polygon,
                                     weight: 1,
                                     opacity: 1,
-                                    fillOpacity: 0.5
+                                    fillOpacity: 1
                                 })
                                 .bindTooltip(response.data[i].nama, {
                                     permanent: true,
@@ -165,16 +165,29 @@
                 type: "GET",
                 success: function(response) {
                     if (response.status == 'success') {
+
                         for (var i = 0; i < response.data.length; i++) {
+                            var pemilikKeong = '';
+                            if (response.data[i].pemilik_lokasi_keong.length > 0) {
+                                pemilikKeong += '<hr class="my-1">';
+                                pemilikKeong += "<p class='my-0 fw-bold'>Pemilik : </p>";
+                                for (var j = 0; j < response.data[i].pemilik_lokasi_keong.length; j++) {
+                                    pemilikKeong += "<p class='my-0'> -" + response.data[i]
+                                        .pemilik_lokasi_keong[
+                                            j].penduduk.nama + "</p>";
+                                }
+                            }
+
                             icon = pinIcon;
                             L.marker([response.data[i].latitude, response.data[i].longitude], {
                                     icon: icon
                                 })
                                 .bindPopup(
                                     "<p class='fw-bold my-0 text-center'>" + response.data[i].nama +
-                                    "</p><hr>" +
-                                    "<p class='my-0'>Desa : " + response.data[i].desa
-                                    .nama + "</p>"
+                                    "</p><hr class='my-1'>" +
+                                    "<p class='my-0 fw-bold'>Desa : </p>" +
+                                    "<p class='my-0'>" + response.data[i].desa
+                                    .nama + "</p>" + pemilikKeong
                                 )
                                 // .on('click', L.bind(petaKlik, null, data[0][i].id))
                                 .addTo(map);
@@ -260,6 +273,10 @@
                     data: 'koordinat',
                     name: 'koordinat',
                     className: 'text-center'
+                },
+                {
+                    data: 'pemilik',
+                    name: 'pemilik',
                 },
                 {
                     data: 'status',

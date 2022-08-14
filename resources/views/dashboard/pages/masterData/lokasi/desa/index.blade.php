@@ -131,7 +131,7 @@
                                     color: response.data[i].warna_polygon,
                                     weight: 1,
                                     opacity: 1,
-                                    fillOpacity: 0.5
+                                    fillOpacity: 1
                                 })
                                 .addTo(map)
                                 .bindTooltip(response.data[i].nama + " (" + response.data[i].luas +

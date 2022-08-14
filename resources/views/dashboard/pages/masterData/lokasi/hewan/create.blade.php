@@ -172,7 +172,27 @@
                                                 type="button"><i class="fas fa-plus-circle"></i> Tambah Hewan
                                                 Ternak</button>
                                         </div>
+                                        <hr size="10px" width="100%" color="black" class="mt-3">
+                                        <div class="col-12">
+                                            <label class="form-label my-2 fw-bold"> Tambahkan Pemilik Hewan</label>
+                                            <div class="select2-input select2-primary">
+                                                <select id="pemilik-lokasi" name="penduduk_id[]"
+                                                    class="form-control multiple" multiple="multiple"
+                                                    data-label="Titik Lokasi">
+                                                    @foreach ($daftarDesa as $desa)
+                                                        <optgroup label="Desa {{ $desa->nama }}">
+                                                            @foreach ($desa->penduduk as $penduduk)
+                                                                <option value="{{ $penduduk->id }}">{{ $penduduk->nama }}
+                                                                </option>
+                                                            @endforeach
+                                                        </optgroup>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <span class="text-danger error-text penduduk_id-error"></span>
+                                        </div>
                                         <div class="col-12 d-flex justify-content-end mt-3">
+
                                             @component('dashboard.components.buttons.submit',
                                                 [
                                                     'label' => 'Simpan',
@@ -192,6 +212,10 @@
 
 @push('scripts')
     <script>
+        $('.multiple').select2({
+            placeholder: "- Bisa Pilih Lebih Dari Satu -",
+            theme: "bootstrap",
+        })
         $('#form-tambah').submit(function(e) {
             e.preventDefault();
             resetError();
@@ -359,7 +383,7 @@
                                     color: response.data[i].warna_polygon,
                                     weight: 1,
                                     opacity: 1,
-                                    fillOpacity: 0.5
+                                    fillOpacity: 1
                                 })
                                 .bindTooltip(response.data[i].nama, {
                                     permanent: true,

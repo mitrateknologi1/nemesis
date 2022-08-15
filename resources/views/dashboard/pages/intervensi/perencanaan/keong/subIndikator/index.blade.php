@@ -13,8 +13,11 @@
 @endsection
 
 @section('buttonPanelHeader')
-    <a href="{{ route('rencana-intervensi-keong.create') }}" class="btn btn-secondary btn-round"><i class="fas fa-plus"></i>
-        Tambah</a>
+    @if (Auth::user()->role == 'OPD')
+        <a href="{{ route('rencana-intervensi-keong.create') }}" class="btn btn-secondary btn-round"><i
+                class="fas fa-plus"></i>
+            Tambah</a>
+    @endif
 @endsection
 
 @section('contents')
@@ -42,7 +45,7 @@
                                             <th>Tanggal Pembuatan</th>
                                             <th>Sub Indikator</th>
                                             <th>OPD</th>
-                                            <th>Jumlah Lokasi</th>
+                                            {{-- <th>Jumlah Lokasi</th> --}}
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -98,10 +101,10 @@
                     data: 'opd',
                     name: 'opd',
                 },
-                {
-                    data: 'jumlah_lokasi',
-                    name: 'jumlah_lokasi',
-                },
+                // {
+                //     data: 'jumlah_lokasi',
+                //     name: 'jumlah_lokasi',
+                // },
                 // {
                 //     data: 'lokasi_keong',
                 //     name: 'lokasi_keong',
@@ -133,5 +136,41 @@
                 },
             ],
         });
+
+        $(document).on('click', '.btn-delete', function() {
+            let id = $(this).val();
+            var _token = "{{ csrf_token() }}";
+            swal({
+                title: 'Apakah Anda yakin?',
+                text: "Data yang dipilih akan dihapus!",
+                icon: "warning",
+                dangerMode: true,
+                buttons: ["Batal", "Ya"],
+            }).then((result) => {
+                if (result) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: "{{ url('rencana-intervensi-keong') }}" + '/' + id,
+                        data: {
+                            _token: _token
+                        },
+                        success: function(data) {
+                            swal({
+                                title: "Berhasil!",
+                                text: "Data yang dipilih berhasil dihapus.",
+                                icon: "success",
+                            }).then(function() {
+                                table.ajax.reload();
+                                $('#checkAllData').prop('checked', false);
+                            });
+                        }
+                    })
+                } else {
+                    swal("Data batal dihapus.", {
+                        icon: "error",
+                    });
+                }
+            })
+        })
     </script>
 @endpush

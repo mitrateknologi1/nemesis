@@ -1,16 +1,23 @@
 @extends('dashboard.layouts.main')
 
+@section('title')
+    Realisasi Intervensi Keong
+@endsection
+
 @section('titlePanelHeader')
     Realisasi Intervensi Keong
 @endsection
 
 @section('subTitlePanelHeader')
-    Data yang muncul hanyalah data dari perencanaan intervensi yang telah disetujui.
+    {{-- Lorem ipsum dolor sit amet consectetur adipisicing elit. --}}
 @endsection
 
 @section('buttonPanelHeader')
-    {{-- <a href="#" class="btn btn-secondary btn-round"><i class="fas fa-plus"></i>
-        Tambah</a> --}}
+    @if (Auth::user()->role == 'OPD')
+        <a href="{{ route('rencana-intervensi-keong.create') }}" class="btn btn-secondary btn-round"><i
+                class="fas fa-plus"></i>
+            Tambah</a>
+    @endif
 @endsection
 
 @section('contents')
@@ -19,7 +26,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Data Berdasarkan Sub Indikator</div>
+                        <div class="card-title">Data Realisasi Intervensi Keong</div>
                         <div class="card-tools">
                             @component('dashboard.components.buttons.export')
                             @endcomponent
@@ -38,99 +45,14 @@
                                             {{-- <th>Tanggal Disetujui</th> --}}
                                             <th>Sub Indikator</th>
                                             <th>OPD</th>
-                                            {{-- <th>Total Dokumen</th> --}}
-                                            <th>Titik Lokasi</th>
-                                            <th>Persentase (%)</th>
+                                            <th>Persentase TW</th>
+                                            <th>Persentase Total</th>
+                                            {{-- <th>Jumlah Lokasi</th> --}}
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Pembersihan Habitat Keong</td>
-                                            <td class="text-center">Dinas Kebersihan</td>
-                                            {{-- <td class="text-center">7</td> --}}
-                                            <td class="text-center">8</td>
-                                            <td class="text-center"><span
-                                                    class="badge font-weight-bold badge-count">100</span></td>
-                                            <td class="text-center"><span class="badge badge-success">Valid</span></td>
-                                            <td class="text-center">
-                                                <div class="my-2">
-                                                    <a href="{{ url('realisasi-intervensi-keong/' . 1) }}"
-                                                        class="btn btn-sm shadow btn-round btn-info" data-toggle="tooltip"
-                                                        data-placement="top" title="Lihat">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                    {{-- <a href="#" class="btn btn-sm shadow btn-round btn-warning"
-                                                        data-toggle="tooltip" data-placement="top" title="Ubah">
-                                                        <i class="fa fa-edit"></i>
-                                                    </a> --}}
-                                                    <a href="#" class="btn btn-sm shadow btn-round btn-danger"
-                                                        data-toggle="tooltip" data-placement="top" title="Hapus">
-                                                        <i class="fa fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Pemusnahan Keong</td>
-                                            <td class="text-center">Dinas Kesehatan</td>
-                                            {{-- <td class="text-center">3</td> --}}
-                                            <td class="text-center">7</td>
-                                            <td class="text-center"><span
-                                                    class="badge font-weight-bold badge-count">100</span></td>
-                                            <td class="text-center"><span class="badge badge-warning">Belum
-                                                    Dikonfirmasi</span></td>
-                                            <td class="text-center">
-                                                <div class="my-2">
-                                                    <a href="#" class="btn btn-sm shadow btn-round btn-secondary"
-                                                        data-toggle="tooltip" data-placement="top" title="Konfirmasi">
-                                                        <i class="fas fa-lg fa-clipboard-check"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>Penaburan Obat</td>
-                                            <td class="text-center">Dinas Kesehatan</td>
-                                            {{-- <td class="text-center">0</td> --}}
-                                            <td class="text-center">2</td>
-                                            <td class="text-center"><span
-                                                    class="badge font-weight-bold badge-count">100</span></td>
-                                            <td class="text-center"><span class="badge badge-danger">Ditolak</span></td>
-                                            <td class="text-center">
-                                                <div class="my-2">
-                                                    <a href="#" class="btn btn-sm shadow btn-round btn-info"
-                                                        data-toggle="tooltip" data-placement="top" title="Lihat">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                </div>
-
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td>Penyuluhan Masyarakat</td>
-                                            <td class="text-center">Dinas Sosial</td>
-                                            {{-- <td class="text-center">3</td> --}}
-                                            <td class="text-center">6</td>
-                                            <td class="text-center"><span
-                                                    class="badge font-weight-bold badge-count">90</span></td>
-                                            <td class="text-center"><span class="badge badge-dark">Belum Selesai</span>
-                                            </td>
-                                            <td class="text-center">
-                                                <div class="my-2">
-                                                    <a href="#" class="btn btn-sm shadow btn-round btn-info"
-                                                        data-toggle="tooltip" data-placement="top" title="Lihat">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                </div>
-
-                                            </td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -146,6 +68,111 @@
     <script>
         $('#nav-realisasi').addClass('active');
         $('#nav-realisasi .collapse').addClass('show');
-        $('#nav-realisasi .collapse #li-keong-2').addClass('active');
+        $('#nav-realisasi .collapse #li-keong').addClass('active');
+
+        var table = $('#dataTables').DataTable({
+            processing: true,
+            serverSide: true,
+            lengthMenu: [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"]
+            ],
+            ajax: {
+                url: "{{ route('realisasi-intervensi-keong.index') }}",
+                // data: function(d) {
+                //     d.lokasiTugas = $('#lokasi-tugas').val();
+                //     d.search = $('input[type="search"]').val();
+                // }
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                    className: 'text-center',
+                    orderable: false,
+                    searchable: false
+                },
+                // {
+                //     data: 'tanggal_konfirmasi',
+                //     name: 'tanggal_konfirmasi',
+                // },
+                {
+                    data: 'sub_indikator',
+                    name: 'sub_indikator',
+                },
+                {
+                    data: 'opd',
+                    name: 'opd',
+                },
+                {
+                    data: 'persentase_tw',
+                    name: 'persentase_tw',
+                },
+                // {
+                //     data: 'lokasi_keong',
+                //     name: 'lokasi_keong',
+                // },
+                {
+                    data: 'status',
+                    name: 'status',
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false,
+                    className: 'text-center'
+                },
+
+
+
+            ],
+            columnDefs: [{
+                    targets: [3, 4],
+                    className: 'text-center',
+                },
+                // {
+                //     targets: [1],
+                //     render: function(data) {
+                //         return moment(data).format('LL');
+                //     }
+                // },
+            ],
+        });
+
+        $(document).on('click', '.btn-delete', function() {
+            let id = $(this).val();
+            var _token = "{{ csrf_token() }}";
+            swal({
+                title: 'Apakah Anda yakin?',
+                text: "Data yang dipilih akan dihapus!",
+                icon: "warning",
+                dangerMode: true,
+                buttons: ["Batal", "Ya"],
+            }).then((result) => {
+                if (result) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: "{{ url('rencana-intervensi-keong') }}" + '/' + id,
+                        data: {
+                            _token: _token
+                        },
+                        success: function(data) {
+                            swal({
+                                title: "Berhasil!",
+                                text: "Data yang dipilih berhasil dihapus.",
+                                icon: "success",
+                            }).then(function() {
+                                table.ajax.reload();
+                                $('#checkAllData').prop('checked', false);
+                            });
+                        }
+                    })
+                } else {
+                    swal("Data batal dihapus.", {
+                        icon: "error",
+                    });
+                }
+            })
+        })
     </script>
 @endpush

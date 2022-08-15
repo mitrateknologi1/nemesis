@@ -27,14 +27,15 @@
                 'class' => 'req',
                 'placeholder' => 'Masukkan Sub Indikator',
                 'wajib' => '<sup class="text-danger">*</sup>',
+                'value' => $rencanaIntervensiKeong->sub_indikator ?? '',
             ])
         @endcomponent
     </div>
-    <div class="form-group mt-0">
+    <div class="form-group pt-0">
         <div class="row">
             <div class="col-md-8">
                 <div class="form-group p-0 pb-2">
-                    <label>Pilih Titik Lokasi <sup class="text-danger">*</sup></label>
+                    <label class="my-2">Pilih Titik Lokasi <sup class="text-danger">*</sup></label>
                     <div class="select2-input select2-danger">
                         <input type="hidden" name="lokasi_hidden" id="lokasi-hidden" data-label="Lokasi Titik"
                             value="">
@@ -44,8 +45,8 @@
                                 <optgroup label="{{ $item->nama }}">
                                     @foreach ($item->lokasiKeong as $item2)
                                         <option value="{{ $item2->id }}" data-latitude="{{ $item2->latitude }}"
-                                            data-longitude="{{ $item2->longitude }}" data-namaLokasi={{ $item2->nama }}
-                                            data-namaDesa={{ $item->nama }}>
+                                            data-longitude="{{ $item2->longitude }}"
+                                            data-nama-lokasi="{{ $item2->nama }}" data-nama-desa="{{ $item->nama }}">
                                             {{ $item2->nama }}</option>
                                     @endforeach
                                 </optgroup>
@@ -59,7 +60,50 @@
             </div>
             <div class="col-md-4">
                 <div class="form-group p-0 pb-2">
-                    <label>Pilih OPD Terkait <span class="text-danger">(Jika Ada)</span></label>
+                    @component('dashboard.components.formElements.input',
+                        [
+                            'label' => 'Nilai Pembiayaan (Rp)',
+                            'id' => 'nilai-pembiayaan',
+                            'name' => 'nilai_pembiayaan',
+                            'class' => 'rupiah req',
+                            'placeholder' => 'Masukkan Nilai Pembiayaan',
+                            'wajib' => '<sup class="text-danger">*</sup>',
+                            'value' => $rencanaIntervensiKeong->nilai_pembiayaan ?? '',
+                        ])
+                    @endcomponent
+                </div>
+                <div class="form-group p-0 pb-2">
+                    <label class="form-label my-2">Sumber Dana <sup class="text-danger">*</sup></label>
+                    <div class="selectgroup w-100">
+                        @if ($method == 'POST')
+                            <input type="hidden" name="sumber_dana" value="" class="req"
+                                data-label="Sumber Dana" id="sumber-dana-hidden">
+                        @endif
+                        @component('dashboard.components.formElements.radioButton',
+                            [
+                                'label' => 'DAK',
+                                'value' => 'DAK',
+                                'name' => 'sumber_dana',
+                                'class' => 'sumber-dana req',
+                                // 'icon' => '<i class="fas fa-money-bill-wave"></i>',
+                                'checked' => isset($rencanaIntervensiKeong) && $rencanaIntervensiKeong->sumber_dana == 'DAK' ? 'checked' : '',
+                            ])
+                        @endcomponent
+                        @component('dashboard.components.formElements.radioButton',
+                            [
+                                'label' => 'DAU',
+                                'value' => 'DAU',
+                                'name' => 'sumber_dana',
+                                'class' => 'sumber-dana req',
+                                // 'icon' => '<i class="fas fa-money-bill-alt"></i>',
+                                'checked' => isset($rencanaIntervensiKeong) && $rencanaIntervensiKeong->sumber_dana == 'DAU' ? 'checked' : '',
+                            ])
+                        @endcomponent
+                    </div>
+                    <span class="text-danger error-text sumber_dana-error"></span>
+                </div>
+                <div class="form-group p-0 pb-2">
+                    <label class="my-2">Pilih OPD Terkait <span class="text-danger">(Jika Ada)</span></label>
                     <div class="select2-input select2-primary">
                         <select id="opd-terkait" name="opd_terkait[]" class="form-control multiple" multiple="multiple"
                             data-label="OPD Terkait">
@@ -72,64 +116,134 @@
                 <div class="form-group  p-0 pb-2">
                     <label for="" class="my-2">Dokumen Pendukung <sup class="text-danger">*</sup></label>
                     {{-- <label for="">(Surat-surat Kendaraan, Berita Acara, dan Lainnya)</label> --}}
-                    <div class="row" id="dokumen-aset">
-                        <div class="col-md-6 col-lg-12 col-xl-12 col-document" id="col-dokumen-1">
-                            <div class="card box-upload mb-3 pegawai" id="box-upload-1" class="box-upload">
-                                <div class="card-body py-3">
-                                    <div class="row">
-                                        <div class="col-3 d-flex align-items-center justify-content-center">
-                                            <img src="{{ asset('assets/dashboard/img/pdf.png') }}" alt=""
-                                                width="70px">
-                                        </div>
-                                        <div class="col-9">
-                                            <div class="mb-3 mt-2">
-                                                {{-- start validation --}}
-                                                <input type="hidden" name="nama_dokumen_1" value=""
-                                                    class="nama_dokumen req" data-label="Nama Dokumen" data-iter="1"
-                                                    id="nama_dokumen-hidden-1">
-                                                {{-- end validation --}}
-
-                                                <input type="text" class="form-control nama-dokumen"
-                                                    id="nama-dokumen-1" name="nama_dokumen[]"
-                                                    placeholder="Masukkan Nama Dokumen" value="" data-iter="1"
-                                                    onkeyup="rmValNamaDokumen(1)">
-
-                                                {{-- start validation --}}
-                                                <p class="text-danger error-text nama_dokumen_1-error my-0"
-                                                    id="nama_dokumen-error-1"></p>
-                                                {{-- end validation --}}
-
-                                                <p class="text-danger error-text nama_dokumen-error my-0"
-                                                    id="nama_dokumen-error-1"></p>
-
+                    <div class="row" id="dokumen-keong">
+                        @if (isset($rencanaIntervensiKeong) && $rencanaIntervensiKeong->dokumenPerencanaanKeong && $method == 'PUT')
+                            @foreach ($rencanaIntervensiKeong->dokumenPerencanaanKeong as $item)
+                                <div class="col-md-12 col-lg-12 col-xl-12 col-document"
+                                    id="col-document-old-{{ $loop->iteration }}">
+                                    <div class="card box-upload mb-3 pegawai" id="box-upload-{{ $loop->iteration }}"
+                                        class="box-upload">
+                                        <div class="card-body py-3">
+                                            <div class="row">
+                                                <div class="col-3 d-flex align-items-center justify-content-center">
+                                                    <img src="{{ asset('assets/dashboard/img/pdf.png') }}"
+                                                        alt="" width="70px">
+                                                </div>
+                                                <div class="col-9">
+                                                    <div class="mb-3 mt-2">
+                                                        {{-- start validation --}}
+                                                        <input type="hidden"
+                                                            name="nama_dokumen_{{ $loop->iteration }}"
+                                                            value="{{ $item->nama }}"
+                                                            class="nama_dokumen {{ $loop->iteration > 2 ? 'req' : '' }}"
+                                                            data-label="Nama Dokumen"
+                                                            data-iter="{{ $loop->iteration }}"
+                                                            id="nama_dokumen-hidden-{{ $loop->iteration }}">
+                                                        {{-- end validation --}}
+                                                        <input type="text" class="form-control nama-dokumen-old"
+                                                            id="nama-dokumen-{{ $loop->iteration }}"
+                                                            name="nama_dokumen_old[]"
+                                                            placeholder="Masukkan Nama Dokumen"
+                                                            value="{{ $item->nama }}"
+                                                            data-iter="{{ $loop->iteration }}">
+                                                        {{-- start validation --}}
+                                                        <p class="text-danger error-text nama_dokumen_{{ $loop->iteration }}-error my-0"
+                                                            id="nama_dokumen-error-{{ $loop->iteration }}"></p>
+                                                        {{-- end validation --}}
+                                                        <p class="text-danger error-text nama_dokumen-error my-0"
+                                                            id="nama_dokumen-error-{{ $loop->iteration }}"></p>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <a type="button"
+                                                            href="{{ Storage::exists('uploads/dokumen/perencanaan/keong/' . $item->file) ? Storage::url('uploads/dokumen/perencanaan/keong/' . $item->file) : 'tidak-ditemukan' }}"
+                                                            target="_blank" class="btn btn-primary shadow-sm w-100"><i
+                                                                class="fas fa-eye"></i> Lihat
+                                                            Dokumen</a>
+                                                    </div>
+                                                    <input name="file_dokumen_old[]"
+                                                        class="form-control file-dokumen-old"
+                                                        id="file-dokumen-{{ $loop->iteration }}" type="file"
+                                                        multiple="true" data-iter="{{ $loop->iteration }}"
+                                                        data-id="{{ $item->id }}" accept="application/pdf">
+                                                    <small class="text-muted" style="font-style: italic">Kosongkan
+                                                        jika tidak ingin
+                                                        mengubah
+                                                        dokumen</small>
+                                                </div>
                                             </div>
-                                            <div class="mb-3">
-                                                {{-- start validation --}}
-                                                <input type="hidden" name="file_dokumen_1" value=""
-                                                    class="req file_dokumen" data-label="File Dokumen" data-iter="1"
-                                                    id="file_dokumen-hidden-1">
-                                                {{-- end validation --}}
+                                        </div>
+                                        @if ($loop->iteration > 1)
+                                            <button type="button"
+                                                class="btn btn-danger fw-bold card-footer bg-danger text-center delete-document p-0"
+                                                onclick="deleteDocumentOld({{ $loop->iteration }})"
+                                                id="delete-document-old-{{ $loop->iteration }}"
+                                                value="{{ $item->id }}"><i class="fas fa-trash-alt"></i>
+                                                Hapus</button>
+                                        @endif
+                                    </div>
+                                    <p class="text-danger error-text dokumen-error my-0" id="dokumen-error-1"></p>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-document" id="col-dokumen-1">
+                                <div class="card box-upload mb-3 pegawai" id="box-upload-1" class="box-upload">
+                                    <div class="card-body py-3">
+                                        <div class="row">
+                                            <div class="col-3 d-flex align-items-center justify-content-center">
+                                                <img src="{{ asset('assets/dashboard/img/pdf.png') }}" alt=""
+                                                    width="70px">
+                                            </div>
+                                            <div class="col-9">
+                                                <div class="mb-3 mt-2">
+                                                    {{-- start validation --}}
+                                                    <input type="hidden" name="nama_dokumen_1" value=""
+                                                        class="nama_dokumen req" data-label="Nama Dokumen"
+                                                        data-iter="1" id="nama_dokumen-hidden-1">
+                                                    {{-- end validation --}}
 
-                                                <input name="file_dokumen[]" class="form-control file-dokumen"
-                                                    id="file-dokumen-1" type="file" multiple="true" data-iter="1"
-                                                    accept="application/pdf" onchange="rmValFileDokumen(1)">
+                                                    <input type="text" class="form-control nama-dokumen"
+                                                        id="nama-dokumen-1" name="nama_dokumen[]"
+                                                        placeholder="Masukkan Nama Dokumen" value=""
+                                                        data-iter="1" onkeyup="rmValNamaDokumen(1)">
 
-                                                {{-- start validation --}}
-                                                <p class="text-danger error-text file_dokumen_1-error my-0"
-                                                    id="file_dokumen-error-1"></p>
-                                                {{-- end validation --}}
+                                                    {{-- start validation --}}
+                                                    <p class="text-danger error-text nama_dokumen_1-error my-0"
+                                                        id="nama_dokumen-error-1"></p>
+                                                    {{-- end validation --}}
 
-                                                <p class="text-danger error-text file_dokumen-error my-0"
-                                                    id="file_dokumen-error-1"></p>
+                                                    <p class="text-danger error-text nama_dokumen-error my-0"
+                                                        id="nama_dokumen-error-1"></p>
+
+                                                </div>
+                                                <div class="mb-3">
+                                                    {{-- start validation --}}
+                                                    <input type="hidden" name="file_dokumen_1" value=""
+                                                        class="req file_dokumen" data-label="File Dokumen"
+                                                        data-iter="1" id="file_dokumen-hidden-1">
+                                                    {{-- end validation --}}
+
+                                                    <input name="file_dokumen[]" class="form-control file-dokumen"
+                                                        id="file-dokumen-1" type="file" multiple="true"
+                                                        data-iter="1" accept="application/pdf"
+                                                        onchange="rmValFileDokumen(1)">
+
+                                                    {{-- start validation --}}
+                                                    <p class="text-danger error-text file_dokumen_1-error my-0"
+                                                        id="file_dokumen-error-1"></p>
+                                                    {{-- end validation --}}
+
+                                                    <p class="text-danger error-text file_dokumen-error my-0"
+                                                        id="file_dokumen-error-1"></p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
+                                </div>
+                                <p class="text-danger error-text dokumen-error my-0" id="dokumen-error-1"></p>
                             </div>
-                            <p class="text-danger error-text dokumen-error my-0" id="dokumen-error-1"></p>
-                        </div>
-                        <div class="col-md-2 col-lg-3 col-xl-12 align-self-center col-add-dokumen">
+                        @endif
+                        <div class="col-md-4 col-lg-4 col-xl-12 align-self-center col-add-dokumen">
                             <div class="text-center text-muted" onclick="addDokumen()" style="cursor: pointer">
                                 <h1><i class="fas fa-plus-circle"></i></h1>
                                 <h6>Tambah Dokumen</h6>
@@ -142,24 +256,211 @@
     </div>
 
     <div class="form-group text-right">
-        @component('dashboard.components.buttons.submit',
-            [
-                'label' => 'Kirim Data',
-                'icon' => '<i class="fas fa-paper-plane"></i> ',
-            ])
+        @component('dashboard.components.buttons.submit')
+            @slot('label')
+                {{ $submitLabel }}
+            @endslot
+            @slot('icon')
+                {!! $submitIcon !!}
+            @endslot
         @endcomponent
     </div>
 </form>
 
 @push('scripts')
     <script>
+        $(document).ready(function() {
+            initializeMap();
+        })
+
+        $('.sumber-dana').click(function() {
+            $('#sumber-dana-hidden').val($(this).val());
+        });
+
         $('.multiple').select2({
             placeholder: "- Bisa Pilih Lebih Dari Satu -",
             theme: "bootstrap",
         })
 
+        $('#form').submit(function(e) {
+            e.preventDefault();
+            clearTextError()
+
+            $('#lokasi-perencanaan').val() == '' ? $('#lokasi-hidden').addClass('req') : $('#lokasi-hidden')
+                .removeClass('req');
+
+            const formValidation = $('#form .req').serializeArray()
+            validation(formValidation)
+
+            if ('{{ $method == 'POST' }}') {
+                var title = 'Kirim Data?'
+                var text = 'Apakah anda yakin ingin mengirim data ini?'
+            } else {
+                var title = 'Perbarui Data?'
+                var text = 'Apakah anda yakin ingin perbarui data ini?'
+            }
+
+            $('.rupiah').unmask();
+            let formData = new FormData(this);
+
+            if ('{{ $method }}' == 'PUT') {
+                formData.append('deleteDocumentOld', itemDocumentOld)
+            }
+
+            swal({
+                title: title,
+                text: text,
+                icon: "info",
+                buttons: ["Batal", "Ya"],
+            }).then((result) => {
+                if (result) {
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ $action }}",
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        data: formData,
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            console.log(response)
+                            $('.rupiah').mask('000.000.000.000.000', {
+                                reverse: true
+                            })
+                            if ($.isEmptyObject(response.error)) {
+                                if (response == 'nama_dokumen_kosong_old') {
+                                    swal({
+                                        title: "Gagal!",
+                                        text: "Terdapat Nama Dokumen yang kosong.",
+                                        icon: "error",
+                                    })
+                                    $.each($('.nama-dokumen-old'), function(index, value) {
+                                        if ($(value).val() == '') {
+                                            $(value).addClass('is-invalid');
+                                            $('#nama_dokumen-error-' + $(value)
+                                                .data(
+                                                    'iter')).text(
+                                                'Nama Dokumen tidak boleh kosong.'
+                                            )
+                                        }
+                                    });
+                                }
+
+                                if (response == 'nama_dokumen_kosong') {
+                                    swal({
+                                        title: "Gagal!",
+                                        text: "Terdapat Nama Dokumen yang kosong.",
+                                        icon: "error",
+                                    })
+                                    $.each($('.nama-dokumen'), function(index, value) {
+                                        if ($(value).val() == '') {
+                                            $(value).addClass('is-invalid');
+                                            $('#nama_dokumen-error-' + $(value)
+                                                .data(
+                                                    'iter')).text(
+                                                'Nama Dokumen tidak boleh kosong.'
+                                            )
+                                        }
+                                    });
+                                }
+
+                                if (response ==
+                                    'nama_dokumen_kosong_dan_file_dokumen_kosong') {
+                                    swal({
+                                        title: "Gagal!",
+                                        text: "Terdapat Nama Dokumen dan File Dokumen yang kosong.",
+                                        icon: "error",
+                                    })
+                                    $.each($('.nama-dokumen'), function(index, value) {
+                                        if ($(value).val() == '') {
+                                            $(value).addClass('is-invalid');
+                                            $('#nama_dokumen-error-' + $(value)
+                                                .data(
+                                                    'iter')).text(
+                                                'Nama Dokumen tidak boleh kosong.'
+                                            )
+                                        }
+                                    });
+                                    $.each($('.file-dokumen'), function(index, value) {
+                                        if ($(value).val() == '') {
+                                            $(value).addClass('is-invalid');
+                                            $('#file_dokumen-error-' + $(value)
+                                                .data(
+                                                    'iter')).text(
+                                                'File Dokumen tidak boleh kosong.'
+                                            )
+                                        }
+                                    });
+                                }
+
+                                if (response == 'kirim') {
+                                    swal({
+                                        title: "Berhasil!",
+                                        text: "Data berhasil dikirim dan sedang menunggu proses konfirmasi oleh admin.",
+                                        icon: "success",
+                                    }).then((value) => {
+                                        location.href = "{{ url()->previous() }}";
+                                    });
+                                }
+
+                                if (response == 'perbarui') {
+                                    swal({
+                                        title: "Berhasil!",
+                                        text: "Data berhasil diperbarui.",
+                                        icon: "success",
+                                    }).then((value) => {
+                                        location.href = "{{ url()->previous() }}";
+                                    });
+                                }
+
+                            } else {
+                                swal({
+                                    title: "Gagal!",
+                                    text: "Terjadi kesalahan, mohon periksa kembali data yang diinputkan.",
+                                    icon: "error",
+                                    button: "Ok",
+                                });
+                                printErrorMsg(response.error);
+                            }
+                        },
+                        error: function(response) {
+                            overlay.hide();
+                            swal({
+                                title: "Coba kembali",
+                                text: "Maaf, terjadi kesalahan pengiriman data, silahkan coba kembali.",
+                                icon: "error",
+                                button: "Ok",
+                            });
+                            $('.rupiah').mask('000.000.000.000.000', {
+                                reverse: true
+                            })
+                        },
+                    });
+                } else {
+                    swal("Data batal dikirim.", {
+                        icon: "error",
+                    });
+                    $('.rupiah').mask('000.000.000.000.000', {
+                        reverse: true
+                    })
+                }
+            });
+        });
+
+        const printErrorMsg = (msg) => {
+            $.each(msg, function(key, value) {
+                $('.' + key + '-error').text(value);
+            });
+        }
+    </script>
+
+    {{-- Lokasi Titik --}}
+    <script>
         let lokasiPerencanaan = [];
-        $('#lokasi-perencanaan').change(function() {
+
+        function setTitik() {
             lokasiPerencanaan = [];
             $('#lokasi-perencanaan option:selected').each(function() {
                 lokasiPerencanaan.push({
@@ -169,15 +470,37 @@
                     'namaLokasi': $(this).data('namaLokasi'),
                 });
             });
-            initializeMap();
+        }
 
+        let temp = 1;
+        $('#lokasi-perencanaan').change(function() {
+            setTitik()
+            if (temp == 0 || '{{ $method }}' == 'POST') {
+                initializeMap();
+            }
         });
 
-        $(document).ready(function() {
-            initializeMap();
-        })
+        if ('{{ isset($lokasi) }}') {
+            const lokasi = {!! $lokasi ?? '[]' !!};
+            for (let i = 0; i < lokasi.length; i++) {
+                $('#lokasi-perencanaan option[value="' + lokasi[i] + '"]').prop('selected', true);
+                setTitik()
+            }
+            $('#lokasi-perencanaan').trigger('change');
+            temp = 0;
+        }
+
+        if ('{{ isset($opdTerkait) }}') {
+            const opdTerkait = {!! $opdTerkait ?? '[]' !!};
+            for (let i = 0; i < opdTerkait.length; i++) {
+                $('#opd-terkait option[value="' + opdTerkait[i] + '"]').prop('selected', true);
+                $('#opd-terkait').trigger('change');
+            }
+        }
 
         var map = null;
+
+
 
         function initializeMap() {
             if (map != undefined || map != null) {
@@ -228,7 +551,7 @@
                                     color: response.data[i].warna_polygon,
                                     weight: 1,
                                     opacity: 1,
-                                    fillOpacity: 0.5
+                                    fillOpacity: 1
                                 })
                                 .bindTooltip(response.data[i].nama, {
                                     permanent: true,
@@ -256,9 +579,10 @@
                     .addTo(map);
             }
         }
+    </script>
 
-
-
+    {{-- Dokumen --}}
+    <script>
         // Dokumen
         $(document).on('change', '.file-dokumen-old', function() {
             let size = $(this)[0].files[0].size / 1024
@@ -325,11 +649,11 @@
 
         function addDokumen() {
             if ((iterDokumen == 0)) {
-                let count = {{ isset($maxDocument) ? $maxDocument : 0 }};
-                iterDokumen = count + 2;
+                let count = {{ isset($maxDokumen) ? $maxDokumen : 1 }};
+                iterDokumen = count + 1;
             }
             $('.col-add-dokumen').remove();
-            $('#dokumen-aset').append(`
+            $('#dokumen-keong').append(`
             <div class="col-md-6 col-lg-12 col-xl-12 col-document" id="col-dokumen-` + iterDokumen + `">
                 <div class="card box-upload mb-3" id="box-upload-` +
                 iterDokumen + `" class="box-upload">
@@ -388,7 +712,7 @@
                 </div>
                 <p class="text-danger error-text dokumen-error my-0" id="dokumen-error-1"></p>
             </div>
-            <div class="col-md-2 col-lg-2 col-xl-12 align-self-center col-add-dokumen">
+            <div class="col-md-4 col-lg-4 col-xl-12 align-self-center col-add-dokumen">
                 <div class="text-center text-muted" onclick="addDokumen()" style="cursor: pointer">
                     <h1><i class="fas fa-plus-circle"></i></h1>
                     <h6>Tambah Dokumen</h6>
@@ -404,149 +728,5 @@
             let iter = $(this).data('iter');
             $(`#nama_dokumen-hidden-${iter}`).val($(this).val())
         })
-
-
-        $('#form').submit(function(e) {
-            e.preventDefault();
-            clearTextError()
-
-            $('#lokasi-perencanaan').val() == '' ? $('#lokasi-hidden').addClass('req') : $('#lokasi-hidden')
-                .removeClass('req');
-
-            // const formValidation = $('#form .req').serializeArray()
-            // validation(formValidation)
-
-            if ('{{ $method == 'POST' }}') {
-                var title = 'Kirim Data?'
-                var text = 'Apakah anda yakin ingin mengirim data ini?'
-            } else {
-                var title = 'Perbarui Data?'
-                var text = 'Apakah anda yakin ingin perbarui data ini?'
-            }
-            let formData = new FormData(this);
-
-            swal({
-                title: title,
-                text: text,
-                icon: "info",
-                buttons: ["Batal", "Ya"],
-            }).then((result) => {
-                if (result) {
-                    $.ajax({
-                        type: "POST",
-                        url: "{{ $action }}",
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        data: formData,
-                        cache: false,
-                        processData: false,
-                        contentType: false,
-                        success: function(response) {
-                            console.log(response)
-                            if ($.isEmptyObject(response.error)) {
-                                // if (response == 'nama_dokumen_kosong_old') {
-                                //     swal({
-                                //         title: "Gagal!",
-                                //         text: "Terdapat Nama Dokumen yang kosong.",
-                                //         icon: "error",
-                                //     })
-                                //     $.each($('.nama-dokumen-old'), function(index, value) {
-                                //         if ($(value).val() == '') {
-                                //             $(value).addClass('is-invalid');
-                                //             $('#nama_dokumen-error-' + $(value)
-                                //                 .data(
-                                //                     'iter')).text(
-                                //                 'Nama Dokumen tidak boleh kosong.'
-                                //             )
-                                //         }
-                                //     });
-                                // }
-
-                                if (response == 'nama_dokumen_kosong') {
-                                    swal({
-                                        title: "Gagal!",
-                                        text: "Terdapat Nama Dokumen yang kosong.",
-                                        icon: "error",
-                                    })
-                                    $.each($('.nama-dokumen'), function(index, value) {
-                                        if ($(value).val() == '') {
-                                            $(value).addClass('is-invalid');
-                                            $('#nama_dokumen-error-' + $(value)
-                                                .data(
-                                                    'iter')).text(
-                                                'Nama Dokumen tidak boleh kosong.'
-                                            )
-                                        }
-                                    });
-                                }
-
-                                if (response == 'nama_dokumen_kosong_dan_file_dokumen_kosong') {
-                                    swal({
-                                        title: "Gagal!",
-                                        text: "Terdapat Nama Dokumen dan File Dokumen yang kosong.",
-                                        icon: "error",
-                                    })
-                                    $.each($('.nama-dokumen'), function(index, value) {
-                                        if ($(value).val() == '') {
-                                            $(value).addClass('is-invalid');
-                                            $('#nama_dokumen-error-' + $(value)
-                                                .data(
-                                                    'iter')).text(
-                                                'Nama Dokumen tidak boleh kosong.'
-                                            )
-                                        }
-                                    });
-                                    $.each($('.file-dokumen'), function(index, value) {
-                                        if ($(value).val() == '') {
-                                            $(value).addClass('is-invalid');
-                                            $('#file_dokumen-error-' + $(value)
-                                                .data(
-                                                    'iter')).text(
-                                                'File Dokumen tidak boleh kosong.'
-                                            )
-                                        }
-                                    });
-                                }
-                                //     swal({
-                                //         title: "Berhasil!",
-                                //         text: "Data berhasil dikirim, dan sedang dalam proses menunggu konfirmasi.",
-                                //         icon: "success",
-                                //     }).then((value) => {
-                                //         location.href = "{{ url()->previous() }}";
-                                //     });
-                            } else {
-                                swal({
-                                    title: "Gagal!",
-                                    text: "Terjadi kesalahan, mohon periksa kembali data yang diinputkan.",
-                                    icon: "error",
-                                    button: "Ok",
-                                });
-                                printErrorMsg(response.error);
-                            }
-                        },
-                        error: function(response) {
-                            overlay.hide();
-                            swal({
-                                title: "Coba kembali",
-                                text: "Maaf, terjadi kesalahan pengiriman data, silahkan coba kembali.",
-                                icon: "error",
-                                button: "Ok",
-                            });
-                        },
-                    });
-                } else {
-                    swal("Data batal dikirim.", {
-                        icon: "error",
-                    });
-                }
-            });
-        });
-
-        const printErrorMsg = (msg) => {
-            $.each(msg, function(key, value) {
-                $('.' + key + '-error').text(value);
-            });
-        }
     </script>
 @endpush

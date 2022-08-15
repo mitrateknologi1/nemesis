@@ -25,4 +25,9 @@ class Desa extends Model
     {
         return $this->hasMany(LokasiKeong::class, 'desa_id')->orderBy('nama');
     }
+
+    public function penduduk()
+    {
+        return $this->hasMany(Penduduk::class, 'desa_id')->orderBy('nama');
+    }
 }

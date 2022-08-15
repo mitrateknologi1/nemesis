@@ -1,11 +1,11 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Lokasi Habitat Keong
+    Lokasi Hewan
 @endsection
 
 @section('titlePanelHeader')
-    Lokasi Habitat Keong
+    Lokasi Hewan
 @endsection
 
 @section('subTitlePanelHeader')
@@ -20,15 +20,8 @@
 @push('styles')
     <style>
         #map {
-            height: 300px;
+            height: 400px;
             margin-top: 0px;
-        }
-
-        .labelPolygon {
-            background-color: transparent;
-            border-color: transparent;
-            box-shadow: none;
-            z-index: 999;
         }
     </style>
 @endpush
@@ -39,7 +32,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Ubah Lokasi Habitat Keong</div>
+                        <div class="card-title">Tambah Lokasi Hewan</div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -48,18 +41,17 @@
                             <div class="card">
                                 <div class="card-body">
                                     <form class="row g-3" id="form-tambah">
-                                        @method('PUT')
+                                        @method('POST')
                                         @csrf
                                         <div class="col-12">
                                             @component('dashboard.components.formElements.input',
                                                 [
-                                                    'label' => 'Nama Lokasi Habitat Keong',
+                                                    'label' => 'Nama Lokasi Hewan',
                                                     'type' => 'text',
                                                     'id' => 'nama',
                                                     'name' => 'nama',
                                                     'wajib' => '<sup class="text-danger">*</sup>',
-                                                    'placeholder' => 'Masukkan Nama Lokasi Habitat Keong',
-                                                    'value' => $lokasiKeong->nama,
+                                                    'placeholder' => 'Masukkan Nama Lokasi Hewan',
                                                 ])
                                             @endcomponent
                                         </div>
@@ -72,7 +64,6 @@
                                                     'placeholder' => 'Deskripsi Lokasi',
                                                     'name' => 'deskripsi',
                                                     'required' => true,
-                                                    'value' => $lokasiKeong->deskripsi,
                                                 ])
                                             @endcomponent
                                         </div>
@@ -107,7 +98,6 @@
                                                     'class' => 'marker numerik',
                                                     'wajib' => '<sup class="text-danger">*</sup>',
                                                     'placeholder' => 'Masukkan Latitude',
-                                                    'value' => $lokasiKeong->latitude,
                                                 ])
                                             @endcomponent
                                         </div>
@@ -121,7 +111,6 @@
                                                     'class' => 'marker numerik',
                                                     'wajib' => '<sup class="text-danger">*</sup>',
                                                     'placeholder' => 'Masukkan Longitude',
-                                                    'value' => $lokasiKeong->longitude,
                                                 ])
                                             @endcomponent
                                         </div>
@@ -142,13 +131,56 @@
                                         </div>
                                         <hr size="10px" width="100%" color="black" class="mt-3">
                                         <div class="col-12">
-                                            <label class="form-label my-2 fw-bold"> Tambahkan Pemilik Lokasi Keong</label>
+                                            <label class="form-label my-2 fw-bold"> Tambahkan Hewan Ternak</label>
+                                            <br>
+                                            <span class="text-danger error-text hewan-kosong-error"></span>
+                                            <div id="list-hewan">
+                                                <div id="form-hewan-1" class="row">
+                                                    <div class="col-5">
+                                                        <div class="d-inline">
+                                                            <label class="form-label my-2">Hewan Ternak
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="d-flex">
+                                                            <select class="form-select col-12 select2" id="select-hewan-1"
+                                                                aria-hidden="true" name="hewan_id[]" autocomplete="off">
+                                                            </select>
+                                                        </div>
+
+                                                        <span class="text-danger error-text hewan_id-error"></span>
+                                                    </div>
+                                                    <div class="col-5">
+                                                        <label for="TextInput" class="form-label my-2">Jumlah Hewan
+                                                            Ternak</label>
+                                                        <input type="text" name="jumlah_hewan[]"
+                                                            class="form-control numerik"
+                                                            placeholder="Masukkan Jumlah Hewan Ternak" autocomplete="off">
+                                                        <span class="text-danger error-text jumlah_hewan-error"></span>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <label for="TextInput" class="form-label my-2">&nbsp;</label>
+                                                        <button class="btn btn-danger col-12 fw-bold"
+                                                            onclick="hapusFormHewan(1)" type="button"><i
+                                                                class="fas fa-trash-alt"></i> Hapus</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 my-3">
+                                            <button class="btn btn-primary btn-rounded col-12 fw-bold" id="btn-tambah-hewan"
+                                                type="button"><i class="fas fa-plus-circle"></i> Tambah Hewan
+                                                Ternak</button>
+                                        </div>
+                                        <hr size="10px" width="100%" color="black" class="mt-3">
+                                        <div class="col-12">
+                                            <label class="form-label my-2 fw-bold"> Tambahkan Pemilik Hewan</label>
                                             <div class="select2-input select2-primary">
-                                                <select id="penduduk_id" name="penduduk_id[]" class="form-control multiple"
-                                                    multiple="multiple" data-label="Titik Lokasi">
+                                                <select id="pemilik-lokasi" name="penduduk_id[]"
+                                                    class="form-control multiple" multiple="multiple"
+                                                    data-label="Titik Lokasi">
                                                     @foreach ($daftarDesa as $desa)
-                                                        <optgroup label="Desa {{ $desa->nama }}"
-                                                            id="desa-{{ $desa->id }}">
+                                                        <optgroup label="Desa {{ $desa->nama }}">
                                                             @foreach ($desa->penduduk as $penduduk)
                                                                 <option value="{{ $penduduk->id }}">{{ $penduduk->nama }}
                                                                 </option>
@@ -160,6 +192,7 @@
                                             <span class="text-danger error-text penduduk_id-error"></span>
                                         </div>
                                         <div class="col-12 d-flex justify-content-end mt-3">
+
                                             @component('dashboard.components.buttons.submit',
                                                 [
                                                     'label' => 'Simpan',
@@ -179,32 +212,10 @@
 
 @push('scripts')
     <script>
-        var arrayPenduduk = {!! json_encode($lokasiKeong->pemilikLokasiKeong->pluck('penduduk_id')->toArray()) !!};
-        var arrayPendudukHapus = {!! json_encode($arrPendudukHapus) !!};
-        var optionPendudukHapus = '';
-
         $('.multiple').select2({
             placeholder: "- Bisa Pilih Lebih Dari Satu -",
             theme: "bootstrap",
         })
-
-        if (arrayPendudukHapus.length > 0) {
-            for (var i = 0; i < arrayPendudukHapus.length; i++) {
-                optionPendudukHapus = '';
-                optionPendudukHapus = '<option value="' + arrayPendudukHapus[i].id + '">' + arrayPendudukHapus[i].nama +
-                    '</option>';
-                $('#desa-' + arrayPendudukHapus[i].desa_id).append(optionPendudukHapus);
-            }
-        }
-
-        $(document).ready(function() {
-            $('#status').val('{{ $lokasiKeong->status }}').trigger('change');
-            $('#desa_id').val('{{ $lokasiKeong->desa_id }}').trigger('change');
-            $('#penduduk_id').val(arrayPenduduk).trigger('change');
-        })
-    </script>
-
-    <script>
         $('#form-tambah').submit(function(e) {
             e.preventDefault();
             resetError();
@@ -227,10 +238,11 @@
             }).then((Update) => {
                 if (Update) {
                     $.ajax({
-                        url: "{{ url('master-data/lokasi/keong' . '/' . $lokasiKeong->id) }}",
+                        url: "{{ url('master-data/lokasi/hewan') }}",
                         type: 'POST',
                         data: $(this).serialize(),
                         success: function(response) {
+                            console.log(response);
                             if (response.status == 'success') {
                                 swal("Berhasil", "Data Berhasil Disimpan", {
                                     icon: "success",
@@ -238,7 +250,7 @@
                                     timer: 1000,
                                 }).then(function() {
                                     window.location.href =
-                                        "{{ url('master-data/lokasi/keong') }}";
+                                        "{{ url('master-data/lokasi/hewan') }}";
                                 })
                             } else {
                                 swal("Periksa Kembali Data Anda", {
@@ -265,23 +277,33 @@
 
     <script>
         function printErrorMsg(msg) {
-            $.each(msg, function(key, value) {
-                $('.' + key + '-error').removeClass('d-none');
-                $('.' + key + '-error').text(value);
+            $.each(msg, function(keyError, valueError) {
+                var totalError = valueError.length;
+                var indexError = 0;
+                $.each(valueError, function(key, value) {
+                    if (keyError.split(".").length > 1) {
+                        $('.' + keyError.split(".")[0] + '-error')[keyError.split(".")[1]].innerHTML = $(
+                            '.' +
+                            keyError.split(".")[0] + '-error')[keyError.split(".")[1]].innerHTML + value;
+                        if ((indexError + 1) != totalError) {
+                            $('.' + keyError.split(".")[0] + '-error')[keyError.split(".")[1]].innerHTML =
+                                $(
+                                    '.' +
+                                    keyError.split(".")[0] + '-error')[keyError.split(".")[1]].innerHTML +
+                                ", ";
+                        }
+                    } else {
+                        $('.' + keyError + '-error').text(value);
+                    }
+                    indexError++;
+                });
             });
         }
 
         function resetError() {
-            resetErrorElement('nama');
-            resetErrorElement('deskripsi');
-            resetErrorElement('desa_id');
-            resetErrorElement('latitude');
-            resetErrorElement('longitude');
-            resetErrorElement('status');
-        }
-
-        function resetErrorElement(key) {
-            $('.' + key + '-error').addClass('d-none');
+            $(".error-text").each(function() {
+                $(this).html('');
+            })
         }
     </script>
 
@@ -315,6 +337,7 @@
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
             attribution: 'Data © <a href="http://osm.org/copyright">OpenStreetMap</a>',
             maxZoom: 18,
+            minZoom: 11
         }).addTo(map);
 
         var drawnItems = new L.FeatureGroup();
@@ -347,6 +370,8 @@
             updateMarker($("#latitude").val(), $("#longitude").val());
         })
 
+        var optionHewan = '<option></option>';
+
         $(document).ready(function() {
             $.ajax({
                 url: "{{ url('/map/desa') }}",
@@ -370,7 +395,59 @@
                     }
                 },
             })
+
+            // GET HEWAN
+            $.ajax({
+                url: "{{ url('/list/hewan') }}",
+                type: "GET",
+                success: function(response) {
+                    if (response.status == 'success') {
+                        for (var i = 0; i < response.data.length; i++) {
+                            optionHewan += '<option value="' + response.data[i].id + '">' + response
+                                .data[i].nama + '</option>';
+                        }
+                        setOptionHewan(totalHewan);
+                    }
+                },
+            })
         })
+    </script>
+
+    {{-- Script Hewan Dinamis --}}
+    <script>
+        var totalHewan = 1;
+
+        function setOptionHewan(id) {
+            $('#select-hewan-' + id).append(optionHewan);
+            $('#select-hewan-' + id).select2({
+                placeholder: "- Pilih Salah Satu -",
+                theme: "bootstrap",
+            })
+        }
+
+        $('#btn-tambah-hewan').click(function() {
+            totalHewan++;
+            $('#list-hewan').append(tambahListHewan(totalHewan));
+            $('#form-hewan-' + totalHewan).fadeIn("slow");
+            setOptionHewan(totalHewan);
+        })
+
+        function tambahListHewan(totalHewan) {
+            var formListHewan =
+                '<div id="form-hewan-' + totalHewan +
+                '" class="row" style="display: none;"><div class="col-5"><div class="d-inline"><label class="form-label my-2">Hewan Ternak</label></div><div class="d-flex"><select class="form-select col-12 select2" id="select-hewan-' +
+                totalHewan +
+                '" aria-hidden="true" name="hewan_id[]" autocomplete="off"></select></div><span class="text-danger error-text hewan_id-error"></span></div><div class="col-5"><label for="TextInput" class="form-label my-2">Jumlah Hewan Ternak</label><input type="text" name="jumlah_hewan[]" class="form-control numerik" placeholder="Masukkan Jumlah Hewan Ternak" autocomplete="off"><span class="text-danger error-text jumlah_hewan-error"></span></div><div class="col-2"><label for="TextInput" class="form-label my-2">&nbsp;</label><button class="btn btn-danger col-12 fw-bold" onclick="hapusFormHewan(' +
+                totalHewan + ')" type="button"><i class="fas fa-trash-alt"></i> Hapus</button></div></div>';
+
+            return formListHewan;
+        }
+
+        function hapusFormHewan(id) {
+            $('#form-hewan-' + id).fadeOut("slow", function() {
+                $("#form-hewan-" + id).remove();
+            });
+        }
     </script>
 
     <script>

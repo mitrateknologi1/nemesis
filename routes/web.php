@@ -3,14 +3,17 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\masterData\OPDController;
-use App\Http\Controllers\masterData\HewanController;
-use App\Http\Controllers\masterData\lokasi\DesaController;
-use App\Http\Controllers\masterData\LokasiKeongController;
-use App\Http\Controllers\masterData\lokasi\KeongController;
-use App\Http\Controllers\intervensi\realisasi\keong\RealisasiKeongController;
+use App\Http\Controllers\ImportController;
 use App\Http\Controllers\intervensi\perencanaan\keong\PerencanaanKeongController;
-
+use App\Http\Controllers\intervensi\realisasi\keong\RealisasiKeongController;
+use App\Http\Controllers\ListController;
+use App\Http\Controllers\masterData\HewanController;
+use App\Http\Controllers\masterData\lokasi\LokasiDesaController;
+use App\Http\Controllers\masterData\lokasi\LokasiHewanController;
+use App\Http\Controllers\masterData\lokasi\LokasiKeongController;
+use App\Http\Controllers\masterData\OPDController;
+use App\Models\Perencanaan;
+use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,8 +24,6 @@ use App\Http\Controllers\intervensi\perencanaan\keong\PerencanaanKeongController
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/', function () {
@@ -52,8 +53,17 @@ Route::group(['middleware' => 'auth'], function () {
             'keong' => 'lokasi_keong'
         ]
     );
+    Route::resource('master-data/lokasi/hewan', LokasiHewanController::class)->parameters(
+        [
+            'hewan' => 'lokasi_hewan'
+        ]
+    );
     Route::resource('master-data/opd', OPDController::class);
     Route::resource('master-data/hewan', HewanController::class);
     Route::get('map/desa', [DesaController::class, 'getMapData']);
     Route::get('map/keong', [KeongController::class, 'getMapData']);
+    Route::get('map/hewan', [LokasiHewanController::class, 'getMapData']);
+    // List
+    Route::get('list/desa', [ListController::class, 'desa']);
+    Route::get('list/hewan', [ListController::class, 'hewan']);
 });

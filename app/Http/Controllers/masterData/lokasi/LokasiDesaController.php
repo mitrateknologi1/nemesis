@@ -9,7 +9,7 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class DesaController extends Controller
+class LokasiDesaController extends Controller
 {
     /**
      * Display a listing of the resource.

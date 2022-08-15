@@ -133,6 +133,25 @@
                      <span class="sidebar-mini-icon">
                          <i class="fa fa-ellipsis-h"></i>
                      </span>
+                     <h4 class="text-section">Dokumen</h4>
+                 </li>
+                 <li class="nav-item" id="nav-dokumen-road-map">
+                     <a href="{{ url('dokumen/road-map') }}">
+                         <i class="fas fa-road"></i>
+                         <p>Road Map</p>
+                     </a>
+                 </li>
+                 <li class="nav-item" id="nav-dokumen-master-plan">
+                     <a href="{{ url('dokumen/master-plan') }}">
+                         <i class="far fa-clipboard"></i>
+                         <p>Master Plan</p>
+                     </a>
+                 </li>
+
+                 <li class="nav-section">
+                     <span class="sidebar-mini-icon">
+                         <i class="fa fa-ellipsis-h"></i>
+                     </span>
                      <h4 class="text-section">Master Data</h4>
                  </li>
 
@@ -174,7 +193,12 @@
                          <p>Hewan</p>
                      </a>
                  </li>
-
+                 <li class="nav-item" id="nav-master-tahun">
+                     <a href="{{ url('master-data/tahun') }}">
+                         <i class="far fa-calendar-alt"></i>
+                         <p>Tahun</p>
+                     </a>
+                 </li>
              </ul>
          </div>
      </div>

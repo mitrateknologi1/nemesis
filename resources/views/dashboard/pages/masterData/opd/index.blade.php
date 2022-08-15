@@ -164,7 +164,7 @@
                                 }
                             },
                             error: function(response) {
-                                swal("Gagal", "Data Gagal Ditambahkan", {
+                                swal("Gagal", "Data Gagal Ditambahkan, Silahkan Coba Kembali", {
                                     icon: "error",
                                     buttons: false,
                                     timer: 1000,
@@ -191,7 +191,7 @@
                                 }
                             },
                             error: function(response) {
-                                swal("Gagal", "Data Gagal Diubah", {
+                                swal("Gagal", "Data Gagal Diubah, Silahkan Coba Kembali", {
                                     icon: "error",
                                     buttons: false,
                                     timer: 1000,
@@ -246,6 +246,13 @@
                                     timer: 1000,
                                 });
                             }
+                        },
+                        error: function(response) {
+                            swal("Gagal", "Data Gagal Diproses, Silahkan Coba Kembali", {
+                                icon: "error",
+                                buttons: false,
+                                timer: 1000,
+                            });
                         }
                     })
                 }

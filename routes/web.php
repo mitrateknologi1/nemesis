@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\dokumen\MasterPlanController;
+use App\Http\Controllers\dokumen\RoadMapController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\intervensi\perencanaan\keong\PerencanaanKeongController;
 use App\Http\Controllers\intervensi\realisasi\keong\RealisasiKeongController;
@@ -10,6 +12,7 @@ use App\Http\Controllers\masterData\lokasi\LokasiDesaController;
 use App\Http\Controllers\masterData\lokasi\LokasiHewanController;
 use App\Http\Controllers\masterData\lokasi\LokasiKeongController;
 use App\Http\Controllers\masterData\OPDController;
+use App\Http\Controllers\masterData\TahunController;
 use App\Models\Perencanaan;
 use Illuminate\Support\Facades\Route;
 
@@ -49,6 +52,7 @@ Route::resource('master-data/lokasi/hewan', LokasiHewanController::class)->param
 
 Route::resource('master-data/opd', OPDController::class);
 Route::resource('master-data/hewan', HewanController::class);
+Route::resource('master-data/tahun', TahunController::class);
 Route::get('map/desa', [LokasiDesaController::class, 'getMapData']);
 Route::get('map/keong', [LokasiKeongController::class, 'getMapData']);
 Route::get('map/hewan', [LokasiHewanController::class, 'getMapData']);
@@ -56,3 +60,7 @@ Route::get('map/hewan', [LokasiHewanController::class, 'getMapData']);
 // List
 Route::get('list/desa', [ListController::class, 'desa']);
 Route::get('list/hewan', [ListController::class, 'hewan']);
+
+// Dokumen
+Route::resource('dokumen/road-map', RoadMapController::class)->parameters(['road-map' => 'road_map']);
+Route::resource('dokumen/master-plan', MasterPlanController::class)->parameters(['master-plan' => 'master-plan']);

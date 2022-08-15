@@ -17,9 +17,13 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('opd_id');
             $table->string('sub_indikator');
-            $table->integer('status'); // 0/1/2
+            $table->bigInteger('nilai_pembiayaan');
+            $table->string('sumber_dana');
+            $table->integer('status')->default(0); // 0/1/2
+            $table->date('tanggal_konfirmasi')->nullable();
             $table->text('alasan_ditolak')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

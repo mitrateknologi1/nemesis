@@ -26,8 +26,8 @@ class DatabaseSeeder extends Seeder
          */
         public function run()
         {
-                Storage::deleteDirectory('/public/uploads');
-                Storage::makeDirectory('/public/uploads');
+                Storage::deleteDirectory('/uploads');
+                Storage::makeDirectory('/uploads');
 
                 File::copyDirectory(
                         public_path('file_dummy'),
@@ -36,11 +36,19 @@ class DatabaseSeeder extends Seeder
 
                 $this->call(OPDSeeder::class);
                 $this->call(PerencanaanKeongSeeder::class);
-                $this->call(RealisasiKeongSeeder::class);
+                // $this->call(RealisasiKeongSeeder::class);
                 $this->call(DesaSeeder::class);
                 $this->call(HewanSeeder::class);
                 $this->call(LokasiKeongTableSeeder::class);
                 $this->call(LokasiPerencanaanKeongSeeder::class);
                 $this->call(DokumenPerencanaanKeongSeeder::class);
+
+
+                $this->call(UserSeeder::class);
+                // $this->call(ProfileSeeder::class);
+                // $this->call(DesaKelurahanTableSeeder::class);
+                // $this->call(KecamatanTableSeeder::class);
+                // $this->call(KabupatenKotaTableSeeder::class);
+                // $this->call(ProvinsiTableSeeder::class);
         }
 }

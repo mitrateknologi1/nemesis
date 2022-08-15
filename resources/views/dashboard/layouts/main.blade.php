@@ -366,15 +366,15 @@
             return ribuan;
         }
 
-        function validation(formValidation) {
+        function validation(formData) {
             $('.error-text').html('');
             $('.req').removeClass('is-invalid');
             let count = 0
-            $.each(formValidation, function(i, field) {
+            $.each(formData, function(i, field) {
                 let getAttr = document.getElementsByName(field.name);
                 let getNodeName = getAttr[0].nodeName;
+                let getType = getAttr[0].type;
                 let attr = $(getNodeName + "[name=" + field.name + "]");
-                console.log(attr)
                 if ((attr.val() == "")) {
                     if (attr.hasClass('req garis datar')) {
                         $('.' + field.name + '-error').html('<b>' + attr.data('label') +
@@ -386,7 +386,7 @@
                         );
                     }
                     count++;
-                    attr.addClass('is-invalid')
+                    // attr.addClass('is-invalid')
                 }
             });
             if (count > 0) {

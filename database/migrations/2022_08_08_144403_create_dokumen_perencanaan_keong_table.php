@@ -18,6 +18,7 @@ return new class extends Migration
             $table->uuid('perencanaan_keong_id');
             $table->text('nama');
             $table->text('file');
+            $table->integer('no_urut');
             $table->timestamps();
         });
     }

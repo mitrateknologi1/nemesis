@@ -38,7 +38,7 @@ class OPDSeeder extends Seeder
             ],
             [
                 'id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c10',
-                'nama' => 'Dinas Perhubungan',
+                'nama' => 'Dinas Lingkungan Hidup',
             ],
             [
                 'id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c11',

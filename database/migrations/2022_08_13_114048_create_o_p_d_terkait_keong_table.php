@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('opd_terkait_keong', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('perencanaan_id'); // keong / hewan / manusia
+            $table->uuid('perencanaan_keong_id'); // keong / hewan / manusia
             $table->uuid('opd_id');
-            $table->string('nama');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -20,6 +20,7 @@ class DokumenPerencanaanKeongSeeder extends Seeder
                 'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265982',
                 'nama' => 'Dokumen Perencanaan Keong 1',
                 'file' => 'dokumen_perencanaan_keong_1_65_red.pdf',
+                'no_urut' => 1,
                 'created_at' => '2020-08-08 01:15:57',
             ],
             [
@@ -27,6 +28,7 @@ class DokumenPerencanaanKeongSeeder extends Seeder
                 'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265983',
                 'nama' => 'Dokumen Perencanaan Keong 1',
                 'file' => 'dokumen_perencanaan_keong_1_66_blue.pdf',
+                'no_urut' => 1,
                 'created_at' => '2020-08-08 01:16:57',
             ],
             [
@@ -34,6 +36,7 @@ class DokumenPerencanaanKeongSeeder extends Seeder
                 'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265983',
                 'nama' => 'Dokumen Perencanaan Keong 2',
                 'file' => 'dokumen_perencanaan_keong_2_67_green.pdf',
+                'no_urut' => 2,
                 'created_at' => '2020-08-08 01:17:57',
             ],
             [
@@ -41,6 +44,7 @@ class DokumenPerencanaanKeongSeeder extends Seeder
                 'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265984',
                 'nama' => 'Dokumen Perencanaan Keong 1',
                 'file' => 'dokumen_perencanaan_keong_1_68_purple.pdf',
+                'no_urut' => 1,
                 'created_at' => '2020-08-08 01:18:57',
             ],
             [
@@ -48,6 +52,7 @@ class DokumenPerencanaanKeongSeeder extends Seeder
                 'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265984',
                 'nama' => 'Dokumen Perencanaan Keong 2',
                 'file' => 'dokumen_perencanaan_keong_2_69_red.pdf',
+                'no_urut' => 2,
                 'created_at' => '2020-08-08 01:18:57',
             ],
             [
@@ -55,6 +60,7 @@ class DokumenPerencanaanKeongSeeder extends Seeder
                 'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265984',
                 'nama' => 'Dokumen Perencanaan Keong 3',
                 'file' => 'dokumen_perencanaan_keong_3_70_blue.pdf',
+                'no_urut' => 3,
                 'created_at' => '2020-08-08 01:18:57',
             ],
             [
@@ -62,6 +68,7 @@ class DokumenPerencanaanKeongSeeder extends Seeder
                 'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265985',
                 'nama' => 'Dokumen Perencanaan Keong 1',
                 'file' => 'dokumen_perencanaan_keong_1_71_green.pdf',
+                'no_urut' => 1,
                 'created_at' => '2020-08-08 01:18:57',
             ],
             [
@@ -69,6 +76,7 @@ class DokumenPerencanaanKeongSeeder extends Seeder
                 'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265985',
                 'nama' => 'Dokumen Perencanaan Keong 2',
                 'file' => 'dokumen_perencanaan_keong_2_72_purple.pdf',
+                'no_urut' => 2,
                 'created_at' => '2020-08-08 01:18:57',
             ],
             [
@@ -76,6 +84,7 @@ class DokumenPerencanaanKeongSeeder extends Seeder
                 'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265985',
                 'nama' => 'Dokumen Perencanaan Keong 3',
                 'file' => 'dokumen_perencanaan_keong_3_73_red.pdf',
+                'no_urut' => 3,
                 'created_at' => '2020-08-08 01:18:57',
             ],
             [
@@ -83,6 +92,7 @@ class DokumenPerencanaanKeongSeeder extends Seeder
                 'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265985',
                 'nama' => 'Dokumen Perencanaan Keong 4',
                 'file' => 'dokumen_perencanaan_keong_4_74_blue.pdf',
+                'no_urut' => 4,
                 'created_at' => '2020-08-08 01:18:57',
             ],
             [
@@ -90,6 +100,7 @@ class DokumenPerencanaanKeongSeeder extends Seeder
                 'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265986',
                 'nama' => 'Dokumen Perencanaan Keong 1',
                 'file' => 'dokumen_perencanaan_keong_1_75_green.pdf',
+                'no_urut' => 1,
                 'created_at' => '2020-08-08 01:18:57',
             ],
             [
@@ -97,6 +108,7 @@ class DokumenPerencanaanKeongSeeder extends Seeder
                 'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265986',
                 'nama' => 'Dokumen Perencanaan Keong 2',
                 'file' => 'dokumen_perencanaan_keong_2_76_purple.pdf',
+                'no_urut' => 2,
                 'created_at' => '2020-08-08 01:18:57',
             ],
             [
@@ -104,6 +116,7 @@ class DokumenPerencanaanKeongSeeder extends Seeder
                 'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265987',
                 'nama' => 'Dokumen Perencanaan Keong 1',
                 'file' => 'dokumen_perencanaan_keong_1_77_red.pdf',
+                'no_urut' => 1,
                 'created_at' => '2020-08-08 01:18:57',
             ],
             [
@@ -111,6 +124,7 @@ class DokumenPerencanaanKeongSeeder extends Seeder
                 'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265987',
                 'nama' => 'Dokumen Perencanaan Keong 2',
                 'file' => 'dokumen_perencanaan_keong_2_78_blue.pdf',
+                'no_urut' => 2,
                 'created_at' => '2020-08-08 01:18:57',
             ],
             [
@@ -118,10 +132,10 @@ class DokumenPerencanaanKeongSeeder extends Seeder
                 'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265987',
                 'nama' => 'Dokumen Perencanaan Keong 3',
                 'file' => 'dokumen_perencanaan_keong_3_79_green.pdf',
+                'no_urut' => 3,
                 'created_at' => '2020-08-08 01:18:57',
             ],
         ];
-
         DokumenPerencanaanKeong::insert($insert);
     }
 }

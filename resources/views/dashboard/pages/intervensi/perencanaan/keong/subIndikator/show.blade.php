@@ -48,10 +48,10 @@
                                 class="font-weight-bold">{{ $rencana_intervensi_keong->opd->nama }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">Lokasi
-                            ({{ $rencana_intervensi_keong->lokasi_perencanaan_keong->count() }}):<span
+                            ({{ $rencana_intervensi_keong->lokasiPerencanaanKeong->count() }}):<span
                                 class="font-weight-bold">
                                 <ul>
-                                    @foreach ($rencana_intervensi_keong->lokasi_perencanaan_keong as $item)
+                                    @foreach ($rencana_intervensi_keong->lokasiPerencanaanKeong as $item)
                                         <li class="d-flex justify-content-end align-items-end">
                                             {{ $item->lokasi_keong->nama . ' ' }}
                                             (<span>{{ $item->lokasi_keong->desa->nama }}</span>)
@@ -59,6 +59,26 @@
                                     @endforeach
                                 </ul>
                             </span>
+                        </li>
+                        @if ($rencana_intervensi_keong->opdTerkaitKeong->count() > 0)
+                            <li class="list-group-item d-flex justify-content-between align-items-center">OPD Terkait
+                                ({{ $rencana_intervensi_keong->opdTerkaitKeong->count() }}):<span class="font-weight-bold">
+                                    <ul>
+                                        @foreach ($rencana_intervensi_keong->opdTerkaitKeong as $item)
+                                            <li class="d-flex justify-content-end align-items-end">
+                                                {{ $item->opd->nama . ' ' }}
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </span>
+                            </li>
+                        @endif
+                        <li class="list-group-item d-flex justify-content-between align-items-center">Nilai Pembiayaan:<span
+                                class="font-weight-bold"><span>Rp. </span>
+                                <span class="rupiah">{{ $rencana_intervensi_keong->nilai_pembiayaan }}</span></span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">Sumber Dana:<span
+                                class="font-weight-bold">{{ $rencana_intervensi_keong->sumber_dana }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">Status:
                             @if ($rencana_intervensi_keong->status == 1)
@@ -73,6 +93,12 @@
                             <li class="list-group-item d-flex justify-content-between align-items-center">Alasan Ditolak:
                                 <span
                                     class="font-weight-bold text-danger">{{ $rencana_intervensi_keong->alasan_ditolak }}</span>
+                            </li>
+                        @endif
+                        @if ($rencana_intervensi_keong->status != 0)
+                            <li class="list-group-item d-flex justify-content-between align-items-center">Tanggal
+                                Konfirmasi:<span
+                                    class="font-weight-bold">{{ Carbon\Carbon::parse($rencana_intervensi_keong->tanggal_konfirmasi)->translatedFormat('j F Y') }}</span>
                             </li>
                         @endif
 
@@ -90,7 +116,7 @@
                 </div>
                 <div class="card-body">
                     <ul class="list-group list-group-bordered">
-                        @forelse ($rencana_intervensi_keong->dokumen_perencanaan_keong as $item)
+                        @forelse ($rencana_intervensi_keong->dokumenPerencanaanKeong as $item)
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 {{ $item->nama }}
                                 <a href="{{ Storage::url('uploads/dokumen/perencanaan/keong/' . $item->file) }}"

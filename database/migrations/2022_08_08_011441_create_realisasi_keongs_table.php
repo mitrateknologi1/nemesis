@@ -16,6 +16,8 @@ return new class extends Migration
         Schema::create('realisasi_keong', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('perencanaan_keong_id');
+            $table->float('persentase_tw');
+            $table->float('persentase_total');
             $table->integer('status'); // 0/1/2
             $table->text('alasan_ditolak')->nullable(); // 0/1/2
             $table->timestamps();

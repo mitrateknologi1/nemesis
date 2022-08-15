@@ -144,8 +144,8 @@
                                  <div class="avatar-lg"><img src="{{ asset('assets/dashboard') }}/img/profile.jpg"
                                          alt="image profile" class="avatar-img rounded"></div>
                                  <div class="u-text">
-                                     <h4>Hizrian</h4>
-                                     <p class="text-muted">hello@example.com</p><a href="profile.html"
+                                     <h4>{{ Auth::user()->nama }}</h4>
+                                     <p class="text-muted">{{ Auth::user()->role }}</p><a href="profile.html"
                                          class="btn btn-xs btn-secondary btn-sm">View Profile</a>
                                  </div>
                              </div>
@@ -158,7 +158,7 @@
                              <div class="dropdown-divider"></div>
                              <a class="dropdown-item" href="#">Account Setting</a>
                              <div class="dropdown-divider"></div>
-                             <a class="dropdown-item" href="#">Logout</a>
+                             <a class="dropdown-item" href="{{ url('/logout') }}">Logout</a>
                          </li>
                      </div>
                  </ul>

@@ -19,6 +19,7 @@ use Database\Seeders\DokumenPerencanaanKeongSeeder;
 
 class DatabaseSeeder extends Seeder
 {
+
     /**
      * Seed the application's database.
      *
@@ -26,8 +27,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Storage::deleteDirectory('/public/uploads');
-        Storage::makeDirectory('/public/uploads');
+        Storage::deleteDirectory('/uploads');
+        Storage::makeDirectory('/uploads');
 
         File::copyDirectory(
             public_path('file_dummy'),
@@ -36,7 +37,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call(OPDSeeder::class);
         $this->call(PerencanaanKeongSeeder::class);
-        $this->call(RealisasiKeongSeeder::class);
+        // $this->call(RealisasiKeongSeeder::class);
         $this->call(DesaSeeder::class);
         $this->call(HewanSeeder::class);
         $this->call(LokasiKeongTableSeeder::class);
@@ -47,5 +48,6 @@ class DatabaseSeeder extends Seeder
         $this->call(TahunSeeder::class);
         $this->call(RoadMapSeeder::class);
         $this->call(MasterPlanSeeder::class);
+        $this->call(UserSeeder::class);
     }
 }

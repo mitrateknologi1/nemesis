@@ -35,6 +35,8 @@
                                     'desa' => $desa,
                                     'opd' => $opd,
                                     'method' => 'POST',
+                                    'submitLabel' => 'Kirim Data',
+                                    'submitIcon' => '<i class="fas fa-paper-plane"></i> ',
                                 ])
                             @endcomponent
                         </div>

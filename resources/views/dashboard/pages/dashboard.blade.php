@@ -1,5 +1,9 @@
 @extends('dashboard.layouts.main')
 
+@section('title')
+    Dashboard
+@endsection
+
 @section('titlePanelHeader')
     Dashboard
 @endsection
@@ -528,5 +532,7 @@
 @push('scripts')
     <script>
         $('#nav-dashboard').addClass('active');
+
+        console.log('{{ Auth::user() }}')
     </script>
 @endpush

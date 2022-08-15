@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\dokumen\MasterPlanController;
 use App\Http\Controllers\dokumen\RoadMapController;
@@ -14,8 +16,6 @@ use App\Http\Controllers\masterData\lokasi\LokasiKeongController;
 use App\Http\Controllers\masterData\OPDController;
 use App\Http\Controllers\masterData\TahunController;
 use App\Models\Perencanaan;
-use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,11 +27,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('/', DashboardController::class);
+Route::group(['middleware' => 'guest'], function () {
+    Route::get('/', function () {
+        return view('dashboard.pages.login');
+    });
+    Route::get('/login', [AuthController::class, 'index'])->name('login');
+    Route::post('/cekLogin', [AuthController::class, 'cekLogin']);
+});
 
-Route::resource('rencana-intervensi-keong', PerencanaanKeongController::class);
-Route::post('rencana-intervensi-keong/konfirmasi/{rencana_intervensi_keong}', PerencanaanKeongController::class . '@konfirmasi');
-Route::get('rencana-intervensi-keong/map/{rencana_intervensi_keong}', PerencanaanKeongController::class . '@map');
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::resource('/dashboard', DashboardController::class);
+
+    Route::resource('rencana-intervensi-keong', PerencanaanKeongController::class);
+    Route::post('rencana-intervensi-keong/konfirmasi/{rencana_intervensi_keong}', PerencanaanKeongController::class . '@konfirmasi');
+    Route::get('rencana-intervensi-keong/map/{rencana_intervensi_keong}', PerencanaanKeongController::class . '@map');
 
 Route::resource('realisasi-intervensi-keong', RealisasiKeongController::class);
 

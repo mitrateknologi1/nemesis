@@ -4,6 +4,7 @@ namespace App\Http\Controllers\masterData\lokasi;
 
 use App\Http\Controllers\Controller;
 use App\Models\Desa;
+use App\Models\Hewan;
 use App\Models\JumlahHewan;
 use App\Models\LokasiHewan;
 use App\Models\PemilikLokasiHewan;
@@ -23,7 +24,7 @@ class LokasiHewanController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = LokasiHewan::orderBy('nama', 'asc')->get();
+            $data = LokasiHewan::orderBy('created_at', 'desc')->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('desa', function ($row) {
@@ -31,9 +32,9 @@ class LokasiHewanController extends Controller
                 })
                 ->addColumn('status', function ($row) {
                     if ($row->status == 1) {
-                        return '<span class="badge bg-success text-light border-none">Aktif</span>';
+                        return '<span class="badge bg-success text-light border-0">Aktif</span>';
                     } else {
-                        return '<span class="badge bg-danger text-light border-none">Tidak Aktif</span>';
+                        return '<span class="badge bg-danger text-light border-0">Tidak Aktif</span>';
                     }
                 })
                 ->addColumn('koordinat', function ($row) {
@@ -69,7 +70,36 @@ class LokasiHewanController extends Controller
                 ->make(true);
         }
 
-        return view('dashboard.pages.masterData.lokasi.hewan.index');
+        $daftarJumlahHewan = $this->_getJumlahHewan();
+        return view('dashboard.pages.masterData.lokasi.hewan.index', compact(['daftarJumlahHewan']));
+    }
+
+    private function _getJumlahHewan()
+    {
+        $daftarDesa = Desa::orderBy('nama', 'asc')->get();
+        $daftarHewan = Hewan::orderBy('nama', 'asc')->get();
+        $arrayDesa = [];
+
+        foreach ($daftarDesa as $desa) {
+            $arrayHewan = [];
+            foreach ($daftarHewan as $hewan) {
+                $jumlahHewan = JumlahHewan::where('hewan_id', $hewan->id)
+                    ->whereHas('lokasiHewan', function ($query) use ($desa) {
+                        $query->where('desa_id', $desa->id);
+                    })->sum('jumlah');
+
+                $arrayHewan[] = [
+                    'nama_hewan' => $hewan->nama,
+                    'jumlah' => $jumlahHewan
+                ];
+            }
+            $arrayDesa[] = [
+                'desa' => $desa->nama,
+                'hewan' => $arrayHewan
+            ];
+        }
+
+        return $arrayDesa;
     }
 
     /**

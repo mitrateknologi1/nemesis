@@ -49,5 +49,7 @@ class DatabaseSeeder extends Seeder
         $this->call(RoadMapSeeder::class);
         $this->call(MasterPlanSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(JumlahHewanTableSeeder::class);
+        $this->call(PemilikLokasiHewanTableSeeder::class);
     }
 }

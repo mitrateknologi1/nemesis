@@ -35,7 +35,7 @@ class LokasiHewanSeeder extends Seeder
                 'longitude' => '120.062699',
                 'deskripsi' => '-',
                 'status' => 1,
-                'created_at' => '2020-08-10 10:30:31',
+                'created_at' => '2020-08-10 10:30:30',
             ],
             // Langko
             [
@@ -46,7 +46,7 @@ class LokasiHewanSeeder extends Seeder
                 'longitude' => '120.022173',
                 'deskripsi' => '-',
                 'status' => 1,
-                'created_at' => '2020-08-10 10:35:31',
+                'created_at' => '2020-08-10 10:35:29',
             ],
             [
                 'id' => '01b2f7f7-8743-4b93-b5af-08c79faff128',
@@ -56,7 +56,7 @@ class LokasiHewanSeeder extends Seeder
                 'longitude' => '120.033731',
                 'deskripsi' => '-',
                 'status' => 1,
-                'created_at' => '2020-08-10 10:36:31',
+                'created_at' => '2020-08-10 10:36:28',
             ],
             // Puro`o
             [
@@ -67,7 +67,7 @@ class LokasiHewanSeeder extends Seeder
                 'longitude' => '120.022139',
                 'deskripsi' => '-',
                 'status' => 1,
-                'created_at' => '2020-08-10 10:41:31',
+                'created_at' => '2020-08-10 10:41:27',
             ],
             [
                 'id' => '01b2f7f7-8743-4b93-b5af-08c79faff134',
@@ -77,7 +77,7 @@ class LokasiHewanSeeder extends Seeder
                 'longitude' => '120.038805',
                 'deskripsi' => '-',
                 'status' => 1,
-                'created_at' => '2020-08-10 10:42:31',
+                'created_at' => '2020-08-10 10:42:26',
             ],
             // Tomado
             [
@@ -88,7 +88,7 @@ class LokasiHewanSeeder extends Seeder
                 'longitude' => '120.119618',
                 'deskripsi' => '-',
                 'status' => 1,
-                'created_at' => '2020-08-10 10:47:31',
+                'created_at' => '2020-08-10 10:47:25',
             ],
             [
                 'id' => '01b2f7f7-8743-4b93-b5af-08c79faff140',
@@ -98,7 +98,7 @@ class LokasiHewanSeeder extends Seeder
                 'longitude' => '120.158081',
                 'deskripsi' => '-',
                 'status' => 1,
-                'created_at' => '2020-08-10 10:48:31',
+                'created_at' => '2020-08-10 10:48:24',
             ],
         ];
 

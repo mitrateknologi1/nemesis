@@ -9,12 +9,14 @@ use App\Http\Controllers\ImportController;
 use App\Http\Controllers\intervensi\perencanaan\keong\PerencanaanKeongController;
 use App\Http\Controllers\intervensi\realisasi\keong\RealisasiKeongController;
 use App\Http\Controllers\ListController;
+use App\Http\Controllers\masterData\AkunController;
 use App\Http\Controllers\masterData\HewanController;
 use App\Http\Controllers\masterData\lokasi\LokasiDesaController;
 use App\Http\Controllers\masterData\lokasi\LokasiHewanController;
 use App\Http\Controllers\masterData\lokasi\LokasiKeongController;
 use App\Http\Controllers\masterData\OPDController;
 use App\Http\Controllers\masterData\TahunController;
+use App\Http\Controllers\PengaturanAkunController;
 use App\Models\Perencanaan;
 /*
 |--------------------------------------------------------------------------
@@ -44,34 +46,42 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('rencana-intervensi-keong/konfirmasi/{rencana_intervensi_keong}', PerencanaanKeongController::class . '@konfirmasi');
     Route::get('rencana-intervensi-keong/map/{rencana_intervensi_keong}', PerencanaanKeongController::class . '@map');
 
-Route::resource('realisasi-intervensi-keong', RealisasiKeongController::class);
+    Route::resource('realisasi-intervensi-keong', RealisasiKeongController::class);
 
-// Master Data
-// Lokasi
-Route::get('master-data/lokasi/desa/tabel', [LokasiDesaController::class, 'tabel']);
-Route::resource('master-data/lokasi/desa', LokasiDesaController::class);
-Route::resource('master-data/lokasi/keong', LokasiKeongController::class)->parameters(
-    [
-        'keong' => 'lokasi_keong'
-    ]
-);
-Route::resource('master-data/lokasi/hewan', LokasiHewanController::class)->parameters(
-    [
-        'hewan' => 'lokasi_hewan'
-    ]
-);
+    // Master Data
+    // Lokasi
+    Route::get('master-data/lokasi/desa/tabel', [LokasiDesaController::class, 'tabel']);
+    Route::resource('master-data/lokasi/desa', LokasiDesaController::class);
+    Route::resource('master-data/lokasi/keong', LokasiKeongController::class)->parameters(
+        [
+            'keong' => 'lokasi_keong'
+        ]
+    );
+    Route::resource('master-data/lokasi/hewan', LokasiHewanController::class)->parameters(
+        [
+            'hewan' => 'lokasi_hewan'
+        ]
+    );
 
-Route::resource('master-data/opd', OPDController::class);
-Route::resource('master-data/hewan', HewanController::class);
-Route::resource('master-data/tahun', TahunController::class);
-Route::get('map/desa', [LokasiDesaController::class, 'getMapData']);
-Route::get('map/keong', [LokasiKeongController::class, 'getMapData']);
-Route::get('map/hewan', [LokasiHewanController::class, 'getMapData']);
+    Route::resource('master-data/opd', OPDController::class);
+    Route::resource('master-data/hewan', HewanController::class);
+    Route::resource('master-data/tahun', TahunController::class);
+    Route::get('map/desa', [LokasiDesaController::class, 'getMapData']);
+    Route::get('map/keong', [LokasiKeongController::class, 'getMapData']);
+    Route::get('map/hewan', [LokasiHewanController::class, 'getMapData']);
 
-// List
-Route::get('list/desa', [ListController::class, 'desa']);
-Route::get('list/hewan', [ListController::class, 'hewan']);
+    // List
+    Route::get('list/desa', [ListController::class, 'desa']);
+    Route::get('list/hewan', [ListController::class, 'hewan']);
 
-// Dokumen
-Route::resource('dokumen/road-map', RoadMapController::class)->parameters(['road-map' => 'road_map']);
-Route::resource('dokumen/master-plan', MasterPlanController::class)->parameters(['master-plan' => 'master-plan']);
+    // Dokumen
+    Route::resource('dokumen/road-map', RoadMapController::class)->parameters(['road-map' => 'road_map']);
+    Route::resource('dokumen/master-plan', MasterPlanController::class)->parameters(['master-plan' => 'master-plan']);
+
+    // Akun
+    Route::resource('master-data/akun', AkunController::class)->parameters(['akun' => 'user']);
+
+    // Pengaturan Akun
+    Route::get('pengaturan-akun', [PengaturanAkunController::class, 'index']);
+    Route::put('pengaturan-akun', [PengaturanAkunController::class, 'update']);
+});

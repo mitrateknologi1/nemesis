@@ -40,7 +40,10 @@ class MasterPlanController extends Controller
 
                     $actionBtn .= '<a target="_blank" id="btn-edit" class="btn btn-success btn-rounded btn-sm mr-1" href="' . Storage::url('uploads/dokumen/masterPlan/' . $row->file) .  '"><i class="fas fa-file-download"></i></a>';
 
-                    $actionBtn .= '<a id="btn-edit" class="btn btn-warning btn-rounded btn-sm mr-1" href="' . url('dokumen/master-plan/' . $row->id . '/edit') . '"><i class="fas fa-edit"></i></a><button id="btn-delete" class="btn btn-danger btn-rounded btn-sm mr-1" value="' . $row->id . '" > <i class="fas fa-trash-alt"></i></button>';
+                    if ($row->role == "Admin") {
+                        $actionBtn .= '<a id="btn-edit" class="btn btn-warning btn-rounded btn-sm mr-1" href="' . url('dokumen/master-plan/' . $row->id . '/edit') . '"><i class="fas fa-edit"></i></a><button id="btn-delete" class="btn btn-danger btn-rounded btn-sm mr-1" value="' . $row->id . '" > <i class="fas fa-trash-alt"></i></button>';
+                    }
+
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])

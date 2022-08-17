@@ -74,10 +74,11 @@
                                         <div class="col-12 my-2">
                                             @component('dashboard.components.formElements.input',
                                                 [
-                                                    'label' => 'Luas Desa (m<sup>2</sup>)',
+                                                    'label' => 'Luas Desa (Km<sup>2</sup>)',
                                                     'type' => 'text',
                                                     'id' => 'luas',
                                                     'name' => 'luas',
+                                                    'class' => 'numerik',
                                                     'wajib' => '<sup class="text-danger">*</sup>',
                                                     'placeholder' => 'Masukkan Luas Desa',
                                                 ])
@@ -86,7 +87,7 @@
                                         <div class="col-12 mt-2">
                                             <label for="textareaInput" class="form-label">Warna</label>
                                             <br>
-                                            <input type="color" id="warna" class="form-control-color" value=""
+                                            <input type="color" id="warna" class="form-control-color" value="#8285fd"
                                                 title="Choose your color" name="warna_polygon">
                                             <span class="badge bg-danger mt-2 d-none warna_polygon-error"></span>
                                         </div>
@@ -446,7 +447,7 @@
                                     fillOpacity: 1
                                 })
                                 .bindTooltip(response.data[i].nama + " (" + response.data[i].luas +
-                                    "m<sup>2</sup>) ", {
+                                    " Km<sup>2</sup>) ", {
                                         permanent: true,
                                         direction: "center"
                                     })

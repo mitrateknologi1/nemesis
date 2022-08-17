@@ -28,11 +28,13 @@
                     <div class="card-head-row">
                         <div class="card-title">Dokumen Master Plan</div>
                         <div class="card-tools">
-                            @component('dashboard.components.buttons.add',
-                                [
-                                    'url' => url('dokumen/master-plan/create'),
-                                ])
-                            @endcomponent
+                            @if (Auth::user()->role == 'Admin')
+                                @component('dashboard.components.buttons.add',
+                                    [
+                                        'url' => url('dokumen/master-plan/create'),
+                                    ])
+                                @endcomponent
+                            @endif
                         </div>
                     </div>
                 </div>

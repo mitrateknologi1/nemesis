@@ -1,11 +1,11 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Road Map
+    Akun
 @endsection
 
 @section('titlePanelHeader')
-    Road Map
+    Akun
 @endsection
 
 @section('subTitlePanelHeader')
@@ -26,35 +26,64 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Dokumen Road Map</div>
+                        <div class="card-title">Data Akun</div>
                         <div class="card-tools">
-                            @if (Auth::user()->role == 'Admin')
-                                @component('dashboard.components.buttons.add',
-                                    [
-                                        'url' => url('dokumen/road-map/create'),
-                                    ])
-                                @endcomponent
-                            @endif
-
+                            @component('dashboard.components.buttons.add',
+                                [
+                                    'url' => url('master-data/akun/create'),
+                                ])
+                            @endcomponent
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="row mb-3">
-                        <div class="col-sm-12 col-lg-12">
+                        <div class="col-4">
                             @component('dashboard.components.formElements.select',
                                 [
-                                    'label' => 'Tahun',
-                                    'id' => 'tahun_id',
-                                    'name' => 'tahun_id',
+                                    'label' => 'OPD',
+                                    'id' => 'opd_id',
+                                    'name' => 'opd_id',
                                     'class' => 'select2 filter',
                                     'wajib' => '<sup class="text-danger">*</sup>',
                                 ])
                                 @slot('options')
                                     <option value="semua">Semua</option>
-                                    @foreach ($daftarTahun as $tahun)
-                                        <option value="{{ $tahun->id }}">{{ $tahun->tahun }}</option>
+                                    @foreach ($daftarOpd as $opd)
+                                        <option value="{{ $opd->id }}">{{ $opd->nama }}</option>
                                     @endforeach
+                                @endslot
+                            @endcomponent
+                        </div>
+                        <div class="col-4">
+                            @component('dashboard.components.formElements.select',
+                                [
+                                    'label' => 'Role',
+                                    'id' => 'role',
+                                    'name' => 'role',
+                                    'class' => 'select2 filter',
+                                    'wajib' => '<sup class="text-danger">*</sup>',
+                                ])
+                                @slot('options')
+                                    <option value="semua">Semua</option>
+                                    <option value="Admin">Admin</option>
+                                    <option value="OPD">OPD</option>
+                                @endslot
+                            @endcomponent
+                        </div>
+                        <div class="col-4">
+                            @component('dashboard.components.formElements.select',
+                                [
+                                    'label' => 'Status',
+                                    'id' => 'status',
+                                    'name' => 'status',
+                                    'class' => 'select2 filter',
+                                    'wajib' => '<sup class="text-danger">*</sup>',
+                                ])
+                                @slot('options')
+                                    <option value="semua">Semua</option>
+                                    <option value="1">Aktif</option>
+                                    <option value="2">Tidak Aktif</option>
                                 @endslot
                             @endcomponent
                         </div>
@@ -65,7 +94,7 @@
                                 @component('dashboard.components.dataTables.index',
                                     [
                                         'id' => 'table-data',
-                                        'th' => ['No', 'Nama', 'Tahun', 'Aksi'],
+                                        'th' => ['No', 'Nama', 'Username', 'OPD', 'Role', 'Status', 'Aksi'],
                                     ])
                                 @endcomponent
                             </div>
@@ -100,7 +129,7 @@
             }).then((Delete) => {
                 if (Delete) {
                     $.ajax({
-                        url: "{{ url('dokumen/road-map') }}" + '/' + id,
+                        url: "{{ url('master-data/akun') }}" + '/' + id,
                         type: 'DELETE',
                         data: {
                             '_token': '{{ csrf_token() }}'
@@ -140,9 +169,11 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: "{{ url('dokumen/road-map') }}",
+                url: "{{ url('master-data/akun') }}",
                 data: function(d) {
-                    d.tahun_id = $('#tahun_id').val();
+                    d.opd_id = $('#opd_id').val();
+                    d.role = $('#role').val();
+                    d.status = $('#status').val();
                     d.search = $('input[type="search"]').val();
                 },
             },
@@ -156,8 +187,20 @@
                     name: 'nama'
                 },
                 {
-                    data: 'tahun',
-                    name: 'tahun',
+                    data: 'username',
+                    name: 'username',
+                },
+                {
+                    data: 'opd',
+                    name: 'opd',
+                },
+                {
+                    data: 'role',
+                    name: 'role',
+                },
+                {
+                    data: 'status',
+                    name: 'status',
                     class: 'text-center'
                 },
                 {
@@ -175,6 +218,6 @@
         $('.filter').change(function() {
             table.draw();
         })
-        $('#nav-dokumen-road-map').addClass('active');
+        $('#nav-master-akun').addClass('active');
     </script>
 @endpush

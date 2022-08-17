@@ -3,17 +3,21 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\dokumen\MasterPlanController;
+use App\Http\Controllers\dokumen\RoadMapController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\intervensi\perencanaan\keong\PerencanaanKeongController;
 use App\Http\Controllers\intervensi\realisasi\keong\RealisasiKeongController;
 use App\Http\Controllers\ListController;
+use App\Http\Controllers\masterData\AkunController;
 use App\Http\Controllers\masterData\HewanController;
 use App\Http\Controllers\masterData\lokasi\LokasiDesaController;
 use App\Http\Controllers\masterData\lokasi\LokasiHewanController;
 use App\Http\Controllers\masterData\lokasi\LokasiKeongController;
 use App\Http\Controllers\masterData\OPDController;
+use App\Http\Controllers\masterData\TahunController;
+use App\Http\Controllers\PengaturanAkunController;
 use App\Models\Perencanaan;
-use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -46,9 +50,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Master Data
     // Lokasi
-    Route::get('master-data/lokasi/desa/tabel', [DesaController::class, 'tabel']);
-    Route::resource('master-data/lokasi/desa', DesaController::class);
-    Route::resource('master-data/lokasi/keong', KeongController::class)->parameters(
+    Route::get('master-data/lokasi/desa/tabel', [LokasiDesaController::class, 'tabel']);
+    Route::resource('master-data/lokasi/desa', LokasiDesaController::class);
+    Route::resource('master-data/lokasi/keong', LokasiKeongController::class)->parameters(
         [
             'keong' => 'lokasi_keong'
         ]
@@ -58,12 +62,26 @@ Route::group(['middleware' => 'auth'], function () {
             'hewan' => 'lokasi_hewan'
         ]
     );
+
     Route::resource('master-data/opd', OPDController::class);
     Route::resource('master-data/hewan', HewanController::class);
-    Route::get('map/desa', [DesaController::class, 'getMapData']);
-    Route::get('map/keong', [KeongController::class, 'getMapData']);
+    Route::resource('master-data/tahun', TahunController::class);
+    Route::get('map/desa', [LokasiDesaController::class, 'getMapData']);
+    Route::get('map/keong', [LokasiKeongController::class, 'getMapData']);
     Route::get('map/hewan', [LokasiHewanController::class, 'getMapData']);
+
     // List
     Route::get('list/desa', [ListController::class, 'desa']);
     Route::get('list/hewan', [ListController::class, 'hewan']);
+
+    // Dokumen
+    Route::resource('dokumen/road-map', RoadMapController::class)->parameters(['road-map' => 'road_map']);
+    Route::resource('dokumen/master-plan', MasterPlanController::class)->parameters(['master-plan' => 'master-plan']);
+
+    // Akun
+    Route::resource('master-data/akun', AkunController::class)->parameters(['akun' => 'user']);
+
+    // Pengaturan Akun
+    Route::get('pengaturan-akun', [PengaturanAkunController::class, 'index']);
+    Route::put('pengaturan-akun', [PengaturanAkunController::class, 'update']);
 });

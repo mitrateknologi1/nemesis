@@ -135,7 +135,7 @@
                                 })
                                 .addTo(map)
                                 .bindTooltip(response.data[i].nama + " (" + response.data[i].luas +
-                                    "m<sup>2</sup>) ", {
+                                    " Km<sup>2</sup>) ", {
                                         permanent: true,
                                         direction: "center"
                                     })
@@ -143,7 +143,7 @@
                                     "<p class='fw-bold my-0 text-center'>" + response.data[i].nama +
                                     "</p><hr>" +
                                     "<p class='my-0'>Kode : " + response.data[i].kode + "</p>" +
-                                    "<p class='my-0'>Luas : " + response.data[i].luas + "m<sup>2</sup></p>"
+                                    "<p class='my-0'>Luas : " + response.data[i].luas + " Km<sup>2</sup></p>"
                                 );
                         }
                     }
@@ -194,6 +194,13 @@
                                     timer: 1000,
                                 });
                             }
+                        },
+                        error: function(response) {
+                            swal("Gagal", "Data Gagal Diproses, Silahkan Coba Kembali", {
+                                icon: "error",
+                                buttons: false,
+                                timer: 1000,
+                            });
                         }
                     })
                 }

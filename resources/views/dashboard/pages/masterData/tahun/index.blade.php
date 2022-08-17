@@ -1,11 +1,11 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Hewan
+    Tahun
 @endsection
 
 @section('titlePanelHeader')
-    Hewan
+    Tahun
 @endsection
 
 @section('subTitlePanelHeader')
@@ -26,7 +26,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Data Hewan</div>
+                        <div class="card-title">Data Tahun</div>
                         <div class="card-tools">
                             @component('dashboard.components.buttons.add',
                                 [
@@ -45,7 +45,7 @@
                                 @component('dashboard.components.dataTables.index',
                                     [
                                         'id' => 'table-data',
-                                        'th' => ['No', 'Nama', 'Aksi'],
+                                        'th' => ['No', 'Tahun', 'Aksi'],
                                     ])
                                 @endcomponent
                             </div>
@@ -62,7 +62,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modal-tambah-title">Tambah Hewan</h5>
+                        <h5 class="modal-title" id="modal-tambah-title">Tambah Tahun</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -70,11 +70,12 @@
                     <div class="modal-body">
                         @component('dashboard.components.formElements.input',
                             [
-                                'id' => 'nama',
+                                'id' => 'tahun',
                                 'type' => 'text',
-                                'label' => 'Nama Hewan',
-                                'placeholder' => 'Tambah Hewan',
-                                'name' => 'nama',
+                                'label' => 'Nama Tahun',
+                                'placeholder' => 'Tambah Tahun',
+                                'name' => 'tahun',
+                                'class' => 'numerik',
                                 'required' => true,
                             ])
                         @endcomponent
@@ -100,8 +101,9 @@
         var aksiTambah = 'tambah';
         $('#btn-tambah').click(function() {
             aksiTambah = 'tambah';
+            resetError();
             $('#modal-tambah').modal('show');
-            $('#modal-tambah-title').html('Tambah Hewan');
+            $('#modal-tambah-title').html('Tambah Tahun');
             $('#nama').val('');
         })
 
@@ -110,16 +112,17 @@
             idEdit = id;
 
             $.ajax({
-                url: "{{ url('master-data/hewan') }}" + '/' + id + '/edit',
+                url: "{{ url('master-data/tahun') }}" + '/' + id + '/edit',
                 type: "GET",
                 data: {
                     id: id
                 },
                 success: function(response) {
                     aksiTambah = 'ubah';
+                    resetError();
                     $('#modal-tambah').modal('show');
-                    $('#modal-tambah-title').html('Ubah Hewan');
-                    $('#nama').val(response.nama);
+                    $('#modal-tambah-title').html('Ubah Tahun');
+                    $('#tahun').val(response.tahun);
                 },
             })
         })
@@ -146,7 +149,7 @@
                 if (Update) {
                     if (aksiTambah == 'tambah') {
                         $.ajax({
-                            url: "{{ url('master-data/hewan') }}",
+                            url: "{{ url('master-data/tahun') }}",
                             type: 'POST',
                             data: $(this).serialize(),
                             success: function(response) {
@@ -173,7 +176,7 @@
                         })
                     } else {
                         $.ajax({
-                            url: "{{ url('master-data/hewan') }}" + '/' + idEdit,
+                            url: "{{ url('master-data/tahun') }}" + '/' + idEdit,
                             type: 'PUT',
                             data: $(this).serialize(),
                             success: function(response) {
@@ -225,7 +228,7 @@
             }).then((Delete) => {
                 if (Delete) {
                     $.ajax({
-                        url: "{{ url('master-data/hewan') }}" + '/' + id,
+                        url: "{{ url('master-data/tahun') }}" + '/' + id,
                         type: 'DELETE',
                         data: {
                             '_token': '{{ csrf_token() }}'
@@ -287,7 +290,7 @@
                 [10, 25, 50, "All"]
             ],
             ajax: {
-                url: "{{ url('master-data/hewan') }}",
+                url: "{{ url('master-data/tahun') }}",
                 data: function(d) {
                     d.statusValidasi = $('#status-validasi').val();
                     d.kategori = $('#kategori').val();
@@ -302,8 +305,8 @@
                     searchable: false
                 },
                 {
-                    data: 'nama',
-                    name: 'nama',
+                    data: 'tahun',
+                    name: 'tahun',
                     className: 'text-center',
                 },
                 {
@@ -326,7 +329,7 @@
     </script>
 
     <script>
-        $('#nav-master-hewan').addClass('active');
+        $('#nav-master-tahun').addClass('active');
 
         function printErrorMsg(msg) {
             $.each(msg, function(key, value) {
@@ -336,7 +339,9 @@
         }
 
         function resetError() {
-            resetErrorElement('nama');
+            $(".error-text").each(function() {
+                $(this).html('');
+            })
         }
 
         function resetModal() {

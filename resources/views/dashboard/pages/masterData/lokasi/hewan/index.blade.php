@@ -55,6 +55,10 @@
                                     <a class="nav-link" id="pills-profile-tab-nobd" data-toggle="pill" href="#pills-tabel"
                                         role="tab" aria-controls="pills-tabel" aria-selected="false">Tabel</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="pills-jumlah-tab-nobd" data-toggle="pill" href="#pills-jumlah"
+                                        role="tab" aria-controls="pills-jumlah" aria-selected="false">Jumlah Hewan</a>
+                                </li>
                             </ul>
                             <div class="tab-content mb-3" id="pills-tabContent">
                                 <div class="tab-pane fade show active" id="pills-peta" role="tabpanel"
@@ -86,6 +90,46 @@
                                                 @endcomponent
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="pills-jumlah" role="tabpanel"
+                                    aria-labelledby="pills-jumlah-tab-nobd">
+                                    <div class="my-2">
+                                        <div class="row">
+                                            @foreach ($daftarJumlahHewan as $jumlahHewan)
+                                                <div class="col-sm-6 col-md-3">
+                                                    <div class="card card-stats card-round border">
+                                                        <div class="card-body ">
+                                                            <div class="row">
+                                                                <div class="col-4">
+                                                                    <div class="icon-big text-center">
+                                                                        <i class="flaticon-placeholder-1 text-primary"></i>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-8 col-stats">
+                                                                    <div class="numbers">
+                                                                        <p class="card-category">Desa</p>
+                                                                        <h4 class="card-title">{{ $jumlahHewan['desa'] }}
+                                                                        </h4>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <hr>
+                                                            @foreach ($jumlahHewan['hewan'] as $hewan)
+                                                                <div class="d-flex justify-content-between mt-2">
+                                                                    <p class="fw-bold mb-0">{{ $hewan['nama_hewan'] }}</p>
+                                                                    <p class="badge bg-primary text-light border-0 mb-0">
+                                                                        {{ $hewan['jumlah'] }}
+                                                                    </p>
+                                                                </div>
+                                                            @endforeach
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -259,6 +303,13 @@
                                     timer: 1000,
                                 });
                             }
+                        },
+                        error: function(response) {
+                            swal("Gagal", "Data Gagal Diproses, Silahkan Coba Kembali", {
+                                icon: "error",
+                                buttons: false,
+                                timer: 1000,
+                            });
                         }
                     })
                 }

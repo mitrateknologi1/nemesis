@@ -71,7 +71,6 @@
                         processData: false,
                         contentType: false,
                         success: function(response) {
-                            console.log(response)
                             if ($.isEmptyObject(response.error)) {
                                 swal({
                                     title: "Berhasil!",
@@ -106,6 +105,11 @@
                     });
                 }
             });
+            const printErrorMsg = (msg) => {
+                $.each(msg, function(key, value) {
+                    $('.' + key + '-error').text(value);
+                });
+            }
 
 
         });

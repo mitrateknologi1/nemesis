@@ -20,40 +20,40 @@ use Database\Seeders\DokumenPerencanaanKeongSeeder;
 class DatabaseSeeder extends Seeder
 {
 
-        /**
-         * Seed the application's database.
-         *
-         * @return void
-         */
-        public function run()
-        {
-                Storage::deleteDirectory('/uploads');
-                Storage::makeDirectory('/uploads');
+    /**
+     * Seed the application's database.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        Storage::deleteDirectory('/uploads');
+        Storage::makeDirectory('/uploads');
 
         File::copyDirectory(
             public_path('file_dummy'),
             storage_path('app/public/uploads')
         );
 
-                $this->call(OPDSeeder::class);
-                $this->call(PerencanaanKeongSeeder::class);
-                // $this->call(RealisasiKeongSeeder::class);
-                $this->call(DesaSeeder::class);
-                $this->call(HewanSeeder::class);
-                $this->call(LokasiKeongTableSeeder::class);
-                $this->call(LokasiPerencanaanKeongSeeder::class);
-                $this->call(LokasiHewanSeeder::class);
-                $this->call(PendudukSeeder::class);
-                $this->call(LokasiKeongTableSeeder::class);
-                $this->call(LokasiPerencanaanKeongSeeder::class);
-                $this->call(DokumenPerencanaanKeongSeeder::class);
+        $this->call(OPDSeeder::class);
+        $this->call(PerencanaanKeongSeeder::class);
+        $this->call(DesaSeeder::class);
+        $this->call(HewanSeeder::class);
+        $this->call(LokasiKeongTableSeeder::class);
+        $this->call(LokasiHewanSeeder::class);
+        $this->call(PendudukSeeder::class);
+        $this->call(LokasiKeongTableSeeder::class);
+        $this->call(DokumenPerencanaanKeongSeeder::class);
 
 
-                $this->call(UserSeeder::class);
-                // $this->call(ProfileSeeder::class);
-                // $this->call(DesaKelurahanTableSeeder::class);
-                // $this->call(KecamatanTableSeeder::class);
-                // $this->call(KabupatenKotaTableSeeder::class);
-                // $this->call(ProvinsiTableSeeder::class);
-        }
+        $this->call(UserSeeder::class);
+        // $this->call(ProfileSeeder::class);
+        // $this->call(DesaKelurahanTableSeeder::class);
+        // $this->call(KecamatanTableSeeder::class);
+        // $this->call(KabupatenKotaTableSeeder::class);
+        // $this->call(ProvinsiTableSeeder::class);
+        $this->call(RealisasiKeongTableSeeder::class);
+        $this->call(DokumenRealisasiKeongTableSeeder::class);
+        $this->call(LokasiPerencanaanKeongTableSeeder::class);
+    }
 }

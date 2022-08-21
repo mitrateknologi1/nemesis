@@ -141,8 +141,8 @@
             let id = $(this).val();
             var _token = "{{ csrf_token() }}";
             swal({
-                title: 'Apakah Anda yakin?',
-                text: "Data yang dipilih akan dihapus!",
+                title: 'Apakah anda yakin ingin menghapus perencanaan ?',
+                text: "Data perencanaan yang dihapus juga akan menghapus data laporan realisasinya (jika ada)!",
                 icon: "warning",
                 dangerMode: true,
                 buttons: ["Batal", "Ya"],
@@ -161,7 +161,6 @@
                                 icon: "success",
                             }).then(function() {
                                 table.ajax.reload();
-                                $('#checkAllData').prop('checked', false);
                             });
                         }
                     })

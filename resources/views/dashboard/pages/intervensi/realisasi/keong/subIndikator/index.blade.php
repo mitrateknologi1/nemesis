@@ -13,11 +13,6 @@
 @endsection
 
 @section('buttonPanelHeader')
-    @if (Auth::user()->role == 'OPD')
-        <a href="{{ route('rencana-intervensi-keong.create') }}" class="btn btn-secondary btn-round"><i
-                class="fas fa-plus"></i>
-            Tambah</a>
-    @endif
 @endsection
 
 @section('contents')
@@ -45,8 +40,7 @@
                                             {{-- <th>Tanggal Disetujui</th> --}}
                                             <th>Sub Indikator</th>
                                             <th>OPD</th>
-                                            <th>Persentase TW</th>
-                                            <th>Persentase Total</th>
+                                            <th>Progress</th>
                                             {{-- <th>Jumlah Lokasi</th> --}}
                                             <th>Status</th>
                                             <th>Aksi</th>
@@ -102,15 +96,13 @@
                 {
                     data: 'opd',
                     name: 'opd',
+                    className: 'text-center'
                 },
+
                 {
-                    data: 'persentase_tw',
-                    name: 'persentase_tw',
+                    data: 'progress',
+                    name: 'progress',
                 },
-                // {
-                //     data: 'lokasi_keong',
-                //     name: 'lokasi_keong',
-                // },
                 {
                     data: 'status',
                     name: 'status',

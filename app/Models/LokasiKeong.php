@@ -23,4 +23,9 @@ class LokasiKeong extends Model
     {
         return $this->hasMany(PemilikLokasiKeong::class);
     }
+
+    public function lokasiPerencanaanKeong()
+    {
+        return $this->hasOne(LokasiPerencanaanKeong::class);
+    }
 }

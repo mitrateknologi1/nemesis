@@ -23,9 +23,9 @@ class PerencanaanKeongSeeder extends Seeder
                 'nilai_pembiayaan' => 10000000,
                 'sumber_dana' => 'DAK',
                 'status' => 2, // ditolak
-                'tanggal_konfirmasi' => '2020-09-30',
+                'tanggal_konfirmasi' => '2022-09-30',
                 'alasan_ditolak' => 'Dokumen Kurang Lengkap',
-                'created_at' => '2020-08-08 01:15:57',
+                'created_at' => '2022-08-08 01:15:57',
             ],
             [
                 'id' => '76628878-af22-4ae8-be21-eaa420265983',
@@ -36,7 +36,7 @@ class PerencanaanKeongSeeder extends Seeder
                 'status' => 0, // menunggu konfirmasi
                 'tanggal_konfirmasi' => null,
                 'alasan_ditolak' => '-',
-                'created_at' => '2020-08-08 01:16:57',
+                'created_at' => '2022-08-08 01:16:57',
             ],
             [
                 'id' => '76628878-af22-4ae8-be21-eaa420265984',
@@ -45,9 +45,9 @@ class PerencanaanKeongSeeder extends Seeder
                 'nilai_pembiayaan' => 12000000,
                 'sumber_dana' => 'DAK',
                 'status' => 1, // disetujui
-                'tanggal_konfirmasi' => '2020-09-30',
+                'tanggal_konfirmasi' => '2022-09-30',
                 'alasan_ditolak' => '-',
-                'created_at' => '2020-08-08 01:17:57',
+                'created_at' => '2022-08-08 01:17:57',
             ],
             [
                 'id' => '76628878-af22-4ae8-be21-eaa420265985',
@@ -56,9 +56,9 @@ class PerencanaanKeongSeeder extends Seeder
                 'nilai_pembiayaan' => 8000000,
                 'sumber_dana' => 'DAK',
                 'status' => 1, // disetujui
-                'tanggal_konfirmasi' => '2020-09-30',
+                'tanggal_konfirmasi' => '2022-09-30',
                 'alasan_ditolak' => '-',
-                'created_at' => '2020-08-08 01:18:57',
+                'created_at' => '2022-08-08 01:18:57',
             ],
             [
                 'id' => '76628878-af22-4ae8-be21-eaa420265986',
@@ -67,9 +67,9 @@ class PerencanaanKeongSeeder extends Seeder
                 'nilai_pembiayaan' => 8500000,
                 'sumber_dana' => 'DAU',
                 'status' => 1, // disetujui
-                'tanggal_konfirmasi' => '2020-09-30',
+                'tanggal_konfirmasi' => '2022-09-30',
                 'alasan_ditolak' => '-',
-                'created_at' => '2020-08-08 01:19:57',
+                'created_at' => '2022-08-08 01:19:57',
             ],
             [
                 'id' => '76628878-af22-4ae8-be21-eaa420265987',
@@ -78,9 +78,9 @@ class PerencanaanKeongSeeder extends Seeder
                 'nilai_pembiayaan' => 1250000,
                 'sumber_dana' => 'DAK',
                 'status' => 1, // disetujui
-                'tanggal_konfirmasi' => '2020-09-30',
+                'tanggal_konfirmasi' => '2022-09-30',
                 'alasan_ditolak' => '-',
-                'created_at' => '2020-08-08 01:20:57',
+                'created_at' => '2022-08-08 01:20:57',
             ],
         ];
 

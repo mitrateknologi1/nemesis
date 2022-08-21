@@ -18,7 +18,6 @@ return new class extends Migration
             $table->uuid('perencanaan_keong_id'); // keong / hewan / manusia
             $table->uuid('opd_id');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

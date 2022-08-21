@@ -23,7 +23,6 @@ return new class extends Migration
             $table->date('tanggal_konfirmasi')->nullable();
             $table->text('alasan_ditolak')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

@@ -47,6 +47,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('rencana-intervensi-keong/map/{rencana_intervensi_keong}', PerencanaanKeongController::class . '@map');
 
     Route::resource('realisasi-intervensi-keong', RealisasiKeongController::class);
+    Route::get('tabel-laporan-realisasi-keong', RealisasiKeongController::class . '@tabelLaporan');
+    Route::get('realisasi-intervensi-keong/create-pelaporan/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@createPelaporan');
+    Route::get('realisasi-intervensi-keong/show-laporan/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@showLaporan');
+    Route::post('realisasi-intervensi-keong/konfirmasi/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@konfirmasi');
+    Route::post('realisasi-intervensi-keong/update-opd/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@updateOPD');
+    Route::delete('realisasi-intervensi-keong/delete-opd/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@deleteOPD');
+    Route::delete('realisasi-intervensi-keong/delete-laporan/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@deleteLaporan');
+    Route::delete('realisasi-intervensi-keong/delete-semua-laporan/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@deleteSemuaLaporan');
 
     // Master Data
     // Lokasi
@@ -66,6 +74,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('master-data/opd', OPDController::class);
     Route::resource('master-data/hewan', HewanController::class);
     Route::resource('master-data/tahun', TahunController::class);
+
     Route::get('map/desa', [LokasiDesaController::class, 'getMapData']);
     Route::get('map/keong', [LokasiKeongController::class, 'getMapData']);
     Route::get('map/hewan', [LokasiHewanController::class, 'getMapData']);

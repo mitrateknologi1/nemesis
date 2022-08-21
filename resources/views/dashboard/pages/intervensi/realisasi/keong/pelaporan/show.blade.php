@@ -1,11 +1,12 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Perencanaan Intervensi Keong
+    Detail Laporan Realisasi Intervensi Keong
 @endsection
 
 @section('titlePanelHeader')
-    Detail Perencanaan Intervensi Keong
+    Detail Laporan Realisasi Intervensi Keong | <span style="text-decoration: underline">Laporan Tanggal:
+        {{ Carbon\Carbon::parse($realisasi_intervensi_keong->created_at)->translatedFormat('j F Y') }}</span>
 @endsection
 
 @section('subTitlePanelHeader')
@@ -37,9 +38,9 @@
                 </div>
                 <div class="card-body">
                     <ul class="list-group list-group-bordered">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">Tanggal Pengajuan:
+                        <li class="list-group-item d-flex justify-content-between align-items-center">Tanggal Laporan:
                             <span
-                                class="font-weight-bold">{{ Carbon\Carbon::parse($rencana_intervensi_keong->created_at)->translatedFormat('j F Y') }}</span>
+                                class="font-weight-bold">{{ Carbon\Carbon::parse($realisasi_intervensi_keong->created_at)->translatedFormat('j F Y') }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">Sub Indikator:<span
                                 class="font-weight-bold">{{ $rencana_intervensi_keong->sub_indikator }}</span>
@@ -48,10 +49,10 @@
                                 class="font-weight-bold">{{ $rencana_intervensi_keong->opd->nama }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">Lokasi
-                            ({{ $rencana_intervensi_keong->lokasiPerencanaanKeong->count() }}):<span
+                            ({{ $realisasi_intervensi_keong->lokasiRealisasiKeong->count() }}):<span
                                 class="font-weight-bold">
                                 <ul>
-                                    @foreach ($rencana_intervensi_keong->lokasiPerencanaanKeong as $item)
+                                    @foreach ($realisasi_intervensi_keong->lokasiRealisasiKeong as $item)
                                         <li class="d-flex justify-content-end align-items-end">
                                             {{ $item->lokasiKeong->nama . ' ' }}
                                             (<span>{{ $item->lokasiKeong->desa->nama }}</span>)
@@ -73,32 +74,32 @@
                                 </span>
                             </li>
                         @endif
-                        <li class="list-group-item d-flex justify-content-between align-items-center">Nilai Pembiayaan:<span
-                                class="font-weight-bold"><span>Rp. </span>
-                                <span class="rupiah">{{ $rencana_intervensi_keong->nilai_pembiayaan }}</span></span>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">Penggunaan
+                            Anggaran:<span class="font-weight-bold"><span>Rp. </span>
+                                <span class="rupiah">{{ $realisasi_intervensi_keong->penggunaan_anggaran }}</span></span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">Sumber Dana:<span
                                 class="font-weight-bold">{{ $rencana_intervensi_keong->sumber_dana }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">Status:
-                            @if ($rencana_intervensi_keong->status == 1)
+                            @if ($realisasi_intervensi_keong->status == 1)
                                 <span class="font-weight-bold badge badge-success">Disetujui</span>
-                            @elseif($rencana_intervensi_keong->status == 2)
+                            @elseif($realisasi_intervensi_keong->status == 2)
                                 <span class="font-weight-bold badge badge-danger">Ditolak</span>
                             @else
                                 <span class="font-weight-bold badge badge-warning">Menunggu Konfirmasi</span>
                             @endif
                         </li>
-                        @if ($rencana_intervensi_keong->status == 2)
+                        @if ($realisasi_intervensi_keong->status == 2)
                             <li class="list-group-item d-flex justify-content-between align-items-center">Alasan Ditolak:
                                 <span
-                                    class="font-weight-bold text-danger">{{ $rencana_intervensi_keong->alasan_ditolak }}</span>
+                                    class="font-weight-bold text-danger">{{ $realisasi_intervensi_keong->alasan_ditolak }}</span>
                             </li>
                         @endif
-                        @if ($rencana_intervensi_keong->status != 0)
+                        @if ($realisasi_intervensi_keong->status != 0)
                             <li class="list-group-item d-flex justify-content-between align-items-center">Tanggal
                                 Konfirmasi:<span
-                                    class="font-weight-bold">{{ Carbon\Carbon::parse($rencana_intervensi_keong->tanggal_konfirmasi)->translatedFormat('j F Y') }}</span>
+                                    class="font-weight-bold">{{ Carbon\Carbon::parse($realisasi_intervensi_keong->tanggal_konfirmasi)->translatedFormat('j F Y') }}</span>
                             </li>
                         @endif
 
@@ -110,16 +111,16 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">List Dokumen Perencanaan</div>
+                        <div class="card-title">List Dokumen Laporan Realisasi</div>
 
                     </div>
                 </div>
                 <div class="card-body">
                     <ul class="list-group list-group-bordered">
-                        @forelse ($rencana_intervensi_keong->dokumenPerencanaanKeong as $item)
+                        @forelse ($realisasi_intervensi_keong->dokumenRealisasiKeong as $item)
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 {{ $item->nama }}
-                                <a href="{{ Storage::url('uploads/dokumen/perencanaan/keong/' . $item->file) }}"
+                                <a href="{{ Storage::url('uploads/dokumen/realisasi/keong/' . $item->file) }}"
                                     target="_blank" class="badge badge-primary" data-toggle="tooltip" data-placement="top"
                                     title="Download">
                                     <i class="fas fa-download"></i>
@@ -140,7 +141,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Titik Koordinat Lokasi Perencanaan Intervensi Keong</div>
+                        <div class="card-title">Titik Koordinat Lokasi Laporan Realisasi Intervensi Keong</div>
 
                     </div>
                 </div>
@@ -149,19 +150,19 @@
                 </div>
             </div>
         </div>
-        @if ($rencana_intervensi_keong->status == 0 && Auth::user()->role == 'Admin')
+        @if ($realisasi_intervensi_keong->status == 0 && Auth::user()->role == 'Admin')
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-header">
                         <div class="card-head-row">
-                            <div class="card-title">Konfirmasi Perencanaan</div>
+                            <div class="card-title">Konfirmasi Laporan Realisasi</div>
 
                         </div>
                     </div>
                     <div class="card-body pt-0">
                         @component('dashboard.components.forms.confirm',
                             [
-                                'action' => url('rencana-intervensi-keong/konfirmasi/' . $rencana_intervensi_keong->id),
+                                'action' => url('realisasi-intervensi-keong/konfirmasi/' . $realisasi_intervensi_keong->id),
                             ])
                         @endcomponent
                     </div>
@@ -173,9 +174,9 @@
 
 @push('scripts')
     <script>
-        $('#nav-perencanaan').addClass('active');
-        $('#nav-perencanaan .collapse').addClass('show');
-        $('#nav-perencanaan .collapse #li-keong').addClass('active');
+        $('#nav-realisasi').addClass('active');
+        $('#nav-realisasi .collapse').addClass('show');
+        $('#nav-realisasi .collapse #li-keong').addClass('active');
 
         $(document).ready(function() {
             initializeMap();
@@ -245,28 +246,22 @@
                 },
             })
 
-            $.ajax({
-                url: "{{ url('rencana-intervensi-keong/map/' . $rencana_intervensi_keong->id) }}",
-                type: "GET",
-                success: function(response) {
-                    if (response.status == 'success') {
-                        for (var i = 0; i < response.data.length; i++) {
-                            icon = pinIcon;
-                            L.marker([response.data[i].latitude, response.data[i].longitude], {
-                                    icon: icon
-                                })
-                                .bindPopup(
-                                    "<p class='fw-bold my-0 text-center'>" + response.data[i].nama +
-                                    "</p><hr>" +
-                                    "<p class='my-0'>Desa : " + response.data[i].desa
-                                    .nama + "</p>"
-                                )
-                                // .on('click', L.bind(petaKlik, null, data[0][i].id))
-                                .addTo(map);
-                        }
-                    }
-                },
-            })
+            const data = {!! $dataMap !!};
+
+            for (var i = 0; i < data.length; i++) {
+                icon = pinIcon;
+                L.marker([data[i].latitude, data[i].longitude], {
+                        icon: icon
+                    })
+                    .bindPopup(
+                        "<p class='fw-bold my-0 text-center'>" + data[i].nama +
+                        "</p><hr>" +
+                        "<p class='my-0'>Desa : " + data[i].desa
+                        .nama + "</p>"
+                    )
+                    // .on('click', L.bind(petaKlik, null, data[0][i].id))
+                    .addTo(map);
+            }
         }
     </script>
 @endpush

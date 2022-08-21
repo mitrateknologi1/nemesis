@@ -20,4 +20,9 @@ class JumlahHewan extends Model
     {
         return $this->belongsTo(Hewan::class)->withTrashed();
     }
+
+    public function lokasiHewan()
+    {
+        return $this->hasMany(LokasiHewan::class, 'id', 'lokasi_hewan_id');
+    }
 }

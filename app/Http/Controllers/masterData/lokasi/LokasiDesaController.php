@@ -27,13 +27,13 @@ class LokasiDesaController extends Controller
                     return $actionBtn;
                 })
                 ->addColumn('luas', function ($row) {
-                    return $row->luas . " m<sup>2</sup>";
+                    return $row->luas . " Km<sup>2</sup>";
                 })
                 ->addColumn('statusPolygon', function ($row) {
                     if ($row->polygon) {
-                        return '<span class="badge bg-success text-light border-none">Ada</span>';
+                        return '<span class="badge bg-success text-light border-0">Ada</span>';
                     } else {
-                        return '<span class="badge bg-danger text-light border-none">Tidak Ada</span>';
+                        return '<span class="badge bg-danger text-light border-0">Tidak Ada</span>';
                     }
                 })
                 ->addColumn('warnaPolygon', function ($row) {

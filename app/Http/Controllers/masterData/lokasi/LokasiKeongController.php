@@ -30,9 +30,9 @@ class LokasiKeongController extends Controller
                 })
                 ->addColumn('status', function ($row) {
                     if ($row->status == 1) {
-                        return '<span class="badge bg-success text-light border-none">Aktif</span>';
+                        return '<span class="badge bg-success text-light border-0">Aktif</span>';
                     } else {
-                        return '<span class="badge bg-danger text-light border-none">Tidak Aktif</span>';
+                        return '<span class="badge bg-danger text-light border-0">Tidak Aktif</span>';
                     }
                 })
                 ->addColumn('koordinat', function ($row) {

@@ -44,6 +44,6 @@ class User extends Authenticatable
 
     public function opd()
     {
-        return $this->belongsTo(OPD::class, 'opd_id');
+        return $this->belongsTo(OPD::class)->withTrashed();
     }
 }

@@ -18,23 +18,23 @@ class HewanSeeder extends Seeder
         $data = [
             [
                 'id' => '0075b51c-49c0-4e81-a3b3-a6b4e21b3c10',
-                'nama' => 'Sapi',
+                'nama' => 'Kerbau',
             ],
             [
                 'id' => '0075b51c-49c0-4e81-a3b3-a6b4e21b3c11',
-                'nama' => 'Kambing',
+                'nama' => 'Sapi',
             ],
             [
                 'id' => '0075b51c-49c0-4e81-a3b3-a6b4e21b3c12',
-                'nama' => 'Ayam',
+                'nama' => 'Babi',
             ],
             [
                 'id' => '0075b51c-49c0-4e81-a3b3-a6b4e21b3c13',
-                'nama' => 'Bebek',
+                'nama' => 'Anjing',
             ],
             [
                 'id' => '0075b51c-49c0-4e81-a3b3-a6b4e21b3c14',
-                'nama' => 'Kelinci',
+                'nama' => 'Kambing',
             ],
         ];
 

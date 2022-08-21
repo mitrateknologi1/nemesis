@@ -44,16 +44,14 @@ class DatabaseSeeder extends Seeder
         $this->call(PendudukSeeder::class);
         $this->call(LokasiKeongTableSeeder::class);
         $this->call(DokumenPerencanaanKeongSeeder::class);
-
-
         $this->call(UserSeeder::class);
-        // $this->call(ProfileSeeder::class);
-        // $this->call(DesaKelurahanTableSeeder::class);
-        // $this->call(KecamatanTableSeeder::class);
-        // $this->call(KabupatenKotaTableSeeder::class);
-        // $this->call(ProvinsiTableSeeder::class);
         $this->call(RealisasiKeongTableSeeder::class);
         $this->call(DokumenRealisasiKeongTableSeeder::class);
         $this->call(LokasiPerencanaanKeongTableSeeder::class);
+        $this->call(TahunSeeder::class);
+        $this->call(RoadMapSeeder::class);
+        $this->call(MasterPlanSeeder::class);
+        $this->call(JumlahHewanTableSeeder::class);
+        $this->call(PemilikLokasiHewanTableSeeder::class);
     }
 }

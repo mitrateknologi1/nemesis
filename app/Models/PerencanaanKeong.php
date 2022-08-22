@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PerencanaanKeong extends Model
 {
-    use HasFactory, TraitUuid, SoftDeletes;
+    use HasFactory, TraitUuid;
 
     protected $table = 'perencanaan_keong';
     protected $guarded = ['id'];
@@ -27,7 +27,7 @@ class PerencanaanKeong extends Model
 
     public function lokasiPerencanaanKeong()
     {
-        return $this->hasMany(LokasiPerencanaanKeong::class, 'perencanaan_keong_id');
+        return $this->hasMany(LokasiPerencanaanKeong::class, 'perencanaan_keong_id')->orderBy('updated_at', 'DESC');
     }
 
     public function dokumenPerencanaanKeong()

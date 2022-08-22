@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('lokasi_perencanaan_keong', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('perencanaan_keong_id');
+            $table->uuid('realisasi_keong_id')->nullable();
             $table->uuid('lokasi_keong_id');
             $table->integer('status')->default(0); // 0/1/2
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

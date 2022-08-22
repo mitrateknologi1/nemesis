@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class LokasiPerencanaanKeong extends Model
 {
-    use HasFactory, TraitUuid, SoftDeletes;
+    use HasFactory, TraitUuid;
 
     protected $table = 'lokasi_perencanaan_keong';
     protected $guarded = ['id'];
 
-    public function lokasi_keong()
+    public function lokasiKeong()
     {
         return $this->belongsTo(LokasiKeong::class, 'lokasi_keong_id');
     }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Provinsi extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class Provinsi extends Migration
      */
     public function up()
     {
-        Schema::create('provinsi', function (Blueprint $table) {
-            $table->id();
+        Schema::create('dokumen_realisasi_keong', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('realisasi_keong_id');
             $table->text('nama');
-            $table->integer('status')->default(1);
+            $table->text('file');
+            $table->integer('no_urut');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -29,6 +30,6 @@ class Provinsi extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('provinsi');
+        Schema::dropIfExists('dokumen_realisasi_keong');
     }
-}
+};

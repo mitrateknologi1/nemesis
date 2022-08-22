@@ -6,6 +6,7 @@ use App\Models\OPD;
 use App\Models\Desa;
 use App\Models\LokasiKeong;
 use Illuminate\Http\Request;
+use App\Models\RealisasiKeong;
 use Illuminate\Support\Carbon;
 use App\Models\OPDTerkaitKeong;
 use Illuminate\Validation\Rule;
@@ -36,7 +37,7 @@ class PerencanaanKeongController extends Controller
                 ->where(function ($query) {
                     if (Auth::user()->role == 'OPD') {
                         $query->where('opd_id', Auth::user()->opd_id);
-                        $query->orWhereHas('opdTerkaitKeong', function ($q) {
+                        $query->orWhereHas('opdTerkaitKeong', function ($q) { // OPD Terkait hanya bisa melihat yang telah di setujui
                             $q->where('status', 1);
                             $q->where('opd_id', Auth::user()->opd_id);
                         });
@@ -55,15 +56,6 @@ class PerencanaanKeongController extends Controller
                         return '<span class="badge fw-bold badge-danger">Ditolak</span>';
                     }
                 })
-
-                // ->addColumn('lokasi_keong', function ($row) {
-                //     $lokasi_keong = '<ul>';
-                //     foreach ($row->lokasiPerencanaanKeong as $l) {
-                //         $lokasi_keong .= '<li>' . $l->lokasi_keong->nama . ' (<span class="font-weight-bold">' . $l->lokasi_keong->desa->nama . '</span>) </li>';
-                //     }
-                //     $lokasi_keong .= '</ul>';
-                //     return $lokasi_keong;
-                // })
 
                 ->addColumn('jumlah_lokasi', function ($row) {
                     return $row->lokasiPerencanaanKeong->count();
@@ -87,8 +79,9 @@ class PerencanaanKeongController extends Controller
                         if (Auth::user()->role == 'OPD') {
                             $actionBtn .= '<a href="' . route('rencana-intervensi-keong.show', $row->id) . '" id="btn-show" class="btn btn-rounded btn-primary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a> ';
                             $actionBtn .= '<a href="' . route('rencana-intervensi-keong.edit', $row->id) . '" id="btn-edit" class="btn btn-rounded btn-warning btn-sm my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a> ';
+                            $actionBtn .= '<button id="btn-delete" class="btn btn-rounded btn-danger btn-sm my-1 text-white shadow btn-delete" data-toggle="tooltip" data-placement="top" title="Hapus" value="' . $row->id . '"><i class="fas fa-trash"></i></button>';
                         } else { //admin
-                            $actionBtn .= '<a href="' . route('rencana-intervensi-keong.show', $row->id) . '" id="btn-show" class="btn btn-rounded btn-secondary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-lg fa-clipboard-check"></i></a> ';
+                            $actionBtn .= '<a href="' . route('rencana-intervensi-keong.show', $row->id) . '" id="btn-show" class="btn btn-rounded btn-secondary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Konfirmasi"><i class="fas fa-lg fa-clipboard-check"></i></a> ';
                         }
                     } else if ($row->status == 1) {
                         $actionBtn .= '<a href="' . route('rencana-intervensi-keong.show', $row->id) . '" id="btn-show" class="btn btn-rounded btn-primary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a> ';
@@ -100,8 +93,8 @@ class PerencanaanKeongController extends Controller
                         $actionBtn .= '<a href="' . route('rencana-intervensi-keong.show', $row->id) . '" id="btn-show" class="btn btn-rounded btn-primary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a> ';
                         if (Auth::user()->role == 'OPD') {
                             $actionBtn .= '<a href="' . route('rencana-intervensi-keong.edit', $row->id) . '" id="btn-edit" class="btn btn-rounded btn-warning btn-sm my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a> ';
+                            $actionBtn .= '<button id="btn-delete" class="btn btn-rounded btn-danger btn-sm my-1 text-white shadow btn-delete" data-toggle="tooltip" data-placement="top" title="Hapus" value="' . $row->id . '"><i class="fas fa-trash"></i></button>';
                         }
-                        $actionBtn .= '<button id="btn-delete" class="btn btn-rounded btn-danger btn-sm my-1 text-white shadow btn-delete" data-toggle="tooltip" data-placement="top" title="Hapus" value="' . $row->id . '"><i class="fas fa-trash"></i></button>';
                     }
                     $actionBtn .= '</div>';
                     return $actionBtn;
@@ -250,6 +243,7 @@ class PerencanaanKeongController extends Controller
      */
     public function edit(PerencanaanKeong $rencana_intervensi_keong)
     {
+        // dd($rencana_intervensi_keong->realisasiKeong->count());
         if (Auth::user()->role == 'Admin') {
             if (in_array($rencana_intervensi_keong->status, [0, 2])) {
                 abort('403', 'Oops! anda tidak memiliki akses ke sini.');
@@ -286,7 +280,7 @@ class PerencanaanKeongController extends Controller
             $request->all(),
             [
                 'sub_indikator' => 'required',
-                'lokasi' => 'required',
+                'lokasi' => $rencana_intervensi_keong->realisasiKeong->count() == 0 ? 'required' : '',
                 'nilai_pembiayaan' => 'required',
                 'sumber_dana' => 'required',
             ],
@@ -322,19 +316,21 @@ class PerencanaanKeongController extends Controller
         }
 
         // update lokasi perencanaan
-        $rencana_intervensi_keong->lokasiPerencanaanKeong()->forceDelete();
-        if ($request->lokasi != null) {
-            foreach ($request->lokasi as $lokasi) {
-                $dataLokasi = [
-                    'perencanaan_keong_id' => $rencana_intervensi_keong->id,
-                    'lokasi_keong_id' => $lokasi,
-                ];
-                $insertLokasi = LokasiPerencanaanKeong::create($dataLokasi);
+        if ($rencana_intervensi_keong->realisasiKeong->count() == 0) {
+            $rencana_intervensi_keong->lokasiPerencanaanKeong()->delete();
+            if ($request->lokasi != null) {
+                foreach ($request->lokasi as $lokasi) {
+                    $dataLokasi = [
+                        'perencanaan_keong_id' => $rencana_intervensi_keong->id,
+                        'lokasi_keong_id' => $lokasi,
+                    ];
+                    $insertLokasi = LokasiPerencanaanKeong::create($dataLokasi);
+                }
             }
         }
 
         // update opd terkait
-        $rencana_intervensi_keong->opdTerkaitKeong()->forceDelete();
+        $rencana_intervensi_keong->opdTerkaitKeong()->delete();
         if ($request->opd_terkait != null) {
             foreach ($request->opd_terkait as $opd) {
                 $dataOPDTerkait = [
@@ -444,11 +440,25 @@ class PerencanaanKeongController extends Controller
                 if (Storage::exists('uploads/dokumen/perencanaan/keong/' . $item->file)) {
                     Storage::delete('uploads/dokumen/perencanaan/keong/' . $item->file);
                 }
-                DokumenPerencanaanKeong::where('id', $item->id)->delete();
+            }
+        }
+        $rencana_intervensi_keong->dokumenPerencanaanKeong()->delete();
+
+        if ($rencana_intervensi_keong->realisasiKeong) {
+            foreach ($rencana_intervensi_keong->realisasiKeong as $item) {
+                foreach ($item->dokumenRealisasiKeong as $doc) {
+                    if (Storage::exists('uploads/dokumen/realisasi/keong/' . $doc->file)) {
+                        Storage::delete('uploads/dokumen/realisasi/keong/' . $doc->file);
+                    }
+                    DokumenRealisasiKeong::where('id', $item->id)->delete();
+                }
+                $item->dokumenRealisasiKeong()->delete();
             }
         }
 
+        $rencana_intervensi_keong->realisasiKeong()->delete();
         $rencana_intervensi_keong->delete();
+
         return response()->json(['success' => 'Data berhasil dihapus']);
     }
 

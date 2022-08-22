@@ -130,6 +130,8 @@
                      </div>
                  </div>
              </li>
+             <li class="text-white font-weight-bold mr-2">
+                 {{ Auth::user()->role == 'Admin' ? Auth::user()->nama : Auth::user()->opd->nama }}</li>
              <li class="nav-item dropdown hidden-caret">
                  <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
                      <div class="avatar-sm">
@@ -146,6 +148,7 @@
                                  <div class="u-text">
                                      <h4>{{ Auth::user()->role == 'Admin' ? Auth::user()->nama : Auth::user()->opd->nama }}
                                      </h4>
+
                                      <p class="text-muted">{{ Auth::user()->role }}</p>
                                      {{-- <a href="profile.html" class="btn btn-xs btn-secondary btn-sm">View Profile</a> --}}
                                  </div>

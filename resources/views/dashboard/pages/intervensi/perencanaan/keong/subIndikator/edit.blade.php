@@ -9,7 +9,7 @@
 @endsection
 
 @section('subTitlePanelHeader')
-    {{ $rencanaIntervensiKeong->opd->nama }}
+    {{ $rencanaIntervensiKeong->sub_indikator }}
 @endsection
 
 @section('buttonPanelHeader')

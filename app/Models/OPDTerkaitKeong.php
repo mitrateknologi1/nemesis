@@ -9,13 +9,13 @@ use App\Traits\TraitUuid;
 
 class OPDTerkaitKeong extends Model
 {
-    use HasFactory, SoftDeletes, TraitUuid;
+    use HasFactory, TraitUuid;
 
     protected $table = 'opd_terkait_keong';
     protected $guarded = ['id'];
 
     public function opd()
     {
-        return $this->belongsTo(OPD::class, 'opd_id');
+        return $this->belongsTo(OPD::class, 'opd_id')->orderBy('nama');
     }
 }

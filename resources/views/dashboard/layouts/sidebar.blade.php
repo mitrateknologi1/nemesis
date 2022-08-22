@@ -163,6 +163,18 @@
                          <p>Tahun</p>
                      </a>
                  </li>
+                 <li class="nav-item" id="nav-master-penduduk">
+                     <a href="{{ url('master-data/penduduk') }}">
+                         <i class="fas fa-user-edit"></i>
+                         <p>Penduduk</p>
+                     </a>
+                 </li>
+                 <li class="nav-item" id="nav-master-sekolah">
+                     <a href="{{ url('master-data/jenjang-sekolah') }}">
+                         <i class="fas fa-school"></i>
+                         <p>Sekolah</p>
+                     </a>
+                 </li>
                  <li class="nav-item" id="nav-master-akun">
                      <a href="{{ url('master-data/akun') }}">
                          <i class="fas fa-users"></i>

@@ -15,9 +15,15 @@ use App\Http\Controllers\masterData\lokasi\LokasiDesaController;
 use App\Http\Controllers\masterData\lokasi\LokasiHewanController;
 use App\Http\Controllers\masterData\lokasi\LokasiKeongController;
 use App\Http\Controllers\masterData\OPDController;
+use App\Http\Controllers\masterData\PendudukController;
+use App\Http\Controllers\masterData\sekolah\JenjangSekolahController;
+use App\Http\Controllers\masterData\sekolah\SekolahController;
+use App\Http\Controllers\masterData\sekolah\SiswaController;
 use App\Http\Controllers\masterData\TahunController;
 use App\Http\Controllers\PengaturanAkunController;
 use App\Models\Perencanaan;
+use App\Models\Siswa;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -84,4 +90,20 @@ Route::group(['middleware' => 'auth'], function () {
     // Pengaturan Akun
     Route::get('pengaturan-akun', [PengaturanAkunController::class, 'index']);
     Route::put('pengaturan-akun', [PengaturanAkunController::class, 'update']);
+
+    // Penduduk
+    Route::post('master-data/penduduk/export-jumlah', [PendudukController::class, 'exportJumlah']);
+    Route::post('master-data/penduduk/export', [PendudukController::class, 'export']);
+    Route::resource('master-data/penduduk', PendudukController::class);
+
+    // Sekolah
+    Route::get('master-data/jenjang-sekolah', [JenjangSekolahController::class, 'index']);
+    Route::resource('master-data/sekolah/{jenjangSekolah}', SekolahController::class)->parameters([
+        '{jenjangSekolah}' => 'sekolah'
+    ]);
+    Route::post('master-data/siswa/detail-siswa', [SiswaController::class, 'detailSiswa']);
+    Route::post('master-data/siswa/{sekolah}/delete-selected', [SiswaController::class, 'deleteSelected']);
+    Route::resource('master-data/siswa/{sekolah}', SiswaController::class)->parameters([
+        '{sekolah}' => 'siswa'
+    ]);
 });

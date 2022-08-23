@@ -13,8 +13,13 @@
 @endsection
 
 @section('buttonPanelHeader')
-    {{-- <a href="#" class="btn btn-secondary btn-round"><i class="fas fa-plus"></i>
-        Tambah</a> --}}
+    @component('dashboard.components.buttons.add',
+        [
+            'id' => 'btn-tambah',
+            'class' => '',
+            'url' => '#',
+        ])
+    @endcomponent
 @endsection
 
 @push('styles')
@@ -28,13 +33,7 @@
                     <div class="card-head-row">
                         <div class="card-title">Data Hewan</div>
                         <div class="card-tools">
-                            @component('dashboard.components.buttons.add',
-                                [
-                                    'id' => 'btn-tambah',
-                                    'class' => '',
-                                    'url' => '#',
-                                ])
-                            @endcomponent
+
                         </div>
                     </div>
                 </div>

@@ -13,8 +13,11 @@
 @endsection
 
 @section('buttonPanelHeader')
-    {{-- <a href="#" class="btn btn-secondary btn-round"><i class="fas fa-plus"></i>
-        Tambah</a> --}}
+    @component('dashboard.components.buttons.add',
+        [
+            'url' => url('master-data/lokasi/hewan/create'),
+        ])
+    @endcomponent
 @endsection
 
 @push('styles')
@@ -34,11 +37,22 @@
                     <div class="card-head-row">
                         <div class="card-title">Data Hewan</div>
                         <div class="card-tools">
-                            @component('dashboard.components.buttons.add',
-                                [
-                                    'url' => url('master-data/lokasi/hewan/create'),
-                                ])
-                            @endcomponent
+                            <form action="{{ url('master-data/lokasi/hewan/export-lokasi') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-info btn-border btn-round btn-sm mr-2"
+                                    id="export-lokasi-hewan">
+                                    <i class="fas fa-lg fa-download"></i>
+                                    Export Lokasi Hewan
+                                </button>
+                            </form>
+                            <form action="{{ url('master-data/lokasi/hewan/export-demografi') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-info btn-border btn-round btn-sm mr-2"
+                                    id="export-demografi">
+                                    <i class="fas fa-lg fa-download"></i>
+                                    Export Demografi
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -57,7 +71,8 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="pills-jumlah-tab-nobd" data-toggle="pill" href="#pills-jumlah"
-                                        role="tab" aria-controls="pills-jumlah" aria-selected="false">Jumlah Hewan</a>
+                                        role="tab" aria-controls="pills-jumlah" aria-selected="false">Demografi
+                                        Daerah</a>
                                 </li>
                             </ul>
                             <div class="tab-content mb-3" id="pills-tabContent">
@@ -115,6 +130,18 @@
                                                                 </div>
                                                             </div>
                                                             <hr>
+                                                            <div class="d-flex justify-content-center mt-2">
+                                                                <p class="fw-bold mb-0">Jumlah Lokasi Hewan Ternak :
+                                                                    {{ $jumlahHewan['lokasi_hewan'] }}</p>
+                                                            </div>
+                                                            <div class="d-flex justify-content-center mt-2">
+                                                                <p class="fw-bold mb-0">Total Hewan Ternak :
+                                                                    {{ $jumlahHewan['jumlah'] }}</p>
+                                                            </div>
+                                                            <hr>
+                                                            <div class="d-flex justify-content-center mt-2">
+                                                                <p class="fw-bold mb-0">Hewan Ternak :</p>
+                                                            </div>
                                                             @foreach ($jumlahHewan['hewan'] as $hewan)
                                                                 <div class="d-flex justify-content-between mt-2">
                                                                     <p class="fw-bold mb-0">{{ $hewan['nama_hewan'] }}</p>
@@ -142,6 +169,27 @@
 @endsection
 
 @push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#export-demografi').hide();
+        })
+
+        $('#pills-home-tab-nobd').click(function() {
+            $('#export-demografi').hide();
+            $('#export-lokasi-hewan').show();
+        })
+
+        $('#pills-profile-tab-nobd').click(function() {
+            $('#export-demografi').hide();
+            $('#export-lokasi-hewan').show();
+        })
+
+        $('#pills-jumlah-tab-nobd').click(function() {
+            $('#export-demografi').show();
+            $('#export-lokasi-hewan').hide();
+        })
+    </script>
+
     <script>
         var map = null;
 

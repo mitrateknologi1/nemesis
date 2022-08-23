@@ -160,7 +160,15 @@ class AkunController extends Controller
      */
     public function edit(User $user)
     {
+        $id = $user->opd_id;
         $daftarOpd = OPD::orderBy('nama', 'asc')->get();
+
+        if ($id) {
+            $opdHapus = OPD::where('id', $id)->withTrashed()->first();
+            if ($opdHapus->trashed()) {
+                $daftarOpd->push($opdHapus);
+            }
+        }
         return view('dashboard.pages.masterData.akun.edit', compact(['daftarOpd', 'user']));
     }
 

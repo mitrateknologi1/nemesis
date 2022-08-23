@@ -11,6 +11,7 @@ use Database\Seeders\DesaSeeder;
 use Database\Seeders\HewanSeeder;
 use Illuminate\Support\Facades\File;
 use App\Models\DokumenPerencanaanKeong;
+use App\Models\PemilikLokasiKeong;
 use Database\Seeders\LokasiKeongSeeder;
 use Illuminate\Support\Facades\Storage;
 use Database\Seeders\PerencanaanKeongSeeder;
@@ -53,5 +54,8 @@ class DatabaseSeeder extends Seeder
         $this->call(MasterPlanSeeder::class);
         $this->call(JumlahHewanTableSeeder::class);
         $this->call(PemilikLokasiHewanTableSeeder::class);
+        $this->call(SekolahSeeder::class);
+        $this->call(SiswaSeeder::class);
+        $this->call(PemilikLokasiKeongSeeder::class);
     }
 }

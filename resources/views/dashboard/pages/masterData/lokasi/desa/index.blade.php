@@ -13,8 +13,11 @@
 @endsection
 
 @section('buttonPanelHeader')
-    {{-- <a href="#" class="btn btn-secondary btn-round"><i class="fas fa-plus"></i>
-        Tambah</a> --}}
+    @component('dashboard.components.buttons.add',
+        [
+            'url' => url('master-data/lokasi/desa/create'),
+        ])
+    @endcomponent
 @endsection
 
 @push('styles')
@@ -34,11 +37,14 @@
                     <div class="card-head-row">
                         <div class="card-title">Data Desa</div>
                         <div class="card-tools">
-                            @component('dashboard.components.buttons.add',
-                                [
-                                    'url' => url('master-data/lokasi/desa/create'),
-                                ])
-                            @endcomponent
+                            <form action="{{ url('master-data/lokasi/desa/export') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-info btn-border btn-round btn-sm mr-2"
+                                    id="export-lokasi-hewan">
+                                    <i class="fas fa-lg fa-download"></i>
+                                    Export Data
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

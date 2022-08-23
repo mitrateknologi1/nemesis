@@ -13,8 +13,11 @@
 @endsection
 
 @section('buttonPanelHeader')
-    {{-- <a href="#" class="btn btn-secondary btn-round"><i class="fas fa-plus"></i>
-        Tambah</a> --}}
+    @component('dashboard.components.buttons.add',
+        [
+            'url' => url('master-data/lokasi/keong/create'),
+        ])
+    @endcomponent
 @endsection
 
 @push('styles')
@@ -34,11 +37,25 @@
                     <div class="card-head-row">
                         <div class="card-title">Data Habitat Keong</div>
                         <div class="card-tools">
-                            @component('dashboard.components.buttons.add',
-                                [
-                                    'url' => url('master-data/lokasi/keong/create'),
-                                ])
-                            @endcomponent
+                            <div class="row">
+                                <form action="{{ url('master-data/lokasi/keong/export') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-info btn-border btn-round btn-sm mr-2"
+                                        id="export-data">
+                                        <i class="fas fa-lg fa-download"></i>
+                                        Export Data
+                                    </button>
+                                </form>
+                                <form action="{{ url('master-data/lokasi/keong/export-demografi') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-info btn-border btn-round btn-sm mr-2"
+                                        id="export-demografi">
+                                        <i class="fas fa-lg fa-download"></i>
+                                        Export Demografi
+                                    </button>
+                                </form>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -54,6 +71,12 @@
                                 <li class="nav-item">
                                     <a class="nav-link" id="pills-profile-tab-nobd" data-toggle="pill" href="#pills-tabel"
                                         role="tab" aria-controls="pills-tabel" aria-selected="false">Tabel</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="pills-demografi-tab-nobd" data-toggle="pill"
+                                        href="#pills-demografi" role="tab" aria-controls="pills-tabel"
+                                        aria-selected="false">Demografi
+                                        Daerah</a>
                                 </li>
                             </ul>
                             <div class="tab-content mb-3" id="pills-tabContent">
@@ -78,6 +101,44 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="tab-pane fade" id="pills-demografi" role="tabpanel"
+                                    aria-labelledby="pills-demografi-tab-nobd">
+                                    <div class="my-2">
+                                        <div class="row">
+                                            @foreach ($daftarDesa as $desa)
+                                                <div class="col-sm-6 col-md-3">
+                                                    <div class="card card-stats card-round border">
+                                                        <div class="card-body ">
+                                                            <div class="row">
+                                                                <div class="col-4">
+                                                                    <div class="icon-big text-center">
+                                                                        <i class="flaticon-placeholder-1 text-primary"></i>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-8 col-stats">
+                                                                    <div class="numbers">
+                                                                        <p class="card-category">Desa</p>
+                                                                        <h4 class="card-title">{{ $desa->nama }}
+                                                                        </h4>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <hr>
+                                                            <div class="d-flex justify-content-between mt-2">
+                                                                <p class="fw-bold mb-0">Total Lokasi Keong</p>
+                                                                <p class="badge bg-primary text-light border-0 mb-0">
+                                                                    {{ $desa->lokasiKeong->count() }}
+                                                                </p>
+                                                            </div>
+
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -88,6 +149,27 @@
 @endsection
 
 @push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#export-demografi').hide();
+        })
+
+        $('#pills-home-tab-nobd').click(function() {
+            $('#export-demografi').hide();
+            $('#export-data').show();
+        })
+
+        $('#pills-profile-tab-nobd').click(function() {
+            $('#export-demografi').hide();
+            $('#export-data').show();
+        })
+
+        $('#pills-demografi-tab-nobd').click(function() {
+            $('#export-demografi').show();
+            $('#export-data').hide();
+        })
+    </script>
+
     <script>
         var map = null;
 

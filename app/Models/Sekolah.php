@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Penduduk extends Model
+class Sekolah extends Model
 {
     use HasFactory;
-    use TraitUuid;
     use SoftDeletes;
+    use TraitUuid;
 
-    protected $table = 'penduduk';
+    protected $table = 'sekolah';
 
     public function desa()
     {

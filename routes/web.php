@@ -17,7 +17,10 @@ use App\Http\Controllers\masterData\lokasi\LokasiKeongController;
 use App\Http\Controllers\masterData\OPDController;
 use App\Http\Controllers\masterData\TahunController;
 use App\Http\Controllers\PengaturanAkunController;
+use App\Http\Controllers\intervensi\perencanaan\manusia\PerencanaanManusiaController;
 use App\Models\Perencanaan;
+use Database\Seeders\PerencanaanManusiaSeeder;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -42,6 +45,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('/dashboard', DashboardController::class);
 
+    // Keong
     Route::resource('rencana-intervensi-keong', PerencanaanKeongController::class);
     Route::post('rencana-intervensi-keong/konfirmasi/{rencana_intervensi_keong}', PerencanaanKeongController::class . '@konfirmasi');
     Route::get('rencana-intervensi-keong/map/{rencana_intervensi_keong}', PerencanaanKeongController::class . '@map');
@@ -55,6 +59,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('realisasi-intervensi-keong/delete-opd/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@deleteOPD');
     Route::delete('realisasi-intervensi-keong/delete-laporan/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@deleteLaporan');
     Route::delete('realisasi-intervensi-keong/delete-semua-laporan/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@deleteSemuaLaporan');
+
+    // Manusia
+    Route::resource('rencana-intervensi-manusia', PerencanaanManusiaController::class);
+
 
     // Master Data
     // Lokasi

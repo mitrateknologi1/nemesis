@@ -29,7 +29,7 @@
                                  </a>
                              </li>
                              <li id="li-manusia">
-                                 <a href="components/buttons.html">
+                                 <a href="{{ url('rencana-intervensi-manusia') }}">
                                      <span class="sub-item">Manusia</span>
                                  </a>
                              </li>

@@ -14,4 +14,9 @@ class Penduduk extends Model
     use SoftDeletes;
 
     protected $table = 'penduduk';
+
+    public function desa()
+    {
+        return $this->belongsTo(Desa::class);
+    }
 }

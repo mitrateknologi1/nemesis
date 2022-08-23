@@ -51,7 +51,7 @@
                                     <button type="submit" class="btn btn-info btn-border btn-round btn-sm mr-2"
                                         id="export-jumlah-penduduk">
                                         <i class="fas fa-lg fa-download"></i>
-                                        Export Jumlah Penduduk
+                                        Export Demografi
                                     </button>
                                 </form>
                             </div>
@@ -70,8 +70,8 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="pills-jumlah-tab-nobd" data-toggle="pill" href="#pills-jumlah"
-                                        role="tab" aria-controls="pills-jumlah" aria-selected="false">Jumlah
-                                        Penduduk</a>
+                                        role="tab" aria-controls="pills-jumlah" aria-selected="false">Demografi
+                                        Daerah</a>
                                 </li>
                             </ul>
                             <div class="tab-content mb-3" id="pills-tabContent">

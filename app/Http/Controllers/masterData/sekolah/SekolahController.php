@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\masterData\sekolah;
 
+use App\Exports\SekolahExport;
 use App\Http\Controllers\Controller;
 use App\Models\Desa;
 use App\Models\Sekolah;
 use App\Models\Siswa;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
 class SekolahController extends Controller
@@ -226,8 +229,32 @@ class SekolahController extends Controller
      * @param  \App\Models\Sekolah  $sekolah
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Sekolah $sekolah)
+    public function destroy(Request $request)
     {
-        //
+        $sekolah = Sekolah::find($request->sekolah);
+        $sekolah->delete();
+
+        $siswa = Siswa::where('sekolah_id', $sekolah->id)->delete();
+
+        return response()->json(['status' => 'success']);
+    }
+
+    public function export(Request $request)
+    {
+        $jenjang = $request->jenjangSekolah;
+        $daftarJumlahData = $this->_getJumlahData($jenjang);
+        // dd($daftarJumlahData);
+
+        if ($jenjang == 'sd') {
+            $jenjang = 'SD';
+        } else if ($jenjang == 'smp') {
+            $jenjang = 'SMP';
+        } else {
+            $jenjang = 'SMA / SMK';
+        }
+
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+
+        return Excel::download(new SekolahExport($daftarJumlahData, $jenjang), "Export Data Jumlah Data Sekolah " . $jenjang . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 }

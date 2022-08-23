@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\masterData\lokasi;
 
+use App\Exports\DesaExport;
 use App\Http\Controllers\Controller;
 use App\Models\Desa;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LokasiDesaController extends Controller
 {
@@ -234,5 +237,13 @@ class LokasiDesaController extends Controller
         } else {
             return response()->json(['status' => 'error']);
         }
+    }
+
+    public function export()
+    {
+        $daftarDesa = Desa::orderBy('nama', 'asc')->get();
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+
+        return Excel::download(new DesaExport($daftarDesa), "Export Data Desa-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 }

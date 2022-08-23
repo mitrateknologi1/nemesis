@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\masterData\sekolah;
 
+use App\Exports\JenjangSekolahExport;
 use App\Http\Controllers\Controller;
 use App\Models\Desa;
 use App\Models\Sekolah;
 use App\Models\Siswa;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class JenjangSekolahController extends Controller
 {
@@ -14,6 +17,15 @@ class JenjangSekolahController extends Controller
     {
         $jumlahData = $this->_getJumlahData();
         return view('dashboard.pages.masterData.sekolah.jenjangSekolah.index', compact(['jumlahData']));
+    }
+
+    public function export()
+    {
+        $daftarJumlahData = $this->_getJumlahData();
+        $daftarDesa = Desa::orderBy('nama', 'asc')->get();
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+
+        return Excel::download(new JenjangSekolahExport($daftarJumlahData, $daftarDesa), "Export Data Jumlah Data Jenjang Sekolah" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 
     private function _getJumlahData()

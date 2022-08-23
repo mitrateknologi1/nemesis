@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers\masterData\lokasi;
 
+use App\Exports\DemografiLokasiKeongExport;
+use App\Exports\LokasiKeongExport;
 use App\Http\Controllers\Controller;
 use App\Models\Desa;
 use App\Models\LokasiKeong;
 use App\Models\PemilikLokasiKeong;
 use App\Models\Penduduk;
+use App\Policies\KeongPolicy;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LokasiKeongController extends Controller
 {
@@ -22,7 +27,7 @@ class LokasiKeongController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = LokasiKeong::orderBy('nama', 'asc')->get();
+            $data = LokasiKeong::orderBy('created_at', 'desc')->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('desa', function ($row) {
@@ -57,7 +62,9 @@ class LokasiKeongController extends Controller
                 ->make(true);
         }
 
-        return view('dashboard.pages.masterData.lokasi.keong.index');
+        $daftarDesa = Desa::orderBy('nama', 'asc')->get();
+
+        return view('dashboard.pages.masterData.lokasi.keong.index', compact(['daftarDesa']));
     }
 
     /**
@@ -235,5 +242,21 @@ class LokasiKeongController extends Controller
         } else {
             return response()->json(['status' => 'error']);
         }
+    }
+
+    public function export()
+    {
+        $lokasiKeong = LokasiKeong::orderBy('created_at', 'desc')->get();
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+
+        return Excel::download(new LokasiKeongExport($lokasiKeong), "Export Data Lokasi Keong-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
+    }
+
+    public function exportDemografi()
+    {
+        $daftarDesa = Desa::orderBy('nama', 'asc')->get();
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+
+        return Excel::download(new DemografiLokasiKeongExport($daftarDesa), "Export Data Demografi Lokasi Keong-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 }

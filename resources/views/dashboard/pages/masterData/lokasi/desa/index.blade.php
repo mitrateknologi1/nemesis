@@ -37,6 +37,14 @@
                     <div class="card-head-row">
                         <div class="card-title">Data Desa</div>
                         <div class="card-tools">
+                            <form action="{{ url('master-data/lokasi/desa/export') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-info btn-border btn-round btn-sm mr-2"
+                                    id="export-lokasi-hewan">
+                                    <i class="fas fa-lg fa-download"></i>
+                                    Export Data
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\masterData\lokasi;
 
+use App\Exports\DemografiLokasiHewanExport;
+use App\Exports\LokasiHewanExport;
 use App\Http\Controllers\Controller;
 use App\Models\Desa;
 use App\Models\Hewan;
@@ -9,9 +11,11 @@ use App\Models\JumlahHewan;
 use App\Models\LokasiHewan;
 use App\Models\PemilikLokasiHewan;
 use App\Models\Penduduk;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 use stdClass;
 
 class LokasiHewanController extends Controller
@@ -74,6 +78,58 @@ class LokasiHewanController extends Controller
         return view('dashboard.pages.masterData.lokasi.hewan.index', compact(['daftarJumlahHewan']));
     }
 
+    public function exportLokasiHewan()
+    {
+        $lokasiHewan = LokasiHewan::orderBy('created_at', 'desc')->get();
+        $jumlahLokasiHewan = [];
+        $daftarHewan = Hewan::orderBy('nama', 'asc')->get();
+
+        foreach ($lokasiHewan as $lokasi) {
+            $arrayHewan = [];
+            $arrayPemilik = [];
+            $totalHewan = 0;
+            foreach ($daftarHewan as $hewan) {
+                $jumlahHewan = JumlahHewan::with(['hewan'])->where('lokasi_hewan_id', $lokasi->id)->where('hewan_id', $hewan->id)->first();
+                $arrayHewan[] = [
+                    'hewan' => $hewan->nama,
+                    'jumlah' => $jumlahHewan ? $jumlahHewan->jumlah : '-'
+                ];
+                $totalHewan += $jumlahHewan ? $jumlahHewan->jumlah : 0;
+            }
+
+            foreach ($lokasi->pemilikLokasiHewan as $pemilik) {
+                $arrayPemilik[] = [
+                    'pemilik' => $pemilik->penduduk->nama
+                ];
+            }
+
+            $jumlahLokasiHewan[] = [
+                'nama' => $lokasi->nama,
+                'desa' => $lokasi->desa->nama,
+                'deskripsi' => $lokasi->deskripsi,
+                'latitude' => $lokasi->latitude,
+                'longitude' => $lokasi->longitude,
+                'total_hewan' => $totalHewan,
+                'jumlah_hewan' => $arrayHewan,
+                'pemilik' => $arrayPemilik
+            ];
+        }
+
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+
+        return Excel::download(new LokasiHewanExport($jumlahLokasiHewan, $daftarHewan), "Export Data Lokasi Hewan-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
+    }
+
+    public function exportDemografi()
+    {
+        $daftarJumlahHewan = $this->_getJumlahHewan();
+        $daftarHewan = Hewan::orderBy('nama', 'asc')->get();
+        // dd($daftarJumlahHewan);
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+
+        return Excel::download(new DemografiLokasiHewanExport($daftarJumlahHewan, $daftarHewan), "Export Data Demografi Lokasi Hewan-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
+    }
+
     private function _getJumlahHewan()
     {
         $daftarDesa = Desa::orderBy('nama', 'asc')->get();
@@ -93,9 +149,17 @@ class LokasiHewanController extends Controller
                     'jumlah' => $jumlahHewan
                 ];
             }
+
+            $lokasiHewan = LokasiHewan::where('desa_id', $desa->id)->count();
+            $jumlahHewan = JumlahHewan::whereHas('lokasiHewan', function ($query) use ($desa) {
+                $query->where('desa_id', $desa->id);
+            })->sum('jumlah');
+
             $arrayDesa[] = [
                 'desa' => $desa->nama,
-                'hewan' => $arrayHewan
+                'hewan' => $arrayHewan,
+                'lokasi_hewan' => $lokasiHewan,
+                'jumlah' => $jumlahHewan
             ];
         }
 

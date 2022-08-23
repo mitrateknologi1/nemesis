@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\masterData\sekolah;
 
+use App\Exports\SiswaExport;
 use App\Http\Controllers\Controller;
 use App\Models\Desa;
 use App\Models\Penduduk;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
 class SiswaController extends Controller
@@ -192,5 +194,17 @@ class SiswaController extends Controller
             'status' => 'success',
             'data' => $data
         ]);
+    }
+
+    public function export(Request $request)
+    {
+        $sekolah = Sekolah::find($request->sekolah);
+        if (!$sekolah) {
+            return redirect()->back();
+        }
+
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+        $daftarSiswa = Siswa::orderBy('created_at', 'desc')->where('sekolah_id', $sekolah->id)->get();
+        return Excel::download(new SiswaExport($daftarSiswa, $sekolah), "Export Data Siswa " . $sekolah->nama . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 }

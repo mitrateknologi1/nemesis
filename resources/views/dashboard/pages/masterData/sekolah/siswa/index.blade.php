@@ -37,14 +37,24 @@
                         <div class="card-title">Data Siswa {{ $sekolah->nama }}
                         </div>
                         <div class="card-tools">
-                            @component('dashboard.components.buttons.selected',
-                                [
-                                    'id' => 'deleteSelected',
-                                    'icon' => '<i class="fas fa-trash"></i>',
-                                    'color' => 'danger',
-                                    'title' => 'Hapus yang dipilih',
-                                ])
-                            @endcomponent
+                            <div class="row">
+                                @component('dashboard.components.buttons.selected',
+                                    [
+                                        'id' => 'deleteSelected',
+                                        'icon' => '<i class="fas fa-trash"></i>',
+                                        'color' => 'danger',
+                                        'title' => 'Hapus yang dipilih',
+                                    ])
+                                @endcomponent
+                                <form action="{{ url('master-data/siswa/' . $sekolah->id . '/export') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-info btn-border btn-round btn-sm ml-2 mr-2">
+                                        <i class="fas fa-lg fa-download"></i>
+                                        Export Data Siswa
+                                    </button>
+                                </form>
+                            </div>
+
                         </div>
                     </div>
                 </div>

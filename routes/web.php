@@ -65,12 +65,18 @@ Route::group(['middleware' => 'auth'], function () {
     // Master Data
     // Lokasi
     Route::get('master-data/lokasi/desa/tabel', [LokasiDesaController::class, 'tabel']);
+    Route::post('master-data/lokasi/desa/export', [LokasiDesaController::class, 'export']);
     Route::resource('master-data/lokasi/desa', LokasiDesaController::class);
+
+    Route::post('master-data/lokasi/keong/export-demografi', [LokasiKeongController::class, 'exportDemografi']);
+    Route::post('master-data/lokasi/keong/export', [LokasiKeongController::class, 'export']);
     Route::resource('master-data/lokasi/keong', LokasiKeongController::class)->parameters(
         [
             'keong' => 'lokasi_keong'
         ]
     );
+    Route::post('master-data/lokasi/hewan/export-demografi', [LokasiHewanController::class, 'exportDemografi']);
+    Route::post('master-data/lokasi/hewan/export-lokasi', [LokasiHewanController::class, 'exportLokasiHewan']);
     Route::resource('master-data/lokasi/hewan', LokasiHewanController::class)->parameters(
         [
             'hewan' => 'lokasi_hewan'
@@ -106,10 +112,15 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('master-data/penduduk', PendudukController::class);
 
     // Sekolah
+    Route::post('master-data/jenjang-sekolah/export', [JenjangSekolahController::class, 'export']);
     Route::get('master-data/jenjang-sekolah', [JenjangSekolahController::class, 'index']);
+
+    Route::post('master-data/sekolah/{jenjangSekolah}/export', [SekolahController::class, 'export']);
     Route::resource('master-data/sekolah/{jenjangSekolah}', SekolahController::class)->parameters([
         '{jenjangSekolah}' => 'sekolah'
     ]);
+
+    Route::post('master-data/siswa/{sekolah}/export', [SiswaController::class, 'export']);
     Route::post('master-data/siswa/detail-siswa', [SiswaController::class, 'detailSiswa']);
     Route::post('master-data/siswa/{sekolah}/delete-selected', [SiswaController::class, 'deleteSelected']);
     Route::resource('master-data/siswa/{sekolah}', SiswaController::class)->parameters([

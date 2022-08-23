@@ -56,7 +56,13 @@
                             @endif
                         </div>
                         <div class="card-tools">
-
+                            <form action="{{ url('master-data/sekolah/' . $jenjang . '/export') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-info btn-border btn-round btn-sm mr-2">
+                                    <i class="fas fa-lg fa-download"></i>
+                                    Export Jumlah Data
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -191,7 +197,7 @@
             }).then((Delete) => {
                 if (Delete) {
                     $.ajax({
-                        url: "{{ url('master-data/penduduk') }}" + '/' + id,
+                        url: "{{ url('master-data/sekolah' . '/' . $jenjang) }}" + '/' + id,
                         type: 'DELETE',
                         data: {
                             '_token': '{{ csrf_token() }}'
@@ -204,7 +210,6 @@
                                     timer: 1000,
                                 }).then(function() {
                                     table.draw();
-                                    initializeMap();
                                 })
                             } else {
                                 swal("Gagal", "Data Gagal Dihapus", {
@@ -263,6 +268,6 @@
     </script>
 
     <script>
-        $('#nav-master-penduduk').addClass('active');
+        $('#nav-master-sekolah').addClass('active');
     </script>
 @endpush

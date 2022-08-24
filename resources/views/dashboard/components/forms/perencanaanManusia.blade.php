@@ -138,9 +138,9 @@
                 <div class="form-group  p-0 pb-2">
                     <label for="" class="my-2">Dokumen Pendukung <sup class="text-danger">*</sup></label>
                     {{-- <label for="">(Surat-surat Kendaraan, Berita Acara, dan Lainnya)</label> --}}
-                    <div class="row" id="dokumen-keong">
-                        @if (isset($rencanaIntervensiManusia) && $rencanaIntervensiManusia->dokumenPerencanaanKeong && $method == 'PUT')
-                            @foreach ($rencanaIntervensiManusia->dokumenPerencanaanKeong as $item)
+                    <div class="row" id="dokumen-manusia">
+                        @if (isset($rencanaIntervensiManusia) && $rencanaIntervensiManusia->dokumenPerencanaanManusia && $method == 'PUT')
+                            @foreach ($rencanaIntervensiManusia->dokumenPerencanaanManusia as $item)
                                 <div class="col-md-12 col-lg-12 col-xl-12 col-document"
                                     id="col-document-old-{{ $loop->iteration }}">
                                     <div class="card box-upload mb-3 pegawai" id="box-upload-{{ $loop->iteration }}"
@@ -177,7 +177,7 @@
                                                     </div>
                                                     <div class="mb-3">
                                                         <a type="button"
-                                                            href="{{ Storage::exists('uploads/dokumen/perencanaan/keong/' . $item->file) ? Storage::url('uploads/dokumen/perencanaan/keong/' . $item->file) : 'tidak-ditemukan' }}"
+                                                            href="{{ Storage::exists('uploads/dokumen/perencanaan/manusia/' . $item->file) ? Storage::url('uploads/dokumen/perencanaan/manusia/' . $item->file) : 'tidak-ditemukan' }}"
                                                             target="_blank" class="btn btn-primary shadow-sm w-100"><i
                                                                 class="fas fa-eye"></i> Lihat
                                                             Dokumen</a>
@@ -757,7 +757,7 @@
                 iterDokumen = count + 1;
             }
             $('.col-add-dokumen').remove();
-            $('#dokumen-keong').append(`
+            $('#dokumen-manusia').append(`
             <div class="col-md-6 col-lg-12 col-xl-12 col-document" id="col-dokumen-` + iterDokumen + `">
                 <div class="card box-upload mb-3" id="box-upload-` +
                 iterDokumen + `" class="box-upload">

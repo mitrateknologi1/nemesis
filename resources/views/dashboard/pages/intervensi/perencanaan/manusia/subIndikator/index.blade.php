@@ -26,7 +26,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Data Perencanaan Intervensi Keong</div>
+                        <div class="card-title">Data Perencanaan Intervensi Manusia</div>
                         <div class="card-tools">
                             @component('dashboard.components.buttons.export')
                             @endcomponent

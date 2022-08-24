@@ -70,6 +70,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('rencana-intervensi-manusia', PerencanaanManusiaController::class)->parameters([
         'rencana-intervensi-manusia' => 'rencana_intervensi_manusia'
     ]);
+    Route::post('rencana-intervensi-manusia/konfirmasi/{rencana_intervensi_manusia}', PerencanaanManusiaController::class . '@konfirmasi');
+
 
 
     // Master Data

@@ -63,6 +63,6 @@
     <script>
         $('#nav-perencanaan').addClass('active');
         $('#nav-perencanaan .collapse').addClass('show');
-        $('#nav-perencanaan .collapse #li-keong').addClass('active');
+        $('#nav-perencanaan .collapse #li-manusia').addClass('active');
     </script>
 @endpush

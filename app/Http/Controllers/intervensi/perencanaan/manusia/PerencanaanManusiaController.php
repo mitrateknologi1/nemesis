@@ -5,11 +5,12 @@ namespace App\Http\Controllers\intervensi\perencanaan\manusia;
 use App\Models\OPD;
 use App\Models\Desa;
 use Illuminate\Http\Request;
-use App\Models\OPDTerkaitKeong;
+use Illuminate\Support\Carbon;
 use App\Models\OPDTerkaitManusia;
 use App\Models\PerencanaanManusia;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\DokumenPerencanaanManusia;
 use Illuminate\Support\Facades\Validator;
@@ -173,11 +174,11 @@ class PerencanaanManusiaController extends Controller
 
         if ($request->penduduk != null) {
             foreach ($request->penduduk as $penduduk) {
-                $dataLokasi = [
+                $dataPenduduk = [
                     'perencanaan_manusia_id' => $insertPerencanaan->id,
                     'penduduk_id' => $penduduk,
                 ];
-                $insertLokasi = PendudukPerencanaanManusia::create($dataLokasi);
+                $insertPenduduk = PendudukPerencanaanManusia::create($dataPenduduk);
             }
         }
 
@@ -222,9 +223,9 @@ class PerencanaanManusiaController extends Controller
      * @param  \App\Models\PerencanaanManusia  $perencanaanManusia
      * @return \Illuminate\Http\Response
      */
-    public function show(PerencanaanManusia $perencanaanManusia)
+    public function show(PerencanaanManusia $rencana_intervensi_manusia)
     {
-        //
+        return view('dashboard.pages.intervensi.perencanaan.manusia.subIndikator.show', compact('rencana_intervensi_manusia'));
     }
 
     /**
@@ -265,9 +266,154 @@ class PerencanaanManusiaController extends Controller
      * @param  \App\Models\PerencanaanManusia  $perencanaanManusia
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePerencanaanManusiaRequest $request, PerencanaanManusia $perencanaanManusia)
+    public function update(Request $request, PerencanaanManusia $rencana_intervensi_manusia)
     {
-        //
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'sub_indikator' => 'required',
+                'penduduk' => $rencana_intervensi_manusia->realisasiManusia->count() == 0 ? 'required' : '',
+                'nilai_pembiayaan' => 'required',
+                'sumber_dana' => 'required',
+            ],
+            [
+                'sub_indikator.required' => 'Sub Indikator harus diisi',
+                'penduduk.required' => 'Lokasi harus dipilih',
+                'nilai_pembiayaan.required' => 'Nilai Pembiayaan harus diisi',
+                'sumber_dana.required' => 'Sumber Dana harus dipilih',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()]);
+        }
+
+        // validate untuk dokumen lama
+        if (in_array(null, $request->nama_dokumen_old)) {
+            return 'nama_dokumen_kosong_old';
+        }
+
+        // validate untuk dokumen baru
+        if ($request->nama_dokumen != null) {
+            $countFileDokumen = count($request->file_dokumen ?? []);
+            $countNamaDokumen = count($request->nama_dokumen);
+
+            if ($countFileDokumen == $countNamaDokumen) {
+                if (in_array(null, $request->nama_dokumen)) {
+                    return 'nama_dokumen_kosong';
+                }
+            } else {
+                return 'nama_dokumen_kosong_dan_file_dokumen_kosong';
+            }
+        }
+
+        // update lokasi perencanaan
+        if ($rencana_intervensi_manusia->realisasiManusia->count() == 0) {
+            $rencana_intervensi_manusia->pendudukPerencanaanManusia()->delete();
+            if ($request->penduduk != null) {
+                foreach ($request->penduduk as $penduduk) {
+                    $dataPenduduk = [
+                        'perencanaan_manusia_id' => $rencana_intervensi_manusia->id,
+                        'penduduk_id' => $penduduk,
+                    ];
+                    $insertPenduduk = PendudukPerencanaanManusia::create($dataPenduduk);
+                }
+            }
+        }
+
+        // update opd terkait
+        $rencana_intervensi_manusia->opdTerkaitManusia()->delete();
+        if ($request->opd_terkait != null) {
+            foreach ($request->opd_terkait as $opd) {
+                $dataOPDTerkait = [
+                    'perencanaan_manusia_id' => $rencana_intervensi_manusia->id,
+                    'opd_id' => $opd,
+                ];
+                $insertOPDTerkait = OPDTerkaitManusia::create($dataOPDTerkait);
+            }
+        }
+
+        // Hapus dokumen lama
+        if ($request->deleteDocumentOld != null) {
+            $deleteDocumentOld = explode(',', $request->deleteDocumentOld);
+            foreach ($deleteDocumentOld as $item) {
+                $namaFile = DokumenPerencanaanManusia::where('id', $item)->first()->file;
+                if (Storage::exists('uploads/dokumen/perencanaan/manusia/' . $namaFile)) {
+                    Storage::delete('uploads/dokumen/perencanaan/manusia/' . $namaFile);
+                }
+                DokumenPerencanaanManusia::where('id', $item)->delete();
+            }
+        }
+
+        // update deskripsi/title dokumen lama
+        if ($request->nama_dokumen_old) {
+            foreach ($request->nama_dokumen_old as $key => $value) {
+                $idUpdateNama = $rencana_intervensi_manusia->dokumenPerencanaanManusia[$key]->id;
+                $dataDokumen = DokumenPerencanaanManusia::find($idUpdateNama);
+
+                $dataDokumen->update([
+                    'nama' => $request->nama_dokumen_old[$key],
+                ]);
+            }
+        }
+
+        //  update file dokumen lama
+        if ($request->file_dokumen_old) {
+            foreach ($request->file_dokumen_old as $key => $value) {
+                $idUpdateDokumen = $rencana_intervensi_manusia->dokumenPerencanaanManusia[$key]->id;
+                $dataDokumen = DokumenPerencanaanManusia::find($idUpdateDokumen);
+                if (Storage::exists('uploads/dokumen/perencanaan/manusia/' . $dataDokumen->file)) {
+                    Storage::delete('uploads/dokumen/perencanaan/manusia/' . $dataDokumen->file);
+                }
+
+                $namaFile = mt_rand() . '-' . $request->nama_dokumen_old[$key] . '-' . $request->sub_indikator . '-' .  $dataDokumen->no_urut . '.' . $value->getClientOriginalExtension();
+                $value->storeAs('uploads/dokumen/perencanaan/manusia/', $namaFile);
+
+                $update = [
+                    'nama' => $request->nama_dokumen_old[$key],
+                    'file' => $namaFile,
+                ];
+
+                $dataDokumen->update($update);
+            }
+        }
+
+        // update dokumen baru
+        $no_dokumen = $rencana_intervensi_manusia->dokumenPerencanaanManusia->max('no_urut') + 1;
+        if ($request->nama_dokumen != null) {
+            for ($i = 0; $i < $countFileDokumen; $i++) {
+                $namaFile = mt_rand() . '-' . $request->nama_dokumen[$i] . '-' . $request->sub_indikator . '-' .  $no_dokumen . '.' . $request->file_dokumen[$i]->getClientOriginalExtension();
+                $request->file_dokumen[$i]->storeAs(
+                    'uploads/dokumen/perencanaan/manusia/',
+                    $namaFile
+                );
+
+                $dataDokumen = [
+                    'perencanaan_manusia_id' => $rencana_intervensi_manusia->id,
+                    'nama' => $request->nama_dokumen[$i],
+                    'file' => $namaFile,
+                    'no_urut' => $no_dokumen,
+                ];
+
+                DokumenPerencanaanManusia::create($dataDokumen);
+                $no_dokumen++;
+            }
+        }
+
+        // update data perencanaan
+        $dataPerencanaan = [
+            'sub_indikator' => $request->sub_indikator,
+            'nilai_pembiayaan' => $request->nilai_pembiayaan,
+            'sumber_dana' => $request->sumber_dana,
+        ];
+
+        if (Auth::user()->role == 'OPD') {
+            $dataPerencanaan['status'] = 0;
+            $dataPerencanaan['alasan_ditolak'] = '-';
+        }
+        $rencana_intervensi_manusia->update($dataPerencanaan);
+
+        return response()->json('perbarui');
     }
 
     /**
@@ -276,8 +422,64 @@ class PerencanaanManusiaController extends Controller
      * @param  \App\Models\PerencanaanManusia  $perencanaanManusia
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PerencanaanManusia $perencanaanManusia)
+    public function destroy(PerencanaanManusia $rencana_intervensi_manusia)
     {
-        //
+        $rencana_intervensi_manusia->opdTerkaitManusia()->delete();
+        $rencana_intervensi_manusia->pendudukPerencanaanManusia()->delete();
+
+        if ($rencana_intervensi_manusia->dokumenPerencanaanManusia) {
+            foreach ($rencana_intervensi_manusia->dokumenPerencanaanManusia as $item) {
+                if (Storage::exists('uploads/dokumen/perencanaan/manusia/' . $item->file)) {
+                    Storage::delete('uploads/dokumen/perencanaan/manusia/' . $item->file);
+                }
+            }
+        }
+        $rencana_intervensi_manusia->dokumenPerencanaanManusia()->delete();
+
+        // if ($rencana_intervensi_manusia->realisasiManusia) {
+        //     foreach ($rencana_intervensi_manusia->realisasiManusia as $item) {
+        //         foreach ($item->dokumenRealisasiManusia as $doc) {
+        //             if (Storage::exists('uploads/dokumen/realisasi/manusia/' . $doc->file)) {
+        //                 Storage::delete('uploads/dokumen/realisasi/manusia/' . $doc->file);
+        //             }
+        //             DokumenRealisasiManusia::where('id', $item->id)->delete();
+        //         }
+        //         $item->dokumenRealisasiManusia()->delete();
+        //     }
+        // }
+
+        $rencana_intervensi_manusia->realisasiManusia()->delete();
+        $rencana_intervensi_manusia->delete();
+
+        return response()->json(['success' => 'Data berhasil dihapus']);
+    }
+
+    public function konfirmasi(PerencanaanManusia $rencana_intervensi_manusia, Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'status' => 'required',
+                'alasan_ditolak' => $request->status == 2 ? 'required' : '',
+            ],
+            [
+                'status.required' => 'Status harus diisi',
+                'alasan_ditolak.required' => 'Alasan ditolak harus diisi',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()]);
+        }
+
+        $data = [
+            'status' => $request->status,
+            'alasan_ditolak' => $request->status == 2 ? $request->alasan_ditolak : '-',
+            'tanggal_konfirmasi' => Carbon::now(),
+        ];
+
+        $rencana_intervensi_manusia->update($data);
+
+        return response()->json(['success' => 'Berhasil mengkonfirmasi']);
     }
 }

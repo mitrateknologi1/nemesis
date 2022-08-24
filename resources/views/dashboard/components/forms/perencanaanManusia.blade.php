@@ -8,6 +8,10 @@
         .select2-container {
             margin-bottom: 5px !important;
         }
+
+        #dataTables_wrapper {
+            padding: 0px !important;
+        }
     </style>
 @endpush
 
@@ -27,7 +31,7 @@
                 'class' => 'req',
                 'placeholder' => 'Masukkan Sub Indikator',
                 'wajib' => '<sup class="text-danger">*</sup>',
-                'value' => $rencanaIntervensiKeong->sub_indikator ?? '',
+                'value' => $rencanaIntervensiManusia->sub_indikator ?? '',
             ])
         @endcomponent
     </div>
@@ -35,27 +39,44 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="form-group p-0 pb-2">
-                    <label class="my-2">Pilih Manusia <sup class="text-danger">*</sup></label>
+                    <label class="my-2">Pilih Penduduk <sup class="text-danger">*</sup></label>
                     <div class="select2-input select2-danger">
-                        <input type="hidden" name="lokasi_hidden" id="lokasi-hidden" data-label="Lokasi Titik"
+                        <input type="hidden" name="penduduk_hidden" id="penduduk-hidden" data-label="Penduduk"
                             value="">
-                        <select id="lokasi-perencanaan" name="lokasi[]" class="form-control multiple"
-                            multiple="multiple" data-label="Titik Lokasi"
-                            {{ isset($rencanaIntervensiKeong) && $rencanaIntervensiKeong->realisasiKeong->count() > 0 ? 'disabled' : '' }}>
+                        <select id="penduduk" name="penduduk[]" class="form-control multiple" multiple="multiple"
+                            data-label="Penduduk"
+                            {{ isset($rencanaIntervensiManusia) && $rencanaIntervensiManusia->realisasiManusia->count() > 0 ? 'disabled' : '' }}>
                             @foreach ($desa as $item)
                                 <optgroup label="{{ $item->nama }}">
                                     @foreach ($item->penduduk as $item2)
-                                        <option value="{{ $item2->id }}">
-                                            {{ $item2->nama . ' - ' . $item2->desa->nama }}</option>
+                                        <option value="{{ $item2->id }}" data-nik="{{ $item2->nik }}"
+                                            data-nama="{{ $item2->nama }}" data-desa="{{ $item2->desa->nama }}">
+                                            {{ $item2->nama . ' (' . $item2->nik . ') - ' . $item2->desa->nama }}
+                                        </option>
                                     @endforeach
                                 </optgroup>
                             @endforeach
                         </select>
                     </div>
-                    <span class="text-danger error-text lokasi_hidden-error"></span>
-                    <span class="text-danger error-text lokasi-error"></span>
+                    <span class="text-danger error-text penduduk_hidden-error"></span>
+                    <span class="text-danger error-text penduduk-error"></span>
                 </div>
-                {{-- <div id="peta"></div> --}}
+                <div class="table-responsive mt-2">
+                    <table class="table table-hover table-striped table-bordered" id="{{ $id ?? 'dataTables' }}"
+                        cellspacing="0" width="100%">
+                        <thead>
+                            <tr class="text-center fw-bold">
+                                <th>No</th>
+                                <th>Nama</th>
+                                <th>NIK</th>
+                                <th>Desa</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group p-0 pb-2">
@@ -67,7 +88,7 @@
                             'class' => 'rupiah req',
                             'placeholder' => 'Masukkan Nilai Pembiayaan',
                             'wajib' => '<sup class="text-danger">*</sup>',
-                            'value' => $rencanaIntervensiKeong->nilai_pembiayaan ?? '',
+                            'value' => $rencanaIntervensiManusia->nilai_pembiayaan ?? '',
                         ])
                     @endcomponent
                 </div>
@@ -85,7 +106,8 @@
                                 'name' => 'sumber_dana',
                                 'class' => 'sumber-dana req',
                                 // 'icon' => '<i class="fas fa-money-bill-wave"></i>',
-                                'checked' => isset($rencanaIntervensiKeong) && $rencanaIntervensiKeong->sumber_dana == 'DAK' ? 'checked' : '',
+                                'checked' =>
+                                    isset($rencanaIntervensiManusia) && $rencanaIntervensiManusia->sumber_dana == 'DAK' ? 'checked' : '',
                             ])
                         @endcomponent
                         @component('dashboard.components.formElements.radioButton',
@@ -95,7 +117,8 @@
                                 'name' => 'sumber_dana',
                                 'class' => 'sumber-dana req',
                                 // 'icon' => '<i class="fas fa-money-bill-alt"></i>',
-                                'checked' => isset($rencanaIntervensiKeong) && $rencanaIntervensiKeong->sumber_dana == 'DAU' ? 'checked' : '',
+                                'checked' =>
+                                    isset($rencanaIntervensiManusia) && $rencanaIntervensiManusia->sumber_dana == 'DAU' ? 'checked' : '',
                             ])
                         @endcomponent
                     </div>
@@ -116,8 +139,8 @@
                     <label for="" class="my-2">Dokumen Pendukung <sup class="text-danger">*</sup></label>
                     {{-- <label for="">(Surat-surat Kendaraan, Berita Acara, dan Lainnya)</label> --}}
                     <div class="row" id="dokumen-keong">
-                        @if (isset($rencanaIntervensiKeong) && $rencanaIntervensiKeong->dokumenPerencanaanKeong && $method == 'PUT')
-                            @foreach ($rencanaIntervensiKeong->dokumenPerencanaanKeong as $item)
+                        @if (isset($rencanaIntervensiManusia) && $rencanaIntervensiManusia->dokumenPerencanaanKeong && $method == 'PUT')
+                            @foreach ($rencanaIntervensiManusia->dokumenPerencanaanKeong as $item)
                                 <div class="col-md-12 col-lg-12 col-xl-12 col-document"
                                     id="col-document-old-{{ $loop->iteration }}">
                                     <div class="card box-upload mb-3 pegawai" id="box-upload-{{ $loop->iteration }}"
@@ -256,13 +279,123 @@
 
     <div class="form-group text-right">
         @component('dashboard.components.buttons.submit')
-            @slot(' label')
+            @slot('label')
                 {{ $submitLabel }}
-                @endslot @slot('icon')
+            @endslot
+            @slot('icon')
                 {!! $submitIcon !!}
             @endslot
         @endcomponent </div>
 </form>
+
+<div class="modal" tabindex="-1" id="modal-lihat">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detail Penduduk</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-between mt-2">
+                    <p class=" mb-0">Nama : </p>
+                    <p id="nama">
+                        -
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <p class=" mb-0">NIK : </p>
+                    <p id="nik">
+                        -
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <p class=" mb-0">Jenis Kelamin : </p>
+                    <p id="jenis-kelamin">
+                        -
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <p class=" mb-0">Tempat, Tanggal Lahir : </p>
+                    <p id="ttl">
+                        -
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <p class=" mb-0">Agama : </p>
+                    <p id="agama">
+                        -
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <p class=" mb-0">Pendidikan Terakhir : </p>
+                    <p id="pendidikan">
+                        -
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <p class=" mb-0">Pekerjaan : </p>
+                    <p id="pekerjaan">
+                        -
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <p class=" mb-0">Golongan Darah : </p>
+                    <p id="golongan-darah">
+                        -
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <p class=" mb-0">Status Perkawinan : </p>
+                    <p id="status-perkawinan">
+                        -
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <p class=" mb-0">Tanggal Perkawinan : </p>
+                    <p id="tanggal-perkawinan">
+                        -
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <p class=" mb-0">Kewarganegaraan : </p>
+                    <p id="kewarganegaraan">
+                        -
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <p class=" mb-0">Nomor Paspor : </p>
+                    <p id="nomor-paspor">
+                        -
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <p class=" mb-0">Nomor Kitap : </p>
+                    <p id="nomor-kitap">
+                        -
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <p class=" mb-0">Alamat : </p>
+                    <p id="alamat">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia, repellat!
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <p class=" mb-0">Desa : </p>
+                    <p id="desa">
+                        -
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @component('dashboard.components.buttons.close')
+                @endcomponent
+            </div>
+        </div>
+    </div>
+</div>
 
 @push('scripts')
     <script>
@@ -281,11 +414,11 @@
             e.preventDefault();
             clearTextError()
 
-            $('#lokasi-perencanaan').val() == '' ? $('#lokasi-hidden').addClass('req') : $('#lokasi-hidden')
+            $('#penduduk').val() == '' ? $('#penduduk-hidden').addClass('req') : $('#penduduk-hidden')
                 .removeClass('req');
 
-            const formValidation = $('#form .req').serializeArray()
-            validation(formValidation)
+            // const formValidation = $('#form .req').serializeArray()
+            // validation(formValidation)
 
             if ('{{ $method == 'POST' }}') {
                 var title = 'Kirim Data?'
@@ -451,7 +584,106 @@
         }
     </script>
 
+    <script>
+        let penduduk = []
+        var table = $('#dataTables').DataTable({
+            data: penduduk,
 
+            columns: [{
+                    title: 'No',
+                    className: 'text-center',
+                },
+                {
+                    title: 'Nama'
+                },
+                {
+                    title: 'NIK',
+                    className: 'text-center',
+                },
+                {
+                    title: 'Desa',
+                },
+                {
+                    title: 'Aksi',
+                    className: 'text-center',
+                    render: function(data, type, row) {
+                        return '<button type="button" class="btn btn-primary btn-rounded btn-sm mr-1" id="btn-lihat" value="' +
+                            data +
+                            '"><i class="far fa-eye"></i></button>';
+                    }
+                },
+            ],
+        })
+
+        function setManusia() {
+            penduduk = [];
+            no = 1;
+            $('#penduduk option:selected').each(function() {
+                penduduk.push([no, $(this).data('nama'),
+                    $(this).data('nik'), $(this).data('desa'),
+                    $(this).val()
+                ])
+                no++;
+            });
+
+        }
+
+        $('#penduduk').change(function() {
+            setManusia()
+            table.clear().rows.add(penduduk).draw();
+        });
+
+        if ('{{ isset($penduduk) }}' || '{{ isset($rencanaIntervensiManusia) }}') {
+            const pendudukOld = {!! $penduduk ?? '[]' !!};
+            for (let i = 0; i < pendudukOld.length; i++) {
+                $('#penduduk option[value="' + pendudukOld[i] + '"]').prop('selected', true);
+            }
+            $('#penduduk').trigger('change');
+        }
+
+        if ('{{ isset($opdTerkait) }}') {
+            const opdTerkait = {!! $opdTerkait ?? '[]' !!};
+            for (let i = 0; i < opdTerkait.length; i++) {
+                $('#opd-terkait option[value="' + opdTerkait[i] + '"]').prop('selected', true);
+                $('#opd-terkait').trigger('change');
+            }
+        }
+
+        $(document).on('click', '#btn-lihat', function() {
+            let id = $(this).val();
+            $.ajax({
+                url: "{{ url('master-data/penduduk') }}" + '/' + id,
+                type: 'GET',
+                success: function(response) {
+                    if (response.status == 'success') {
+                        $('#nama').html(response.data.nama);
+                        $('#nik').html(response.data.nik);
+                        $('#jenis-kelamin').html(response.data.jenis_kelamin);
+                        $('#ttl').html(response.data.ttl);
+                        $('#agama').html(response.data.agama);
+                        $('#pendidikan').html(response.data.pendidikan);
+                        $('#pekerjaan').html(response.data.pekerjaan);
+                        $('#golongan-darah').html(response.data.golongan_darah);
+                        $('#status-perkawinan').html(response.data.status_perkawinan);
+                        $('#tanggal-perkawinan').html(response.data.tanggal_perkawinan);
+                        $('#kewarganegaraan').html(response.data.kewarganegaraan);
+                        $('#nomor-paspor').html(response.data.no_paspor);
+                        $('#nomor-kitap').html(response.data.no_kitap);
+                        $('#alamat').html(response.data.alamat);
+                        $('#desa').html(response.data.desa);
+                        $('#modal-lihat').modal('show');
+                    }
+                },
+                error: function(response) {
+                    swal("Gagal", "Data Gagal Diambil, Silahkan Coba Kembali", {
+                        icon: "error",
+                        buttons: false,
+                        timer: 1000,
+                    });
+                }
+            })
+        })
+    </script>
 
     {{-- Dokumen --}}
     <script>

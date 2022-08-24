@@ -12,31 +12,31 @@ class PerencanaanManusia extends Model
 
     use HasFactory, TraitUuid;
 
-    protected $table = 'perencanaan_keong';
+    protected $table = 'perencanaan_manusia';
     protected $guarded = ['id'];
 
     public function opd()
     {
-        return $this->belongsTo(OPD::class, 'opd_id');
+        return $this->belongsTo(OPD::class);
     }
 
     public function opdTerkaitManusia()
     {
-        return $this->hasMany(OPDTerkaitManusia::class, 'perencanaan_keong_id');
+        return $this->hasMany(OPDTerkaitManusia::class);
     }
 
-    // public function lokasiPerencanaanManusia()
-    // {
-    //     return $this->hasMany(LokasiPerencanaanManusia::class, 'perencanaan_keong_id')->orderBy('updated_at', 'DESC');
-    // }
+    public function pendudukPerencanaanManusia()
+    {
+        return $this->hasMany(PendudukPerencanaanManusia::class)->orderBy('updated_at', 'DESC');
+    }
 
     public function dokumenPerencanaanManusia()
     {
-        return $this->hasMany(DokumenPerencanaanManusia::class, 'perencanaan_keong_id')->orderBy('no_urut');
+        return $this->hasMany(DokumenPerencanaanManusia::class)->orderBy('no_urut');
     }
 
     public function realisasiManusia()
     {
-        return $this->hasMany(RealisasiManusia::class, 'perencanaan_keong_id');
+        return $this->hasMany(RealisasiManusia::class);
     }
 }

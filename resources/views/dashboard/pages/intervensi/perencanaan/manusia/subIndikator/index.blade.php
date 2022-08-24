@@ -68,62 +68,62 @@
         $('#nav-perencanaan .collapse').addClass('show');
         $('#nav-perencanaan .collapse #li-manusia').addClass('active');
 
-        // var table = $('#dataTables').DataTable({
-        //     processing: true,
-        //     serverSide: true,
-        //     lengthMenu: [
-        //         [10, 25, 50, -1],
-        //         [10, 25, 50, "All"]
-        //     ],
-        //     ajax: {
-        //         url: "{{ route('rencana-intervensi-manusia.index') }}",
-        //     },
-        //     columns: [{
-        //             data: 'DT_RowIndex',
-        //             name: 'DT_RowIndex',
-        //             className: 'text-center',
-        //             orderable: false,
-        //             searchable: false
-        //         },
-        //         {
-        //             data: 'created_at',
-        //             name: 'created_at',
-        //         },
-        //         {
-        //             data: 'sub_indikator',
-        //             name: 'sub_indikator',
-        //         },
-        //         {
-        //             data: 'opd',
-        //             name: 'opd',
-        //         },
-        //         {
-        //             data: 'status',
-        //             name: 'status',
-        //         },
-        //         {
-        //             data: 'action',
-        //             name: 'action',
-        //             orderable: false,
-        //             searchable: false,
-        //             className: 'text-center'
-        //         },
+        var table = $('#dataTables').DataTable({
+            processing: true,
+            serverSide: true,
+            lengthMenu: [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"]
+            ],
+            ajax: {
+                url: "{{ route('rencana-intervensi-manusia.index') }}",
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                    className: 'text-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'created_at',
+                    name: 'created_at',
+                },
+                {
+                    data: 'sub_indikator',
+                    name: 'sub_indikator',
+                },
+                {
+                    data: 'opd',
+                    name: 'opd',
+                },
+                {
+                    data: 'status',
+                    name: 'status',
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false,
+                    className: 'text-center'
+                },
 
 
 
-        //     ],
-        //     columnDefs: [{
-        //             targets: [3, 4, 5],
-        //             className: 'text-center',
-        //         },
-        //         {
-        //             targets: [1],
-        //             render: function(data) {
-        //                 return moment(data).format('LL');
-        //             }
-        //         },
-        //     ],
-        // });
+            ],
+            columnDefs: [{
+                    targets: [3, 4, 5],
+                    className: 'text-center',
+                },
+                {
+                    targets: [1],
+                    render: function(data) {
+                        return moment(data).format('LL');
+                    }
+                },
+            ],
+        });
 
         $(document).on('click', '.btn-delete', function() {
             let id = $(this).val();

@@ -258,7 +258,7 @@
 
     <div class="form-group text-right">
         @component('dashboard.components.buttons.submit')
-            @slot(' label')
+            @slot('label')
                 {{ $submitLabel }}
                 @endslot @slot('icon')
                 {!! $submitIcon !!}

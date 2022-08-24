@@ -67,7 +67,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('realisasi-intervensi-keong/delete-semua-laporan/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@deleteSemuaLaporan');
 
     // Manusia
-    Route::resource('rencana-intervensi-manusia', PerencanaanManusiaController::class);
+    Route::resource('rencana-intervensi-manusia', PerencanaanManusiaController::class)->parameters([
+        'rencana-intervensi-manusia' => 'rencana_intervensi_manusia'
+    ]);
 
 
     // Master Data

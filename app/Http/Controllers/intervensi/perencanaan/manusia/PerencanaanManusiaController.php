@@ -10,6 +10,7 @@ use App\Models\OPDTerkaitManusia;
 use App\Models\PerencanaanManusia;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Models\DokumenRealisasiManusia;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\DokumenPerencanaanManusia;
@@ -436,17 +437,17 @@ class PerencanaanManusiaController extends Controller
         }
         $rencana_intervensi_manusia->dokumenPerencanaanManusia()->delete();
 
-        // if ($rencana_intervensi_manusia->realisasiManusia) {
-        //     foreach ($rencana_intervensi_manusia->realisasiManusia as $item) {
-        //         foreach ($item->dokumenRealisasiManusia as $doc) {
-        //             if (Storage::exists('uploads/dokumen/realisasi/manusia/' . $doc->file)) {
-        //                 Storage::delete('uploads/dokumen/realisasi/manusia/' . $doc->file);
-        //             }
-        //             DokumenRealisasiManusia::where('id', $item->id)->delete();
-        //         }
-        //         $item->dokumenRealisasiManusia()->delete();
-        //     }
-        // }
+        if ($rencana_intervensi_manusia->realisasiManusia) {
+            foreach ($rencana_intervensi_manusia->realisasiManusia as $item) {
+                foreach ($item->dokumenRealisasiManusia as $doc) {
+                    if (Storage::exists('uploads/dokumen/realisasi/manusia/' . $doc->file)) {
+                        Storage::delete('uploads/dokumen/realisasi/manusia/' . $doc->file);
+                    }
+                    DokumenRealisasiManusia::where('id', $item->id)->delete();
+                }
+                $item->dokumenRealisasiManusia()->delete();
+            }
+        }
 
         $rencana_intervensi_manusia->realisasiManusia()->delete();
         $rencana_intervensi_manusia->delete();

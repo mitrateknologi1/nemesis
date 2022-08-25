@@ -72,6 +72,8 @@
                                 <tr class="text-center fw-bold">
                                     <th>No</th>
                                     <th>Nama</th>
+                                    <th>NIK</th>
+                                    <th>Desa</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -82,6 +84,8 @@
                                             {{ $loop->iteration }}
                                         </td>
                                         <td>{{ $item->penduduk->nama }}</td>
+                                        <td class="text-center">{{ $item->penduduk->nik }}</td>
+                                        <td class="text-center">{{ $item->penduduk->desa->nama }}</td>
                                         <td class="text-center"><button type="button"
                                                 class="btn btn-primary btn-rounded btn-sm mr-1" id="btn-lihat"
                                                 value="{{ $item->penduduk->id }}"><i class="far fa-eye"></i></button>

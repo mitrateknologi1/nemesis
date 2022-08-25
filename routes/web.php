@@ -73,12 +73,14 @@ Route::group(['middleware' => 'auth'], function () {
     ]);
     Route::post('rencana-intervensi-manusia/konfirmasi/{rencana_intervensi_manusia}', PerencanaanManusiaController::class . '@konfirmasi');
 
-
     Route::resource('realisasi-intervensi-manusia', RealisasiManusiaController::class)->parameters([
         'realisasi-intervensi-manusia' => 'realisasi_intervensi_manusia'
     ]);
     Route::get('tabel-laporan-realisasi-manusia', RealisasiManusiaController::class . '@tabelLaporan');
     Route::get('realisasi-intervensi-manusia/create-pelaporan/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@createPelaporan');
+    Route::get('realisasi-intervensi-manusia/show-laporan/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@showLaporan');
+    Route::post('realisasi-intervensi-manusia/konfirmasi/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@konfirmasi');
+
 
 
 

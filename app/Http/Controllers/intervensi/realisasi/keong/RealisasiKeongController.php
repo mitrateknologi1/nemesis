@@ -513,8 +513,8 @@ class RealisasiKeongController extends Controller
 
     public function showLaporan(RealisasiKeong $realisasi_intervensi_keong)
     {
-        $getLokasiKeongBelumTerealisasi = $realisasi_intervensi_keong->lokasiRealisasiKeong->pluck('lokasi_keong_id')->toArray();
-        $lokasiKeong = LokasiKeong::with('desa')->whereIn('id', $getLokasiKeongBelumTerealisasi)->get();
+        $getLokasiKeongTerealisasi = $realisasi_intervensi_keong->lokasiRealisasiKeong->pluck('lokasi_keong_id')->toArray();
+        $lokasiKeong = LokasiKeong::with('desa')->whereIn('id', $getLokasiKeongTerealisasi)->get();
         $data = [
             'rencana_intervensi_keong' => $realisasi_intervensi_keong->perencanaanKeong,
             'realisasi_intervensi_keong' => $realisasi_intervensi_keong,

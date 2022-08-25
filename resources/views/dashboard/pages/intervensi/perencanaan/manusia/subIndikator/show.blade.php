@@ -47,8 +47,8 @@
                         <li class="list-group-item d-flex justify-content-between align-items-center">OPD:<span
                                 class="font-weight-bold">{{ $rencana_intervensi_manusia->opd->nama }}</span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">Jumlah Penduduk
-                            :<span class="font-weight-bold">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">Jumlah Penduduk:<span
+                                class="font-weight-bold">
                                 {{ $rencana_intervensi_manusia->pendudukPerencanaanManusia->count() }}
                             </span>
                         </li>

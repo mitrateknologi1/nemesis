@@ -4,6 +4,7 @@ namespace App\Http\Controllers\intervensi\realisasi\manusia;
 
 use App\Models\OPD;
 use App\Models\Desa;
+use App\Models\Penduduk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\RealisasiManusia;
@@ -349,6 +350,19 @@ class RealisasiManusiaController extends Controller
         return view('dashboard.pages.intervensi.realisasi.manusia.subIndikator.show', $data);
     }
 
+    public function showLaporan(RealisasiManusia $realisasi_intervensi_manusia)
+    {
+        $getPendudukTerealisasi = $realisasi_intervensi_manusia->pendudukRealisasiManusia->pluck('penduduk_id')->toArray();
+        $penduduk = Penduduk::with('desa')->whereIn('id', $getPendudukTerealisasi)->get();
+        $data = [
+            'rencana_intervensi_manusia' => $realisasi_intervensi_manusia->perencanaanManusia,
+            'realisasi_intervensi_manusia' => $realisasi_intervensi_manusia,
+            'dataPendudukRealisasi' => $penduduk,
+
+        ];
+        return view('dashboard.pages.intervensi.realisasi.manusia.pelaporan.show', $data);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -381,5 +395,44 @@ class RealisasiManusiaController extends Controller
     public function destroy(RealisasiManusia $realisasiManusia)
     {
         //
+    }
+
+    public function konfirmasi(RealisasiManusia $realisasi_intervensi_manusia, Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'status' => 'required',
+                'alasan_ditolak' => $request->status == 2 ? 'required' : '',
+            ],
+            [
+                'status.required' => 'Status harus diisi',
+                'alasan_ditolak.required' => 'Alasan ditolak harus diisi',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()]);
+        }
+
+        $data = [
+            'status' => $request->status,
+            'alasan_ditolak' => $request->status == 2 ? $request->alasan_ditolak : '-',
+            'tanggal_konfirmasi' => Carbon::now(),
+        ];
+
+        $realisasi_intervensi_manusia->update($data);
+
+        // update penduduk perencanaan
+        foreach ($realisasi_intervensi_manusia->pendudukRealisasiManusia as $item) {
+            if ($request->status == 1) {
+                $item->status = 1;
+            } else {
+                $item->status = 2;
+            }
+            $item->save();
+        }
+
+        return response()->json(['success' => 'Berhasil mengkonfirmasi']);
     }
 }

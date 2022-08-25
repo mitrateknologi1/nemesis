@@ -13,8 +13,8 @@
 @endsection
 
 @section('buttonPanelHeader')
-    <a href="{{ url('/realisasi-intervensi-manusia') }}" class="btn btn-secondary btn-round mr-2"><i
-            class="fas fa-arrow-left mr-1"></i>
+    <a href="{{ url('/realisasi-intervensi-manusia') }}" class="btn btn-secondary btn-round mr-2">
+        <i class="fas fa-arrow-left mr-1"></i>
         Kembali</a>
     @if (Auth::user()->role == 'OPD' && Auth::user()->opd_id == $rencana_intervensi_manusia->opd_id)
         <a href="{{ url('realisasi-intervensi-manusia/create-pelaporan/' . $rencana_intervensi_manusia->id) }}"
@@ -88,7 +88,7 @@
                                 <tr class="text-center fw-bold">
                                     <th>No</th>
                                     <th>Tanggal Laporan</th>
-                                    <th>Jumlah Lokasi</th>
+                                    <th>Jumlah Penduduk</th>
                                     <th>Progress</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
@@ -211,7 +211,6 @@
                     </div>
                 </div>
                 <div class="col-md-5">
-
                     <div class="card">
                         <div class="card-header">
                             <div class="card-head-row">
@@ -272,6 +271,7 @@
                                     <th>Nama</th>
                                     <th>NIK</th>
                                     <th>Desa</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -282,6 +282,17 @@
                                         <td>{{ $item->penduduk->nama }}</td>
                                         <td class="text-center">{{ $item->penduduk->nik }}</td>
                                         <td class="text-center">{{ $item->penduduk->desa->nama }}</td>
+                                        <td class="text-center">
+                                            @if ($item->realisasi_manusia_id == null && $item->status == 0)
+                                                <span class="badge badge-dark">Belum Terealisasi</span>
+                                            @elseif($item->realisasi_manusia_id != null && $item->status == 0)
+                                                <span class="badge badge-warning">Menunggu Konfirmasi</span>
+                                            @elseif($item->realisasi_manusia_id != null && $item->status == 1)
+                                                <span class="badge badge-success">Sudah Terealisasi</span>
+                                            @elseif($item->realisasi_manusia_id != null && $item->status == 2)
+                                                <span class="badge badge-danger">Ditolak</span>
+                                            @endif
+                                        </td>
                                         <td class="text-center"><button type="button"
                                                 class="btn btn-primary btn-rounded btn-sm mr-1" id="btn-lihat"
                                                 value="{{ $item->penduduk->id }}"><i class="far fa-eye"></i></button>
@@ -648,10 +659,6 @@
             }
         }
 
-        $(document).ready(function() {
-            initializeMap();
-        })
-
         var tableLaporan = $('#tableLaporan').DataTable({
             processing: true,
             serverSide: true,
@@ -681,8 +688,8 @@
 
                 },
                 {
-                    data: 'jumlah_lokasi',
-                    name: 'jumlah_lokasi',
+                    data: 'jumlah_penduduk',
+                    name: 'jumlah_penduduk',
                     className: 'text-center'
                 },
                 {

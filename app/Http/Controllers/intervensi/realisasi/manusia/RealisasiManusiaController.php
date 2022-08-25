@@ -3,12 +3,17 @@
 namespace App\Http\Controllers\intervensi\realisasi\manusia;
 
 use App\Models\OPD;
+use App\Models\Desa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Models\RealisasiManusia;
 use App\Models\PerencanaanManusia;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Models\DokumenRealisasiManusia;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Validator;
+use App\Models\PendudukPerencanaanManusia;
 use App\Http\Requests\StoreRealisasiManusiaRequest;
 use App\Http\Requests\UpdateRealisasiManusiaRequest;
 
@@ -124,10 +129,6 @@ class RealisasiManusiaController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
 
-                ->addColumn('jumlah_lokasi', function ($row) {
-                    return $row->pendudukRealisasiManusia->count();
-                })
-
                 ->addColumn('status', function ($row) {
                     if ($row->status == 0) {
                         return '<span class="badge badge-pill badge-warning">Menunggu Konfirmasi</span>';
@@ -137,6 +138,11 @@ class RealisasiManusiaController extends Controller
                         return '<span class="badge badge-pill badge-danger">Ditolak</span>';
                     }
                 })
+
+                ->addColumn('jumlah_penduduk', function ($row) {
+                    return $row->pendudukRealisasiManusia->count();
+                })
+
 
                 ->addColumn('progress', function ($row) {
                     return $row->progress . ' %';
@@ -186,15 +192,140 @@ class RealisasiManusiaController extends Controller
         //
     }
 
+    public function createPelaporan(PerencanaanManusia $realisasi_intervensi_manusia)
+    {
+        $rencana_intervensi_manusia = $realisasi_intervensi_manusia;
+        if (Auth::user()->role == 'Admin' || Auth::user()->opd_id != $rencana_intervensi_manusia->opd_id) {
+            abort('403', 'Oops! anda tidak memiliki akses ke sini.');
+        }
+
+        $countStatusSelainDisetujui = RealisasiManusia::where('perencanaan_manusia_id', $realisasi_intervensi_manusia->id)
+            ->whereIn('status', [0, 2])
+            ->count();
+
+        if (Auth::user()->role == 'OPD') {
+            if ($countStatusSelainDisetujui > 0) {
+                abort('403', 'Maaf, anda tidak dapat menambahkan laporan apabila terdapat laporan yang berstatus "Menunggu Dikonfirmasi" / "Ditolak". Untuk Data "Ditolak", silahkan klik tombol "Ubah" pada laporan yang berstatus "Ditolak" dan Perbarui datanya. Kemudian untuk data "Menunggu Konfirmasi", silahkan hubungi Admin untuk diproses konfirmasi.');
+            }
+            if ($rencana_intervensi_manusia->created_at->year != Carbon::now()->year) {
+                abort('403', 'Maaf, anda sudah tidak dapat membuat laporan pada sub indikator ini karena sudah berganti tahun.');
+            }
+        }
+
+        if ($rencana_intervensi_manusia->realisasiManusia->where('progress', 100)->count() > 0) {
+            abort('403', 'Maaf, anda sudah tidak dapat membuat laporan pada sub indikator ini karena sudah mencapai progress 100%.');
+        }
+
+
+        $data = [
+            'rencanaIntervensiManusia' => $rencana_intervensi_manusia,
+            'desa' => Desa::all(),
+            'pendudukPerencanaanManusia' => json_encode($rencana_intervensi_manusia->pendudukPerencanaanManusia->pluck('penduduk_id')->toArray()),
+            'pendudukPerencanaanManusiaArr' => $rencana_intervensi_manusia->pendudukPerencanaanManusia->whereNull('realisasi_manusia_id')->pluck('penduduk_id')->toArray(),
+            'opdTerkaitManusia' => json_encode($rencana_intervensi_manusia->opdTerkaitManusia->pluck('opd_id')->toArray()),
+        ];
+
+        return view('dashboard.pages.intervensi.realisasi.manusia.pelaporan.create', $data);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\StoreRealisasiManusiaRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRealisasiManusiaRequest $request)
+    public function store(Request $request)
     {
-        //
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'penduduk' => 'required',
+                'penggunaan_anggaran' => 'required',
+            ],
+            [
+                'penduduk.required' => 'Penduduk harus dipilih',
+                'penggunaan_anggaran.required' => 'Nilai Pembiayaan harus diisi',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()]);
+        }
+
+        if ($request->nama_dokumen != null) {
+            $countFileDokumen = count($request->file_dokumen ?? []);
+            $countNamaDokumen = count($request->nama_dokumen);
+
+            if ($countFileDokumen == $countNamaDokumen) {
+                if (in_array(null, $request->nama_dokumen)) {
+                    return 'nama_dokumen_kosong';
+                }
+            } else {
+                return 'nama_dokumen_kosong_dan_file_dokumen_kosong';
+            }
+        }
+
+        $bulanSekarang = Carbon::now()->month;
+
+        if (($bulanSekarang >= 1 && $bulanSekarang <= 3)) {
+            $tw = 1;
+        } else if (($bulanSekarang >= 4 && $bulanSekarang <= 6)) {
+            $tw = 2;
+        } else if (($bulanSekarang >= 7 && $bulanSekarang <= 9)) {
+            $tw = 3;
+        } else {
+            $tw = 4;
+        }
+
+        $countTotalPendudukPerencanaan = PendudukPerencanaanManusia::where('perencanaan_manusia_id', $request->id_perencanaan)->count();
+        $countPendudukTerealisasi = PendudukPerencanaanManusia::where('perencanaan_manusia_id', $request->id_perencanaan)->whereNotNull('realisasi_manusia_id')->count();
+        $countPendudukDipilih = count($request->penduduk);
+        $countPencapaian = ((100 / $countTotalPendudukPerencanaan) * ($countPendudukTerealisasi + $countPendudukDipilih));
+
+        $dataRealisasi = [
+            'perencanaan_manusia_id' => $request->id_perencanaan,
+            'penggunaan_anggaran' => $request->penggunaan_anggaran,
+            'tw' => $tw,
+            'progress' => round($countPencapaian, 2),
+            'status' => 0,
+        ];
+
+        $insertRealisasi = RealisasiManusia::create($dataRealisasi);
+
+        $updatePendudukPerencanaan = PendudukPerencanaanManusia::whereIn('penduduk_id', $request->penduduk)->where('perencanaan_manusia_id', $request->id_perencanaan)->get();
+
+        // update realisasi_manusia_id
+        foreach ($updatePendudukPerencanaan as $item) {
+            $item->realisasi_manusia_id = $insertRealisasi->id;
+            $item->save();
+        }
+
+        $no_dokumen = 1;
+        $perencanaanManusia = PerencanaanManusia::find($request->id_perencanaan);
+        if ($request->nama_dokumen != null) {
+            for ($i = 0; $i < $countFileDokumen; $i++) {
+                $namaFile = mt_rand() . '-' . $request->nama_dokumen[$i] . '-' . $perencanaanManusia->sub_indikator . '-' . $no_dokumen . '.' . $request->file_dokumen[$i]->getClientOriginalExtension();
+
+                $request->file_dokumen[$i]->storeAs(
+                    'uploads/dokumen/realisasi/manusia',
+                    $namaFile
+                );
+
+                $dataDokumen = [
+                    'realisasi_manusia_id' => $insertRealisasi->id,
+                    'nama' => $request->nama_dokumen[$i],
+                    'file' => $namaFile,
+                    'no_urut' => $no_dokumen,
+                ];
+
+                DokumenRealisasiManusia::create($dataDokumen);
+                $no_dokumen++;
+            }
+        }
+
+        return response()->json('kirim');
+
+        return $dataRealisasi;
     }
 
     /**

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('dokumen_realisasi_manusia', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('perencanaan_manusia_id');
+            $table->uuid('realisasi_manusia_id');
             $table->text('nama');
             $table->text('file');
             $table->integer('no_urut');

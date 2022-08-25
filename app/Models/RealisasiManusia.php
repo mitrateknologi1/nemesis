@@ -18,9 +18,9 @@ class RealisasiManusia extends Model
         return $this->belongsTo(PerencanaanManusia::class, 'perencanaan_manusia_id');
     }
 
-    public function lokasiRealisasiManusia()
+    public function pendudukRealisasiManusia()
     {
-        return $this->hasMany(LokasiPerencanaanManusia::class, 'realisasi_manusia_id')->orderBy('updated_at', 'DESC');
+        return $this->hasMany(PendudukPerencanaanManusia::class, 'realisasi_manusia_id')->orderBy('updated_at', 'DESC');
     }
 
     public function dokumenRealisasiManusia()

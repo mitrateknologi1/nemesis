@@ -78,6 +78,8 @@ Route::group(['middleware' => 'auth'], function () {
         'realisasi-intervensi-manusia' => 'realisasi_intervensi_manusia'
     ]);
     Route::get('tabel-laporan-realisasi-manusia', RealisasiManusiaController::class . '@tabelLaporan');
+    Route::get('realisasi-intervensi-manusia/create-pelaporan/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@createPelaporan');
+
 
 
 

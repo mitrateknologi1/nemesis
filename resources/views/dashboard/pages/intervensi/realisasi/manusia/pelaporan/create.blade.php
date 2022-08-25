@@ -1,15 +1,15 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Tambah Laporan Realisasi Intervensi Keong
+    Tambah Laporan Realisasi Intervensi Manusia
 @endsection
 
 @section('titlePanelHeader')
-    Tambah Laporan Realisasi Intervensi Keong
+    Tambah Laporan Realisasi Intervensi Manusia
 @endsection
 
 @section('subTitlePanelHeader')
-    {{ $rencanaIntervensiKeong->sub_indikator }}
+    {{ $rencanaIntervensiManusia->sub_indikator }}
 @endsection
 
 @section('buttonPanelHeader')
@@ -18,13 +18,13 @@
 @endsection
 
 @push('styles')
-    <style>
+    {{-- <style>
         #tabelLokasiTerealisasi_wrapper .dataTables_filter {
             width: 100% !important;
             margin-bottom: 10px !important;
             text-align: center !important;
         }
-    </style>
+    </style> --}}
 @endpush
 
 @section('contents')
@@ -33,19 +33,18 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Form Laporan Realisasi Intervensi Keong</div>
+                        <div class="card-title">Form Laporan Realisasi Intervensi Manusia</div>
                     </div>
                 </div>
                 <div class="card-body pt-1">
                     <div class="row">
                         <div class="col">
-                            @component('dashboard.components.forms.realisasiKeong',
+                            @component('dashboard.components.forms.realisasiManusia',
                                 [
-                                    'action' => route('realisasi-intervensi-keong.store'),
-                                    'rencanaIntervensiKeong' => $rencanaIntervensiKeong,
+                                    'action' => route('realisasi-intervensi-manusia.store'),
+                                    'rencanaIntervensiManusia' => $rencanaIntervensiManusia,
                                     'desa' => $desa,
-                                    'lokasiArr' => $lokasiPerencanaanKeongArr,
-                                    'dataMap' => $dataMap,
+                                    'pendudukArr' => $pendudukPerencanaanManusiaArr,
                                     'method' => 'POST',
                                     'submitLabel' => 'Kirim Data',
                                     'submitIcon' => '<i class="fas fa-paper-plane"></i> ',
@@ -58,11 +57,11 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-4 order-md-2">
+        <div class="col-md">
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Lokasi Yang Belum Terealisasi</div>
+                        <div class="card-title">Pendudduk Yang Belum Terealisasi</div>
                     </div>
                 </div>
                 <div class="card-body px-2">
@@ -72,17 +71,21 @@
                             <thead>
                                 <tr class="text-center fw-bold">
                                     <th>No</th>
-                                    <th>Nama Lokasi</th>
+                                    <th>Nama</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($rencanaIntervensiKeong->lokasiPerencanaanKeong->whereNull('realisasi_keong_id') as $item)
+                                @foreach ($rencanaIntervensiManusia->pendudukPerencanaanManusia->whereNull('realisasi_penduduk_id') as $item)
                                     <tr>
                                         <td class="text-center">
                                             {{ $loop->iteration }}
                                         </td>
-                                        <td>{{ $item->lokasiKeong->nama }}</td>
-
+                                        <td>{{ $item->penduduk->nama }}</td>
+                                        <td class="text-center"><button type="button"
+                                                class="btn btn-primary btn-rounded btn-sm mr-1" id="btn-lihat"
+                                                value="{{ $item->penduduk->id }}"><i class="far fa-eye"></i></button>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -91,20 +94,116 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-head-row">
-                        <div class="card-title">Titik Koordinat Yang Belum Terealisasi</div>
+    {{-- Modal Penduduk --}}
+    <div class="modal" tabindex="-1" id="modal-lihat">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detail Penduduk</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Nama : </p>
+                        <p id="nama">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">NIK : </p>
+                        <p id="nik">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Jenis Kelamin : </p>
+                        <p id="jenis-kelamin">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Tempat, Tanggal Lahir : </p>
+                        <p id="ttl">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Agama : </p>
+                        <p id="agama">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Pendidikan Terakhir : </p>
+                        <p id="pendidikan">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Pekerjaan : </p>
+                        <p id="pekerjaan">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Golongan Darah : </p>
+                        <p id="golongan-darah">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Status Perkawinan : </p>
+                        <p id="status-perkawinan">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Tanggal Perkawinan : </p>
+                        <p id="tanggal-perkawinan">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Kewarganegaraan : </p>
+                        <p id="kewarganegaraan">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Nomor Paspor : </p>
+                        <p id="nomor-paspor">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Nomor Kitap : </p>
+                        <p id="nomor-kitap">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Alamat : </p>
+                        <p id="alamat">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia, repellat!
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Desa : </p>
+                        <p id="desa">
+                            -
+                        </p>
                     </div>
                 </div>
-                <div class="card-body px-2">
-                    <div id="peta"></div>
+                <div class="modal-footer">
+                    @component('dashboard.components.buttons.close')
+                    @endcomponent
                 </div>
             </div>
         </div>
-
     </div>
 @endsection
 
@@ -112,11 +211,43 @@
     <script>
         $('#nav-realisasi').addClass('active');
         $('#nav-realisasi .collapse').addClass('show');
-        $('#nav-realisasi .collapse #li-keong').addClass('active');
+        $('#nav-realisasi .collapse #li-manusia-2').addClass('active');
 
-        var tableLokasiRealisasi = $('#tabelLokasiTerealisasi').DataTable({
-            "dom": "ftip",
-            "bPaginate": false,
-        });
+        var tableLokasiRealisasi = $('#tabelLokasiTerealisasi').DataTable({});
+
+        $(document).on('click', '#btn-lihat', function() {
+            let id = $(this).val();
+            $.ajax({
+                url: "{{ url('master-data/penduduk') }}" + '/' + id,
+                type: 'GET',
+                success: function(response) {
+                    if (response.status == 'success') {
+                        $('#nama').html(response.data.nama);
+                        $('#nik').html(response.data.nik);
+                        $('#jenis-kelamin').html(response.data.jenis_kelamin);
+                        $('#ttl').html(response.data.ttl);
+                        $('#agama').html(response.data.agama);
+                        $('#pendidikan').html(response.data.pendidikan);
+                        $('#pekerjaan').html(response.data.pekerjaan);
+                        $('#golongan-darah').html(response.data.golongan_darah);
+                        $('#status-perkawinan').html(response.data.status_perkawinan);
+                        $('#tanggal-perkawinan').html(response.data.tanggal_perkawinan);
+                        $('#kewarganegaraan').html(response.data.kewarganegaraan);
+                        $('#nomor-paspor').html(response.data.no_paspor);
+                        $('#nomor-kitap').html(response.data.no_kitap);
+                        $('#alamat').html(response.data.alamat);
+                        $('#desa').html(response.data.desa);
+                        $('#modal-lihat').modal('show');
+                    }
+                },
+                error: function(response) {
+                    swal("Gagal", "Data Gagal Diambil, Silahkan Coba Kembali", {
+                        icon: "error",
+                        buttons: false,
+                        timer: 1000,
+                    });
+                }
+            })
+        })
     </script>
 @endpush

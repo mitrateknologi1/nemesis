@@ -22,6 +22,7 @@ use App\Http\Controllers\masterData\sekolah\SiswaController;
 use App\Http\Controllers\masterData\TahunController;
 use App\Http\Controllers\PengaturanAkunController;
 use App\Http\Controllers\intervensi\perencanaan\manusia\PerencanaanManusiaController;
+use App\Http\Controllers\intervensi\realisasi\manusia\RealisasiManusiaController;
 use App\Models\Perencanaan;
 use Database\Seeders\PerencanaanManusiaSeeder;
 
@@ -71,6 +72,13 @@ Route::group(['middleware' => 'auth'], function () {
         'rencana-intervensi-manusia' => 'rencana_intervensi_manusia'
     ]);
     Route::post('rencana-intervensi-manusia/konfirmasi/{rencana_intervensi_manusia}', PerencanaanManusiaController::class . '@konfirmasi');
+
+
+    Route::resource('realisasi-intervensi-manusia', RealisasiManusiaController::class)->parameters([
+        'realisasi-intervensi-manusia' => 'realisasi_intervensi_manusia'
+    ]);
+    Route::get('tabel-laporan-realisasi-manusia', RealisasiManusiaController::class . '@tabelLaporan');
+
 
 
 

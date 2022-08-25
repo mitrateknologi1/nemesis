@@ -79,6 +79,7 @@ class DatabaseSeeder extends Seeder
         $this->call(DokumenRealisasiManusiaTableSeeder::class); // new
         $this->call(OpdTerkaitManusiaTableSeeder::class); // new
         $this->call(PerencanaanManusiaTableSeeder::class); // new
+        $this->call(PendudukPerencanaanManusiaTableSeeder::class); // new
         $this->call(DokumenPerencanaanManusiaTableSeeder::class); // new
     }
 }

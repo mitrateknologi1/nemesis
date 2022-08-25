@@ -1,11 +1,12 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Tambah Laporan Realisasi Intervensi Keong
+    Ubah Laporan Realisasi Intervensi Keong
 @endsection
 
 @section('titlePanelHeader')
-    Tambah Laporan Realisasi Intervensi Keong
+    Ubah Laporan Realisasi Intervensi Keong | <span style="text-decoration: underline">Laporan Tanggal:
+        {{ Carbon\Carbon::parse($realisasiIntervensiKeong->created_at)->translatedFormat('j F Y') }}</span>
 @endsection
 
 @section('subTitlePanelHeader')
@@ -37,18 +38,29 @@
                     </div>
                 </div>
                 <div class="card-body pt-1">
+                    @if ($realisasiIntervensiKeong->status == 2)
+                        <div class="row">
+                            <div class="col">
+                                <div class="alert alert-danger mt-3 font-weight-bold" role="alert">Alasan Ditolak: <span
+                                        class="text-danger">{{ $realisasiIntervensiKeong->alasan_ditolak }}</span></div>
+                            </div>
+                        </div>
+                    @endif
                     <div class="row">
                         <div class="col">
                             @component('dashboard.components.forms.realisasiKeong',
                                 [
-                                    'action' => route('realisasi-intervensi-keong.store'),
+                                    'action' => route('realisasi-intervensi-keong.update', $realisasiIntervensiKeong->id),
+                                    'realisasiIntervensiKeong' => $realisasiIntervensiKeong,
                                     'rencanaIntervensiKeong' => $rencanaIntervensiKeong,
                                     'desa' => $desa,
+                                    'lokasi' => $lokasiPerencanaanKeong,
                                     'lokasiArr' => $lokasiPerencanaanKeongArr,
                                     'dataMap' => $dataMap,
-                                    'method' => 'POST',
-                                    'submitLabel' => 'Kirim Data',
-                                    'submitIcon' => '<i class="fas fa-paper-plane"></i> ',
+                                    'maxDokumen' => $realisasiIntervensiKeong->dokumenRealisasiKeong()->count(),
+                                    'method' => 'PUT',
+                                    'submitLabel' => 'Perbarui Data',
+                                    'submitIcon' => '<i class="fas fa-save"></i> ',
                                 ])
                             @endcomponent
                         </div>
@@ -91,7 +103,6 @@
                 </div>
             </div>
         </div>
-
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
@@ -112,7 +123,7 @@
     <script>
         $('#nav-realisasi').addClass('active');
         $('#nav-realisasi .collapse').addClass('show');
-        $('#nav-realisasi .collapse #li-keong-2').addClass('active');
+        $('#nav-realisasi .collapse #li-keong').addClass('active');
 
         var tableLokasiRealisasi = $('#tabelLokasiTerealisasi').DataTable({
             "dom": "ftip",

@@ -62,7 +62,7 @@
     <script>
         $('#nav-realisasi').addClass('active');
         $('#nav-realisasi .collapse').addClass('show');
-        $('#nav-realisasi .collapse #li-keong-2').addClass('active');
+        $('#nav-realisasi .collapse #li-manusia-2').addClass('active');
 
         var table = $('#dataTables').DataTable({
             processing: true,
@@ -72,7 +72,7 @@
                 [10, 25, 50, "All"]
             ],
             ajax: {
-                url: "{{ route('realisasi-intervensi-keong.index') }}",
+                url: "{{ route('realisasi-intervensi-manusia.index') }}",
                 // data: function(d) {
                 //     d.lokasiTugas = $('#lokasi-tugas').val();
                 //     d.search = $('input[type="search"]').val();

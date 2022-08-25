@@ -1,23 +1,23 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Realisasi Intervensi Keong
+    Realisasi Intervensi Manusia
 @endsection
 
 @section('titlePanelHeader')
-    Laporan Realisasi Intervensi Keong
+    Laporan Realisasi Intervensi Manusia
 @endsection
 
 @section('subTitlePanelHeader')
-    {{ $rencana_intervensi_keong->sub_indikator }}
+    {{ $rencana_intervensi_manusia->sub_indikator }}
 @endsection
 
 @section('buttonPanelHeader')
-    <a href="{{ url('/realisasi-intervensi-keong') }}" class="btn btn-secondary btn-round mr-2"><i
+    <a href="{{ url('/realisasi-intervensi-manusia') }}" class="btn btn-secondary btn-round mr-2"><i
             class="fas fa-arrow-left mr-1"></i>
         Kembali</a>
-    @if (Auth::user()->role == 'OPD' && Auth::user()->opd_id == $rencana_intervensi_keong->opd_id)
-        <a href="{{ url('realisasi-intervensi-keong/create-pelaporan/' . $rencana_intervensi_keong->id) }}"
+    @if (Auth::user()->role == 'OPD' && Auth::user()->opd_id == $rencana_intervensi_manusia->opd_id)
+        <a href="{{ url('realisasi-intervensi-manusia/create-pelaporan/' . $rencana_intervensi_manusia->id) }}"
             class="btn btn-secondary btn-round"><i class="fas fa-plus"></i>
             Tambah</a>
     @endif
@@ -50,19 +50,19 @@
                 <div class="card-header">
                     <div class="card-head-row">
                         <div class="card-title">Data Laporan Realisasi | <span
-                                class="font-weight-bold">{{ $rencana_intervensi_keong->opd->nama }}</span></div>
+                                class="font-weight-bold">{{ $rencana_intervensi_manusia->opd->nama }}</span></div>
                         <div class="card-tools">
-                            @if ($rencana_intervensi_keong->realisasiKeong->count() > 0 &&
-                                ($rencana_intervensi_keong->opd_id == Auth::user()->opd_id || Auth::user()->role == 'Admin'))
+                            @if ($rencana_intervensi_manusia->realisasiManusia->count() > 0 &&
+                                ($rencana_intervensi_manusia->opd_id == Auth::user()->opd_id || Auth::user()->role == 'Admin'))
                                 <button id="btn-delete-all"
                                     class="btn btn-danger btn-border font-weight-bold btn-round btn-sm mr-2 {{ $class ?? '' }}"
-                                    value="{{ $rencana_intervensi_keong->id }}">
+                                    value="{{ $rencana_intervensi_manusia->id }}">
                                     <i class="fas
                                     fa-trash"></i>
                                     Hapus Semua Laporan
                                 </button>
                             @endif
-                            <a href="{{ route('rencana-intervensi-keong.show', $rencana_intervensi_keong->id) }}"
+                            <a href="{{ route('rencana-intervensi-manusia.show', $rencana_intervensi_manusia->id) }}"
                                 class="btn btn-info btn-border font-weight-bold btn-round btn-sm mr-2 {{ $class ?? '' }} id={{ $id ?? '' }}"
                                 target="_blank">
                                 <i class="fas fa-eye"></i>
@@ -73,7 +73,7 @@
                     </div>
                 </div>
                 <div class="card-body px-2">
-                    @if (Auth::user()->role == 'OPD' && Auth::user()->opd_id != $rencana_intervensi_keong->opd_id)
+                    @if (Auth::user()->role == 'OPD' && Auth::user()->opd_id != $rencana_intervensi_manusia->opd_id)
                         <div class="row">
                             <div class="col">
                                 <div class="alert alert-info mx-2 font-weight-bold" role="alert">Info : <span
@@ -112,7 +112,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            @if ($rencana_intervensi_keong->realisasiKeong->where('status', 1)->count() > 0)
+                            @if ($rencana_intervensi_manusia->realisasiManusia->where('status', 1)->count() > 0)
                                 @if ($tw4 != null)
                                     <div class="progress-card mb-2">
                                         <div class="progress-status mb-1">
@@ -217,7 +217,7 @@
                             <div class="card-head-row">
                                 <div class="card-title">OPD Terkait Realisasi</div>
                                 <div class="card-tools">
-                                    @if (Auth::user()->role == 'Admin' || Auth::user()->opd_id == $rencana_intervensi_keong->opd_id)
+                                    @if (Auth::user()->role == 'Admin' || Auth::user()->opd_id == $rencana_intervensi_manusia->opd_id)
                                         <button type="button"
                                             class="btn btn-info btn-border font-weight-bold btn-sm btn-round"
                                             data-toggle="modal" data-target="#btnTambahOPD">
@@ -228,12 +228,12 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            @forelse ($rencana_intervensi_keong->opdTerkaitKeong as $item)
+                            @forelse ($rencana_intervensi_manusia->opdTerkaitManusia as $item)
                                 <ul class="list-group list-group-bordered">
                                     <li
                                         class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
                                         {{ $loop->iteration }}. {{ $item->opd->nama }}
-                                        @if (Auth::user()->role == 'Admin' || Auth::user()->opd_id == $rencana_intervensi_keong->opd_id)
+                                        @if (Auth::user()->role == 'Admin' || Auth::user()->opd_id == $rencana_intervensi_manusia->opd_id)
                                             <button data-id={{ $item->id }} class="badge badge-danger delete-opd"
                                                 data-toggle="tooltip" data-placement="top" title="Hapus"
                                                 style="cursor: pointer">
@@ -255,60 +255,42 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-5 order-md-2">
+        <div class="col">
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Status Lokasi Realisasi</div>
+                        <div class="card-title">Data Penduduk Perencanaan Intervensi Manusia</div>
                     </div>
                 </div>
-                <div class="card-body px-2">
-                    <div class="table-responsive">
-                        <table class="table table-hover table-striped" id="tabelLokasi" cellspacing="0" width="100%">
+                <div class="card-body">
+                    <div class="table-responsive mt-2">
+                        <table class="table table-hover table-striped table-bordered" id="{{ $id ?? 'dataTables' }}"
+                            cellspacing="0" width="100%">
                             <thead>
                                 <tr class="text-center fw-bold">
                                     <th>No</th>
-                                    <th>Nama Lokasi</th>
-                                    <th>Status</th>
+                                    <th>Nama</th>
+                                    <th>NIK</th>
+                                    <th>Desa</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($rencana_intervensi_keong->lokasiPerencanaanKeong as $item)
+                                @foreach ($rencana_intervensi_manusia->pendudukPerencanaanManusia as $item)
                                     <tr>
-                                        <td class="text-center">
-                                            {{ $loop->iteration }}
-                                        </td>
-                                        <td>{{ $item->lokasiKeong->nama }}</td>
-                                        <td class="text-center">
-                                            @if ($item->realisasi_keong_id == null && $item->status == 0)
-                                                <span class="badge badge-dark">Belum Terealisasi</span>
-                                            @elseif($item->realisasi_keong_id != null && $item->status == 0)
-                                                <span class="badge badge-warning">Menunggu Konfirmasi</span>
-                                            @elseif($item->realisasi_keong_id != null && $item->status == 1)
-                                                <span class="badge badge-success">Sudah Terealisasi</span>
-                                            @elseif($item->realisasi_keong_id != null && $item->status == 2)
-                                                <span class="badge badge-danger">Ditolak</span>
-                                            @endif
+                                        <td class="text-center">{{ $loop->iteration }}</td>
+                                        <td>{{ $item->penduduk->nama }}</td>
+                                        <td class="text-center">{{ $item->penduduk->nik }}</td>
+                                        <td class="text-center">{{ $item->penduduk->desa->nama }}</td>
+                                        <td class="text-center"><button type="button"
+                                                class="btn btn-primary btn-rounded btn-sm mr-1" id="btn-lihat"
+                                                value="{{ $item->penduduk->id }}"><i class="far fa-eye"></i></button>
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-7">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-head-row">
-                        <div class="card-title">Titik Koordinat Realisasi Intervensi Keong</div>
-
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div id="peta"></div>
                 </div>
             </div>
         </div>
@@ -353,13 +335,123 @@
             </div>
         </div>
     </div>
+
+    {{-- Modal Penduduk --}}
+    <div class="modal" tabindex="-1" id="modal-lihat">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detail Penduduk</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Nama : </p>
+                        <p id="nama">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">NIK : </p>
+                        <p id="nik">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Jenis Kelamin : </p>
+                        <p id="jenis-kelamin">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Tempat, Tanggal Lahir : </p>
+                        <p id="ttl">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Agama : </p>
+                        <p id="agama">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Pendidikan Terakhir : </p>
+                        <p id="pendidikan">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Pekerjaan : </p>
+                        <p id="pekerjaan">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Golongan Darah : </p>
+                        <p id="golongan-darah">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Status Perkawinan : </p>
+                        <p id="status-perkawinan">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Tanggal Perkawinan : </p>
+                        <p id="tanggal-perkawinan">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Kewarganegaraan : </p>
+                        <p id="kewarganegaraan">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Nomor Paspor : </p>
+                        <p id="nomor-paspor">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Nomor Kitap : </p>
+                        <p id="nomor-kitap">
+                            -
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Alamat : </p>
+                        <p id="alamat">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia, repellat!
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <p class=" mb-0">Desa : </p>
+                        <p id="desa">
+                            -
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    @component('dashboard.components.buttons.close')
+                    @endcomponent
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('scripts')
     <script>
         $('#nav-realisasi').addClass('active');
         $('#nav-realisasi .collapse').addClass('show');
-        $('#nav-realisasi .collapse #li-keong-2').addClass('active');
+        $('#nav-realisasi .collapse #li-manusia-2').addClass('active');
 
         $('.multiple').select2({
             placeholder: "- Pilih OPD -",
@@ -379,7 +471,8 @@
                 if (result) {
                     $.ajax({
                         type: 'DELETE',
-                        url: "{{ url('realisasi-intervensi-keong/delete-semua-laporan') }}" + '/' +
+                        url: "{{ url('realisasi-intervensi-manusia/delete-semua-laporan') }}" +
+                            '/' +
                             id,
                         data: {
                             _token: _token
@@ -416,7 +509,7 @@
                 if (result) {
                     $.ajax({
                         type: 'DELETE',
-                        url: "{{ url('realisasi-intervensi-keong/delete-laporan') }}" + '/' + id,
+                        url: "{{ url('realisasi-intervensi-manusia/delete-laporan') }}" + '/' + id,
                         data: {
                             _token: _token
                         },
@@ -452,7 +545,7 @@
                 if (result) {
                     $.ajax({
                         type: 'DELETE',
-                        url: "{{ url('realisasi-intervensi-keong/delete-opd') }}" + '/' + id,
+                        url: "{{ url('realisasi-intervensi-manusia/delete-opd') }}" + '/' + id,
                         data: {
                             _token: _token
                         },
@@ -495,7 +588,7 @@
                 if (result) {
                     $.ajax({
                         type: "POST",
-                        url: "{{ url('realisasi-intervensi-keong/update-opd/' . $rencana_intervensi_keong->id) }}",
+                        url: "{{ url('realisasi-intervensi-manusia/update-opd/' . $rencana_intervensi_manusia->id) }}",
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         },
@@ -567,9 +660,9 @@
                 [10, 25, 50, "All"]
             ],
             ajax: {
-                url: "{{ url('tabel-laporan-realisasi-keong') }}",
+                url: "{{ url('tabel-laporan-realisasi-manusia') }}",
                 data: function(d) {
-                    d.id_perencanaan = '{{ $rencana_intervensi_keong->id }}'
+                    d.id_perencanaan = '{{ $rencana_intervensi_manusia->id }}'
                     // d.lokasiTugas = $('#lokasi-tugas').val();
                     // d.search = $('input[type="search"]').val();
                 }
@@ -625,97 +718,43 @@
             ],
         });
 
-        var tableLokasi = $('#tabelLokasi').DataTable({
-            "dom": "ftip",
-            "bPaginate": false,
-        });
+        var table = $('#dataTables').DataTable({
+            processing: true,
+        })
 
-        var map = null;
-
-        function initializeMap() {
-            if (map != undefined || map != null) {
-                map.remove();
-            }
-
-            var center = [-1.3618072, 120.1619337];
-
-            map = L.map("peta", {
-                maxBounds: [
-                    [-1.511127, 119.9637063],
-                    [-1.21458, 120.2912363]
-                ]
-            }).setView(center, 11);
-            map.addControl(new L.Control.Fullscreen());
-
-            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                attribution: 'Data © <a href="http://osm.org/copyright">OpenStreetMap</a>',
-                maxZoom: 18,
-                minZoom: 11
-            }).addTo(map);
-
-            var pin = L.Icon.extend({
-                options: {
-                    iconSize: [50, 50],
-                    iconAnchor: [22, 94],
-                    shadowAnchor: [4, 62],
-                    popupAnchor: [-3, -76],
-                },
-            });
-
-            var pinIcon = new pin({
-                iconUrl: "{{ asset('assets/dashboard/img/pin/pin_red_x.png') }}",
-                iconSize: [40, 40],
-                iconAnchor: [25, 20],
-                popupAnchor: [-4, -20]
-            });
-
-            map.invalidateSize();
-
+        $(document).on('click', '#btn-lihat', function() {
+            let id = $(this).val();
             $.ajax({
-                url: "{{ url('/map/desa') }}",
-                type: "GET",
+                url: "{{ url('master-data/penduduk') }}" + '/' + id,
+                type: 'GET',
                 success: function(response) {
                     if (response.status == 'success') {
-                        for (var i = 0; i < response.data.length; i++) {
-                            L.polygon(response.data[i].koordinatPolygon, {
-                                    color: response.data[i].warna_polygon,
-                                    weight: 1,
-                                    opacity: 1,
-                                    fillOpacity: 1
-                                })
-                                .bindTooltip(response.data[i].nama, {
-                                    permanent: true,
-                                    direction: "center",
-                                    className: 'labelPolygon'
-                                })
-                                .addTo(map);
-                        }
+                        $('#nama').html(response.data.nama);
+                        $('#nik').html(response.data.nik);
+                        $('#jenis-kelamin').html(response.data.jenis_kelamin);
+                        $('#ttl').html(response.data.ttl);
+                        $('#agama').html(response.data.agama);
+                        $('#pendidikan').html(response.data.pendidikan);
+                        $('#pekerjaan').html(response.data.pekerjaan);
+                        $('#golongan-darah').html(response.data.golongan_darah);
+                        $('#status-perkawinan').html(response.data.status_perkawinan);
+                        $('#tanggal-perkawinan').html(response.data.tanggal_perkawinan);
+                        $('#kewarganegaraan').html(response.data.kewarganegaraan);
+                        $('#nomor-paspor').html(response.data.no_paspor);
+                        $('#nomor-kitap').html(response.data.no_kitap);
+                        $('#alamat').html(response.data.alamat);
+                        $('#desa').html(response.data.desa);
+                        $('#modal-lihat').modal('show');
                     }
                 },
+                error: function(response) {
+                    swal("Gagal", "Data Gagal Diambil, Silahkan Coba Kembali", {
+                        icon: "error",
+                        buttons: false,
+                        timer: 1000,
+                    });
+                }
             })
-
-            $.ajax({
-                url: "{{ url('rencana-intervensi-keong/map/' . $rencana_intervensi_keong->id) }}",
-                type: "GET",
-                success: function(response) {
-                    if (response.status == 'success') {
-                        for (var i = 0; i < response.data.length; i++) {
-                            icon = pinIcon;
-                            L.marker([response.data[i].latitude, response.data[i].longitude], {
-                                    icon: icon
-                                })
-                                .bindPopup(
-                                    "<p class='fw-bold my-0 text-center'>" + response.data[i].nama +
-                                    "</p><hr>" +
-                                    "<p class='my-0'>Desa : " + response.data[i].desa
-                                    .nama + "</p>"
-                                )
-                                // .on('click', L.bind(petaKlik, null, data[0][i].id))
-                                .addTo(map);
-                        }
-                    }
-                },
-            })
-        }
+        })
     </script>
 @endpush

@@ -54,12 +54,12 @@
                                      <span class="sub-item">Keong</span>
                                  </a>
                              </li>
-                             <li>
-                                 <a href="components/buttons.html">
+                             <li id="li-manusia-2">
+                                 <a href="{{ url('realisasi-intervensi-manusia') }}">
                                      <span class="sub-item">Manusia</span>
                                  </a>
                              </li>
-                             <li>
+                             <li id="li-hewan-2">
                                  <a href="components/gridsystem.html">
                                      <span class="sub-item">Hewan</span>
                                  </a>

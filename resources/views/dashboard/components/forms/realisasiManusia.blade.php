@@ -69,7 +69,7 @@
                         'class' => 'rupiah req',
                         'placeholder' => 'Masukkan Penggunaan Anggaran',
                         'wajib' => '<sup class="text-danger">*</sup>',
-                        'value' => $rencanaIntervensiManusia->penggunaan_anggaran ?? '',
+                        'value' => $realisasiIntervensiManusia->penggunaan_anggaran ?? '',
                     ])
                 @endcomponent
             </div>
@@ -77,8 +77,10 @@
                 <label for="" class="mt-1 mb-2">Dokumen Pendukung <sup class="text-danger">*</sup></label>
                 {{-- <label for="">(Surat-surat Kendaraan, Berita Acara, dan Lainnya)</label> --}}
                 <div class="row" id="dokumen-keong">
-                    @if (isset($rencanaIntervensiManusia) && $rencanaIntervensiManusia->dokumenRealisasiManusia && $method == 'PUT')
-                        @foreach ($rencanaIntervensiManusia->dokumenRealisasiManusia as $item)
+                    @if (isset($realisasiIntervensiManusia) &&
+                        $realisasiIntervensiManusia->dokumenRealisasiManusia &&
+                        $method == 'PUT')
+                        @foreach ($realisasiIntervensiManusia->dokumenRealisasiManusia as $item)
                             <div class="col-md-12 col-lg-12 col-xl-12 col-document"
                                 id="col-document-old-{{ $loop->iteration }}">
                                 <div class="card box-upload mb-3 pegawai" id="box-upload-{{ $loop->iteration }}"

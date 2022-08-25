@@ -369,9 +369,39 @@ class RealisasiManusiaController extends Controller
      * @param  \App\Models\RealisasiManusia  $realisasiManusia
      * @return \Illuminate\Http\Response
      */
-    public function edit(RealisasiManusia $realisasiManusia)
+    public function edit(RealisasiManusia $realisasi_intervensi_manusia)
     {
-        //
+        if (Auth::user()->role == 'Admin') {
+            if (in_array($realisasi_intervensi_manusia->status, [0, 2])) {
+                abort('403', 'Oops! anda tidak memiliki akses ke sini.');
+            }
+        } else if (Auth::user()->role == 'OPD') {
+            if (in_array($realisasi_intervensi_manusia->status, [1])) {
+                abort('403', 'Oops! anda tidak memiliki akses ke sini.');
+            }
+        } else {
+            abort('403', 'Oops! anda tidak memiliki akses ke sini.');
+        }
+
+        $pendudukPerencanaanManusiaArr = PendudukPerencanaanManusia::where('perencanaan_manusia_id', $realisasi_intervensi_manusia->perencanaan_manusia_id)
+            ->where(function ($query) use ($realisasi_intervensi_manusia) {
+                $query->where('realisasi_manusia_id', $realisasi_intervensi_manusia->id);
+                $query->orWhereNull('realisasi_manusia_id');
+            })->pluck('penduduk_id')->toArray();
+
+        $getPendudukBelumTerealisasi = $realisasi_intervensi_manusia->perencanaanManusia->pendudukPerencanaanManusia->whereNull('realisasi_manusia_id')->pluck('penduduk_id')->toArray();
+        $penduduk = Penduduk::with('desa')->whereIn('id', $getPendudukBelumTerealisasi)->get();
+
+        $data = [
+            'realisasiIntervensiManusia' => $realisasi_intervensi_manusia,
+            'rencanaIntervensiManusia' => $realisasi_intervensi_manusia->perencanaanManusia,
+            'desa' => Desa::all(),
+            'pendudukPerencanaanManusia' => json_encode($realisasi_intervensi_manusia->perencanaanManusia->pendudukPerencanaanManusia->where('realisasi_manusia_id', $realisasi_intervensi_manusia->id)->pluck('penduduk_id')->toArray()),
+            'pendudukPerencanaanManusiaArr' => $pendudukPerencanaanManusiaArr,
+            'dataPendudukBelumRealisasi' => $penduduk,
+        ];
+
+        return view('dashboard.pages.intervensi.realisasi.manusia.pelaporan.edit', $data);
     }
 
     /**

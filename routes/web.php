@@ -1,32 +1,32 @@
 <?php
 
+use App\Models\Siswa;
+use App\Models\Perencanaan;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\dokumen\MasterPlanController;
-use App\Http\Controllers\dokumen\RoadMapController;
-use App\Http\Controllers\ImportController;
-use App\Http\Controllers\intervensi\perencanaan\keong\PerencanaanKeongController;
-use App\Http\Controllers\intervensi\realisasi\keong\RealisasiKeongController;
 use App\Http\Controllers\ListController;
+use App\Http\Controllers\ImportController;
+use App\Http\Controllers\DashboardController;
+use Database\Seeders\PerencanaanManusiaSeeder;
+use App\Http\Controllers\masterData\OPDController;
+use App\Http\Controllers\PengaturanAkunController;
+use App\Http\Controllers\dokumen\RoadMapController;
 use App\Http\Controllers\masterData\AkunController;
 use App\Http\Controllers\masterData\HewanController;
+use App\Http\Controllers\masterData\TahunController;
+use App\Http\Controllers\dokumen\MasterPlanController;
+use App\Http\Controllers\masterData\PendudukController;
+use App\Http\Controllers\masterData\sekolah\SiswaController;
+use App\Http\Controllers\masterData\sekolah\SekolahController;
 use App\Http\Controllers\masterData\lokasi\LokasiDesaController;
 use App\Http\Controllers\masterData\lokasi\LokasiHewanController;
 use App\Http\Controllers\masterData\lokasi\LokasiKeongController;
-use App\Http\Controllers\masterData\OPDController;
-use App\Http\Controllers\masterData\PendudukController;
 use App\Http\Controllers\masterData\sekolah\JenjangSekolahController;
-use App\Http\Controllers\masterData\sekolah\SekolahController;
-use App\Http\Controllers\masterData\sekolah\SiswaController;
-use App\Http\Controllers\masterData\TahunController;
-use App\Http\Controllers\PengaturanAkunController;
-use App\Http\Controllers\intervensi\perencanaan\manusia\PerencanaanManusiaController;
+use App\Http\Controllers\intervensi\realisasi\keong\RealisasiKeongController;
+use App\Http\Controllers\intervensi\perencanaan\keong\PerencanaanKeongController;
 use App\Http\Controllers\intervensi\realisasi\manusia\RealisasiManusiaController;
-use App\Models\Perencanaan;
-use Database\Seeders\PerencanaanManusiaSeeder;
 
-use App\Models\Siswa;
+use App\Http\Controllers\intervensi\perencanaan\manusia\PerencanaanManusiaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,6 +80,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('realisasi-intervensi-manusia/create-pelaporan/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@createPelaporan');
     Route::get('realisasi-intervensi-manusia/show-laporan/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@showLaporan');
     Route::post('realisasi-intervensi-manusia/konfirmasi/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@konfirmasi');
+    Route::post('realisasi-intervensi-manusia/update-opd/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@updateOPD');
+    Route::delete('realisasi-intervensi-manusia/delete-opd/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@deleteOPD');
+
+
 
 
 

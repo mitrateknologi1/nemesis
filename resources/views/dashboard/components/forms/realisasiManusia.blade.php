@@ -76,7 +76,7 @@
             <div class="form-group  p-0 pb-2">
                 <label for="" class="mt-1 mb-2">Dokumen Pendukung <sup class="text-danger">*</sup></label>
                 {{-- <label for="">(Surat-surat Kendaraan, Berita Acara, dan Lainnya)</label> --}}
-                <div class="row" id="dokumen-keong">
+                <div class="row" id="dokumen-manusia">
                     @if (isset($realisasiIntervensiManusia) &&
                         $realisasiIntervensiManusia->dokumenRealisasiManusia &&
                         $method == 'PUT')
@@ -114,7 +114,7 @@
                                                 </div>
                                                 <div class="mb-3">
                                                     <a type="button"
-                                                        href="{{ Storage::exists('uploads/dokumen/realisasi/keong/' . $item->file) ? Storage::url('uploads/dokumen/realisasi/keong/' . $item->file) : 'tidak-ditemukan' }}"
+                                                        href="{{ Storage::exists('uploads/dokumen/realisasi/manusia/' . $item->file) ? Storage::url('uploads/dokumen/realisasi/manusia/' . $item->file) : 'tidak-ditemukan' }}"
                                                         target="_blank" class="btn btn-primary shadow-sm w-100"><i
                                                             class="fas fa-eye"></i> Lihat
                                                         Dokumen</a>
@@ -243,8 +243,8 @@
             $('#penduduk').val() == '' ? $('#penduduk-hidden').addClass('req') : $('#penduduk-hidden')
                 .removeClass('req');
 
-            // const formValidation = $('#form .req').serializeArray()
-            // validation(formValidation)
+            const formValidation = $('#form .req').serializeArray()
+            validation(formValidation)
 
             if ('{{ $method == 'POST' }}') {
                 var title = 'Kirim Data?'
@@ -585,7 +585,7 @@
                 iterDokumen = count + 1;
             }
             $('.col-add-dokumen').remove();
-            $('#dokumen-keong').append(`
+            $('#dokumen-manusia').append(`
             <div class="col-md-6 col-lg-12 col-xl-12 col-document" id="col-dokumen-` + iterDokumen + `">
                 <div class="card box-upload mb-3" id="box-upload-` +
                 iterDokumen + `" class="box-upload">

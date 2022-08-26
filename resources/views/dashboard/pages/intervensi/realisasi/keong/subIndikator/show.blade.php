@@ -510,7 +510,7 @@
                                     text: "Data berhasil disimpan.",
                                     icon: "success",
                                 }).then((value) => {
-                                    location.href = "{{ url()->previous() }}";
+                                    window.location.reload()
                                 });
 
                             } else {

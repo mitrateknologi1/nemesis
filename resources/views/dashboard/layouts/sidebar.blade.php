@@ -34,7 +34,7 @@
                                  </a>
                              </li>
                              <li id="li-hewan">
-                                 <a href="components/gridsystem.html">
+                                 <a href="{{ url('rencana-intervensi-hewan') }}">
                                      <span class="sub-item">Hewan</span>
                                  </a>
                              </li>
@@ -60,7 +60,7 @@
                                  </a>
                              </li>
                              <li id="li-hewan-2">
-                                 <a href="components/gridsystem.html">
+                                 <a href="{{ url('realisasi-intervensi-hewan') }}">
                                      <span class="sub-item">Hewan</span>
                                  </a>
                              </li>

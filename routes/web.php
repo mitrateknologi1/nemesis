@@ -25,8 +25,8 @@ use App\Http\Controllers\masterData\sekolah\JenjangSekolahController;
 use App\Http\Controllers\intervensi\realisasi\keong\RealisasiKeongController;
 use App\Http\Controllers\intervensi\perencanaan\keong\PerencanaanKeongController;
 use App\Http\Controllers\intervensi\realisasi\manusia\RealisasiManusiaController;
-
 use App\Http\Controllers\intervensi\perencanaan\manusia\PerencanaanManusiaController;
+use App\Http\Controllers\intervensi\perencanaan\hewan\PerencanaanHewanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,6 +84,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('realisasi-intervensi-manusia/delete-opd/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@deleteOPD');
     Route::delete('realisasi-intervensi-manusia/delete-laporan/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@deleteLaporan');
     Route::delete('realisasi-intervensi-manusia/delete-semua-laporan/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@deleteSemuaLaporan');
+
+    // Hewan
+    Route::resource('rencana-intervensi-hewan', PerencanaanHewanController::class);
 
 
 

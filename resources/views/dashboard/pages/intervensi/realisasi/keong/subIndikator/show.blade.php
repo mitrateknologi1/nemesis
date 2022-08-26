@@ -387,7 +387,7 @@
                         success: function(data) {
                             swal({
                                 title: "Berhasil!",
-                                text: "Data yang dipilih berhasil dihapus.",
+                                text: "Data berhasil dihapus.",
                                 icon: "success",
                             }).then(function() {
                                 location.reload();

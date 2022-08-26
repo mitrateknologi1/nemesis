@@ -627,4 +627,57 @@ class RealisasiManusiaController extends Controller
         $realisasi_intervensi_manusia->delete();
         return response()->json(['success' => 'Berhasil menghapus OPD terkait']);
     }
+
+    public function deleteLaporan(RealisasiManusia $realisasi_intervensi_manusia)
+    {
+        if ($realisasi_intervensi_manusia->pendudukRealisasiManusia) {
+            foreach ($realisasi_intervensi_manusia->pendudukRealisasiManusia as $item) {
+                $data = [
+                    'status' => 0,
+                    'realisasi_manusia_id' => NULL,
+                ];
+                $item->update($data);
+            }
+        }
+
+        if ($realisasi_intervensi_manusia->dokumenRealisasiManusia) {
+            foreach ($realisasi_intervensi_manusia->dokumenRealisasiManusia as $item) {
+                $namaFile = $item->file;
+                if (Storage::exists('uploads/dokumen/realisasi/manusia/' . $namaFile)) {
+                    Storage::delete('uploads/dokumen/realisasi/manusia/' . $namaFile);
+                }
+            }
+            $realisasi_intervensi_manusia->dokumenRealisasiManusia()->delete();
+        }
+
+        $realisasi_intervensi_manusia->delete();
+        return response()->json(['success' => 'Berhasil menghapus laporan']);
+    }
+
+    public function deleteSemuaLaporan(PerencanaanManusia $realisasi_intervensi_manusia)
+    {
+        $rencana_intervensi_manusia = $realisasi_intervensi_manusia;
+
+        if ($rencana_intervensi_manusia->realisasiManusia) {
+            foreach ($rencana_intervensi_manusia->realisasiManusia as $item) {
+                foreach ($item->pendudukRealisasiManusia as $item2) {
+                    $data = [
+                        'status' => 0,
+                        'realisasi_manusia_id' => NULL,
+                    ];
+                    $item2->update($data);
+                }
+                foreach ($item->dokumenRealisasiManusia as $item3) {
+                    $namaFile = $item3->file;
+                    if (Storage::exists('uploads/dokumen/realisasi/manusia/' . $namaFile)) {
+                        Storage::delete('uploads/dokumen/realisasi/manusia/' . $namaFile);
+                    }
+                }
+                $item->dokumenRealisasiManusia()->delete();
+            }
+
+            $rencana_intervensi_manusia->realisasiManusia()->delete();
+        }
+        return response()->json(['success' => 'Berhasil menghapus laporan']);
+    }
 }

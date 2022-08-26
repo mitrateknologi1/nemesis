@@ -25,9 +25,9 @@ class PendudukPerencanaanManusiaTableSeeder extends Seeder
                 'id' => '00eabed6-f49d-483b-a357-3080af33d77a',
                 'penduduk_id' => '2f202f89-933b-4916-900f-4101c2f9caf3',
                 'perencanaan_manusia_id' => 'e24a52eb-b522-4a5c-a03f-3e9d89f2eab0',
-                'realisasi_manusia_id' => NULL,
+                'realisasi_manusia_id' => 'b3848658-4a55-4ce5-95ff-54cf9371ce20',
                 'status' => 0,
-                'updated_at' => '2022-08-24 23:32:10',
+                'updated_at' => '2022-08-26 11:50:14',
             ),
             1 => 
             array (
@@ -35,9 +35,9 @@ class PendudukPerencanaanManusiaTableSeeder extends Seeder
                 'id' => '01fa2298-af60-4378-8b6e-1a828673b8c6',
                 'penduduk_id' => 'd0acfbdc-3917-4938-bf4e-d29ac5b29f2d',
                 'perencanaan_manusia_id' => 'e24a52eb-b522-4a5c-a03f-3e9d89f2eab0',
-                'realisasi_manusia_id' => NULL,
-                'status' => 0,
-                'updated_at' => '2022-08-24 23:32:10',
+                'realisasi_manusia_id' => '22cda26a-21f6-497b-9013-258f84593136',
+                'status' => 1,
+                'updated_at' => '2022-08-26 11:48:19',
             ),
             2 => 
             array (
@@ -75,9 +75,9 @@ class PendudukPerencanaanManusiaTableSeeder extends Seeder
                 'id' => '1aa3dcc3-d85f-41fc-9c2f-ae7fa11bcf59',
                 'penduduk_id' => 'de9f413f-758f-4292-b280-08fd5633fdba',
                 'perencanaan_manusia_id' => 'fc3995c2-d9bc-4a98-800b-1298f5ae1165',
-                'realisasi_manusia_id' => NULL,
-                'status' => 0,
-                'updated_at' => '2022-08-24 23:42:02',
+                'realisasi_manusia_id' => 'fb143b8d-8621-4c70-b00e-e3d61268896e',
+                'status' => 2,
+                'updated_at' => '2022-08-26 11:58:41',
             ),
             6 => 
             array (
@@ -125,9 +125,9 @@ class PendudukPerencanaanManusiaTableSeeder extends Seeder
                 'id' => '25df461f-695a-42e8-8306-e2699bd1c609',
                 'penduduk_id' => '49a55e3b-ec87-4628-ad94-d2798b3e59c5',
                 'perencanaan_manusia_id' => 'e24a52eb-b522-4a5c-a03f-3e9d89f2eab0',
-                'realisasi_manusia_id' => NULL,
-                'status' => 0,
-                'updated_at' => '2022-08-24 23:32:10',
+                'realisasi_manusia_id' => '22cda26a-21f6-497b-9013-258f84593136',
+                'status' => 1,
+                'updated_at' => '2022-08-26 11:48:19',
             ),
             11 => 
             array (
@@ -165,9 +165,9 @@ class PendudukPerencanaanManusiaTableSeeder extends Seeder
                 'id' => '3c246c98-bee7-4e52-a7d3-3dbb56a9f672',
                 'penduduk_id' => 'a34a2a2b-6962-45eb-a9dd-cdaff3a1f20c',
                 'perencanaan_manusia_id' => 'e24a52eb-b522-4a5c-a03f-3e9d89f2eab0',
-                'realisasi_manusia_id' => NULL,
-                'status' => 0,
-                'updated_at' => '2022-08-24 23:32:10',
+                'realisasi_manusia_id' => 'f653bfc9-9bf5-4717-a8fb-1cbe06c240a9',
+                'status' => 1,
+                'updated_at' => '2022-08-26 11:49:25',
             ),
             15 => 
             array (
@@ -185,9 +185,9 @@ class PendudukPerencanaanManusiaTableSeeder extends Seeder
                 'id' => '41d4a3f9-0655-4d90-98c0-a33bbc1feb74',
                 'penduduk_id' => 'd4bf9113-2458-4b69-89e3-10fc2ec278cd',
                 'perencanaan_manusia_id' => 'e24a52eb-b522-4a5c-a03f-3e9d89f2eab0',
-                'realisasi_manusia_id' => NULL,
-                'status' => 0,
-                'updated_at' => '2022-08-24 23:32:10',
+                'realisasi_manusia_id' => '22cda26a-21f6-497b-9013-258f84593136',
+                'status' => 1,
+                'updated_at' => '2022-08-26 11:48:19',
             ),
             17 => 
             array (
@@ -195,9 +195,9 @@ class PendudukPerencanaanManusiaTableSeeder extends Seeder
                 'id' => '42a1731b-2c23-4c66-a4bc-5f8852c9a766',
                 'penduduk_id' => '400ad894-7c71-4dc8-8981-7881e0f11058',
                 'perencanaan_manusia_id' => 'fc3995c2-d9bc-4a98-800b-1298f5ae1165',
-                'realisasi_manusia_id' => NULL,
-                'status' => 0,
-                'updated_at' => '2022-08-24 23:42:02',
+                'realisasi_manusia_id' => '829a007f-91be-4f2b-a71a-26b53b0b1280',
+                'status' => 1,
+                'updated_at' => '2022-08-26 11:57:33',
             ),
             18 => 
             array (
@@ -215,9 +215,9 @@ class PendudukPerencanaanManusiaTableSeeder extends Seeder
                 'id' => '531cbe82-23ff-4d1e-8a0c-351a68471952',
                 'penduduk_id' => '8e775afe-406e-4b53-b531-f996d9b7b308',
                 'perencanaan_manusia_id' => 'e24a52eb-b522-4a5c-a03f-3e9d89f2eab0',
-                'realisasi_manusia_id' => NULL,
+                'realisasi_manusia_id' => 'b3848658-4a55-4ce5-95ff-54cf9371ce20',
                 'status' => 0,
-                'updated_at' => '2022-08-24 23:32:10',
+                'updated_at' => '2022-08-26 11:50:14',
             ),
             20 => 
             array (
@@ -225,9 +225,9 @@ class PendudukPerencanaanManusiaTableSeeder extends Seeder
                 'id' => '562bb254-dc0a-4785-b16e-970524feedd1',
                 'penduduk_id' => 'dbfbe3b9-4bca-4c13-9ee2-6a501b85c426',
                 'perencanaan_manusia_id' => 'fc3995c2-d9bc-4a98-800b-1298f5ae1165',
-                'realisasi_manusia_id' => NULL,
-                'status' => 0,
-                'updated_at' => '2022-08-24 23:42:02',
+                'realisasi_manusia_id' => '829a007f-91be-4f2b-a71a-26b53b0b1280',
+                'status' => 1,
+                'updated_at' => '2022-08-26 11:57:33',
             ),
             21 => 
             array (
@@ -235,9 +235,9 @@ class PendudukPerencanaanManusiaTableSeeder extends Seeder
                 'id' => '6107a2e4-8199-483d-81f2-f667cefce4b0',
                 'penduduk_id' => '741ff928-4404-40cc-bd4a-642d1d34b27e',
                 'perencanaan_manusia_id' => 'e24a52eb-b522-4a5c-a03f-3e9d89f2eab0',
-                'realisasi_manusia_id' => NULL,
-                'status' => 0,
-                'updated_at' => '2022-08-24 23:32:10',
+                'realisasi_manusia_id' => 'f653bfc9-9bf5-4717-a8fb-1cbe06c240a9',
+                'status' => 1,
+                'updated_at' => '2022-08-26 11:49:25',
             ),
             22 => 
             array (
@@ -295,9 +295,9 @@ class PendudukPerencanaanManusiaTableSeeder extends Seeder
                 'id' => '8af2b399-9fc3-4429-a290-6fd328e0fa70',
                 'penduduk_id' => 'b14aacbd-5980-4f58-a7b1-0985b73b92e3',
                 'perencanaan_manusia_id' => 'e24a52eb-b522-4a5c-a03f-3e9d89f2eab0',
-                'realisasi_manusia_id' => NULL,
+                'realisasi_manusia_id' => 'b3848658-4a55-4ce5-95ff-54cf9371ce20',
                 'status' => 0,
-                'updated_at' => '2022-08-24 23:32:10',
+                'updated_at' => '2022-08-26 11:50:14',
             ),
             28 => 
             array (
@@ -325,9 +325,9 @@ class PendudukPerencanaanManusiaTableSeeder extends Seeder
                 'id' => '93f04d94-40c1-4aaa-bbf4-9b8b388d69a0',
                 'penduduk_id' => '325b88f9-716c-40f7-a6f7-186e0417a98d',
                 'perencanaan_manusia_id' => 'e24a52eb-b522-4a5c-a03f-3e9d89f2eab0',
-                'realisasi_manusia_id' => NULL,
+                'realisasi_manusia_id' => 'b3848658-4a55-4ce5-95ff-54cf9371ce20',
                 'status' => 0,
-                'updated_at' => '2022-08-24 23:32:10',
+                'updated_at' => '2022-08-26 11:50:14',
             ),
             31 => 
             array (
@@ -405,9 +405,9 @@ class PendudukPerencanaanManusiaTableSeeder extends Seeder
                 'id' => 'd4156e0f-88e2-47fa-9d9a-9510d24b8188',
                 'penduduk_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b4d09',
                 'perencanaan_manusia_id' => 'fc3995c2-d9bc-4a98-800b-1298f5ae1165',
-                'realisasi_manusia_id' => NULL,
-                'status' => 0,
-                'updated_at' => '2022-08-24 23:42:01',
+                'realisasi_manusia_id' => '829a007f-91be-4f2b-a71a-26b53b0b1280',
+                'status' => 1,
+                'updated_at' => '2022-08-26 11:57:33',
             ),
             39 => 
             array (
@@ -425,9 +425,9 @@ class PendudukPerencanaanManusiaTableSeeder extends Seeder
                 'id' => 'd65c40b7-1109-44f7-beea-2f6fd40225db',
                 'penduduk_id' => 'f1164036-f23a-448c-b6fe-2091700c51de',
                 'perencanaan_manusia_id' => 'e24a52eb-b522-4a5c-a03f-3e9d89f2eab0',
-                'realisasi_manusia_id' => NULL,
-                'status' => 0,
-                'updated_at' => '2022-08-24 23:32:10',
+                'realisasi_manusia_id' => '22cda26a-21f6-497b-9013-258f84593136',
+                'status' => 1,
+                'updated_at' => '2022-08-26 11:48:19',
             ),
             41 => 
             array (
@@ -435,9 +435,9 @@ class PendudukPerencanaanManusiaTableSeeder extends Seeder
                 'id' => 'd6bc856a-0045-4fe1-9b49-1102b636dab5',
                 'penduduk_id' => '92190277-f799-4502-aabd-4d968421d486',
                 'perencanaan_manusia_id' => 'e24a52eb-b522-4a5c-a03f-3e9d89f2eab0',
-                'realisasi_manusia_id' => NULL,
+                'realisasi_manusia_id' => 'b3848658-4a55-4ce5-95ff-54cf9371ce20',
                 'status' => 0,
-                'updated_at' => '2022-08-24 23:32:10',
+                'updated_at' => '2022-08-26 11:50:14',
             ),
             42 => 
             array (
@@ -465,9 +465,9 @@ class PendudukPerencanaanManusiaTableSeeder extends Seeder
                 'id' => 'dd315c45-0af1-42f8-93ba-d919d7200d91',
                 'penduduk_id' => '10dca7a8-f238-47f3-863a-b39c5a5a110c',
                 'perencanaan_manusia_id' => 'fc3995c2-d9bc-4a98-800b-1298f5ae1165',
-                'realisasi_manusia_id' => NULL,
-                'status' => 0,
-                'updated_at' => '2022-08-24 23:42:01',
+                'realisasi_manusia_id' => '829a007f-91be-4f2b-a71a-26b53b0b1280',
+                'status' => 1,
+                'updated_at' => '2022-08-26 11:57:33',
             ),
             45 => 
             array (
@@ -475,9 +475,9 @@ class PendudukPerencanaanManusiaTableSeeder extends Seeder
                 'id' => 'edd8356c-dbfb-4958-b1a2-5485f7806ca7',
                 'penduduk_id' => '40295a45-70ac-471d-a7a5-eb9c40296915',
                 'perencanaan_manusia_id' => 'fc3995c2-d9bc-4a98-800b-1298f5ae1165',
-                'realisasi_manusia_id' => NULL,
-                'status' => 0,
-                'updated_at' => '2022-08-24 23:42:02',
+                'realisasi_manusia_id' => 'fb143b8d-8621-4c70-b00e-e3d61268896e',
+                'status' => 2,
+                'updated_at' => '2022-08-26 11:58:41',
             ),
             46 => 
             array (
@@ -495,9 +495,9 @@ class PendudukPerencanaanManusiaTableSeeder extends Seeder
                 'id' => 'f2e514d8-3955-4df3-a59f-e48ba7ce62ff',
                 'penduduk_id' => '4e4cf312-88ef-450b-ae4c-420300a43513',
                 'perencanaan_manusia_id' => 'e24a52eb-b522-4a5c-a03f-3e9d89f2eab0',
-                'realisasi_manusia_id' => NULL,
+                'realisasi_manusia_id' => 'b3848658-4a55-4ce5-95ff-54cf9371ce20',
                 'status' => 0,
-                'updated_at' => '2022-08-24 23:32:10',
+                'updated_at' => '2022-08-26 11:50:15',
             ),
             48 => 
             array (

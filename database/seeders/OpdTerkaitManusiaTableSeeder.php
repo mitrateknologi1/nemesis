@@ -37,19 +37,19 @@ class OpdTerkaitManusiaTableSeeder extends Seeder
             ),
             2 => 
             array (
+                'created_at' => '2022-08-26 12:00:43',
+                'id' => '92c858ce-aaaa-4e01-8e77-861d2a59273b',
+                'opd_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c98',
+                'perencanaan_manusia_id' => 'fc3995c2-d9bc-4a98-800b-1298f5ae1165',
+                'updated_at' => '2022-08-26 12:00:43',
+            ),
+            3 => 
+            array (
                 'created_at' => '2022-08-24 23:26:52',
                 'id' => 'acde66c2-1983-48a2-8964-039d35b31dfb',
                 'opd_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c98',
                 'perencanaan_manusia_id' => 'bac1eb88-fb66-4a73-b51d-2d6834470217',
                 'updated_at' => '2022-08-24 23:26:52',
-            ),
-            3 => 
-            array (
-                'created_at' => '2022-08-24 23:32:10',
-                'id' => 'b82d16df-f406-41ec-ba08-f6f2d0b9590b',
-                'opd_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c97',
-                'perencanaan_manusia_id' => 'e24a52eb-b522-4a5c-a03f-3e9d89f2eab0',
-                'updated_at' => '2022-08-24 23:32:10',
             ),
             4 => 
             array (
@@ -61,27 +61,19 @@ class OpdTerkaitManusiaTableSeeder extends Seeder
             ),
             5 => 
             array (
-                'created_at' => '2022-08-24 23:42:02',
-                'id' => 'd4ebe05a-f695-445b-ac0e-74ef711e5286',
-                'opd_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c98',
-                'perencanaan_manusia_id' => 'fc3995c2-d9bc-4a98-800b-1298f5ae1165',
-                'updated_at' => '2022-08-24 23:42:02',
-            ),
-            6 => 
-            array (
                 'created_at' => '2022-08-24 23:32:10',
                 'id' => 'e0d25bc6-953a-4340-b4ec-94f695a10e77',
                 'opd_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c98',
                 'perencanaan_manusia_id' => 'e24a52eb-b522-4a5c-a03f-3e9d89f2eab0',
                 'updated_at' => '2022-08-24 23:32:10',
             ),
-            7 => 
+            6 => 
             array (
-                'created_at' => '2022-08-24 23:42:02',
-                'id' => 'e3730f39-b71e-48a2-9a7d-a217f9bf783c',
+                'created_at' => '2022-08-26 12:00:43',
+                'id' => 'fd317304-f08b-416a-9b39-71273be1bdea',
                 'opd_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c95',
                 'perencanaan_manusia_id' => 'fc3995c2-d9bc-4a98-800b-1298f5ae1165',
-                'updated_at' => '2022-08-24 23:42:02',
+                'updated_at' => '2022-08-26 12:00:43',
             ),
         ));
         

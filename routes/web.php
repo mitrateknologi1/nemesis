@@ -82,6 +82,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('realisasi-intervensi-manusia/konfirmasi/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@konfirmasi');
     Route::post('realisasi-intervensi-manusia/update-opd/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@updateOPD');
     Route::delete('realisasi-intervensi-manusia/delete-opd/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@deleteOPD');
+    Route::delete('realisasi-intervensi-manusia/delete-laporan/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@deleteLaporan');
+    Route::delete('realisasi-intervensi-manusia/delete-semua-laporan/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@deleteSemuaLaporan');
+
+
 
 
 

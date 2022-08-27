@@ -89,6 +89,7 @@
                                     <th>No</th>
                                     <th>Tanggal Laporan</th>
                                     <th>Jumlah Lokasi</th>
+                                    <th>Penggunaan Anggaran</th>
                                     <th>Progress</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
@@ -593,8 +594,16 @@
                     className: 'text-center'
                 },
                 {
+                    data: 'penggunaan_anggaran',
+                    name: 'penggunaan_anggaran',
+                    className: 'text-right',
+                    render: $.fn.dataTable.render.number('.', ',', 0, 'Rp. ')
+                },
+                {
                     data: 'progress',
                     name: 'progress',
+                    className: 'text-center'
+
                 },
                 {
                     data: 'status',
@@ -617,10 +626,7 @@
                     className: 'text-center',
                 },
                 {
-                    targets: [1],
-                    render: function(data) {
-                        return moment(data).format('LL');
-                    }
+                    targets: [3],
                 },
             ],
         });

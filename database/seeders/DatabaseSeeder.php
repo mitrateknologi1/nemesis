@@ -87,10 +87,7 @@ class DatabaseSeeder extends Seeder
         $this->call(OpdTerkaitHewanTableSeeder::class); // new
         $this->call(DokumenPerencanaanHewanTableSeeder::class); // new
         $this->call(LokasiPerencanaanHewanTableSeeder::class); // new
-
-
-
-
-
+        $this->call(RealisasiHewanTableSeeder::class);
+        $this->call(DokumenRealisasiHewanTableSeeder::class);
     }
 }

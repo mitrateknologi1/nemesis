@@ -27,6 +27,8 @@ use App\Http\Controllers\intervensi\perencanaan\keong\PerencanaanKeongController
 use App\Http\Controllers\intervensi\realisasi\manusia\RealisasiManusiaController;
 use App\Http\Controllers\intervensi\perencanaan\manusia\PerencanaanManusiaController;
 use App\Http\Controllers\intervensi\perencanaan\hewan\PerencanaanHewanController;
+use App\Http\Controllers\intervensi\realisasi\hewan\RealisasiHewanController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -89,6 +91,22 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('rencana-intervensi-hewan', PerencanaanHewanController::class);
     Route::post('rencana-intervensi-hewan/konfirmasi/{rencana_intervensi_hewan}', PerencanaanHewanController::class . '@konfirmasi');
     Route::get('rencana-intervensi-hewan/map/{rencana_intervensi_hewan}', PerencanaanHewanController::class . '@map');
+
+    Route::resource('realisasi-intervensi-hewan', RealisasiHewanController::class);
+    Route::get('tabel-laporan-realisasi-hewan', RealisasiHewanController::class . '@tabelLaporan');
+    Route::get('realisasi-intervensi-hewan/create-pelaporan/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@createPelaporan');
+    Route::get('realisasi-intervensi-hewan/show-laporan/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@showLaporan');
+    Route::post('realisasi-intervensi-hewan/konfirmasi/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@konfirmasi');
+    Route::post('realisasi-intervensi-hewan/update-opd/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@updateOPD');
+    Route::delete('realisasi-intervensi-hewan/delete-opd/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@deleteOPD');
+    Route::delete('realisasi-intervensi-hewan/delete-laporan/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@deleteLaporan');
+    Route::delete('realisasi-intervensi-hewan/delete-semua-laporan/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@deleteSemuaLaporan');
+
+
+
+
+
+
 
 
 

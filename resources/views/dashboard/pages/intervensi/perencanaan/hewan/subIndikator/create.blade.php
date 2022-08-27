@@ -1,11 +1,11 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Tambah Perencanaan Intervensi Keong
+    Tambah Perencanaan Intervensi Hewan
 @endsection
 
 @section('titlePanelHeader')
-    Tambah Perencanaan Intervensi Keong
+    Tambah Perencanaan Intervensi Hewan
 @endsection
 
 @section('subTitlePanelHeader')
@@ -23,15 +23,15 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Form Perencanaan Intervensi Keong</div>
+                        <div class="card-title">Form Perencanaan Intervensi Hewan</div>
                     </div>
                 </div>
                 <div class="card-body pt-1">
                     <div class="row">
                         <div class="col">
-                            @component('dashboard.components.forms.perencanaanKeong',
+                            @component('dashboard.components.forms.perencanaanHewan',
                                 [
-                                    'action' => route('rencana-intervensi-keong.store'),
+                                    'action' => route('rencana-intervensi-hewan.store'),
                                     'desa' => $desa,
                                     'opd' => $opd,
                                     'method' => 'POST',
@@ -51,6 +51,6 @@
     <script>
         $('#nav-perencanaan').addClass('active');
         $('#nav-perencanaan .collapse').addClass('show');
-        $('#nav-perencanaan .collapse #li-keong').addClass('active');
+        $('#nav-perencanaan .collapse #li-hewan').addClass('active');
     </script>
 @endpush

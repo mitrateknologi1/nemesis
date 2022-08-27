@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('realisasi_hewan', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('perencanaan_keong_id');
+            $table->uuid('perencanaan_hewan_id');
             $table->bigInteger('penggunaan_anggaran');
             $table->integer('tw');
             $table->float('progress');

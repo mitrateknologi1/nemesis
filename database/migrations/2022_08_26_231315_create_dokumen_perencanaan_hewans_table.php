@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('dokumen_perencanaan_hewan', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('perencanaan_keong_id');
+            $table->uuid('perencanaan_hewan_id');
             $table->text('nama');
             $table->text('file');
             $table->integer('no_urut');

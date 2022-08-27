@@ -87,6 +87,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Hewan
     Route::resource('rencana-intervensi-hewan', PerencanaanHewanController::class);
+    Route::post('rencana-intervensi-hewan/konfirmasi/{rencana_intervensi_hewan}', PerencanaanHewanController::class . '@konfirmasi');
+    Route::get('rencana-intervensi-hewan/map/{rencana_intervensi_hewan}', PerencanaanHewanController::class . '@map');
+
 
 
 

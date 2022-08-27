@@ -76,12 +76,21 @@ class DatabaseSeeder extends Seeder
         $this->call(SekolahSeeder::class);
         $this->call(SiswaSeeder::class);
         $this->call(PemilikLokasiKeongSeeder::class);
-        $this->call(DokumenRealisasiManusiaTableSeeder::class); // new
-        $this->call(OpdTerkaitManusiaTableSeeder::class); // new
-        $this->call(PerencanaanManusiaTableSeeder::class); // new
-        $this->call(PendudukPerencanaanManusiaTableSeeder::class); // new
-        $this->call(DokumenPerencanaanManusiaTableSeeder::class); // new
-        $this->call(RealisasiManusiaTableSeeder::class); // new
-        $this->call(OpdTerkaitKeongTableSeeder::class); //new
+        $this->call(DokumenRealisasiManusiaTableSeeder::class);
+        $this->call(OpdTerkaitManusiaTableSeeder::class);
+        $this->call(PerencanaanManusiaTableSeeder::class);
+        $this->call(PendudukPerencanaanManusiaTableSeeder::class);
+        $this->call(DokumenPerencanaanManusiaTableSeeder::class);
+        $this->call(RealisasiManusiaTableSeeder::class);
+        $this->call(OpdTerkaitKeongTableSeeder::class);
+        $this->call(PerencanaanHewanTableSeeder::class); // new
+        $this->call(OpdTerkaitHewanTableSeeder::class); // new
+        $this->call(DokumenPerencanaanHewanTableSeeder::class); // new
+        $this->call(LokasiPerencanaanHewanTableSeeder::class); // new
+
+
+
+
+
     }
 }

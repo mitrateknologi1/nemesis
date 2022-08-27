@@ -70,8 +70,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('realisasi-intervensi-keong/delete-semua-laporan/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@deleteSemuaLaporan');
     Route::get('hasil-realisasi-keong', RealisasiKeongController::class . '@hasilRealisasi');
 
-
-
     // Manusia
     Route::resource('rencana-intervensi-manusia', PerencanaanManusiaController::class)->parameters([
         'rencana-intervensi-manusia' => 'rencana_intervensi_manusia'
@@ -89,6 +87,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('realisasi-intervensi-manusia/delete-opd/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@deleteOPD');
     Route::delete('realisasi-intervensi-manusia/delete-laporan/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@deleteLaporan');
     Route::delete('realisasi-intervensi-manusia/delete-semua-laporan/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@deleteSemuaLaporan');
+    Route::get('hasil-realisasi-manusia', RealisasiManusiaController::class . '@hasilRealisasi');
 
     // Hewan
     Route::resource('rencana-intervensi-hewan', PerencanaanHewanController::class);
@@ -104,6 +103,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('realisasi-intervensi-hewan/delete-opd/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@deleteOPD');
     Route::delete('realisasi-intervensi-hewan/delete-laporan/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@deleteLaporan');
     Route::delete('realisasi-intervensi-hewan/delete-semua-laporan/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@deleteSemuaLaporan');
+    Route::get('hasil-realisasi-hewan', RealisasiHewanController::class . '@hasilRealisasi');
+
 
 
 

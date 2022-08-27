@@ -683,4 +683,46 @@ class RealisasiHewanController extends Controller
         }
         return response()->json(['success' => 'Berhasil menghapus laporan']);
     }
+
+    public function hasilRealisasi(Request $request)
+    {
+        $habitatHewan = LokasiPerencanaanHewan::where('status', 1)
+            ->groupBy('lokasi_hewan_id')
+            ->pluck('lokasi_hewan_id')
+            ->toArray();
+
+
+        if ($request->ajax()) {
+            $data = LokasiHewan::with('listIndikator', 'desa')->whereIn('id', $habitatHewan)
+                ->latest();
+            return DataTables::of($data)
+                ->addIndexColumn()
+
+                ->addColumn('list_indikator', function ($row) {
+                    $list = '<ol class="mb-0">';
+                    foreach ($row->listIndikator as $row2) {
+                        $list .= '<li>' . $row2->perencanaanHewan->sub_indikator . '</li>';
+                    }
+                    $list .= '</ol>';
+                    return $list;
+                })
+
+                ->addColumn('list_opd', function ($row) {
+                    $list = '<ol class="mb-0">';
+                    foreach ($row->listIndikator as $row2) {
+                        $list .= '<li>' . $row2->perencanaanHewan->opd->nama . '</li>';
+                    }
+                    $list .= '</ol>';
+                    return $list;
+                })
+
+                ->rawColumns([
+                    'list_indikator',
+                    'list_opd'
+                ])
+                ->make(true);
+        }
+
+        return view('dashboard.pages.hasilRealisasi.hewan.index');
+    }
 }

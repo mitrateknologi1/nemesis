@@ -74,20 +74,20 @@
                      </span>
                      <h4 class="text-section">Hasil Realisasi</h4>
                  </li>
-                 <li class="nav-item">
+                 <li class="nav-item" id="nav-hasil-realisasi-keong">
                      <a href="{{ url('hasil-realisasi-keong') }}">
                          <i class="fas fa-map-pin"></i>
                          <p>Habitat Keong</p>
                      </a>
                  </li>
-                 <li class="nav-item">
-                     <a href="projects.html">
+                 <li class="nav-item" id="nav-hasil-realisasi-manusia">
+                     <a href="{{ url('hasil-realisasi-manusia') }}">
                          <i class="fas fa-users"></i>
                          <p>Manusia</p>
                      </a>
                  </li>
-                 <li class="nav-item">
-                     <a href="projects.html">
+                 <li class="nav-item" id="nav-hasil-realisasi-hewan">
+                     <a href="{{ url('hasil-realisasi-hewan') }}">
                          <i class="fas fa-paw"></i>
                          <p>Hewan</p>
                      </a>

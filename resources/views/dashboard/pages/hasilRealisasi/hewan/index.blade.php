@@ -1,11 +1,11 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Hasil Realisasi Pada Habitat/Lokasi Keong
+    Hasil Realisasi Pada Habitat/Lokasi Hewan Ternak
 @endsection
 
 @section('titlePanelHeader')
-    Hasil Realisasi Pada Habitat/Lokasi Keong
+    Hasil Realisasi Pada Habitat/Lokasi Hewan Ternak
 @endsection
 
 @section('subTitlePanelHeader')
@@ -21,7 +21,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Data Hasil Realisasi Pada Habitat/Lokasi Keong</div>
+                        <div class="card-title">Data Hasil Realisasi Pada Habitat/Lokasi Hewan Ternak</div>
                         <div class="card-tools">
                             @component('dashboard.components.buttons.export')
                             @endcomponent
@@ -37,7 +37,7 @@
                                     <thead>
                                         <tr class="text-center fw-bold">
                                             <th>No</th>
-                                            <th>Habitat/Lokasi Keong</th>
+                                            <th>Habitat/Lokasi Hewan</th>
                                             <th>List Sub Indikator</th>
                                             <th>List OPD</th>
                                             {{-- <th>Aksi</th> --}}
@@ -57,7 +57,8 @@
 
 @push('scripts')
     <script>
-        $('#nav-hasil-realisasi-keong').addClass('active');
+        $('#nav-hasil-realisasi-hewan').addClass('active');
+
 
         var table = $('#dataTables').DataTable({
             processing: true,
@@ -67,7 +68,7 @@
                 [10, 25, 50, "All"]
             ],
             ajax: {
-                url: "{{ url('hasil-realisasi-keong') }}",
+                url: "{{ url('hasil-realisasi-hewan') }}",
                 // data: function(d) {
                 //     d.lokasiTugas = $('#lokasi-tugas').val();
                 //     d.search = $('input[type="search"]').val();
@@ -108,7 +109,7 @@
                 if (result) {
                     $.ajax({
                         type: 'DELETE',
-                        url: "{{ url('rencana-intervensi-keong') }}" + '/' + id,
+                        url: "{{ url('rencana-intervensi-hewan') }}" + '/' + id,
                         data: {
                             _token: _token
                         },

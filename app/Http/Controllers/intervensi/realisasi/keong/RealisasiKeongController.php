@@ -636,4 +636,46 @@ class RealisasiKeongController extends Controller
         }
         return response()->json(['success' => 'Berhasil menghapus laporan']);
     }
+
+    public function hasilRealisasi(Request $request)
+    {
+        $habitatKeong = LokasiPerencanaanKeong::where('status', 1)
+            ->groupBy('lokasi_keong_id')
+            ->pluck('lokasi_keong_id')
+            ->toArray();
+
+
+        if ($request->ajax()) {
+            $data = LokasiKeong::with('listIndikator', 'desa')->whereIn('id', $habitatKeong)
+                ->latest();
+            return DataTables::of($data)
+                ->addIndexColumn()
+
+                ->addColumn('list_indikator', function ($row) {
+                    $list = '<ol class="mb-0">';
+                    foreach ($row->listIndikator as $row2) {
+                        $list .= '<li>' . $row2->perencanaanKeong->sub_indikator . '</li>';
+                    }
+                    $list .= '</ol>';
+                    return $list;
+                })
+
+                ->addColumn('list_opd', function ($row) {
+                    $list = '<ol class="mb-0">';
+                    foreach ($row->listIndikator as $row2) {
+                        $list .= '<li>' . $row2->perencanaanKeong->opd->nama . '</li>';
+                    }
+                    $list .= '</ol>';
+                    return $list;
+                })
+
+                ->rawColumns([
+                    'list_indikator',
+                    'list_opd'
+                ])
+                ->make(true);
+        }
+
+        return view('dashboard.pages.hasilRealisasi.keong.index');
+    }
 }

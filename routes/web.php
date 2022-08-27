@@ -68,6 +68,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('realisasi-intervensi-keong/delete-opd/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@deleteOPD');
     Route::delete('realisasi-intervensi-keong/delete-laporan/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@deleteLaporan');
     Route::delete('realisasi-intervensi-keong/delete-semua-laporan/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@deleteSemuaLaporan');
+    Route::get('hasil-realisasi-keong', RealisasiKeongController::class . '@hasilRealisasi');
+
+
 
     // Manusia
     Route::resource('rencana-intervensi-manusia', PerencanaanManusiaController::class)->parameters([

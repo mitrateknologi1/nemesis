@@ -18,4 +18,9 @@ class LokasiPerencanaanKeong extends Model
     {
         return $this->belongsTo(LokasiKeong::class, 'lokasi_keong_id')->withTrashed();
     }
+
+    public function perencanaanKeong()
+    {
+        return $this->belongsTo(PerencanaanKeong::class);
+    }
 }

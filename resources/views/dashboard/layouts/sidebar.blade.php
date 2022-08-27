@@ -75,7 +75,7 @@
                      <h4 class="text-section">Hasil Realisasi</h4>
                  </li>
                  <li class="nav-item">
-                     <a href="projects.html">
+                     <a href="{{ url('hasil-realisasi-keong') }}">
                          <i class="fas fa-map-pin"></i>
                          <p>Habitat Keong</p>
                      </a>

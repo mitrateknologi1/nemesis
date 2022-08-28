@@ -10,9 +10,11 @@ use App\Models\OPDTerkaitManusia;
 use App\Models\PerencanaanManusia;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\DokumenRealisasiManusia;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
+use App\Exports\PerencanaanManusiaExport;
 use App\Models\DokumenPerencanaanManusia;
 use Illuminate\Support\Facades\Validator;
 use App\Models\PendudukPerencanaanManusia;
@@ -482,5 +484,15 @@ class PerencanaanManusiaController extends Controller
         $rencana_intervensi_manusia->update($data);
 
         return response()->json(['success' => 'Berhasil mengkonfirmasi']);
+    }
+
+    public function export()
+    {
+        $dataPerencanaan = PerencanaanManusia::latest()->get();
+        // return view('dashboard.pages.intervensi.perencanaan.keong.subIndikator.export', ['dataPerencanaan' => $dataPerencanaan]);
+
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+
+        return Excel::download(new PerencanaanManusiaExport($dataPerencanaan), "Export Data Perencanaan Manusia" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 }

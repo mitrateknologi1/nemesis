@@ -12,8 +12,10 @@ use App\Models\OPDTerkaitHewan;
 use App\Models\PerencanaanHewan;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\DokumenRealisasiHewan;
 use App\Models\LokasiPerencanaanHewan;
+use App\Exports\PerencanaanHewanExport;
 use App\Models\DokumenPerencanaanHewan;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
@@ -494,5 +496,15 @@ class PerencanaanHewanController extends Controller
         $getLokasiHewan = $rencana_intervensi_hewan->lokasiPerencanaanHewan->pluck('lokasi_hewan_id')->toArray();
         $lokasiHewan = LokasiHewan::with('desa')->whereIn('id', $getLokasiHewan)->get();
         return response()->json(['status' => 'success', 'data' => $lokasiHewan]);
+    }
+
+    public function export()
+    {
+        $dataPerencanaan = PerencanaanHewan::latest()->get();
+        // return view('dashboard.pages.intervensi.perencanaan.keong.subIndikator.export', ['dataPerencanaan' => $dataPerencanaan]);
+
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+
+        return Excel::download(new PerencanaanHewanExport($dataPerencanaan), "Export Data Perencanaan Hewan" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 }

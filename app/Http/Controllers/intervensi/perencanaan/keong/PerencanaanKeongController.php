@@ -13,8 +13,10 @@ use Illuminate\Validation\Rule;
 use App\Models\PerencanaanKeong;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\DokumenRealisasiKeong;
 use App\Models\LokasiPerencanaanKeong;
+use App\Exports\PerencanaanKeongExport;
 use App\Models\DokumenPerencanaanKeong;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
@@ -495,5 +497,15 @@ class PerencanaanKeongController extends Controller
         $getLokasiKeong = $rencana_intervensi_keong->lokasiPerencanaanKeong->pluck('lokasi_keong_id')->toArray();
         $lokasiKeong = LokasiKeong::with('desa')->whereIn('id', $getLokasiKeong)->get();
         return response()->json(['status' => 'success', 'data' => $lokasiKeong]);
+    }
+
+    public function export()
+    {
+        $dataPerencanaan = PerencanaanKeong::latest()->get();
+        // return view('dashboard.pages.intervensi.perencanaan.keong.subIndikator.export', ['dataPerencanaan' => $dataPerencanaan]);
+
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+
+        return Excel::download(new PerencanaanKeongExport($dataPerencanaan), "Export Data Perencanaan Keong" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 }

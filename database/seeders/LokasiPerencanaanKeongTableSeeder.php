@@ -21,6 +21,66 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
         \DB::table('lokasi_perencanaan_keong')->insert(array (
             0 => 
             array (
+                'created_at' => '2022-08-28 12:57:31',
+                'id' => '095b1436-f222-42db-9d91-09bb8394f959',
+                'lokasi_keong_id' => '9b31ab4a-a620-4116-98da-b2aab892bdf5',
+                'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265986',
+                'realisasi_keong_id' => 'f6b09084-f1bf-453d-bc36-ece196f46782',
+                'status' => 1,
+                'updated_at' => '2022-08-28 13:14:04',
+            ),
+            1 => 
+            array (
+                'created_at' => '2022-08-28 12:57:31',
+                'id' => '4cbf5d9f-96ef-4718-bc7f-fcef6b6c6fa2',
+                'lokasi_keong_id' => '857118ba-5d3c-430d-bd1a-5046d69338e1',
+                'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265986',
+                'realisasi_keong_id' => '9392b3cc-537c-49b3-bc91-d320a17d703f',
+                'status' => 1,
+                'updated_at' => '2022-08-28 13:12:50',
+            ),
+            2 => 
+            array (
+                'created_at' => '2022-08-28 12:57:31',
+                'id' => '66237716-8425-4dc3-981f-ecc37715db95',
+                'lokasi_keong_id' => '65454a3b-8bc6-4ec9-9c5c-c23aa2553e3e',
+                'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265986',
+                'realisasi_keong_id' => 'f6b09084-f1bf-453d-bc36-ece196f46782',
+                'status' => 1,
+                'updated_at' => '2022-08-28 13:14:04',
+            ),
+            3 => 
+            array (
+                'created_at' => '2022-08-28 12:57:31',
+                'id' => '7af9a4ab-d979-4404-94c4-064df2ecd94a',
+                'lokasi_keong_id' => '9ce72d2c-2a53-4368-ae9f-7abbf77230e3',
+                'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265986',
+                'realisasi_keong_id' => 'f6b09084-f1bf-453d-bc36-ece196f46782',
+                'status' => 1,
+                'updated_at' => '2022-08-28 13:14:04',
+            ),
+            4 => 
+            array (
+                'created_at' => '2022-08-28 12:57:31',
+                'id' => '87d6b0d0-5ae6-4f10-ab70-beaad47065d3',
+                'lokasi_keong_id' => 'b93e6fd5-d1c6-4d76-89b8-78d924fbcdd4',
+                'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265986',
+                'realisasi_keong_id' => '9392b3cc-537c-49b3-bc91-d320a17d703f',
+                'status' => 1,
+                'updated_at' => '2022-08-28 13:12:50',
+            ),
+            5 => 
+            array (
+                'created_at' => '2022-08-28 12:57:31',
+                'id' => '9e43e749-a5ac-4ccb-8a8d-ee0040fd0610',
+                'lokasi_keong_id' => 'c7f3bc85-717e-4daa-b71d-fcbcc5ff7463',
+                'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265986',
+                'realisasi_keong_id' => 'f6b09084-f1bf-453d-bc36-ece196f46782',
+                'status' => 1,
+                'updated_at' => '2022-08-28 13:14:04',
+            ),
+            6 => 
+            array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856923',
                 'lokasi_keong_id' => '0352420a-8bb8-41c1-af72-9728d2b8c140',
@@ -29,7 +89,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            1 => 
+            7 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856924',
@@ -39,7 +99,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            2 => 
+            8 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856925',
@@ -49,7 +109,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            3 => 
+            9 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856926',
@@ -59,7 +119,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            4 => 
+            10 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856927',
@@ -69,7 +129,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            5 => 
+            11 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856928',
@@ -79,7 +139,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            6 => 
+            12 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856929',
@@ -89,7 +149,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            7 => 
+            13 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856931',
@@ -99,7 +159,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            8 => 
+            14 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856932',
@@ -109,7 +169,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            9 => 
+            15 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856933',
@@ -119,7 +179,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            10 => 
+            16 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856934',
@@ -129,7 +189,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            11 => 
+            17 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856935',
@@ -139,7 +199,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            12 => 
+            18 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856936',
@@ -149,7 +209,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 1,
                 'updated_at' => '2022-04-23 20:44:40',
             ),
-            13 => 
+            19 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856937',
@@ -159,7 +219,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 1,
                 'updated_at' => '2022-08-17 20:49:19',
             ),
-            14 => 
+            20 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856938',
@@ -169,7 +229,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 1,
                 'updated_at' => '2022-06-03 20:46:45',
             ),
-            15 => 
+            21 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856939',
@@ -179,7 +239,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 1,
                 'updated_at' => '2022-01-10 20:41:53',
             ),
-            16 => 
+            22 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856941',
@@ -189,7 +249,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            17 => 
+            23 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856942',
@@ -199,7 +259,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => '2022-11-28 20:51:01',
             ),
-            18 => 
+            24 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856943',
@@ -209,7 +269,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 1,
                 'updated_at' => '2022-01-10 20:41:53',
             ),
-            19 => 
+            25 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856944',
@@ -219,7 +279,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            20 => 
+            26 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856945',
@@ -229,7 +289,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            21 => 
+            27 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856946',
@@ -239,7 +299,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            22 => 
+            28 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856947',
@@ -249,7 +309,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            23 => 
+            29 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856948',
@@ -259,7 +319,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            24 => 
+            30 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856949',
@@ -269,7 +329,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            25 => 
+            31 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856950',
@@ -279,77 +339,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            26 => 
-            array (
-                'created_at' => '2020-08-10 10:20:00',
-                'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856951',
-                'lokasi_keong_id' => 'd788232e-d308-4949-8da6-2e3242040334',
-                'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265986',
-                'realisasi_keong_id' => NULL,
-                'status' => 0,
-                'updated_at' => NULL,
-            ),
-            27 => 
-            array (
-                'created_at' => '2020-08-10 10:20:00',
-                'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856952',
-                'lokasi_keong_id' => 'd79a69d1-817e-4854-8b84-3277edcc6824',
-                'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265986',
-                'realisasi_keong_id' => NULL,
-                'status' => 0,
-                'updated_at' => NULL,
-            ),
-            28 => 
-            array (
-                'created_at' => '2020-08-10 10:20:00',
-                'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856953',
-                'lokasi_keong_id' => 'db000a30-4d80-4d9b-bf79-09169284f620',
-                'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265986',
-                'realisasi_keong_id' => NULL,
-                'status' => 0,
-                'updated_at' => NULL,
-            ),
-            29 => 
-            array (
-                'created_at' => '2020-08-10 10:20:00',
-                'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856954',
-                'lokasi_keong_id' => 'e6457d30-71c3-4cd7-84ba-957c6f9694d0',
-                'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265986',
-                'realisasi_keong_id' => NULL,
-                'status' => 0,
-                'updated_at' => NULL,
-            ),
-            30 => 
-            array (
-                'created_at' => '2020-08-10 10:20:00',
-                'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856955',
-                'lokasi_keong_id' => 'ff928f88-e7bf-4849-ac41-a090e340d28b',
-                'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265986',
-                'realisasi_keong_id' => NULL,
-                'status' => 0,
-                'updated_at' => NULL,
-            ),
-            31 => 
-            array (
-                'created_at' => '2020-08-10 10:20:00',
-                'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856956',
-                'lokasi_keong_id' => 'c80914ee-e075-4dbf-9b7b-4af0ecb6402b',
-                'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265986',
-                'realisasi_keong_id' => NULL,
-                'status' => 0,
-                'updated_at' => NULL,
-            ),
             32 => 
-            array (
-                'created_at' => '2020-08-10 10:20:00',
-                'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856957',
-                'lokasi_keong_id' => 'b93e6fd5-d1c6-4d76-89b8-78d924fbcdd4',
-                'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265986',
-                'realisasi_keong_id' => NULL,
-                'status' => 0,
-                'updated_at' => NULL,
-            ),
-            33 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856958',
@@ -359,7 +349,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            34 => 
+            33 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856959',
@@ -369,7 +359,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            35 => 
+            34 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856960',
@@ -379,7 +369,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            36 => 
+            35 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856961',
@@ -389,7 +379,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            37 => 
+            36 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856962',
@@ -399,7 +389,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            38 => 
+            37 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856963',
@@ -409,7 +399,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            39 => 
+            38 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856964',
@@ -419,7 +409,7 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'status' => 0,
                 'updated_at' => NULL,
             ),
-            40 => 
+            39 => 
             array (
                 'created_at' => '2020-08-10 10:20:00',
                 'id' => 'a4a1fc8a-3277-4ccd-b228-9a74b8856965',
@@ -428,6 +418,46 @@ class LokasiPerencanaanKeongTableSeeder extends Seeder
                 'realisasi_keong_id' => NULL,
                 'status' => 0,
                 'updated_at' => NULL,
+            ),
+            40 => 
+            array (
+                'created_at' => '2022-08-28 12:57:31',
+                'id' => 'c212899d-0fda-40c4-9a3c-a9666e76dba5',
+                'lokasi_keong_id' => '61089d02-2504-4ce2-8f75-62da30a5125d',
+                'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265986',
+                'realisasi_keong_id' => 'f6b09084-f1bf-453d-bc36-ece196f46782',
+                'status' => 1,
+                'updated_at' => '2022-08-28 13:14:04',
+            ),
+            41 => 
+            array (
+                'created_at' => '2022-08-28 12:57:31',
+                'id' => 'dae753ff-c297-495f-a857-c218fe28454e',
+                'lokasi_keong_id' => '6c8bc624-6552-4112-aa54-b85293575969',
+                'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265986',
+                'realisasi_keong_id' => 'f6b09084-f1bf-453d-bc36-ece196f46782',
+                'status' => 1,
+                'updated_at' => '2022-08-28 13:14:04',
+            ),
+            42 => 
+            array (
+                'created_at' => '2022-08-28 12:57:31',
+                'id' => 'dd7f27eb-b808-4cc7-b965-fcd1b5962054',
+                'lokasi_keong_id' => '30c5a0f7-3063-40df-ab06-2854b758c9c4',
+                'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265986',
+                'realisasi_keong_id' => '9392b3cc-537c-49b3-bc91-d320a17d703f',
+                'status' => 1,
+                'updated_at' => '2022-08-28 13:12:50',
+            ),
+            43 => 
+            array (
+                'created_at' => '2022-08-28 12:57:31',
+                'id' => 'eb591e77-cf84-4949-bbfd-dcbd53a9449b',
+                'lokasi_keong_id' => '136ac647-012f-4af7-86b5-4cf209e22c2c',
+                'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265986',
+                'realisasi_keong_id' => '9392b3cc-537c-49b3-bc91-d320a17d703f',
+                'status' => 1,
+                'updated_at' => '2022-08-28 13:12:50',
             ),
         ));
         

@@ -28,4 +28,9 @@ class LokasiKeong extends Model
     {
         return $this->hasOne(LokasiPerencanaanKeong::class);
     }
+
+    public function listIndikator()
+    { // untuk hasil realisasi
+        return $this->hasMany(LokasiPerencanaanKeong::class)->where('status', 1);
+    }
 }

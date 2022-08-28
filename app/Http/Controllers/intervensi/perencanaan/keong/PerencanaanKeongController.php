@@ -243,7 +243,6 @@ class PerencanaanKeongController extends Controller
      */
     public function edit(PerencanaanKeong $rencana_intervensi_keong)
     {
-        // dd($rencana_intervensi_keong->realisasiKeong->count());
         if (Auth::user()->role == 'Admin') {
             if (in_array($rencana_intervensi_keong->status, [0, 2])) {
                 abort('403', 'Oops! anda tidak memiliki akses ke sini.');

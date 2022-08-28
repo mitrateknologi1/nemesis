@@ -326,6 +326,8 @@
             $('.error-text').html('')
             $('.nama-dokumen').removeClass('is-invalid')
             $('.file-dokumen').removeClass('is-invalid')
+            $('.nama-dokumen-old').removeClass('is-invalid')
+            $('.file-dokumen-old').removeClass('is-invalid')
         }
 
         $(function() {

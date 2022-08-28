@@ -233,7 +233,7 @@ class PendudukSeeder extends Seeder
 
         $faker = app(Generator::class);
 
-        for ($i = 0; $i < 5500; $i++) {
+        for ($i = 0; $i < 500; $i++) {
 
             $desa = Desa::inRandomOrder()->first();
 

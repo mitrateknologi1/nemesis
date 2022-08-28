@@ -17,4 +17,9 @@ class PendudukPerencanaanManusia extends Model
     {
         return $this->belongsTo(Penduduk::class)->withTrashed();
     }
+
+    public function perencanaanManusia()
+    {
+        return $this->belongsTo(PerencanaanManusia::class);
+    }
 }

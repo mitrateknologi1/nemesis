@@ -61,7 +61,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Pendudduk Yang Belum Terealisasi</div>
+                        <div class="card-title">Penduduk Yang Belum Terealisasi</div>
                     </div>
                 </div>
                 <div class="card-body px-2">
@@ -78,7 +78,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($rencanaIntervensiManusia->pendudukPerencanaanManusia->whereNull('realisasi_penduduk_id') as $item)
+                                @foreach ($rencanaIntervensiManusia->pendudukPerencanaanManusia->whereNull('realisasi_manusia_id') as $item)
                                     <tr>
                                         <td class="text-center">
                                             {{ $loop->iteration }}

@@ -626,7 +626,10 @@
                     className: 'text-center',
                 },
                 {
-                    targets: [3],
+                    targets: [1],
+                    render: function(data) {
+                        return moment(data).format('LL');
+                    }
                 },
             ],
         });

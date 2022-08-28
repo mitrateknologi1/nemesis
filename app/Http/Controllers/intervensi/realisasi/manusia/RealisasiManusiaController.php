@@ -680,4 +680,45 @@ class RealisasiManusiaController extends Controller
         }
         return response()->json(['success' => 'Berhasil menghapus laporan']);
     }
+
+    public function hasilRealisasi(Request $request)
+    {
+        $habitatManusia = PendudukPerencanaanManusia::where('status', 1)
+            ->groupBy('penduduk_id')
+            ->pluck('penduduk_id')
+            ->toArray();
+
+        if ($request->ajax()) {
+            $data = Penduduk::with('listIndikator', 'desa')->whereIn('id', $habitatManusia)
+                ->latest();
+            return DataTables::of($data)
+                ->addIndexColumn()
+
+                ->addColumn('list_indikator', function ($row) {
+                    $list = '<ol class="mb-0">';
+                    foreach ($row->listIndikator as $row2) {
+                        $list .= '<li>' . $row2->perencanaanManusia->sub_indikator . '</li>';
+                    }
+                    $list .= '</ol>';
+                    return $list;
+                })
+
+                ->addColumn('list_opd', function ($row) {
+                    $list = '<ol class="mb-0">';
+                    foreach ($row->listIndikator as $row2) {
+                        $list .= '<li>' . $row2->perencanaanManusia->opd->nama . '</li>';
+                    }
+                    $list .= '</ol>';
+                    return $list;
+                })
+
+                ->rawColumns([
+                    'list_indikator',
+                    'list_opd'
+                ])
+                ->make(true);
+        }
+
+        return view('dashboard.pages.hasilRealisasi.manusia.index');
+    }
 }

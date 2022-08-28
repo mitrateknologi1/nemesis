@@ -89,6 +89,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('realisasi-intervensi-manusia/delete-semua-laporan/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@deleteSemuaLaporan');
     Route::get('hasil-realisasi-manusia', RealisasiManusiaController::class . '@hasilRealisasi');
 
+
     // Hewan
     Route::resource('rencana-intervensi-hewan', PerencanaanHewanController::class);
     Route::post('rencana-intervensi-hewan/konfirmasi/{rencana_intervensi_hewan}', PerencanaanHewanController::class . '@konfirmasi');

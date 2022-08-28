@@ -21,16 +21,16 @@ class PerencanaanManusiaTableSeeder extends Seeder
         \DB::table('perencanaan_manusia')->insert(array (
             0 => 
             array (
-                'alasan_ditolak' => NULL,
-                'created_at' => '2022-08-24 23:45:49',
+                'alasan_ditolak' => '-',
+                'created_at' => '2022-01-24 23:45:49',
                 'id' => '00326039-0a88-495b-8670-2b9098ce4600',
                 'nilai_pembiayaan' => 4000000,
                 'opd_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c96',
-                'status' => 0,
+                'status' => 1,
                 'sub_indikator' => 'Melakukan survey pada warga yang telah sembuh dari gejala yang disebabkan Schistosomiasis',
                 'sumber_dana' => 'DAU',
-                'tanggal_konfirmasi' => NULL,
-                'updated_at' => '2022-08-24 23:45:49',
+                'tanggal_konfirmasi' => '2022-01-28',
+                'updated_at' => '2022-08-28 13:29:42',
             ),
             1 => 
             array (

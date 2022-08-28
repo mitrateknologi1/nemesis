@@ -71,6 +71,16 @@ class DokumenRealisasiManusiaTableSeeder extends Seeder
             ),
             5 => 
             array (
+                'created_at' => '2022-08-28 13:43:03',
+                'file' => '1495352766-Dokumen Realisasi Manusia g-Melakukan survey pada warga yang telah sembuh dari gejala yang disebabkan Schistosomiasis-1.pdf',
+                'id' => '92fb492d-0e11-4b87-8738-9a7db78171b7',
+                'nama' => 'Dokumen Realisasi Manusia g',
+                'no_urut' => 1,
+                'realisasi_manusia_id' => '9423f60a-e8ab-4ed0-a0d0-fa0c915d0e74',
+                'updated_at' => '2022-08-28 13:43:03',
+            ),
+            6 => 
+            array (
                 'created_at' => '2022-08-26 11:47:17',
                 'file' => '1392021851-Dokumen Realisasi 2 p-Pemeriksaan Kesehatan-2.pdf',
                 'id' => '97aa9fae-4518-4112-bba0-8b6148253680',
@@ -79,7 +89,7 @@ class DokumenRealisasiManusiaTableSeeder extends Seeder
                 'realisasi_manusia_id' => '22cda26a-21f6-497b-9013-258f84593136',
                 'updated_at' => '2022-08-26 11:47:17',
             ),
-            6 => 
+            7 => 
             array (
                 'created_at' => '2022-08-26 11:47:17',
                 'file' => '18142040-Dokumen Realisasi 1 r-Pemeriksaan Kesehatan-1.pdf',
@@ -88,6 +98,16 @@ class DokumenRealisasiManusiaTableSeeder extends Seeder
                 'no_urut' => 1,
                 'realisasi_manusia_id' => '22cda26a-21f6-497b-9013-258f84593136',
                 'updated_at' => '2022-08-26 11:47:17',
+            ),
+            8 => 
+            array (
+                'created_at' => '2022-08-28 13:36:44',
+                'file' => '581987799-Dokumen Realisasi Manusia r-Melakukan survey pada warga yang telah sembuh dari gejala yang disebabkan Schistosomiasis-1.pdf',
+                'id' => 'eeec215e-678f-451c-89ac-a3ff098817ca',
+                'nama' => 'Dokumen Realisasi Manusia r',
+                'no_urut' => 1,
+                'realisasi_manusia_id' => 'd9e809ae-3e83-4fbd-8832-b1077cf93edf',
+                'updated_at' => '2022-08-28 13:36:44',
             ),
         ));
         

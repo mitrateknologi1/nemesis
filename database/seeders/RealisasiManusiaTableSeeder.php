@@ -47,6 +47,19 @@ class RealisasiManusiaTableSeeder extends Seeder
             ),
             2 => 
             array (
+                'alasan_ditolak' => '-',
+                'created_at' => '2022-08-28 13:43:03',
+                'id' => '9423f60a-e8ab-4ed0-a0d0-fa0c915d0e74',
+                'penggunaan_anggaran' => 2000000,
+                'perencanaan_manusia_id' => '00326039-0a88-495b-8670-2b9098ce4600',
+                'progress' => 100.0,
+                'status' => 1,
+                'tanggal_konfirmasi' => '2022-08-28',
+                'tw' => 3,
+                'updated_at' => '2022-08-28 13:43:22',
+            ),
+            3 => 
+            array (
                 'alasan_ditolak' => NULL,
                 'created_at' => '2022-08-26 11:50:14',
                 'id' => 'b3848658-4a55-4ce5-95ff-54cf9371ce20',
@@ -58,7 +71,20 @@ class RealisasiManusiaTableSeeder extends Seeder
                 'tw' => 3,
                 'updated_at' => '2022-08-26 11:50:14',
             ),
-            3 => 
+            4 => 
+            array (
+                'alasan_ditolak' => '-',
+                'created_at' => '2022-08-28 13:36:44',
+                'id' => 'd9e809ae-3e83-4fbd-8832-b1077cf93edf',
+                'penggunaan_anggaran' => 1000000,
+                'perencanaan_manusia_id' => '00326039-0a88-495b-8670-2b9098ce4600',
+                'progress' => 50.0,
+                'status' => 1,
+                'tanggal_konfirmasi' => '2022-08-28',
+                'tw' => 3,
+                'updated_at' => '2022-08-28 13:36:59',
+            ),
+            5 => 
             array (
                 'alasan_ditolak' => '-',
                 'created_at' => '2022-05-26 11:49:16',
@@ -71,7 +97,7 @@ class RealisasiManusiaTableSeeder extends Seeder
                 'tw' => 2,
                 'updated_at' => '2022-08-26 11:49:25',
             ),
-            4 => 
+            6 => 
             array (
                 'alasan_ditolak' => 'Penduduk Kurang 1',
                 'created_at' => '2022-08-26 11:58:26',

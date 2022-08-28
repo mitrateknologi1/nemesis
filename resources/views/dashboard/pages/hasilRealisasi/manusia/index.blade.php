@@ -1,11 +1,11 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Realisasi Intervensi Manusia
+    Hasil Realisasi Pada Manusia
 @endsection
 
 @section('titlePanelHeader')
-    Realisasi Intervensi Manusia
+    Hasil Realisasi Pada Manusia
 @endsection
 
 @section('subTitlePanelHeader')
@@ -21,7 +21,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Data Realisasi Intervensi Manusia</div>
+                        <div class="card-title">Data Hasil Pada Manusia</div>
                         <div class="card-tools">
                             @component('dashboard.components.buttons.export')
                             @endcomponent
@@ -37,13 +37,10 @@
                                     <thead>
                                         <tr class="text-center fw-bold">
                                             <th>No</th>
-                                            {{-- <th>Tanggal Disetujui</th> --}}
-                                            <th>Sub Indikator</th>
-                                            <th>OPD</th>
-                                            <th>Progress</th>
-                                            {{-- <th>Jumlah Lokasi</th> --}}
-                                            <th>Status</th>
-                                            <th>Aksi</th>
+                                            <th>Nama</th>
+                                            <th>List Sub Indikator</th>
+                                            <th>List OPD</th>
+                                            {{-- <th>Aksi</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -60,9 +57,7 @@
 
 @push('scripts')
     <script>
-        $('#nav-realisasi').addClass('active');
-        $('#nav-realisasi .collapse').addClass('show');
-        $('#nav-realisasi .collapse #li-manusia-2').addClass('active');
+        $('#nav-hasil-realisasi-manusia').addClass('active');
 
         var table = $('#dataTables').DataTable({
             processing: true,
@@ -72,7 +67,7 @@
                 [10, 25, 50, "All"]
             ],
             ajax: {
-                url: "{{ route('realisasi-intervensi-manusia.index') }}",
+                url: "{{ url('hasil-realisasi-manusia') }}",
                 // data: function(d) {
                 //     d.lokasiTugas = $('#lokasi-tugas').val();
                 //     d.search = $('input[type="search"]').val();
@@ -85,49 +80,18 @@
                     orderable: false,
                     searchable: false
                 },
-                // {
-                //     data: 'tanggal_konfirmasi',
-                //     name: 'tanggal_konfirmasi',
-                // },
                 {
-                    data: 'sub_indikator',
-                    name: 'sub_indikator',
+                    data: 'nama',
+                    name: 'nama',
                 },
                 {
-                    data: 'opd',
-                    name: 'opd',
-                    className: 'text-center'
-                },
-
-                {
-                    data: 'progress',
-                    name: 'progress',
+                    data: 'list_indikator',
+                    name: 'list_indikator',
                 },
                 {
-                    data: 'status',
-                    name: 'status',
+                    data: 'list_opd',
+                    name: 'list_opd',
                 },
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                    searchable: false,
-                    className: 'text-center'
-                },
-
-
-
-            ],
-            columnDefs: [{
-                    targets: [3, 4],
-                    className: 'text-center',
-                },
-                // {
-                //     targets: [1],
-                //     render: function(data) {
-                //         return moment(data).format('LL');
-                //     }
-                // },
             ],
         });
 

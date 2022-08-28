@@ -40,6 +40,7 @@
                                             {{-- <th>Tanggal Disetujui</th> --}}
                                             <th>Sub Indikator</th>
                                             <th>OPD</th>
+                                            <th>Pembiayaan</th>
                                             <th>Progress</th>
                                             {{-- <th>Jumlah Lokasi</th> --}}
                                             <th>Status</th>
@@ -98,7 +99,12 @@
                     name: 'opd',
                     className: 'text-center'
                 },
-
+                {
+                    data: 'nilai_pembiayaan',
+                    name: 'nilai_pembiayaan',
+                    className: 'text-right',
+                    render: $.fn.dataTable.render.number('.', ',', 0, 'Rp.')
+                },
                 {
                     data: 'progress',
                     name: 'progress',
@@ -119,7 +125,7 @@
 
             ],
             columnDefs: [{
-                    targets: [3, 4],
+                    targets: [4, 5],
                     className: 'text-center',
                 },
                 // {

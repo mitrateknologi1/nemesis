@@ -597,7 +597,7 @@
                     data: 'penggunaan_anggaran',
                     name: 'penggunaan_anggaran',
                     className: 'text-right',
-                    render: $.fn.dataTable.render.number('.', ',', 0, 'Rp. ')
+                    render: $.fn.dataTable.render.number('.', ',', 0, 'Rp.')
                 },
                 {
                     data: 'progress',

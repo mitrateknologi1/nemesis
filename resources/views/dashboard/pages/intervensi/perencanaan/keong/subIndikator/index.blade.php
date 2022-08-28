@@ -45,6 +45,7 @@
                                             <th>Tanggal Pembuatan</th>
                                             <th>Sub Indikator</th>
                                             <th>OPD</th>
+                                            <th>Pembiayaan</th>
                                             {{-- <th>Jumlah Lokasi</th> --}}
                                             <th>Status</th>
                                             <th>Aksi</th>
@@ -100,6 +101,12 @@
                 {
                     data: 'opd',
                     name: 'opd',
+                },
+                {
+                    data: 'nilai_pembiayaan',
+                    name: 'nilai_pembiayaan',
+                    className: 'text-right',
+                    render: $.fn.dataTable.render.number('.', ',', 0, 'Rp.')
                 },
                 // {
                 //     data: 'jumlah_lokasi',

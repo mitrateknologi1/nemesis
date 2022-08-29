@@ -56,9 +56,9 @@ class AkunController extends Controller
                 ->addColumn('status', function ($row) {
                     $status = '';
                     if ($row->status == 1) {
-                        $status = '<span class="badge bg-success text-light">Aktif</span>';
+                        $status = '<span class="badge bg-success border-0 text-light">Aktif</span>';
                     } else {
-                        $status = '<span class="badge bg-danger text-light">Tidak Aktif</span>';
+                        $status = '<span class="badge bg-danger border-0 text-light">Tidak Aktif</span>';
                     }
                     return $status;
                 })

@@ -145,24 +145,6 @@
                          </ul>
                      </div>
                  </li>
-                 <li class="nav-item" id="nav-master-opd">
-                     <a href="{{ url('master-data/opd') }}">
-                         <i class="fas fa-building"></i>
-                         <p>OPD</p>
-                     </a>
-                 </li>
-                 <li class="nav-item" id="nav-master-hewan">
-                     <a href="{{ url('master-data/hewan') }}">
-                         <i class="fas fa-paw"></i>
-                         <p>Hewan</p>
-                     </a>
-                 </li>
-                 <li class="nav-item" id="nav-master-tahun">
-                     <a href="{{ url('master-data/tahun') }}">
-                         <i class="far fa-calendar-alt"></i>
-                         <p>Tahun</p>
-                     </a>
-                 </li>
                  <li class="nav-item" id="nav-master-penduduk">
                      <a href="{{ url('master-data/penduduk') }}">
                          <i class="fas fa-user-edit"></i>
@@ -175,12 +157,34 @@
                          <p>Sekolah</p>
                      </a>
                  </li>
-                 <li class="nav-item" id="nav-master-akun">
-                     <a href="{{ url('master-data/akun') }}">
-                         <i class="fas fa-users"></i>
-                         <p>Akun</p>
-                     </a>
-                 </li>
+                 @if (Auth::user()->role == 'Admin')
+                     <li class="nav-item" id="nav-master-opd">
+                         <a href="{{ url('master-data/opd') }}">
+                             <i class="fas fa-building"></i>
+                             <p>OPD</p>
+                         </a>
+                     </li>
+                     <li class="nav-item" id="nav-master-hewan">
+                         <a href="{{ url('master-data/hewan') }}">
+                             <i class="fas fa-paw"></i>
+                             <p>Hewan</p>
+                         </a>
+                     </li>
+                     <li class="nav-item" id="nav-master-tahun">
+                         <a href="{{ url('master-data/tahun') }}">
+                             <i class="far fa-calendar-alt"></i>
+                             <p>Tahun</p>
+                         </a>
+                     </li>
+
+                     <li class="nav-item" id="nav-master-akun">
+                         <a href="{{ url('master-data/akun') }}">
+                             <i class="fas fa-users"></i>
+                             <p>Akun</p>
+                         </a>
+                     </li>
+                 @endif
+
              </ul>
          </div>
      </div>

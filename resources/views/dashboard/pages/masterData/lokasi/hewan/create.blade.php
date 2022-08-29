@@ -453,6 +453,6 @@
     <script>
         $('#nav-master-lokasi').addClass('active');
         $('#nav-master-lokasi .collapse').addClass('show');
-        $('#nav-master-lokasi .collapse #li-lokasi-keong').addClass('active');
+        $('#nav-master-lokasi .collapse #li-lokasi-hewan').addClass('active');
     </script>
 @endpush

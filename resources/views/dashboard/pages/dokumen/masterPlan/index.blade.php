@@ -13,8 +13,13 @@
 @endsection
 
 @section('buttonPanelHeader')
-    {{-- <a href="#" class="btn btn-secondary btn-round"><i class="fas fa-plus"></i>
-        Tambah</a> --}}
+    @if (Auth::user()->role == 'Admin')
+        @component('dashboard.components.buttons.add',
+            [
+                'url' => url('dokumen/master-plan/create'),
+            ])
+        @endcomponent
+    @endif
 @endsection
 
 @push('styles')
@@ -28,13 +33,7 @@
                     <div class="card-head-row">
                         <div class="card-title">Dokumen Master Plan</div>
                         <div class="card-tools">
-                            @if (Auth::user()->role == 'Admin')
-                                @component('dashboard.components.buttons.add',
-                                    [
-                                        'url' => url('dokumen/master-plan/create'),
-                                    ])
-                                @endcomponent
-                            @endif
+
                         </div>
                     </div>
                 </div>

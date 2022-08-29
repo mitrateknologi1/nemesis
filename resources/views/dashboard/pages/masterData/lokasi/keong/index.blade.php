@@ -13,11 +13,13 @@
 @endsection
 
 @section('buttonPanelHeader')
-    @component('dashboard.components.buttons.add',
-        [
-            'url' => url('master-data/lokasi/keong/create'),
-        ])
-    @endcomponent
+    @if (Auth::user()->role == 'Admin')
+        @component('dashboard.components.buttons.add',
+            [
+                'url' => url('master-data/lokasi/keong/create'),
+            ])
+        @endcomponent
+    @endif
 @endsection
 
 @push('styles')
@@ -375,8 +377,14 @@
             ]
         });
 
+        var role = "{{ Auth::user()->role }}";
+
         $(document).ready(function() {
             initializeMap();
+
+            if (role != "Admin") {
+                table.column(7).visible(false);
+            }
         })
     </script>
 

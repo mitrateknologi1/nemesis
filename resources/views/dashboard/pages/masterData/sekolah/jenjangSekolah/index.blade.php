@@ -104,88 +104,110 @@
                                 <div class="tab-pane fade" id="pills-jumlah" role="tabpanel"
                                     aria-labelledby="pills-jumlah-tab-nobd">
                                     <div class="my-2">
-                                        <div class="row">
+                                        <div class="owl-carousel owl-theme owl-img-responsive">
                                             @foreach ($jumlahData as $jumlah)
-                                                <div class="col-sm-6 col-md-4">
+                                                <div class="col-sm-12 col-md-12 item">
                                                     <div class="card card-stats card-round border">
-                                                        <div class="card-body ">
+                                                        <div class="card-body">
                                                             <div class="row">
-                                                                <div class="col-4">
-                                                                    <div class="icon-big text-center">
-                                                                        <i class="flaticon-agenda text-primary"></i>
+                                                                <div class="col-6">
+                                                                    <div class="row">
+                                                                        <div class="col-2">
+                                                                            <div class="icon-big text-center">
+                                                                                <i class="flaticon-agenda text-primary"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-10 col-stats">
+                                                                            <div class="numbers">
+                                                                                <p class="card-category">Jenjang</p>
+                                                                                <h4 class="card-title">
+                                                                                    {{ $jumlah['jenjang'] }}
+                                                                                </h4>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr>
+                                                                    <div class="d-flex justify-content-center mt-2">
+                                                                        <p class="fw-bold mb-0">Jumlah Data</p>
+                                                                    </div>
+                                                                    <div class="d-flex justify-content-between mt-2">
+                                                                        <p class=" mb-0">Jumlah Sekolah : </p>
+                                                                        <p
+                                                                            class="badge bg-primary text-light border-0 mb-0">
+                                                                            {{ $jumlah['jumlah_sekolah'] }}
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="d-flex justify-content-between mt-2">
+                                                                        <p class=" mb-0">Jumlah Siswa : </p>
+                                                                        <p
+                                                                            class="badge bg-primary text-light border-0 mb-0">
+                                                                            {{ $jumlah['total_siswa'] }}
+                                                                        </p>
+                                                                    </div>
+                                                                    <hr>
+                                                                    <div class="d-flex justify-content-center mt-2">
+                                                                        <p class="fw-bold mb-0">Jumlah Siswa Berdasarkan
+                                                                            Jenis
+                                                                            Kelamin</p>
+                                                                    </div>
+                                                                    <div class="d-flex justify-content-between mt-2">
+                                                                        <p class=" mb-0">Laki - Laki : </p>
+                                                                        <p
+                                                                            class="badge bg-primary text-light border-0 mb-0">
+                                                                            {{ $jumlah['siswa_laki'] }}
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="d-flex justify-content-between mt-2">
+                                                                        <p class=" mb-0">Perempuan : </p>
+                                                                        <p
+                                                                            class="badge bg-primary text-light border-0 mb-0">
+                                                                            {{ $jumlah['siswa_perempuan'] }}
+                                                                        </p>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-8 col-stats">
-                                                                    <div class="numbers">
-                                                                        <p class="card-category">Jenjang</p>
-                                                                        <h4 class="card-title">{{ $jumlah['jenjang'] }}
-                                                                        </h4>
+                                                                <div class="col-6">
+                                                                    <div class="d-flex justify-content-center mt-2">
+                                                                        <p class="fw-bold mb-0">Jumlah Data Per Desa
+                                                                        </p>
                                                                     </div>
+                                                                    @foreach ($jumlah['desa'] as $desa)
+                                                                        <div class="d-flex justify-content-center mt-2">
+                                                                            <p class="fw-bold mb-0">Desa
+                                                                                {{ $desa['desa'] }}
+                                                                            </p>
+                                                                        </div>
+                                                                        <div class="d-flex justify-content-between mt-2">
+                                                                            <p class=" mb-0">Jumlah Sekolah : </p>
+                                                                            <p
+                                                                                class="badge bg-primary text-light border-0 mb-0">
+                                                                                {{ $desa['jumlah_sekolah'] }}
+                                                                            </p>
+                                                                        </div>
+                                                                        <div class="d-flex justify-content-between mt-2">
+                                                                            <p class=" mb-0">Jumlah Siswa : </p>
+                                                                            <p
+                                                                                class="badge bg-primary text-light border-0 mb-0">
+                                                                                {{ $desa['total_siswa'] }}
+                                                                            </p>
+                                                                        </div>
+                                                                        <div class="d-flex justify-content-between mt-2">
+                                                                            <p class=" mb-0">Laki - Laki : </p>
+                                                                            <p
+                                                                                class="badge bg-primary text-light border-0 mb-0">
+                                                                                {{ $desa['siswa_laki'] }}
+                                                                            </p>
+                                                                        </div>
+                                                                        <div class="d-flex justify-content-between mt-2">
+                                                                            <p class=" mb-0">Perempuan : </p>
+                                                                            <p
+                                                                                class="badge bg-primary text-light border-0 mb-0">
+                                                                                {{ $desa['siswa_perempuan'] }}
+                                                                            </p>
+                                                                        </div>
+                                                                        <hr>
+                                                                    @endforeach
                                                                 </div>
                                                             </div>
-                                                            <hr>
-                                                            <div class="d-flex justify-content-center mt-2">
-                                                                <p class="fw-bold mb-0">Jumlah Data</p>
-                                                            </div>
-                                                            <div class="d-flex justify-content-between mt-2">
-                                                                <p class=" mb-0">Jumlah Sekolah : </p>
-                                                                <p class="badge bg-primary text-light border-0 mb-0">
-                                                                    {{ $jumlah['jumlah_sekolah'] }}
-                                                                </p>
-                                                            </div>
-                                                            <div class="d-flex justify-content-between mt-2">
-                                                                <p class=" mb-0">Jumlah Siswa : </p>
-                                                                <p class="badge bg-primary text-light border-0 mb-0">
-                                                                    {{ $jumlah['total_siswa'] }}
-                                                                </p>
-                                                            </div>
-                                                            <hr>
-                                                            <div class="d-flex justify-content-center mt-2">
-                                                                <p class="fw-bold mb-0">Jumlah Siswa Berdasarkan Jenis
-                                                                    Kelamin</p>
-                                                            </div>
-                                                            <div class="d-flex justify-content-between mt-2">
-                                                                <p class=" mb-0">Laki - Laki : </p>
-                                                                <p class="badge bg-primary text-light border-0 mb-0">
-                                                                    {{ $jumlah['siswa_laki'] }}
-                                                                </p>
-                                                            </div>
-                                                            <div class="d-flex justify-content-between mt-2">
-                                                                <p class=" mb-0">Perempuan : </p>
-                                                                <p class="badge bg-primary text-light border-0 mb-0">
-                                                                    {{ $jumlah['siswa_perempuan'] }}
-                                                                </p>
-                                                            </div>
-                                                            @foreach ($jumlah['desa'] as $desa)
-                                                                <hr>
-                                                                <div class="d-flex justify-content-center mt-2">
-                                                                    <p class="fw-bold mb-0">Desa {{ $desa['desa'] }}</p>
-                                                                </div>
-                                                                <div class="d-flex justify-content-between mt-2">
-                                                                    <p class=" mb-0">Jumlah Sekolah : </p>
-                                                                    <p class="badge bg-primary text-light border-0 mb-0">
-                                                                        {{ $desa['jumlah_sekolah'] }}
-                                                                    </p>
-                                                                </div>
-                                                                <div class="d-flex justify-content-between mt-2">
-                                                                    <p class=" mb-0">Jumlah Siswa : </p>
-                                                                    <p class="badge bg-primary text-light border-0 mb-0">
-                                                                        {{ $desa['total_siswa'] }}
-                                                                    </p>
-                                                                </div>
-                                                                <div class="d-flex justify-content-between mt-2">
-                                                                    <p class=" mb-0">Laki - Laki : </p>
-                                                                    <p class="badge bg-primary text-light border-0 mb-0">
-                                                                        {{ $desa['siswa_laki'] }}
-                                                                    </p>
-                                                                </div>
-                                                                <div class="d-flex justify-content-between mt-2">
-                                                                    <p class=" mb-0">Perempuan : </p>
-                                                                    <p class="badge bg-primary text-light border-0 mb-0">
-                                                                        {{ $desa['siswa_perempuan'] }}
-                                                                    </p>
-                                                                </div>
-                                                            @endforeach
 
                                                         </div>
                                                     </div>
@@ -204,7 +226,22 @@
 @endsection
 
 @push('scripts')
-    <script></script>
+    <script>
+        $('.owl-carousel').owlCarousel({
+            loop: true,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                600: {
+                    items: 1
+                },
+                1000: {
+                    items: 1
+                }
+            }
+        })
+    </script>
 
     <script>
         $('#nav-master-sekolah').addClass('active');

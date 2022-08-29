@@ -13,11 +13,13 @@
 @endsection
 
 @section('buttonPanelHeader')
-    @component('dashboard.components.buttons.add',
-        [
-            'url' => url('master-data/lokasi/hewan/create'),
-        ])
-    @endcomponent
+    @if (Auth::user()->role == 'Admin')
+        @component('dashboard.components.buttons.add',
+            [
+                'url' => url('master-data/lokasi/hewan/create'),
+            ])
+        @endcomponent
+    @endif
 @endsection
 
 @push('styles')
@@ -112,16 +114,16 @@
                                     <div class="my-2">
                                         <div class="row">
                                             @foreach ($daftarJumlahHewan as $jumlahHewan)
-                                                <div class="col-sm-6 col-md-3">
+                                                <div class="col-sm-6 col-md-6">
                                                     <div class="card card-stats card-round border">
                                                         <div class="card-body ">
                                                             <div class="row">
-                                                                <div class="col-4">
+                                                                <div class="col-2">
                                                                     <div class="icon-big text-center">
                                                                         <i class="flaticon-placeholder-1 text-primary"></i>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-8 col-stats">
+                                                                <div class="col-10 col-stats">
                                                                     <div class="numbers">
                                                                         <p class="card-category">Desa</p>
                                                                         <h4 class="card-title">{{ $jumlahHewan['desa'] }}
@@ -416,8 +418,15 @@
             ]
         });
 
+        var role = "{{ Auth::user()->role }}";
+
         $(document).ready(function() {
             initializeMap();
+
+            if (role != "Admin") {
+                table.column(8).visible(false);
+            }
+
         })
     </script>
 

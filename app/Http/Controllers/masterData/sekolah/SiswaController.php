@@ -10,6 +10,7 @@ use App\Models\Sekolah;
 use App\Models\Siswa;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -58,7 +59,13 @@ class SiswaController extends Controller
                     return $row->penduduk->desa->nama;
                 })
                 ->addColumn('action', function ($row) use ($sekolah) {
-                    $actionBtn = '<button class="btn btn-success btn-rounded btn-sm mr-1" id="btn-lihat" value="' . $row->penduduk_id . '"><i class="far fa-eye"></i></button><button id="btn-delete" class="btn btn-danger btn-rounded btn-sm mr-1" value="' . $row->id . '" > <i class="fas fa-trash-alt"></i></button>';
+                    $actionBtn = '';
+
+                    $actionBtn .= '<button class="btn btn-success btn-rounded btn-sm mr-1" id="btn-lihat" value="' . $row->penduduk_id . '"><i class="far fa-eye"></i></button>';
+
+                    if (Auth::user()->role == "Admin") {
+                        $actionBtn .= '<button id="btn-delete" class="btn btn-danger btn-rounded btn-sm mr-1" value="' . $row->id . '" > <i class="fas fa-trash-alt"></i></button>';
+                    }
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])

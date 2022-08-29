@@ -9,6 +9,7 @@ use App\Models\Desa;
 use App\Models\Penduduk;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -36,7 +37,13 @@ class PendudukController extends Controller
                     return $row->desa->nama;
                 })
                 ->addColumn('action', function ($row) {
-                    $actionBtn = '<button class="btn btn-success btn-rounded btn-sm mr-1" id="btn-lihat" value="' . $row->id . '"><i class="far fa-eye"></i></button><a id="btn-edit" class="btn btn-warning btn-rounded btn-sm mr-1" href="' . url('master-data/penduduk/' . $row->id . '/edit')  . '" ><i class="fas fa-edit"></i></a><button id="btn-delete" class="btn btn-danger btn-rounded btn-sm mr-1" value="' . $row->id . '" > <i class="fas fa-trash-alt"></i></button>';
+                    $actionBtn = '';
+
+                    $actionBtn .= '<button class="btn btn-success btn-rounded btn-sm mr-1" id="btn-lihat" value="' . $row->id . '"><i class="far fa-eye"></i></button>';
+
+                    if (Auth::user()->role == "Admin") {
+                        $actionBtn .= '<a id="btn-edit" class="btn btn-warning btn-rounded btn-sm mr-1" href="' . url('master-data/penduduk/' . $row->id . '/edit')  . '" ><i class="fas fa-edit"></i></a><button id="btn-delete" class="btn btn-danger btn-rounded btn-sm mr-1" value="' . $row->id . '" > <i class="fas fa-trash-alt"></i></button>';
+                    }
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])

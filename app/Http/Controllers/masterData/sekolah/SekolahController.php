@@ -9,6 +9,7 @@ use App\Models\Sekolah;
 use App\Models\Siswa;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -45,7 +46,13 @@ class SekolahController extends Controller
                     return $row->desa->nama;
                 })
                 ->addColumn('action', function ($row) use ($jenjang) {
-                    $actionBtn = '<a class="btn btn-success btn-rounded btn-sm mr-1" id="btn-lihat" href="' . url('master-data/siswa' . '/' . $row->id)  . '"><i class="far fa-eye"></i></a><a id="btn-edit" class="btn btn-warning btn-rounded btn-sm mr-1" href="' . url('master-data/sekolah/' . $jenjang . '/' . $row->id . '/edit')  . '" ><i class="fas fa-edit"></i></a><button id="btn-delete" class="btn btn-danger btn-rounded btn-sm mr-1" value="' . $row->id . '" > <i class="fas fa-trash-alt"></i></button>';
+                    $actionBtn = '';
+
+                    $actionBtn = '<a class="btn btn-success btn-rounded btn-sm mr-1" id="btn-lihat" href="' . url('master-data/siswa' . '/' . $row->id)  . '"><i class="far fa-eye"></i></a>';
+
+                    if (Auth::user()->role == "Admin") {
+                        $actionBtn .= '<a id="btn-edit" class="btn btn-warning btn-rounded btn-sm mr-1" href="' . url('master-data/sekolah/' . $jenjang . '/' . $row->id . '/edit')  . '" ><i class="fas fa-edit"></i></a><button id="btn-delete" class="btn btn-danger btn-rounded btn-sm mr-1" value="' . $row->id . '" > <i class="fas fa-trash-alt"></i></button>';
+                    }
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])

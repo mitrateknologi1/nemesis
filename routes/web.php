@@ -82,10 +82,45 @@ Route::group(['middleware' => 'auth'], function () {
             'hewan' => 'lokasi_hewan'
         ]
     );
+    Route::post('master-data/siswa/detail-siswa', [SiswaController::class, 'detailSiswa']);
 
-    Route::resource('master-data/opd', OPDController::class);
-    Route::resource('master-data/hewan', HewanController::class);
-    Route::resource('master-data/tahun', TahunController::class);
+    Route::group(['middleware' => ['role:Admin']], function () {
+        Route::resource('master-data/opd', OPDController::class);
+        Route::resource('master-data/hewan', HewanController::class);
+        Route::resource('master-data/tahun', TahunController::class);
+
+        // Akun
+        Route::resource('master-data/akun', AkunController::class)->parameters(['akun' => 'user']);
+
+        // Dokumen
+        Route::resource('dokumen/road-map', RoadMapController::class)->parameters(['road-map' => 'road_map'])->except(
+            'index',
+            'show'
+        );
+        Route::resource('dokumen/master-plan', MasterPlanController::class)->parameters(['master-plan' => 'master-plan'])->except(
+            'index',
+            'show'
+        );
+
+        Route::resource('master-data/penduduk', PendudukController::class)->except(
+            'index',
+            'show'
+        );
+
+        Route::resource('master-data/sekolah/{jenjangSekolah}', SekolahController::class)->parameters([
+            '{jenjangSekolah}' => 'sekolah'
+        ])->except(
+            'index',
+            'show'
+        );
+
+        Route::resource('master-data/siswa/{sekolah}', SiswaController::class)->parameters([
+            '{sekolah}' => 'siswa'
+        ])->except(
+            'index',
+            'show'
+        );
+    });
 
     Route::get('map/desa', [LokasiDesaController::class, 'getMapData']);
     Route::get('map/keong', [LokasiKeongController::class, 'getMapData']);
@@ -96,11 +131,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('list/hewan', [ListController::class, 'hewan']);
 
     // Dokumen
-    Route::resource('dokumen/road-map', RoadMapController::class)->parameters(['road-map' => 'road_map']);
-    Route::resource('dokumen/master-plan', MasterPlanController::class)->parameters(['master-plan' => 'master-plan']);
-
-    // Akun
-    Route::resource('master-data/akun', AkunController::class)->parameters(['akun' => 'user']);
+    Route::resource('dokumen/road-map', RoadMapController::class)->parameters(['road-map' => 'road_map'])->only(
+        'index',
+        'show'
+    );
+    Route::resource('dokumen/master-plan', MasterPlanController::class)->parameters(['master-plan' => 'master-plan'])->only(
+        'index',
+        'show'
+    );
 
     // Pengaturan Akun
     Route::get('pengaturan-akun', [PengaturanAkunController::class, 'index']);
@@ -109,7 +147,10 @@ Route::group(['middleware' => 'auth'], function () {
     // Penduduk
     Route::post('master-data/penduduk/export-jumlah', [PendudukController::class, 'exportJumlah']);
     Route::post('master-data/penduduk/export', [PendudukController::class, 'export']);
-    Route::resource('master-data/penduduk', PendudukController::class);
+    Route::resource('master-data/penduduk', PendudukController::class)->only(
+        'index',
+        'show'
+    );
 
     // Sekolah
     Route::post('master-data/jenjang-sekolah/export', [JenjangSekolahController::class, 'export']);
@@ -118,12 +159,17 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('master-data/sekolah/{jenjangSekolah}/export', [SekolahController::class, 'export']);
     Route::resource('master-data/sekolah/{jenjangSekolah}', SekolahController::class)->parameters([
         '{jenjangSekolah}' => 'sekolah'
-    ]);
+    ])->only(
+        'index',
+        'show'
+    );
 
     Route::post('master-data/siswa/{sekolah}/export', [SiswaController::class, 'export']);
-    Route::post('master-data/siswa/detail-siswa', [SiswaController::class, 'detailSiswa']);
     Route::post('master-data/siswa/{sekolah}/delete-selected', [SiswaController::class, 'deleteSelected']);
     Route::resource('master-data/siswa/{sekolah}', SiswaController::class)->parameters([
         '{sekolah}' => 'siswa'
-    ]);
+    ])->only(
+        'index',
+        'show'
+    );
 });

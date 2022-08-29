@@ -21,11 +21,11 @@ class LokasiKeong extends Model
 
     public function pemilikLokasiKeong()
     {
-        return $this->hasMany(PemilikLokasiKeong::class);
+        return $this->hasMany(PemilikLokasiKeong::class)->withTrashed();
     }
 
     public function lokasiPerencanaanKeong()
     {
-        return $this->hasOne(LokasiPerencanaanKeong::class);
+        return $this->hasOne(LokasiPerencanaanKeong::class)->withTrashed();
     }
 }

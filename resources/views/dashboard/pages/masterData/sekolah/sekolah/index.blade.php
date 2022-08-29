@@ -28,11 +28,13 @@
     <a href="{{ url('master-data/jenjang-sekolah') }}" class="btn btn-sm btn-secondary btn-round" id=""><i
             class="far fa-arrow-alt-circle-left"></i>
         Kembali</a>
-    @component('dashboard.components.buttons.add',
-        [
-            'url' => url('master-data/sekolah/' . $jenjang . '/create'),
-        ])
-    @endcomponent
+    @if (Auth::user()->role == 'Admin')
+        @component('dashboard.components.buttons.add',
+            [
+                'url' => url('master-data/sekolah/' . $jenjang . '/create'),
+            ])
+        @endcomponent
+    @endif
 @endsection
 
 @push('styles')

@@ -15,7 +15,7 @@ class Siswa extends Model
 
     public function penduduk()
     {
-        return $this->belongsTo(Penduduk::class);
+        return $this->belongsTo(Penduduk::class)->withTrashed();
     }
 
     public function sekolah()

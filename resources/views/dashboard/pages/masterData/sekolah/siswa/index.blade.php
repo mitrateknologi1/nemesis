@@ -16,11 +16,13 @@
     <a href="{{ url('master-data/sekolah' . '/' . $jenjang) }}" class="btn btn-sm btn-secondary btn-round mr-2"
         id=""><i class="far fa-arrow-alt-circle-left"></i>
         Kembali</a>
-    @component('dashboard.components.buttons.add',
-        [
-            'url' => url('master-data/siswa/' . $sekolah->id . '/create'),
-        ])
-    @endcomponent
+    @if (Auth::user()->role == 'Admin')
+        @component('dashboard.components.buttons.add',
+            [
+                'url' => url('master-data/siswa/' . $sekolah->id . '/create'),
+            ])
+        @endcomponent
+    @endif
 @endsection
 
 @push('styles')
@@ -38,14 +40,16 @@
                         </div>
                         <div class="card-tools">
                             <div class="row">
-                                @component('dashboard.components.buttons.selected',
-                                    [
-                                        'id' => 'deleteSelected',
-                                        'icon' => '<i class="fas fa-trash"></i>',
-                                        'color' => 'danger',
-                                        'title' => 'Hapus yang dipilih',
-                                    ])
-                                @endcomponent
+                                @if (Auth::user()->role == 'Admin')
+                                    @component('dashboard.components.buttons.selected',
+                                        [
+                                            'id' => 'deleteSelected',
+                                            'icon' => '<i class="fas fa-trash"></i>',
+                                            'color' => 'danger',
+                                            'title' => 'Hapus yang dipilih',
+                                        ])
+                                    @endcomponent
+                                @endif
                                 <form action="{{ url('master-data/siswa/' . $sekolah->id . '/export') }}" method="POST">
                                     @csrf
                                     <button type="submit" class="btn btn-info btn-border btn-round btn-sm ml-2 mr-2">
@@ -202,7 +206,9 @@
                 <div class="modal-footer">
                     @component('dashboard.components.buttons.close')
                     @endcomponent
-                    <a href="#" class="btn btn-warning" id="link-edit"><i class="fas fa-edit"></i> Ubah</a>
+                    @if (Auth::user()->role == 'Admin')
+                        <a href="#" class="btn btn-warning" id="link-edit"><i class="fas fa-edit"></i> Ubah</a>
+                    @endif
                 </div>
             </div>
         </div>

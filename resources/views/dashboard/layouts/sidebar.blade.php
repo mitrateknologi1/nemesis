@@ -29,12 +29,12 @@
                                  </a>
                              </li>
                              <li id="li-manusia">
-                                 <a href="components/buttons.html">
+                                 <a href="{{ url('rencana-intervensi-manusia') }}">
                                      <span class="sub-item">Manusia</span>
                                  </a>
                              </li>
                              <li id="li-hewan">
-                                 <a href="components/gridsystem.html">
+                                 <a href="{{ url('rencana-intervensi-hewan') }}">
                                      <span class="sub-item">Hewan</span>
                                  </a>
                              </li>
@@ -54,13 +54,13 @@
                                      <span class="sub-item">Keong</span>
                                  </a>
                              </li>
-                             <li>
-                                 <a href="components/buttons.html">
+                             <li id="li-manusia-2">
+                                 <a href="{{ url('realisasi-intervensi-manusia') }}">
                                      <span class="sub-item">Manusia</span>
                                  </a>
                              </li>
-                             <li>
-                                 <a href="components/gridsystem.html">
+                             <li id="li-hewan-2">
+                                 <a href="{{ url('realisasi-intervensi-hewan') }}">
                                      <span class="sub-item">Hewan</span>
                                  </a>
                              </li>
@@ -74,20 +74,20 @@
                      </span>
                      <h4 class="text-section">Hasil Realisasi</h4>
                  </li>
-                 <li class="nav-item">
-                     <a href="projects.html">
+                 <li class="nav-item" id="nav-hasil-realisasi-keong">
+                     <a href="{{ url('hasil-realisasi-keong') }}">
                          <i class="fas fa-map-pin"></i>
                          <p>Habitat Keong</p>
                      </a>
                  </li>
-                 <li class="nav-item">
-                     <a href="projects.html">
+                 <li class="nav-item" id="nav-hasil-realisasi-manusia">
+                     <a href="{{ url('hasil-realisasi-manusia') }}">
                          <i class="fas fa-users"></i>
                          <p>Manusia</p>
                      </a>
                  </li>
-                 <li class="nav-item">
-                     <a href="projects.html">
+                 <li class="nav-item" id="nav-hasil-realisasi-hewan">
+                     <a href="{{ url('hasil-realisasi-hewan') }}">
                          <i class="fas fa-paw"></i>
                          <p>Hewan</p>
                      </a>

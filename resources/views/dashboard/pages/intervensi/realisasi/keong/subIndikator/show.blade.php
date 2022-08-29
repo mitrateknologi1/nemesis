@@ -89,6 +89,7 @@
                                     <th>No</th>
                                     <th>Tanggal Laporan</th>
                                     <th>Jumlah Lokasi</th>
+                                    <th>Penggunaan Anggaran</th>
                                     <th>Progress</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
@@ -112,92 +113,99 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            @if ($tw4 != null)
-                                <div class="progress-card mb-2">
-                                    <div class="progress-status mb-1">
-                                        <span class="font-weight-normal">TW 4</span>
-                                        <span class="text-muted fw-bold"> {{ $tw4 }}%</span>
-                                    </div>
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-striped @if ($tw4 > 0 && $tw4 <= 25) bg-danger
-                                        @elseif($tw4 > 25 && $tw4 <= 50)
-                                            bg-warning
-                                        @elseif($tw4 > 50 && $tw4 <= 75)
-                                            bg-info
-                                        @elseif($tw4 > 75 && $tw4 <= 100)
-                                            bg-success @endif"
-                                            role="progressbar" style="width: {{ $tw4 }}%"
-                                            aria-valuenow="{{ $tw4 }}" aria-valuemin="0" aria-valuemax="100"
-                                            data-toggle="tooltip" data-placement="top" title=""
-                                            data-original-title="{{ $tw4 }}%">
+                            @if ($rencana_intervensi_keong->realisasiKeong->where('status', 1)->count() > 0)
+                                @if ($tw4 != null)
+                                    <div class="progress-card mb-2">
+                                        <div class="progress-status mb-1">
+                                            <span class="font-weight-normal">TW 4</span>
+                                            <span class="text-muted fw-bold"> {{ $tw4 }}%</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-striped @if ($tw4 > 0 && $tw4 <= 25) bg-danger
+                                            @elseif($tw4 > 25 && $tw4 <= 50)
+                                                bg-warning
+                                            @elseif($tw4 > 50 && $tw4 <= 75)
+                                                bg-info
+                                            @elseif($tw4 > 75 && $tw4 <= 100)
+                                                bg-success @endif"
+                                                role="progressbar" style="width: {{ $tw4 }}%"
+                                                aria-valuenow="{{ $tw4 }}" aria-valuemin="0" aria-valuemax="100"
+                                                data-toggle="tooltip" data-placement="top" title=""
+                                                data-original-title="{{ $tw4 }}%">
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endif
-                            @if ($tw3 != null)
-                                <div class="progress-card mb-2">
-                                    <div class="progress-status mb-1">
-                                        <span class="font-weight-normal">TW 3</span>
-                                        <span class="text-muted fw-bold"> {{ $tw3 }}%</span>
-                                    </div>
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-striped @if ($tw3 > 0 && $tw3 <= 25) bg-danger
-                                        @elseif($tw3 > 25 && $tw3 <= 50)
-                                            bg-warning
-                                        @elseif($tw3 > 50 && $tw3 <= 75)
-                                            bg-info
-                                        @elseif($tw3 > 75 && $tw3 <= 100)
-                                            bg-success @endif"
-                                            role="progressbar" style="width: {{ $tw3 }}%"
-                                            aria-valuenow="{{ $tw3 }}" aria-valuemin="0" aria-valuemax="100"
-                                            data-toggle="tooltip" data-placement="top" title=""
-                                            data-original-title="{{ $tw3 }}%">
+                                @endif
+                                @if ($tw3 != null)
+                                    <div class="progress-card mb-2">
+                                        <div class="progress-status mb-1">
+                                            <span class="font-weight-normal">TW 3</span>
+                                            <span class="text-muted fw-bold"> {{ $tw3 }}%</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-striped @if ($tw3 > 0 && $tw3 <= 25) bg-danger
+                                            @elseif($tw3 > 25 && $tw3 <= 50)
+                                                bg-warning
+                                            @elseif($tw3 > 50 && $tw3 <= 75)
+                                                bg-info
+                                            @elseif($tw3 > 75 && $tw3 <= 100)
+                                                bg-success @endif"
+                                                role="progressbar" style="width: {{ $tw3 }}%"
+                                                aria-valuenow="{{ $tw3 }}" aria-valuemin="0" aria-valuemax="100"
+                                                data-toggle="tooltip" data-placement="top" title=""
+                                                data-original-title="{{ $tw3 }}%">
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endif
-                            @if ($tw2 != null)
-                                <div class="progress-card mb-2">
-                                    <div class="progress-status mb-1">
-                                        <span class="font-weight-normal">TW 2</span>
-                                        <span class="text-muted fw-bold"> {{ $tw2 }}%</span>
-                                    </div>
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-striped @if ($tw2 > 0 && $tw2 <= 25) bg-danger
-                                        @elseif($tw2 > 25 && $tw2 <= 50)
-                                            bg-warning
-                                        @elseif($tw2 > 50 && $tw2 <= 75)
-                                            bg-info
-                                        @elseif($tw2 > 75 && $tw2 <= 100)
-                                            bg-success @endif"
-                                            role="progressbar" style="width: {{ $tw2 }}%"
-                                            aria-valuenow="{{ $tw2 }}" aria-valuemin="0" aria-valuemax="100"
-                                            data-toggle="tooltip" data-placement="top" title=""
-                                            data-original-title="{{ $tw2 }}%">
+                                @endif
+                                @if ($tw2 != null)
+                                    <div class="progress-card mb-2">
+                                        <div class="progress-status mb-1">
+                                            <span class="font-weight-normal">TW 2</span>
+                                            <span class="text-muted fw-bold"> {{ $tw2 }}%</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-striped @if ($tw2 > 0 && $tw2 <= 25) bg-danger
+                                            @elseif($tw2 > 25 && $tw2 <= 50)
+                                                bg-warning
+                                            @elseif($tw2 > 50 && $tw2 <= 75)
+                                                bg-info
+                                            @elseif($tw2 > 75 && $tw2 <= 100)
+                                                bg-success @endif"
+                                                role="progressbar" style="width: {{ $tw2 }}%"
+                                                aria-valuenow="{{ $tw2 }}" aria-valuemin="0" aria-valuemax="100"
+                                                data-toggle="tooltip" data-placement="top" title=""
+                                                data-original-title="{{ $tw2 }}%">
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endif
-                            @if ($tw1 != null)
-                                <div class="progress-card mb-2">
-                                    <div class="progress-status mb-1">
-                                        <span class="font-weight-normal">TW 1</span>
-                                        <span class="text-muted fw-bold"> {{ $tw1 }}%</span>
-                                    </div>
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-striped @if ($tw1 > 0 && $tw1 <= 25) bg-danger
-                                        @elseif($tw1 > 25 && $tw1 <= 50)
-                                            bg-warning
-                                        @elseif($tw1 > 50 && $tw1 <= 75)
-                                            bg-info
-                                        @elseif($tw1 > 75 && $tw1 <= 100)
-                                            bg-success @endif
-                                            role="progressbar"
-                                            style="width: {{ $tw1 }}%" aria-valuenow="{{ $tw1 }}"
-                                            aria-valuemin="0" aria-valuemax="100" data-toggle="tooltip" data-placement="top"
-                                            title="" data-original-title="{{ $tw1 }}%">
+                                @endif
+                                @if ($tw1 != null)
+                                    <div class="progress-card mb-2">
+                                        <div class="progress-status mb-1">
+                                            <span class="font-weight-normal">TW 1</span>
+                                            <span class="text-muted fw-bold"> {{ $tw1 }}%</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-striped @if ($tw1 > 0 && $tw1 <= 25) bg-danger
+                                            @elseif($tw1 > 25 && $tw1 <= 50)
+                                                bg-warning
+                                            @elseif($tw1 > 50 && $tw1 <= 75)
+                                                bg-info
+                                            @elseif($tw1 > 75 && $tw1 <= 100)
+                                                bg-success @endif
+                                                role="progressbar"
+                                                style="width: {{ $tw1 }}%" aria-valuenow="{{ $tw1 }}"
+                                                aria-valuemin="0" aria-valuemax="100" data-toggle="tooltip"
+                                                data-placement="top" title=""
+                                                data-original-title="{{ $tw1 }}%">
+                                            </div>
                                         </div>
                                     </div>
+                                @endif
+                            @else
+                                <div class="text-center text-muted">
+                                    <i>Tidak ada data</i>
                                 </div>
                             @endif
                         </div>
@@ -352,7 +360,7 @@
     <script>
         $('#nav-realisasi').addClass('active');
         $('#nav-realisasi .collapse').addClass('show');
-        $('#nav-realisasi .collapse #li-keong').addClass('active');
+        $('#nav-realisasi .collapse #li-keong-2').addClass('active');
 
         $('.multiple').select2({
             placeholder: "- Pilih OPD -",
@@ -380,7 +388,7 @@
                         success: function(data) {
                             swal({
                                 title: "Berhasil!",
-                                text: "Data yang dipilih berhasil dihapus.",
+                                text: "Data berhasil dihapus.",
                                 icon: "success",
                             }).then(function() {
                                 location.reload();
@@ -503,7 +511,7 @@
                                     text: "Data berhasil disimpan.",
                                     icon: "success",
                                 }).then((value) => {
-                                    location.href = "{{ url()->previous() }}";
+                                    window.location.reload()
                                 });
 
                             } else {
@@ -586,8 +594,15 @@
                     className: 'text-center'
                 },
                 {
+                    data: 'penggunaan_anggaran',
+                    name: 'penggunaan_anggaran',
+                    className: 'text-right',
+                    render: $.fn.dataTable.render.number('.', ',', 0, 'Rp.')
+                },
+                {
                     data: 'progress',
                     name: 'progress',
+                    className: 'text-center'
                 },
                 {
                     data: 'status',

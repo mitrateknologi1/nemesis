@@ -51,6 +51,7 @@
 
         $('#form').submit(function(e) {
             e.preventDefault();
+            $('.error-text').html('')
             const formValidation = $('#form .req').serializeArray()
             validation(formValidation)
             let formData = new FormData(this);

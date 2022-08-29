@@ -16,6 +16,11 @@ class LokasiPerencanaanKeong extends Model
 
     public function lokasiKeong()
     {
-        return $this->belongsTo(LokasiKeong::class, 'lokasi_keong_id');
+        return $this->belongsTo(LokasiKeong::class, 'lokasi_keong_id')->withTrashed();
+    }
+
+    public function perencanaanKeong()
+    {
+        return $this->belongsTo(PerencanaanKeong::class);
     }
 }

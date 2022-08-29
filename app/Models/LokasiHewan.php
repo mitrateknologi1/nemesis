@@ -29,4 +29,9 @@ class LokasiHewan extends Model
     {
         return $this->hasMany(PemilikLokasiHewan::class)->withTrashed();
     }
+
+    public function listIndikator()
+    { // untuk hasil realisasi
+        return $this->hasMany(LokasiPerencanaanHewan::class)->where('status', 1);
+    }
 }

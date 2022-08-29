@@ -16,6 +16,6 @@ class OPDTerkaitKeong extends Model
 
     public function opd()
     {
-        return $this->belongsTo(OPD::class, 'opd_id')->orderBy('nama');
+        return $this->belongsTo(OPD::class, 'opd_id')->orderBy('nama')->withTrashed();
     }
 }

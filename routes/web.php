@@ -1,28 +1,34 @@
 <?php
 
+use App\Models\Siswa;
+use App\Models\Perencanaan;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\dokumen\MasterPlanController;
-use App\Http\Controllers\dokumen\RoadMapController;
-use App\Http\Controllers\ImportController;
-use App\Http\Controllers\intervensi\perencanaan\keong\PerencanaanKeongController;
-use App\Http\Controllers\intervensi\realisasi\keong\RealisasiKeongController;
 use App\Http\Controllers\ListController;
+use App\Http\Controllers\ImportController;
+use App\Http\Controllers\DashboardController;
+use Database\Seeders\PerencanaanManusiaSeeder;
+use App\Http\Controllers\masterData\OPDController;
+use App\Http\Controllers\PengaturanAkunController;
+use App\Http\Controllers\dokumen\RoadMapController;
 use App\Http\Controllers\masterData\AkunController;
 use App\Http\Controllers\masterData\HewanController;
+use App\Http\Controllers\masterData\TahunController;
+use App\Http\Controllers\dokumen\MasterPlanController;
+use App\Http\Controllers\masterData\PendudukController;
+use App\Http\Controllers\masterData\sekolah\SiswaController;
+use App\Http\Controllers\masterData\sekolah\SekolahController;
 use App\Http\Controllers\masterData\lokasi\LokasiDesaController;
 use App\Http\Controllers\masterData\lokasi\LokasiHewanController;
 use App\Http\Controllers\masterData\lokasi\LokasiKeongController;
-use App\Http\Controllers\masterData\OPDController;
-use App\Http\Controllers\masterData\PendudukController;
 use App\Http\Controllers\masterData\sekolah\JenjangSekolahController;
-use App\Http\Controllers\masterData\sekolah\SekolahController;
-use App\Http\Controllers\masterData\sekolah\SiswaController;
-use App\Http\Controllers\masterData\TahunController;
-use App\Http\Controllers\PengaturanAkunController;
-use App\Models\Perencanaan;
-use App\Models\Siswa;
+use App\Http\Controllers\intervensi\realisasi\keong\RealisasiKeongController;
+use App\Http\Controllers\intervensi\perencanaan\keong\PerencanaanKeongController;
+use App\Http\Controllers\intervensi\realisasi\manusia\RealisasiManusiaController;
+use App\Http\Controllers\intervensi\perencanaan\manusia\PerencanaanManusiaController;
+use App\Http\Controllers\intervensi\perencanaan\hewan\PerencanaanHewanController;
+use App\Http\Controllers\intervensi\realisasi\hewan\RealisasiHewanController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +54,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('/dashboard', DashboardController::class);
 
+    // Keong
     Route::resource('rencana-intervensi-keong', PerencanaanKeongController::class);
     Route::post('rencana-intervensi-keong/konfirmasi/{rencana_intervensi_keong}', PerencanaanKeongController::class . '@konfirmasi');
     Route::get('rencana-intervensi-keong/map/{rencana_intervensi_keong}', PerencanaanKeongController::class . '@map');
@@ -61,6 +68,60 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('realisasi-intervensi-keong/delete-opd/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@deleteOPD');
     Route::delete('realisasi-intervensi-keong/delete-laporan/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@deleteLaporan');
     Route::delete('realisasi-intervensi-keong/delete-semua-laporan/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@deleteSemuaLaporan');
+    Route::get('hasil-realisasi-keong', RealisasiKeongController::class . '@hasilRealisasi');
+
+    // Manusia
+    Route::resource('rencana-intervensi-manusia', PerencanaanManusiaController::class)->parameters([
+        'rencana-intervensi-manusia' => 'rencana_intervensi_manusia'
+    ]);
+    Route::post('rencana-intervensi-manusia/konfirmasi/{rencana_intervensi_manusia}', PerencanaanManusiaController::class . '@konfirmasi');
+
+    Route::resource('realisasi-intervensi-manusia', RealisasiManusiaController::class)->parameters([
+        'realisasi-intervensi-manusia' => 'realisasi_intervensi_manusia'
+    ]);
+    Route::get('tabel-laporan-realisasi-manusia', RealisasiManusiaController::class . '@tabelLaporan');
+    Route::get('realisasi-intervensi-manusia/create-pelaporan/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@createPelaporan');
+    Route::get('realisasi-intervensi-manusia/show-laporan/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@showLaporan');
+    Route::post('realisasi-intervensi-manusia/konfirmasi/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@konfirmasi');
+    Route::post('realisasi-intervensi-manusia/update-opd/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@updateOPD');
+    Route::delete('realisasi-intervensi-manusia/delete-opd/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@deleteOPD');
+    Route::delete('realisasi-intervensi-manusia/delete-laporan/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@deleteLaporan');
+    Route::delete('realisasi-intervensi-manusia/delete-semua-laporan/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@deleteSemuaLaporan');
+    Route::get('hasil-realisasi-manusia', RealisasiManusiaController::class . '@hasilRealisasi');
+
+
+    // Hewan
+    Route::resource('rencana-intervensi-hewan', PerencanaanHewanController::class);
+    Route::post('rencana-intervensi-hewan/konfirmasi/{rencana_intervensi_hewan}', PerencanaanHewanController::class . '@konfirmasi');
+    Route::get('rencana-intervensi-hewan/map/{rencana_intervensi_hewan}', PerencanaanHewanController::class . '@map');
+
+    Route::resource('realisasi-intervensi-hewan', RealisasiHewanController::class);
+    Route::get('tabel-laporan-realisasi-hewan', RealisasiHewanController::class . '@tabelLaporan');
+    Route::get('realisasi-intervensi-hewan/create-pelaporan/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@createPelaporan');
+    Route::get('realisasi-intervensi-hewan/show-laporan/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@showLaporan');
+    Route::post('realisasi-intervensi-hewan/konfirmasi/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@konfirmasi');
+    Route::post('realisasi-intervensi-hewan/update-opd/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@updateOPD');
+    Route::delete('realisasi-intervensi-hewan/delete-opd/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@deleteOPD');
+    Route::delete('realisasi-intervensi-hewan/delete-laporan/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@deleteLaporan');
+    Route::delete('realisasi-intervensi-hewan/delete-semua-laporan/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@deleteSemuaLaporan');
+    Route::get('hasil-realisasi-hewan', RealisasiHewanController::class . '@hasilRealisasi');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // Master Data
     // Lokasi

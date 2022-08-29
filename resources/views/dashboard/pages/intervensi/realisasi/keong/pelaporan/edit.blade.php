@@ -123,7 +123,7 @@
     <script>
         $('#nav-realisasi').addClass('active');
         $('#nav-realisasi .collapse').addClass('show');
-        $('#nav-realisasi .collapse #li-keong').addClass('active');
+        $('#nav-realisasi .collapse #li-keong-2').addClass('active');
 
         var tableLokasiRealisasi = $('#tabelLokasiTerealisasi').DataTable({
             "dom": "ftip",

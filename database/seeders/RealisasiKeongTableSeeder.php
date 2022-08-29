@@ -84,6 +84,32 @@ class RealisasiKeongTableSeeder extends Seeder
                 'tw' => 3,
                 'updated_at' => '2022-08-17 20:49:19',
             ),
+            5 => 
+            array (
+                'alasan_ditolak' => '-',
+                'created_at' => '2022-04-21 13:11:56',
+                'id' => '9392b3cc-537c-49b3-bc91-d320a17d703f',
+                'penggunaan_anggaran' => 1000000,
+                'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265986',
+                'progress' => 40.0,
+                'status' => 1,
+                'tanggal_konfirmasi' => '2022-04-21',
+                'tw' => 2,
+                'updated_at' => '2022-08-28 13:12:50',
+            ),
+            6 => 
+            array (
+                'alasan_ditolak' => '-',
+                'created_at' => '2022-08-28 13:13:51',
+                'id' => 'f6b09084-f1bf-453d-bc36-ece196f46782',
+                'penggunaan_anggaran' => 2000000,
+                'perencanaan_keong_id' => '76628878-af22-4ae8-be21-eaa420265986',
+                'progress' => 100.0,
+                'status' => 1,
+                'tanggal_konfirmasi' => '2022-08-28',
+                'tw' => 3,
+                'updated_at' => '2022-08-28 13:14:04',
+            ),
         ));
         
         

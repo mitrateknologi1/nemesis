@@ -12,6 +12,8 @@ use App\Models\OPDTerkaitManusia;
 use App\Models\PerencanaanManusia;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\RealisasiManusiaExport;
 use App\Models\DokumenRealisasiManusia;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
@@ -720,5 +722,27 @@ class RealisasiManusiaController extends Controller
         }
 
         return view('dashboard.pages.hasilRealisasi.manusia.index');
+    }
+
+
+    public function export()
+    {
+        $dataRealisasi = PerencanaanManusia::with('opd', 'pendudukPerencanaanManusia', 'realisasiManusia')
+            ->where('status', 1)
+            ->where(function ($query) {
+                if (Auth::user()->role == 'OPD') {
+                    $query->where('opd_id', Auth::user()->opd_id);
+                    $query->orWhereHas('opdTerkaitManusia', function ($q) {
+                        $q->where('status', 1);
+                        $q->where('opd_id', Auth::user()->opd_id);
+                    });
+                }
+            })
+            ->latest()->get();
+        // return view('dashboard.pages.intervensi.realisasi.keong.subIndikator.export', ['dataPerencanaan' => $dataPerencanaan]);
+
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+
+        return Excel::download(new RealisasiManusiaExport($dataRealisasi), "Export Data Realisasi Manusia" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 }

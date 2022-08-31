@@ -13,6 +13,8 @@ use App\Models\OPDTerkaitHewan;
 use App\Models\PerencanaanHewan;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\RealisasiHewanExport;
 use App\Models\DokumenRealisasiHewan;
 use App\Models\LokasiPerencanaanHewan;
 use Illuminate\Support\Facades\Storage;
@@ -724,5 +726,26 @@ class RealisasiHewanController extends Controller
         }
 
         return view('dashboard.pages.hasilRealisasi.hewan.index');
+    }
+
+    public function export()
+    {
+        $dataRealisasi = PerencanaanHewan::with('opd', 'lokasiPerencanaanHewan', 'realisasiHewan')
+            ->where('status', 1)
+            ->where(function ($query) {
+                if (Auth::user()->role == 'OPD') {
+                    $query->where('opd_id', Auth::user()->opd_id);
+                    $query->orWhereHas('opdTerkaitHewan', function ($q) {
+                        $q->where('status', 1);
+                        $q->where('opd_id', Auth::user()->opd_id);
+                    });
+                }
+            })
+            ->latest()->get();
+        // return view('dashboard.pages.intervensi.realisasi.keong.subIndikator.export', ['dataPerencanaan' => $dataPerencanaan]);
+
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+
+        return Excel::download(new RealisasiHewanExport($dataRealisasi), "Export Data Realisasi Hewan" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 }

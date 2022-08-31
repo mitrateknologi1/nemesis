@@ -13,8 +13,10 @@ use App\Models\OPDTerkaitKeong;
 use App\Models\PerencanaanKeong;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Models\LokasiPerencanaanKeong;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\RealisasiKeongExport;
 use App\Models\DokumenRealisasiKeong;
+use App\Models\LokasiPerencanaanKeong;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
@@ -677,5 +679,26 @@ class RealisasiKeongController extends Controller
         }
 
         return view('dashboard.pages.hasilRealisasi.keong.index');
+    }
+
+    public function export()
+    {
+        $dataRealisasi = PerencanaanKeong::with('opd', 'lokasiPerencanaanKeong', 'realisasiKeong')
+            ->where('status', 1)
+            ->where(function ($query) {
+                if (Auth::user()->role == 'OPD') {
+                    $query->where('opd_id', Auth::user()->opd_id);
+                    $query->orWhereHas('opdTerkaitKeong', function ($q) {
+                        $q->where('status', 1);
+                        $q->where('opd_id', Auth::user()->opd_id);
+                    });
+                }
+            })
+            ->latest()->get();
+        // return view('dashboard.pages.intervensi.realisasi.keong.subIndikator.export', ['dataPerencanaan' => $dataPerencanaan]);
+
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+
+        return Excel::download(new RealisasiKeongExport($dataRealisasi), "Export Data Realisasi Keong" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 }

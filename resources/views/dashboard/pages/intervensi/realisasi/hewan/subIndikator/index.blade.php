@@ -23,8 +23,14 @@
                     <div class="card-head-row">
                         <div class="card-title">Data Realisasi Intervensi Hewan</div>
                         <div class="card-tools">
-                            @component('dashboard.components.buttons.export')
-                            @endcomponent
+                            <form action="{{ url('export-realisasi-hewan') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-info btn-border btn-round btn-sm mr-2"
+                                    id="export-penduduk" value="" name="desa_id">
+                                    <i class="fas fa-lg fa-download"></i>
+                                    Export Data Realisasi
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

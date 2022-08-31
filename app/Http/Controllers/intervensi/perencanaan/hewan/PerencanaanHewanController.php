@@ -500,7 +500,17 @@ class PerencanaanHewanController extends Controller
 
     public function export()
     {
-        $dataPerencanaan = PerencanaanHewan::latest()->get();
+        $dataPerencanaan = PerencanaanHewan::with('opd', 'lokasiPerencanaanHewan')
+            ->where(function ($query) {
+                if (Auth::user()->role == 'OPD') {
+                    $query->where('opd_id', Auth::user()->opd_id);
+                    $query->orWhereHas('opdTerkaitHewan', function ($q) { // OPD Terkait hanya bisa melihat yang telah di setujui
+                        $q->where('status', 1);
+                        $q->where('opd_id', Auth::user()->opd_id);
+                    });
+                }
+            })
+            ->latest()->get();
         // return view('dashboard.pages.intervensi.perencanaan.keong.subIndikator.export', ['dataPerencanaan' => $dataPerencanaan]);
 
         $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');

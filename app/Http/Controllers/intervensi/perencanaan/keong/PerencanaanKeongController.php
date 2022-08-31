@@ -501,7 +501,17 @@ class PerencanaanKeongController extends Controller
 
     public function export()
     {
-        $dataPerencanaan = PerencanaanKeong::latest()->get();
+        $dataPerencanaan = PerencanaanKeong::with('opd', 'lokasiPerencanaanKeong')
+            ->where(function ($query) {
+                if (Auth::user()->role == 'OPD') {
+                    $query->where('opd_id', Auth::user()->opd_id);
+                    $query->orWhereHas('opdTerkaitKeong', function ($q) { // OPD Terkait hanya bisa melihat yang telah di setujui
+                        $q->where('status', 1);
+                        $q->where('opd_id', Auth::user()->opd_id);
+                    });
+                }
+            })
+            ->latest()->get();
         // return view('dashboard.pages.intervensi.perencanaan.keong.subIndikator.export', ['dataPerencanaan' => $dataPerencanaan]);
 
         $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');

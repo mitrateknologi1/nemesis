@@ -161,19 +161,34 @@
                 buttons: ["Batal", "Ya"],
             }).then((result) => {
                 if (result) {
-                    $.ajax({
-                        type: 'DELETE',
-                        url: "{{ url('rencana-intervensi-keong') }}" + '/' + id,
-                        data: {
-                            _token: _token
-                        },
-                        success: function(data) {
-                            swal({
-                                title: "Berhasil!",
-                                text: "Data yang dipilih berhasil dihapus.",
-                                icon: "success",
-                            }).then(function() {
-                                table.ajax.reload();
+                    swal({
+                        title: 'Apakah anda benar-benar yakin ingin menghapus perencanaan ?',
+                        text: "Data yang dihapus tidak akan dapat dikembalikkan lagi!",
+                        icon: "warning",
+                        dangerMode: true,
+                        buttons: ["Batal", "Ya"],
+                    }).then((result) => {
+                        if (result) {
+                            $.ajax({
+                                type: 'DELETE',
+                                url: "{{ url('rencana-intervensi-keong') }}" + '/' + id,
+                                data: {
+                                    _token: _token
+                                },
+                                success: function(data) {
+                                    swal({
+                                        title: "Berhasil!",
+                                        text: "Data yang dipilih berhasil dihapus.",
+                                        icon: "success",
+                                    }).then(function() {
+                                        table.ajax.reload();
+                                    });
+                                }
+                            })
+
+                        } else {
+                            swal("Data batal dihapus.", {
+                                icon: "error",
                             });
                         }
                     })

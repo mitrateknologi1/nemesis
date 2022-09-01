@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
+use App\Exports\HasilRealisasiHewanExport;
 
 class RealisasiHewanController extends Controller
 {
@@ -742,10 +743,26 @@ class RealisasiHewanController extends Controller
                 }
             })
             ->latest()->get();
-        // return view('dashboard.pages.intervensi.realisasi.keong.subIndikator.export', ['dataPerencanaan' => $dataPerencanaan]);
+        // return view('dashboard.pages.intervensi.realisasi.hewan.subIndikator.export', ['dataPerencanaan' => $dataPerencanaan]);
 
         $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
 
         return Excel::download(new RealisasiHewanExport($dataRealisasi), "Export Data Realisasi Hewan" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
+    }
+
+    public function exportHasilRealisasi()
+    {
+        $habitatHewan = LokasiPerencanaanHewan::where('status', 1)
+            ->groupBy('lokasi_hewan_id')
+            ->pluck('lokasi_hewan_id')
+            ->toArray();
+
+        $dataRealisasi = LokasiHewan::with('listIndikator', 'desa')->whereIn('id', $habitatHewan)
+            ->latest()->get();
+        // return view('dashboard.pages.hasilRealisasi.hewan.export', ['dataRealisasi' => $dataRealisasi]);
+
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+
+        return Excel::download(new HasilRealisasiHewanExport($dataRealisasi), "Export Data Hasil Realisasi Hewan" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 }

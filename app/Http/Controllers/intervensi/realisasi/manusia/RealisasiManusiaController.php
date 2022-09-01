@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use App\Models\PendudukPerencanaanManusia;
+use App\Exports\HasilRealisasiManusiaExport;
 use App\Http\Requests\StoreRealisasiManusiaRequest;
 use App\Http\Requests\UpdateRealisasiManusiaRequest;
 
@@ -744,5 +745,21 @@ class RealisasiManusiaController extends Controller
         $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
 
         return Excel::download(new RealisasiManusiaExport($dataRealisasi), "Export Data Realisasi Manusia" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
+    }
+
+    public function exportHasilRealisasi()
+    {
+        $penduduk = PendudukPerencanaanManusia::where('status', 1)
+            ->groupBy('penduduk_id')
+            ->pluck('penduduk_id')
+            ->toArray();
+
+        $dataRealisasi = Penduduk::with('listIndikator', 'desa')->whereIn('id', $penduduk)
+            ->latest()->get();
+        // return view('dashboard.pages.hasilRealisasi.keong.export', ['dataRealisasi' => $dataRealisasi]);
+
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+
+        return Excel::download(new HasilRealisasiManusiaExport($dataRealisasi), "Export Data Hasil Realisasi Manusia" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 }

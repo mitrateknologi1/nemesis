@@ -20,6 +20,7 @@ use App\Models\LokasiPerencanaanKeong;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
+use App\Exports\HasilRealisasiKeongExport;
 
 class RealisasiKeongController extends Controller
 {
@@ -700,5 +701,21 @@ class RealisasiKeongController extends Controller
         $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
 
         return Excel::download(new RealisasiKeongExport($dataRealisasi), "Export Data Realisasi Keong" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
+    }
+
+    public function exportHasilRealisasi()
+    {
+        $habitatKeong = LokasiPerencanaanKeong::where('status', 1)
+            ->groupBy('lokasi_keong_id')
+            ->pluck('lokasi_keong_id')
+            ->toArray();
+
+        $dataRealisasi = LokasiKeong::with('listIndikator', 'desa')->whereIn('id', $habitatKeong)
+            ->latest()->get();
+        // return view('dashboard.pages.hasilRealisasi.keong.export', ['dataRealisasi' => $dataRealisasi]);
+
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+
+        return Excel::download(new HasilRealisasiKeongExport($dataRealisasi), "Export Data Hasil Realisasi Habitat Keong" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 }

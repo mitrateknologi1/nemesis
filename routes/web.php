@@ -72,6 +72,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('realisasi-intervensi-keong/delete-semua-laporan/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@deleteSemuaLaporan');
     Route::get('hasil-realisasi-keong', RealisasiKeongController::class . '@hasilRealisasi');
     Route::post('export-realisasi-keong', RealisasiKeongController::class . '@export');
+    Route::post('export-hasil-realisasi-keong', RealisasiKeongController::class . '@exportHasilRealisasi');
 
 
     // Manusia
@@ -94,6 +95,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('realisasi-intervensi-manusia/delete-semua-laporan/{realisasi_intervensi_manusia}', RealisasiManusiaController::class . '@deleteSemuaLaporan');
     Route::get('hasil-realisasi-manusia', RealisasiManusiaController::class . '@hasilRealisasi');
     Route::post('export-realisasi-manusia', RealisasiManusiaController::class . '@export');
+    Route::post('export-hasil-realisasi-manusia', RealisasiManusiaController::class . '@exportHasilRealisasi');
 
 
 
@@ -115,6 +117,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('realisasi-intervensi-hewan/delete-semua-laporan/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@deleteSemuaLaporan');
     Route::get('hasil-realisasi-hewan', RealisasiHewanController::class . '@hasilRealisasi');
     Route::post('export-realisasi-hewan', RealisasiHewanController::class . '@export');
+    Route::post('export-hasil-realisasi-hewan', RealisasiHewanController::class . '@exportHasilRealisasi');
+
 
 
 

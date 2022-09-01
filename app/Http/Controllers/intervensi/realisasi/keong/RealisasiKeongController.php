@@ -213,6 +213,11 @@ class RealisasiKeongController extends Controller
         $getLokasiKeongBelumTerealisasi = $rencana_intervensi_keong->lokasiPerencanaanKeong->whereNull('realisasi_keong_id')->pluck('lokasi_keong_id')->toArray();
         $lokasiKeong = LokasiKeong::with('desa')->whereIn('id', $getLokasiKeongBelumTerealisasi)->get();
 
+        $penggunaanAnggaran = 0;
+        foreach ($rencana_intervensi_keong->realisasiKeong->where('status', 1) as $item) {
+            $penggunaanAnggaran += $item->penggunaan_anggaran;
+        }
+        $sisaAnggaran = $rencana_intervensi_keong->nilai_pembiayaan - $penggunaanAnggaran;
         $data = [
             'rencanaIntervensiKeong' => $rencana_intervensi_keong,
             'desa' => Desa::all(),
@@ -220,6 +225,7 @@ class RealisasiKeongController extends Controller
             'lokasiPerencanaanKeongArr' => $rencana_intervensi_keong->lokasiPerencanaanKeong->whereNull('realisasi_keong_id')->pluck('lokasi_keong_id')->toArray(),
             'opdTerkaitKeong' => json_encode($rencana_intervensi_keong->opdTerkaitKeong->pluck('opd_id')->toArray()),
             'dataMap' => $lokasiKeong,
+            'countSisaAnggaran' => $sisaAnggaran,
         ];
 
         return view('dashboard.pages.intervensi.realisasi.keong.pelaporan.create', $data);
@@ -228,6 +234,11 @@ class RealisasiKeongController extends Controller
     public function show(PerencanaanKeong $realisasi_intervensi_keong)
     {
         $rencana_intervensi_keong = $realisasi_intervensi_keong;
+        $penggunaanAnggaran = 0;
+        foreach ($rencana_intervensi_keong->realisasiKeong->where('status', 1) as $item) {
+            $penggunaanAnggaran += $item->penggunaan_anggaran;
+        }
+        $sisaAnggaran = $rencana_intervensi_keong->nilai_pembiayaan - $penggunaanAnggaran;
         $data = [
             'rencana_intervensi_keong' => $rencana_intervensi_keong,
             'tw1' => $rencana_intervensi_keong->realisasiKeong->where('tw', 1)->where('status', 1)->max('progress'),
@@ -236,14 +247,21 @@ class RealisasiKeongController extends Controller
             'tw4' => $rencana_intervensi_keong->realisasiKeong->where('tw', 4)->where('status', 1)->max('progress'),
             'opdTerkait' => json_encode($rencana_intervensi_keong->opdTerkaitKeong->pluck('opd_id')->toArray()),
             'opd' => OPD::orderBy('nama')->whereNot('id', $rencana_intervensi_keong->opd_id)->get(),
+            'countPenggunaanAnggaran' => $penggunaanAnggaran,
+            'countSisaAnggaran' => $sisaAnggaran,
         ];
         return view('dashboard.pages.intervensi.realisasi.keong.subIndikator.show', $data);
     }
 
-
-
     public function store(Request $request)
     {
+        $rencana_intervensi_keong = PerencanaanKeong::find($request->id_perencanaan);
+        $penggunaanAnggaran = 0;
+        foreach ($rencana_intervensi_keong->realisasiKeong->where('status', 1) as $item) {
+            $penggunaanAnggaran += $item->penggunaan_anggaran;
+        }
+        $sisaAnggaran = $rencana_intervensi_keong->nilai_pembiayaan - $penggunaanAnggaran;
+
         $validator = Validator::make(
             $request->all(),
             [
@@ -252,12 +270,16 @@ class RealisasiKeongController extends Controller
             ],
             [
                 'lokasi.required' => 'Lokasi harus dipilih',
-                'penggunaan_anggaran.required' => 'Nilai Pembiayaan harus diisi',
+                'penggunaan_anggaran.required' => 'Penggunaan Anggaran harus diisi',
             ]
         );
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()]);
+        }
+
+        if ($request->penggunaan_anggaran > $sisaAnggaran) {
+            return 'max_sisa_anggaran';
         }
 
         if ($request->nama_dokumen != null) {
@@ -357,6 +379,13 @@ class RealisasiKeongController extends Controller
         $getLokasiKeongBelumTerealisasi = $realisasi_intervensi_keong->perencanaanKeong->lokasiPerencanaanKeong->whereNull('realisasi_keong_id')->pluck('lokasi_keong_id')->toArray();
         $lokasiKeong = LokasiKeong::with('desa')->whereIn('id', $getLokasiKeongBelumTerealisasi)->get();
 
+        $rencana_intervensi_keong = $realisasi_intervensi_keong->perencanaanKeong;
+        $penggunaanAnggaran = 0;
+        foreach ($rencana_intervensi_keong->realisasiKeong->where('status', 1) as $item) {
+            $penggunaanAnggaran += $item->penggunaan_anggaran;
+        }
+        $sisaAnggaran = $rencana_intervensi_keong->nilai_pembiayaan - $penggunaanAnggaran;
+
         $data = [
             'realisasiIntervensiKeong' => $realisasi_intervensi_keong,
             'rencanaIntervensiKeong' => $realisasi_intervensi_keong->perencanaanKeong,
@@ -366,6 +395,7 @@ class RealisasiKeongController extends Controller
             'opdTerkaitKeong' => json_encode($realisasi_intervensi_keong->perencanaanKeong->opdTerkaitKeong->pluck('opd_id')->toArray()),
             'opd' => OPD::orderBy('nama')->whereNot('id', Auth::user()->opd_id)->get(),
             'dataMap' => $lokasiKeong,
+            'countSisaAnggaran' => $sisaAnggaran,
         ];
 
         return view('dashboard.pages.intervensi.realisasi.keong.pelaporan.edit', $data);
@@ -373,20 +403,31 @@ class RealisasiKeongController extends Controller
 
     public function update(Request $request, RealisasiKeong $realisasi_intervensi_keong)
     {
+        $rencana_intervensi_keong = PerencanaanKeong::find($request->id_perencanaan);
+        $penggunaanAnggaran = 0;
+        foreach ($rencana_intervensi_keong->realisasiKeong->where('status', 1) as $item) {
+            $penggunaanAnggaran += $item->penggunaan_anggaran;
+        }
+        $sisaAnggaran = $rencana_intervensi_keong->nilai_pembiayaan - $penggunaanAnggaran;
+
         $validator = Validator::make(
             $request->all(),
             [
                 'lokasi' => $realisasi_intervensi_keong->status != 1 ? 'required' : '',
-                'penggunaan_anggaran' => 'required',
+                'penggunaan_anggaran' => $realisasi_intervensi_keong->status != 1 ? 'required' : '',
             ],
             [
                 'lokasi.required' => 'Lokasi harus dipilih',
-                'penggunaan_anggaran.required' => 'Nilai Pembiayaan harus diisi',
+                'penggunaan_anggaran.required' => 'Penggunaan Anggaran harus diisi',
             ]
         );
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()]);
+        }
+
+        if ($realisasi_intervensi_keong->status != 1 && $request->penggunaan_anggaran > $sisaAnggaran) {
+            return 'max_sisa_anggaran';
         }
 
         // validate untuk dokumen lama
@@ -497,12 +538,12 @@ class RealisasiKeongController extends Controller
         // $countLokasiDipilih = count($request->lokasi);
         $countPencapaian = ((100 / $countTotalLokasiPerencanaan) * $countLokasiTerealisasi);
 
-        $dataRealisasi = [
-            'penggunaan_anggaran' => $request->penggunaan_anggaran,
-        ];
-
+        $dataRealisasi = [];
         if ($realisasi_intervensi_keong->status != 1) {
-            $dataRealisasi['progress'] = round($countPencapaian, 2);
+            $dataRealisasi = [
+                'penggunaan_anggaran' => $request->penggunaan_anggaran,
+                'progress' => round($countPencapaian, 2)
+            ];
         }
 
         if (Auth::user()->role == 'OPD') {

@@ -53,6 +53,7 @@
                                     'action' => route('realisasi-intervensi-manusia.update', $realisasiIntervensiManusia->id),
                                     'realisasiIntervensiManusia' => $realisasiIntervensiManusia,
                                     'rencanaIntervensiManusia' => $rencanaIntervensiManusia,
+                                    'countSisaAnggaran' => $countSisaAnggaran,
                                     'desa' => $desa,
                                     'penduduk' => $pendudukPerencanaanManusia,
                                     'pendudukArr' => $pendudukPerencanaanManusiaArr,

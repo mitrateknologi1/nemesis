@@ -282,7 +282,7 @@ class PerencanaanKeongController extends Controller
             [
                 'sub_indikator' => 'required',
                 'lokasi' => $rencana_intervensi_keong->realisasiKeong->count() == 0 ? 'required' : '',
-                'nilai_pembiayaan' => 'required',
+                'nilai_pembiayaan' => $rencana_intervensi_keong->realisasiKeong->count() == 0 ? 'required' : '',
                 'sumber_dana' => 'required',
             ],
             [
@@ -390,9 +390,12 @@ class PerencanaanKeongController extends Controller
         // update data perencanaan
         $dataPerencanaan = [
             'sub_indikator' => $request->sub_indikator,
-            'nilai_pembiayaan' => $request->nilai_pembiayaan,
-            'sumber_dana' => $request->sumber_dana,
+            'sumber_dana' => $request->sumber_dana
         ];
+
+        if ($rencana_intervensi_keong->realisasiKeong->count() == 0) {
+            $dataPerencanaan['nilai_pembiayaan'] = $request->nilai_pembiayaan;
+        }
 
         if (Auth::user()->role == 'OPD') {
             $dataPerencanaan['status'] = 0;

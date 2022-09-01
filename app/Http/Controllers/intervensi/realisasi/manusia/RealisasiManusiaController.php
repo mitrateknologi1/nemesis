@@ -222,13 +222,18 @@ class RealisasiManusiaController extends Controller
             abort('403', 'Maaf, anda sudah tidak dapat membuat laporan pada sub indikator ini karena sudah mencapai progress 100%.');
         }
 
-
+        $penggunaanAnggaran = 0;
+        foreach ($rencana_intervensi_manusia->realisasiManusia->where('status', 1) as $item) {
+            $penggunaanAnggaran += $item->penggunaan_anggaran;
+        }
+        $sisaAnggaran = $rencana_intervensi_manusia->nilai_pembiayaan - $penggunaanAnggaran;
         $data = [
             'rencanaIntervensiManusia' => $rencana_intervensi_manusia,
             'desa' => Desa::all(),
             'pendudukPerencanaanManusia' => json_encode($rencana_intervensi_manusia->pendudukPerencanaanManusia->pluck('penduduk_id')->toArray()),
             'pendudukPerencanaanManusiaArr' => $rencana_intervensi_manusia->pendudukPerencanaanManusia->whereNull('realisasi_manusia_id')->pluck('penduduk_id')->toArray(),
             'opdTerkaitManusia' => json_encode($rencana_intervensi_manusia->opdTerkaitManusia->pluck('opd_id')->toArray()),
+            'countSisaAnggaran' => $sisaAnggaran,
         ];
 
         return view('dashboard.pages.intervensi.realisasi.manusia.pelaporan.create', $data);
@@ -242,6 +247,13 @@ class RealisasiManusiaController extends Controller
      */
     public function store(Request $request)
     {
+        $rencana_intervensi_manusia = PerencanaanManusia::find($request->id_perencanaan);
+        $penggunaanAnggaran = 0;
+        foreach ($rencana_intervensi_manusia->realisasiManusia->where('status', 1) as $item) {
+            $penggunaanAnggaran += $item->penggunaan_anggaran;
+        }
+        $sisaAnggaran = $rencana_intervensi_manusia->nilai_pembiayaan - $penggunaanAnggaran;
+
         $validator = Validator::make(
             $request->all(),
             [
@@ -250,12 +262,16 @@ class RealisasiManusiaController extends Controller
             ],
             [
                 'penduduk.required' => 'Penduduk harus dipilih',
-                'penggunaan_anggaran.required' => 'Nilai Pembiayaan harus diisi',
+                'penggunaan_anggaran.required' => 'Penggunaan Anggaran harus diisi',
             ]
         );
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()]);
+        }
+
+        if ($request->penggunaan_anggaran > $sisaAnggaran) {
+            return 'max_sisa_anggaran';
         }
 
         if ($request->nama_dokumen != null) {
@@ -330,8 +346,6 @@ class RealisasiManusiaController extends Controller
         }
 
         return response()->json('kirim');
-
-        return $dataRealisasi;
     }
 
     /**
@@ -343,6 +357,11 @@ class RealisasiManusiaController extends Controller
     public function show(PerencanaanManusia $realisasi_intervensi_manusia)
     {
         $rencana_intervensi_manusia = $realisasi_intervensi_manusia;
+        $penggunaanAnggaran = 0;
+        foreach ($rencana_intervensi_manusia->realisasiManusia->where('status', 1) as $item) {
+            $penggunaanAnggaran += $item->penggunaan_anggaran;
+        }
+        $sisaAnggaran = $rencana_intervensi_manusia->nilai_pembiayaan - $penggunaanAnggaran;
         $data = [
             'rencana_intervensi_manusia' => $rencana_intervensi_manusia,
             'tw1' => $rencana_intervensi_manusia->realisasiManusia->where('tw', 1)->where('status', 1)->max('progress'),
@@ -351,6 +370,8 @@ class RealisasiManusiaController extends Controller
             'tw4' => $rencana_intervensi_manusia->realisasiManusia->where('tw', 4)->where('status', 1)->max('progress'),
             'opdTerkait' => json_encode($rencana_intervensi_manusia->opdTerkaitManusia->pluck('opd_id')->toArray()),
             'opd' => OPD::orderBy('nama')->whereNot('id', $rencana_intervensi_manusia->opd_id)->get(),
+            'countPenggunaanAnggaran' => $penggunaanAnggaran,
+            'countSisaAnggaran' => $sisaAnggaran,
         ];
         return view('dashboard.pages.intervensi.realisasi.manusia.subIndikator.show', $data);
     }
@@ -397,6 +418,13 @@ class RealisasiManusiaController extends Controller
         $getPendudukBelumTerealisasi = $realisasi_intervensi_manusia->perencanaanManusia->pendudukPerencanaanManusia->whereNull('realisasi_manusia_id')->pluck('penduduk_id')->toArray();
         $penduduk = Penduduk::with('desa')->whereIn('id', $getPendudukBelumTerealisasi)->get();
 
+        $rencana_intervensi_manusia = $realisasi_intervensi_manusia->perencanaanManusia;
+        $penggunaanAnggaran = 0;
+        foreach ($rencana_intervensi_manusia->realisasiManusia->where('status', 1) as $item) {
+            $penggunaanAnggaran += $item->penggunaan_anggaran;
+        }
+        $sisaAnggaran = $rencana_intervensi_manusia->nilai_pembiayaan - $penggunaanAnggaran;
+
         $data = [
             'realisasiIntervensiManusia' => $realisasi_intervensi_manusia,
             'rencanaIntervensiManusia' => $realisasi_intervensi_manusia->perencanaanManusia,
@@ -404,6 +432,7 @@ class RealisasiManusiaController extends Controller
             'pendudukPerencanaanManusia' => json_encode($realisasi_intervensi_manusia->perencanaanManusia->pendudukPerencanaanManusia->where('realisasi_manusia_id', $realisasi_intervensi_manusia->id)->pluck('penduduk_id')->toArray()),
             'pendudukPerencanaanManusiaArr' => $pendudukPerencanaanManusiaArr,
             'dataPendudukBelumRealisasi' => $penduduk,
+            'countSisaAnggaran' => $sisaAnggaran,
         ];
 
         return view('dashboard.pages.intervensi.realisasi.manusia.pelaporan.edit', $data);
@@ -418,6 +447,13 @@ class RealisasiManusiaController extends Controller
      */
     public function update(Request $request, RealisasiManusia $realisasi_intervensi_manusia)
     {
+        $rencana_intervensi_manusia = PerencanaanManusia::find($request->id_perencanaan);
+        $penggunaanAnggaran = 0;
+        foreach ($rencana_intervensi_manusia->realisasiManusia->where('status', 1) as $item) {
+            $penggunaanAnggaran += $item->penggunaan_anggaran;
+        }
+        $sisaAnggaran = $rencana_intervensi_manusia->nilai_pembiayaan - $penggunaanAnggaran;
+
         $validator = Validator::make(
             $request->all(),
             [
@@ -426,12 +462,16 @@ class RealisasiManusiaController extends Controller
             ],
             [
                 'penduduk.required' => 'Penduduk harus dipilih',
-                'penggunaan_anggaran.required' => 'Nilai Pembiayaan harus diisi',
+                'penggunaan_anggaran.required' => 'Penggunaan Anggaran harus diisi',
             ]
         );
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()]);
+        }
+
+        if ($realisasi_intervensi_manusia->status != 1 && $request->penggunaan_anggaran > $sisaAnggaran) {
+            return 'max_sisa_anggaran';
         }
 
         // validate untuk dokumen lama
@@ -543,12 +583,12 @@ class RealisasiManusiaController extends Controller
         // $countPendudukDipilih = count($request->penduduk);
         $countPencapaian = ((100 / $countTotalPendudukPerencanaan) * $countPendudukTerealisasi);
 
-        $dataRealisasi = [
-            'penggunaan_anggaran' => $request->penggunaan_anggaran,
-        ];
-
+        $dataRealisasi = [];
         if ($realisasi_intervensi_manusia->status != 1) {
-            $dataRealisasi['progress'] = round($countPencapaian, 2);
+            $dataRealisasi = [
+                'penggunaan_anggaran' => $request->penggunaan_anggaran,
+                'progress' => round($countPencapaian, 2)
+            ];
         }
 
         if (Auth::user()->role == 'OPD') {
@@ -740,7 +780,7 @@ class RealisasiManusiaController extends Controller
                 }
             })
             ->latest()->get();
-        // return view('dashboard.pages.intervensi.realisasi.keong.subIndikator.export', ['dataPerencanaan' => $dataPerencanaan]);
+        // return view('dashboard.pages.intervensi.realisasi.manusia.subIndikator.export', ['dataPerencanaan' => $dataPerencanaan]);
 
         $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
 
@@ -756,7 +796,7 @@ class RealisasiManusiaController extends Controller
 
         $dataRealisasi = Penduduk::with('listIndikator', 'desa')->whereIn('id', $penduduk)
             ->latest()->get();
-        // return view('dashboard.pages.hasilRealisasi.keong.export', ['dataRealisasi' => $dataRealisasi]);
+        // return view('dashboard.pages.hasilRealisasi.manusia.export', ['dataRealisasi' => $dataRealisasi]);
 
         $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
 

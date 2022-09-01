@@ -70,7 +70,15 @@
                         'placeholder' => 'Masukkan Penggunaan Anggaran',
                         'wajib' => '<sup class="text-danger">*</sup>',
                         'value' => $realisasiIntervensiManusia->penggunaan_anggaran ?? '',
+                        'attribute' => Auth::user()->role != 'OPD' ? 'disabled' : '',
                     ])
+                    @if (Auth::user()->role == 'OPD')
+                        @slot('info')
+                            Maksimal penggunaan anggaran adalah Rp <span class="rupiah font-weight-bold">
+                                {!! $countSisaAnggaran !!}
+                            </span>
+                        @endslot
+                    @endif
                 @endcomponent
             </div>
             <div class="form-group  p-0 pb-2">
@@ -285,6 +293,16 @@
                                 reverse: true
                             })
                             if ($.isEmptyObject(response.error)) {
+                                if (response == 'max_sisa_anggaran') {
+                                    $('.penggunaan_anggaran-error').html(
+                                        'Penggunaan Anggaran tidak boleh melebihi nilai maksimal yang telah ditentukan.'
+                                    );
+                                    swal({
+                                        title: "Gagal!",
+                                        text: "Penggunaan Anggaran melebihi nilai maksimal yang ditentukan",
+                                        icon: "error",
+                                    })
+                                }
                                 if (response == 'nama_dokumen_kosong_old') {
                                     swal({
                                         title: "Gagal!",

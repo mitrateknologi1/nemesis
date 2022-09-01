@@ -43,6 +43,7 @@
                                 [
                                     'action' => route('realisasi-intervensi-hewan.store'),
                                     'rencanaIntervensiHewan' => $rencanaIntervensiHewan,
+                                    'countSisaAnggaran' => $countSisaAnggaran,
                                     'desa' => $desa,
                                     'lokasiArr' => $lokasiPerencanaanHewanArr,
                                     'dataMap' => $dataMap,

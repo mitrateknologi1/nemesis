@@ -43,6 +43,7 @@
                                 [
                                     'action' => route('realisasi-intervensi-manusia.store'),
                                     'rencanaIntervensiManusia' => $rencanaIntervensiManusia,
+                                    'countSisaAnggaran' => $countSisaAnggaran,
                                     'desa' => $desa,
                                     'pendudukArr' => $pendudukPerencanaanManusiaArr,
                                     'method' => 'POST',

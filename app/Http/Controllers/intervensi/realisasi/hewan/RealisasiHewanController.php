@@ -226,6 +226,11 @@ class RealisasiHewanController extends Controller
         $getLokasiHewanBelumTerealisasi = $rencana_intervensi_hewan->lokasiPerencanaanHewan->whereNull('realisasi_hewan_id')->pluck('lokasi_hewan_id')->toArray();
         $lokasiHewan = LokasiHewan::with('desa')->whereIn('id', $getLokasiHewanBelumTerealisasi)->get();
 
+        $penggunaanAnggaran = 0;
+        foreach ($rencana_intervensi_hewan->realisasiHewan->where('status', 1) as $item) {
+            $penggunaanAnggaran += $item->penggunaan_anggaran;
+        }
+        $sisaAnggaran = $rencana_intervensi_hewan->nilai_pembiayaan - $penggunaanAnggaran;
         $data = [
             'rencanaIntervensiHewan' => $rencana_intervensi_hewan,
             'desa' => Desa::all(),
@@ -233,6 +238,7 @@ class RealisasiHewanController extends Controller
             'lokasiPerencanaanHewanArr' => $rencana_intervensi_hewan->lokasiPerencanaanHewan->whereNull('realisasi_hewan_id')->pluck('lokasi_hewan_id')->toArray(),
             'opdTerkaitHewan' => json_encode($rencana_intervensi_hewan->opdTerkaitHewan->pluck('opd_id')->toArray()),
             'dataMap' => $lokasiHewan,
+            'countSisaAnggaran' => $sisaAnggaran,
         ];
 
         return view('dashboard.pages.intervensi.realisasi.hewan.pelaporan.create', $data);
@@ -246,6 +252,13 @@ class RealisasiHewanController extends Controller
      */
     public function store(Request $request)
     {
+        $rencana_intervensi_hewan = PerencanaanHewan::find($request->id_perencanaan);
+        $penggunaanAnggaran = 0;
+        foreach ($rencana_intervensi_hewan->realisasiHewan->where('status', 1) as $item) {
+            $penggunaanAnggaran += $item->penggunaan_anggaran;
+        }
+        $sisaAnggaran = $rencana_intervensi_hewan->nilai_pembiayaan - $penggunaanAnggaran;
+
         $validator = Validator::make(
             $request->all(),
             [
@@ -254,12 +267,16 @@ class RealisasiHewanController extends Controller
             ],
             [
                 'lokasi.required' => 'Lokasi harus dipilih',
-                'penggunaan_anggaran.required' => 'Nilai Pembiayaan harus diisi',
+                'penggunaan_anggaran.required' => 'Penggunaan Anggaran harus diisi',
             ]
         );
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()]);
+        }
+
+        if ($request->penggunaan_anggaran > $sisaAnggaran) {
+            return 'max_sisa_anggaran';
         }
 
         if ($request->nama_dokumen != null) {
@@ -345,6 +362,11 @@ class RealisasiHewanController extends Controller
     public function show(PerencanaanHewan $realisasi_intervensi_hewan)
     {
         $rencana_intervensi_hewan = $realisasi_intervensi_hewan;
+        $penggunaanAnggaran = 0;
+        foreach ($rencana_intervensi_hewan->realisasiHewan->where('status', 1) as $item) {
+            $penggunaanAnggaran += $item->penggunaan_anggaran;
+        }
+        $sisaAnggaran = $rencana_intervensi_hewan->nilai_pembiayaan - $penggunaanAnggaran;
         $data = [
             'rencana_intervensi_hewan' => $rencana_intervensi_hewan,
             'tw1' => $rencana_intervensi_hewan->realisasiHewan->where('tw', 1)->where('status', 1)->max('progress'),
@@ -353,6 +375,8 @@ class RealisasiHewanController extends Controller
             'tw4' => $rencana_intervensi_hewan->realisasiHewan->where('tw', 4)->where('status', 1)->max('progress'),
             'opdTerkait' => json_encode($rencana_intervensi_hewan->opdTerkaitHewan->pluck('opd_id')->toArray()),
             'opd' => OPD::orderBy('nama')->whereNot('id', $rencana_intervensi_hewan->opd_id)->get(),
+            'countPenggunaanAnggaran' => $penggunaanAnggaran,
+            'countSisaAnggaran' => $sisaAnggaran,
         ];
         return view('dashboard.pages.intervensi.realisasi.hewan.subIndikator.show', $data);
     }
@@ -399,6 +423,12 @@ class RealisasiHewanController extends Controller
         $getLokasiHewanBelumTerealisasi = $realisasi_intervensi_hewan->perencanaanHewan->lokasiPerencanaanHewan->whereNull('realisasi_hewan_id')->pluck('lokasi_hewan_id')->toArray();
         $lokasiHewan = LokasiHewan::with('desa')->whereIn('id', $getLokasiHewanBelumTerealisasi)->get();
 
+        $rencana_intervensi_hewan = $realisasi_intervensi_hewan->perencanaanHewan;
+        $penggunaanAnggaran = 0;
+        foreach ($rencana_intervensi_hewan->realisasiHewan->where('status', 1) as $item) {
+            $penggunaanAnggaran += $item->penggunaan_anggaran;
+        }
+        $sisaAnggaran = $rencana_intervensi_hewan->nilai_pembiayaan - $penggunaanAnggaran;
         $data = [
             'realisasiIntervensiHewan' => $realisasi_intervensi_hewan,
             'rencanaIntervensiHewan' => $realisasi_intervensi_hewan->perencanaanHewan,
@@ -408,6 +438,7 @@ class RealisasiHewanController extends Controller
             'opdTerkaitHewan' => json_encode($realisasi_intervensi_hewan->perencanaanHewan->opdTerkaitHewan->pluck('opd_id')->toArray()),
             'opd' => OPD::orderBy('nama')->whereNot('id', Auth::user()->opd_id)->get(),
             'dataMap' => $lokasiHewan,
+            'countSisaAnggaran' => $sisaAnggaran,
         ];
 
         return view('dashboard.pages.intervensi.realisasi.hewan.pelaporan.edit', $data);
@@ -422,20 +453,31 @@ class RealisasiHewanController extends Controller
      */
     public function update(Request $request, RealisasiHewan $realisasi_intervensi_hewan)
     {
+        $rencana_intervensi_hewan = PerencanaanHewan::find($request->id_perencanaan);
+        $penggunaanAnggaran = 0;
+        foreach ($rencana_intervensi_hewan->realisasiHewan->where('status', 1) as $item) {
+            $penggunaanAnggaran += $item->penggunaan_anggaran;
+        }
+        $sisaAnggaran = $rencana_intervensi_hewan->nilai_pembiayaan - $penggunaanAnggaran;
+
         $validator = Validator::make(
             $request->all(),
             [
                 'lokasi' => $realisasi_intervensi_hewan->status != 1 ? 'required' : '',
-                'penggunaan_anggaran' => 'required',
+                'penggunaan_anggaran' => $realisasi_intervensi_hewan->status != 1 ? 'required' : '',
             ],
             [
                 'lokasi.required' => 'Lokasi harus dipilih',
-                'penggunaan_anggaran.required' => 'Nilai Pembiayaan harus diisi',
+                'penggunaan_anggaran.required' => 'Penggunaan Anggaran harus diisi',
             ]
         );
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()]);
+        }
+
+        if ($realisasi_intervensi_hewan->status != 1 && $request->penggunaan_anggaran > $sisaAnggaran) {
+            return 'max_sisa_anggaran';
         }
 
         // validate untuk dokumen lama
@@ -546,12 +588,12 @@ class RealisasiHewanController extends Controller
         // $countLokasiDipilih = count($request->lokasi);
         $countPencapaian = ((100 / $countTotalLokasiPerencanaan) * $countLokasiTerealisasi);
 
-        $dataRealisasi = [
-            'penggunaan_anggaran' => $request->penggunaan_anggaran,
-        ];
-
+        $dataRealisasi = [];
         if ($realisasi_intervensi_hewan->status != 1) {
-            $dataRealisasi['progress'] = round($countPencapaian, 2);
+            $dataRealisasi = [
+                'penggunaan_anggaran' => $request->penggunaan_anggaran,
+                'progress' => round($countPencapaian, 2)
+            ];
         }
 
         if (Auth::user()->role == 'OPD') {

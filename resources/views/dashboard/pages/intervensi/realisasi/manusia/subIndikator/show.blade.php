@@ -105,7 +105,7 @@
         </div>
         <div class="col-md-12">
             <div class="row">
-                <div class="col-md-7">
+                <div class="col-md-4">
                     <div class="card">
                         <div class="card-header">
                             <div class="card-head-row">
@@ -211,7 +211,33 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-head-row">
+                                <div class="card-title">Penggunaan Anggaran</div>
+                            </div>
+                        </div>
+                        <div class="card-body p-3">
+                            <ul class="list-group list-group-bordered">
+                                <li class="list-group-item d-flex justify-content-between align-items-center p-2">Pagu
+                                    Awal:<span class="font-weight-bold">Rp. <span id="pagu-awal"
+                                            class="rupiah">{{ $rencana_intervensi_manusia->nilai_pembiayaan }}</span></span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+                                    Penggunaan Anggaran:<span class="font-weight-bold">Rp. <span id="penggunaan-anggaran"
+                                            class="rupiah">{{ $countPenggunaanAnggaran }}</span></span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+                                    Sisa Anggaran:<span class="font-weight-bold">Rp. <span id="sisa-anggaran"
+                                            class="rupiah">{{ $countSisaAnggaran }}</span></span>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
                     <div class="card">
                         <div class="card-header">
                             <div class="card-head-row">

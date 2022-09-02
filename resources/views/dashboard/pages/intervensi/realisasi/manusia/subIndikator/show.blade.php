@@ -52,8 +52,7 @@
                         <div class="card-title">Data Laporan Realisasi | <span
                                 class="font-weight-bold">{{ $rencana_intervensi_manusia->opd->nama }}</span></div>
                         <div class="card-tools">
-                            @if ($rencana_intervensi_manusia->realisasiManusia->count() > 0 &&
-                                ($rencana_intervensi_manusia->opd_id == Auth::user()->opd_id || Auth::user()->role == 'Admin'))
+                            @if ($rencana_intervensi_manusia->realisasiManusia->count() > 0 && Auth::user()->role == 'Admin')
                                 <button id="btn-delete-all"
                                     class="btn btn-danger btn-border font-weight-bold btn-round btn-sm mr-2 {{ $class ?? '' }}"
                                     value="{{ $rencana_intervensi_manusia->id }}">

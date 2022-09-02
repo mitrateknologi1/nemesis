@@ -20,6 +20,7 @@
                 ])
                 @slot('options')
                     <option value="Admin">Admin</option>
+                    <option value="Pimpinan">Pimpinan</option>
                     <option value="OPD">OPD</option>
                 @endslot
             @endcomponent
@@ -184,7 +185,7 @@
             $('#form-username').show();
             $('#form-password').show();
             $('#form-status').show();
-            if (role == "Admin") {
+            if (role == "Admin" || role == "Pimpinan") {
                 $('#form-nama').show();
                 $('#form-opd').hide();
             } else {

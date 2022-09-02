@@ -106,23 +106,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('realisasi-intervensi-hewan/delete-semua-laporan/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@deleteSemuaLaporan');
     Route::get('hasil-realisasi-hewan', RealisasiHewanController::class . '@hasilRealisasi');
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // Master Data
     // Lokasi
     Route::get('master-data/lokasi/desa/tabel', [LokasiDesaController::class, 'tabel']);

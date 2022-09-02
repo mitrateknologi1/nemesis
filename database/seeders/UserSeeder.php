@@ -26,6 +26,15 @@ class UserSeeder extends Seeder
                 'role' => 'Admin'
             ],
             [
+                'id' => '28f36223-ad80-495b-b461-deb4075fe530',
+                'nama' => 'Pimpinan',
+                'username' => 'pimpinan',
+                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+                'opd_id' => '',
+                'status' => 1,
+                'role' => 'Pimpinan'
+            ],
+            [
                 'id' => '28f36223-ad80-495b-b461-deb4075fe512',
                 'nama' => 'Dinas Kesehatan',
                 'username' => 'opd1',

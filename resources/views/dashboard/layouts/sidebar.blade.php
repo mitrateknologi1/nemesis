@@ -158,12 +158,6 @@
                      </a>
                  </li>
                  @if (Auth::user()->role == 'Admin')
-                     <li class="nav-item" id="nav-master-opd">
-                         <a href="{{ url('master-data/opd') }}">
-                             <i class="fas fa-building"></i>
-                             <p>OPD</p>
-                         </a>
-                     </li>
                      <li class="nav-item" id="nav-master-hewan">
                          <a href="{{ url('master-data/hewan') }}">
                              <i class="fas fa-paw"></i>

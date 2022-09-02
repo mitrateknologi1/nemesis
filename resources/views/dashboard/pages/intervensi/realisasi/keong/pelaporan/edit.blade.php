@@ -53,6 +53,7 @@
                                     'action' => route('realisasi-intervensi-keong.update', $realisasiIntervensiKeong->id),
                                     'realisasiIntervensiKeong' => $realisasiIntervensiKeong,
                                     'rencanaIntervensiKeong' => $rencanaIntervensiKeong,
+                                    'countSisaAnggaran' => $countSisaAnggaran,
                                     'desa' => $desa,
                                     'lokasi' => $lokasiPerencanaanKeong,
                                     'lokasiArr' => $lokasiPerencanaanKeongArr,

@@ -12,8 +12,10 @@ use App\Models\OPDTerkaitHewan;
 use App\Models\PerencanaanHewan;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\DokumenRealisasiHewan;
 use App\Models\LokasiPerencanaanHewan;
+use App\Exports\PerencanaanHewanExport;
 use App\Models\DokumenPerencanaanHewan;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
@@ -30,18 +32,37 @@ class PerencanaanHewanController extends Controller
      */
     public function index(Request $request)
     {
+        $perencanaanHewan = PerencanaanHewan::with('opd', 'lokasiPerencanaanHewan')
+            ->where(function ($query) {
+                if (Auth::user()->role == 'OPD') {
+                    $query->where('opd_id', Auth::user()->opd_id);
+                    $query->orWhereHas('opdTerkaitHewan', function ($q) { // OPD Terkait hanya bisa melihat yang telah di setujui
+                        $q->where('status', 1);
+                        $q->where('opd_id', Auth::user()->opd_id);
+                    });
+                }
+            })
+            ->latest();
         if ($request->ajax()) {
-            $data = PerencanaanHewan::with('opd', 'lokasiPerencanaanHewan')
-                ->where(function ($query) {
-                    if (Auth::user()->role == 'OPD') {
-                        $query->where('opd_id', Auth::user()->opd_id);
-                        $query->orWhereHas('opdTerkaitHewan', function ($q) { // OPD Terkait hanya bisa melihat yang telah di setujui
-                            $q->where('status', 1);
-                            $q->where('opd_id', Auth::user()->opd_id);
+            $data = $perencanaanHewan
+                // filtering
+                ->where(function ($query) use ($request) {
+                    if ($request->opd_filter && $request->opd_filter != 'semua') {
+                        $query->where('opd_id', $request->opd_filter);
+                    }
+
+                    if ($request->status_filter && $request->status_filter != 'semua') {
+                        $filter = $request->status_filter == "-" ? 0 : $request->status_filter;
+                        $query->where('status', $filter);
+                    }
+
+                    if ($request->search_filter) {
+                        $query->where(function ($query2) use ($request) {
+                            $query2->where('sub_indikator', 'like', '%' . $request->search_filter . '%');
                         });
                     }
-                })
-                ->latest();
+                });
+
             return DataTables::of($data)
                 ->addIndexColumn()
 
@@ -106,7 +127,7 @@ class PerencanaanHewanController extends Controller
                 ])
                 ->make(true);
         }
-        return view('dashboard.pages.intervensi.perencanaan.hewan.subIndikator.index');
+        return view('dashboard.pages.intervensi.perencanaan.hewan.subIndikator.index', ['perencanaanHewan' => $perencanaanHewan]);
     }
 
     /**
@@ -278,7 +299,7 @@ class PerencanaanHewanController extends Controller
             [
                 'sub_indikator' => 'required',
                 'lokasi' => $rencana_intervensi_hewan->realisasiHewan->count() == 0 ? 'required' : '',
-                'nilai_pembiayaan' => 'required',
+                'nilai_pembiayaan' => $rencana_intervensi_hewan->realisasiHewan->count() == 0 ? 'required' : '',
                 'sumber_dana' => 'required',
             ],
             [
@@ -386,9 +407,12 @@ class PerencanaanHewanController extends Controller
         // update data perencanaan
         $dataPerencanaan = [
             'sub_indikator' => $request->sub_indikator,
-            'nilai_pembiayaan' => $request->nilai_pembiayaan,
             'sumber_dana' => $request->sumber_dana,
         ];
+
+        if ($rencana_intervensi_hewan->realisasiHewan->count() == 0) {
+            $dataPerencanaan['nilai_pembiayaan'] = $request->nilai_pembiayaan;
+        }
 
         if (Auth::user()->role == 'OPD') {
             $dataPerencanaan['status'] = 0;
@@ -494,5 +518,25 @@ class PerencanaanHewanController extends Controller
         $getLokasiHewan = $rencana_intervensi_hewan->lokasiPerencanaanHewan->pluck('lokasi_hewan_id')->toArray();
         $lokasiHewan = LokasiHewan::with('desa')->whereIn('id', $getLokasiHewan)->get();
         return response()->json(['status' => 'success', 'data' => $lokasiHewan]);
+    }
+
+    public function export()
+    {
+        $dataPerencanaan = PerencanaanHewan::with('opd', 'lokasiPerencanaanHewan')
+            ->where(function ($query) {
+                if (Auth::user()->role == 'OPD') {
+                    $query->where('opd_id', Auth::user()->opd_id);
+                    $query->orWhereHas('opdTerkaitHewan', function ($q) { // OPD Terkait hanya bisa melihat yang telah di setujui
+                        $q->where('status', 1);
+                        $q->where('opd_id', Auth::user()->opd_id);
+                    });
+                }
+            })
+            ->latest()->get();
+        // return view('dashboard.pages.intervensi.perencanaan.keong.subIndikator.export', ['dataPerencanaan' => $dataPerencanaan]);
+
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+
+        return Excel::download(new PerencanaanHewanExport($dataPerencanaan), "Export Data Perencanaan Hewan" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 }

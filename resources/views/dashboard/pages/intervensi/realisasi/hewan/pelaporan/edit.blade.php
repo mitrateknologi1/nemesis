@@ -53,6 +53,7 @@
                                     'action' => route('realisasi-intervensi-hewan.update', $realisasiIntervensiHewan->id),
                                     'realisasiIntervensiHewan' => $realisasiIntervensiHewan,
                                     'rencanaIntervensiHewan' => $rencanaIntervensiHewan,
+                                    'countSisaAnggaran' => $countSisaAnggaran,
                                     'desa' => $desa,
                                     'lokasi' => $lokasiPerencanaanHewan,
                                     'lokasiArr' => $lokasiPerencanaanHewanArr,

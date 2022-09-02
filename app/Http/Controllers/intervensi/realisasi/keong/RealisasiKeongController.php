@@ -13,29 +13,83 @@ use App\Models\OPDTerkaitKeong;
 use App\Models\PerencanaanKeong;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Models\LokasiPerencanaanKeong;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\RealisasiKeongExport;
 use App\Models\DokumenRealisasiKeong;
+use App\Models\LokasiPerencanaanKeong;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
+use App\Exports\HasilRealisasiKeongExport;
 
 class RealisasiKeongController extends Controller
 {
     public function index(Request $request)
     {
+        $realisasiKeong = PerencanaanKeong::with('opd', 'lokasiPerencanaanKeong', 'realisasiKeong')
+            ->where('status', 1)
+            ->where(function ($query) {
+                if (Auth::user()->role == 'OPD') {
+                    $query->where('opd_id', Auth::user()->opd_id);
+                    $query->orWhereHas('opdTerkaitKeong', function ($q) {
+                        $q->where('status', 1);
+                        $q->where('opd_id', Auth::user()->opd_id);
+                    });
+                }
+            })
+            ->latest();
         if ($request->ajax()) {
-            $data = PerencanaanKeong::with('opd', 'lokasiPerencanaanKeong', 'realisasiKeong')
-                ->where('status', 1)
-                ->where(function ($query) {
-                    if (Auth::user()->role == 'OPD') {
-                        $query->where('opd_id', Auth::user()->opd_id);
-                        $query->orWhereHas('opdTerkaitKeong', function ($q) {
-                            $q->where('status', 1);
-                            $q->where('opd_id', Auth::user()->opd_id);
+            $data = $realisasiKeong
+                // filtering
+                ->where(function ($query) use ($request) {
+                    if ($request->opd_filter && $request->opd_filter != 'semua') {
+                        $query->where('opd_id', $request->opd_filter);
+                    }
+
+                    if ($request->status_filter && $request->status_filter != 'semua') {
+
+                        if ($request->status_filter == 'selesai') {
+                            $query->whereHas('realisasiKeong', function ($query2) use ($request) {
+                                $query2->where('status', 1);
+                                $query2->havingRaw('max(progress) = 100');
+                            });
+                        }
+                        if ($request->status_filter == 'belum_selesai') {
+                            $query->where(function ($query2) use ($request) {
+                                $query2->whereHas('realisasiKeong', function ($query3) use ($request) {
+                                    $query3->where('status', 1);
+                                    $query3->havingRaw('max(progress) != 100');
+                                });
+                                $query2->orWhereDoesntHave('realisasiKeong');
+                            });
+                        }
+                        if ($request->status_filter == 'belum_ada_laporan') {
+                            $query->whereDoesntHave('realisasiKeong');
+                        }
+
+                        if (in_array($request->status_filter, array("-", 1, 2))) {
+                            $query->whereHas('realisasiKeong', function ($query2) use ($request) {
+                                if ($request->status_filter == "-") {
+                                    $query2->where('status', 0);
+                                } else {
+                                    if ($request->status_filter == 1) {
+                                        $query2->where('status', 1);
+                                        $query2->max('progress') != 100;
+                                    } else {
+                                        $query2->where('status', $request->status_filter);
+                                    }
+                                }
+                            });
+                        }
+                    }
+
+                    if ($request->search_filter) {
+                        $query->where(function ($query2) use ($request) {
+                            $query2->where('sub_indikator', 'like', '%' . $request->search_filter . '%');
                         });
                     }
-                })
-                ->latest();
+                });
+
             return DataTables::of($data)
                 ->addIndexColumn()
 
@@ -53,7 +107,7 @@ class RealisasiKeongController extends Controller
                 ->addColumn('status', function ($row) {
                     $status = '<div>';
                     if ($row->realisasiKeong->where('status', 1)->max('progress') == 100) {
-                        $status .=  '<span class="badge badge-success">' . $row->realisasiKeong->where('status', 1)->count() . ' Laporan Selesai</span>';
+                        $status .=  '<span class="badge badge-info">Selesai Terealisasi</span>';
                     } else {
                         if ($row->realisasiKeong->where('status', 0)->count() > 0) {
                             $status .= '<span class="badge badge-warning my-1 mx-1">Menunggu Konfirmasi : <span class="font-weight-bold">' . $row->realisasiKeong->where('status', 0)->count() . '</span></span>';
@@ -101,7 +155,7 @@ class RealisasiKeongController extends Controller
                 ])
                 ->make(true);
         }
-        return view('dashboard.pages.intervensi.realisasi.keong.subIndikator.index');
+        return view('dashboard.pages.intervensi.realisasi.keong.subIndikator.index', ['realisasiKeong' => $realisasiKeong]);
     }
 
     public function tabelLaporan(Request $request)
@@ -210,6 +264,11 @@ class RealisasiKeongController extends Controller
         $getLokasiKeongBelumTerealisasi = $rencana_intervensi_keong->lokasiPerencanaanKeong->whereNull('realisasi_keong_id')->pluck('lokasi_keong_id')->toArray();
         $lokasiKeong = LokasiKeong::with('desa')->whereIn('id', $getLokasiKeongBelumTerealisasi)->get();
 
+        $penggunaanAnggaran = 0;
+        foreach ($rencana_intervensi_keong->realisasiKeong->where('status', 1) as $item) {
+            $penggunaanAnggaran += $item->penggunaan_anggaran;
+        }
+        $sisaAnggaran = $rencana_intervensi_keong->nilai_pembiayaan - $penggunaanAnggaran;
         $data = [
             'rencanaIntervensiKeong' => $rencana_intervensi_keong,
             'desa' => Desa::all(),
@@ -217,6 +276,7 @@ class RealisasiKeongController extends Controller
             'lokasiPerencanaanKeongArr' => $rencana_intervensi_keong->lokasiPerencanaanKeong->whereNull('realisasi_keong_id')->pluck('lokasi_keong_id')->toArray(),
             'opdTerkaitKeong' => json_encode($rencana_intervensi_keong->opdTerkaitKeong->pluck('opd_id')->toArray()),
             'dataMap' => $lokasiKeong,
+            'countSisaAnggaran' => $sisaAnggaran,
         ];
 
         return view('dashboard.pages.intervensi.realisasi.keong.pelaporan.create', $data);
@@ -225,6 +285,11 @@ class RealisasiKeongController extends Controller
     public function show(PerencanaanKeong $realisasi_intervensi_keong)
     {
         $rencana_intervensi_keong = $realisasi_intervensi_keong;
+        $penggunaanAnggaran = 0;
+        foreach ($rencana_intervensi_keong->realisasiKeong->where('status', 1) as $item) {
+            $penggunaanAnggaran += $item->penggunaan_anggaran;
+        }
+        $sisaAnggaran = $rencana_intervensi_keong->nilai_pembiayaan - $penggunaanAnggaran;
         $data = [
             'rencana_intervensi_keong' => $rencana_intervensi_keong,
             'tw1' => $rencana_intervensi_keong->realisasiKeong->where('tw', 1)->where('status', 1)->max('progress'),
@@ -233,14 +298,21 @@ class RealisasiKeongController extends Controller
             'tw4' => $rencana_intervensi_keong->realisasiKeong->where('tw', 4)->where('status', 1)->max('progress'),
             'opdTerkait' => json_encode($rencana_intervensi_keong->opdTerkaitKeong->pluck('opd_id')->toArray()),
             'opd' => OPD::orderBy('nama')->whereNot('id', $rencana_intervensi_keong->opd_id)->get(),
+            'countPenggunaanAnggaran' => $penggunaanAnggaran,
+            'countSisaAnggaran' => $sisaAnggaran,
         ];
         return view('dashboard.pages.intervensi.realisasi.keong.subIndikator.show', $data);
     }
 
-
-
     public function store(Request $request)
     {
+        $rencana_intervensi_keong = PerencanaanKeong::find($request->id_perencanaan);
+        $penggunaanAnggaran = 0;
+        foreach ($rencana_intervensi_keong->realisasiKeong->where('status', 1) as $item) {
+            $penggunaanAnggaran += $item->penggunaan_anggaran;
+        }
+        $sisaAnggaran = $rencana_intervensi_keong->nilai_pembiayaan - $penggunaanAnggaran;
+
         $validator = Validator::make(
             $request->all(),
             [
@@ -249,12 +321,16 @@ class RealisasiKeongController extends Controller
             ],
             [
                 'lokasi.required' => 'Lokasi harus dipilih',
-                'penggunaan_anggaran.required' => 'Nilai Pembiayaan harus diisi',
+                'penggunaan_anggaran.required' => 'Penggunaan Anggaran harus diisi',
             ]
         );
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()]);
+        }
+
+        if ($request->penggunaan_anggaran > $sisaAnggaran) {
+            return 'max_sisa_anggaran';
         }
 
         if ($request->nama_dokumen != null) {
@@ -354,6 +430,13 @@ class RealisasiKeongController extends Controller
         $getLokasiKeongBelumTerealisasi = $realisasi_intervensi_keong->perencanaanKeong->lokasiPerencanaanKeong->whereNull('realisasi_keong_id')->pluck('lokasi_keong_id')->toArray();
         $lokasiKeong = LokasiKeong::with('desa')->whereIn('id', $getLokasiKeongBelumTerealisasi)->get();
 
+        $rencana_intervensi_keong = $realisasi_intervensi_keong->perencanaanKeong;
+        $penggunaanAnggaran = 0;
+        foreach ($rencana_intervensi_keong->realisasiKeong->where('status', 1) as $item) {
+            $penggunaanAnggaran += $item->penggunaan_anggaran;
+        }
+        $sisaAnggaran = $rencana_intervensi_keong->nilai_pembiayaan - $penggunaanAnggaran;
+
         $data = [
             'realisasiIntervensiKeong' => $realisasi_intervensi_keong,
             'rencanaIntervensiKeong' => $realisasi_intervensi_keong->perencanaanKeong,
@@ -363,6 +446,7 @@ class RealisasiKeongController extends Controller
             'opdTerkaitKeong' => json_encode($realisasi_intervensi_keong->perencanaanKeong->opdTerkaitKeong->pluck('opd_id')->toArray()),
             'opd' => OPD::orderBy('nama')->whereNot('id', Auth::user()->opd_id)->get(),
             'dataMap' => $lokasiKeong,
+            'countSisaAnggaran' => $sisaAnggaran,
         ];
 
         return view('dashboard.pages.intervensi.realisasi.keong.pelaporan.edit', $data);
@@ -370,20 +454,31 @@ class RealisasiKeongController extends Controller
 
     public function update(Request $request, RealisasiKeong $realisasi_intervensi_keong)
     {
+        $rencana_intervensi_keong = PerencanaanKeong::find($request->id_perencanaan);
+        $penggunaanAnggaran = 0;
+        foreach ($rencana_intervensi_keong->realisasiKeong->where('status', 1) as $item) {
+            $penggunaanAnggaran += $item->penggunaan_anggaran;
+        }
+        $sisaAnggaran = $rencana_intervensi_keong->nilai_pembiayaan - $penggunaanAnggaran;
+
         $validator = Validator::make(
             $request->all(),
             [
                 'lokasi' => $realisasi_intervensi_keong->status != 1 ? 'required' : '',
-                'penggunaan_anggaran' => 'required',
+                'penggunaan_anggaran' => $realisasi_intervensi_keong->status != 1 ? 'required' : '',
             ],
             [
                 'lokasi.required' => 'Lokasi harus dipilih',
-                'penggunaan_anggaran.required' => 'Nilai Pembiayaan harus diisi',
+                'penggunaan_anggaran.required' => 'Penggunaan Anggaran harus diisi',
             ]
         );
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()]);
+        }
+
+        if ($realisasi_intervensi_keong->status != 1 && $request->penggunaan_anggaran > $sisaAnggaran) {
+            return 'max_sisa_anggaran';
         }
 
         // validate untuk dokumen lama
@@ -494,12 +589,12 @@ class RealisasiKeongController extends Controller
         // $countLokasiDipilih = count($request->lokasi);
         $countPencapaian = ((100 / $countTotalLokasiPerencanaan) * $countLokasiTerealisasi);
 
-        $dataRealisasi = [
-            'penggunaan_anggaran' => $request->penggunaan_anggaran,
-        ];
-
+        $dataRealisasi = [];
         if ($realisasi_intervensi_keong->status != 1) {
-            $dataRealisasi['progress'] = round($countPencapaian, 2);
+            $dataRealisasi = [
+                'penggunaan_anggaran' => $request->penggunaan_anggaran,
+                'progress' => round($countPencapaian, 2)
+            ];
         }
 
         if (Auth::user()->role == 'OPD') {
@@ -637,6 +732,22 @@ class RealisasiKeongController extends Controller
         return response()->json(['success' => 'Berhasil menghapus laporan']);
     }
 
+    function unique_multidim_array($array, $key)
+    {
+        $temp_array = array();
+        $i = 0;
+        $key_array = array();
+
+        foreach ($array as $val) {
+            if (!in_array($val[$key], $key_array)) {
+                $key_array[$i] = $val[$key];
+                $temp_array[$i] = $val;
+            }
+            $i++;
+        }
+        return $temp_array;
+    }
+
     public function hasilRealisasi(Request $request)
     {
         $habitatKeong = LokasiPerencanaanKeong::where('status', 1)
@@ -644,10 +755,35 @@ class RealisasiKeongController extends Controller
             ->pluck('lokasi_keong_id')
             ->toArray();
 
+        $dataHabitatKeong = LokasiKeong::with('listIndikator', 'desa')->whereIn('id', $habitatKeong)
+            ->latest();
 
         if ($request->ajax()) {
-            $data = LokasiKeong::with('listIndikator', 'desa')->whereIn('id', $habitatKeong)
-                ->latest();
+            $data = $dataHabitatKeong
+                // filtering
+                ->where(function ($query) use ($request) {
+                    if ($request->opd_filter && $request->opd_filter != 'semua') {
+                        $query->whereHas('listIndikator', function ($query2) use ($request) {
+                            $query2->whereHas('perencanaanKeong', function ($query3) use ($request) {
+                                $query3->where('opd_id', $request->opd_filter);
+                            });
+                        });
+                    }
+
+                    if ($request->indikator_filter && $request->indikator_filter != 'semua') {
+                        $query->whereHas('listIndikator', function ($query2) use ($request) {
+                            $query2->whereHas('perencanaanKeong', function ($query3) use ($request) {
+                                $query3->where('id', $request->indikator_filter);
+                            });
+                        });
+                    }
+
+                    if ($request->search_filter) {
+                        $query->where(function ($query2) use ($request) {
+                            $query2->where('nama', 'like', '%' . $request->search_filter . '%');
+                        });
+                    }
+                });
             return DataTables::of($data)
                 ->addIndexColumn()
 
@@ -676,6 +812,64 @@ class RealisasiKeongController extends Controller
                 ->make(true);
         }
 
-        return view('dashboard.pages.hasilRealisasi.keong.index');
+        $filterSubIndikator = [];
+        $filterOpd = [];
+
+        foreach ($dataHabitatKeong->get() as $item) {
+            foreach ($item->listIndikator as $row) {
+                $dataSubIndikator = [
+                    'id' => $row->perencanaanKeong->id,
+                    'sub_indikator' => $row->perencanaanKeong->sub_indikator
+                ];
+                $dataOpd = [
+                    'id' => $row->perencanaanKeong->opd->id,
+                    'opd' => $row->perencanaanKeong->opd->nama
+                ];
+                array_push($filterSubIndikator, $dataSubIndikator);
+                array_push($filterOpd, $dataOpd);
+            }
+        }
+
+        $filterSubIndikator = $this->unique_multidim_array($filterSubIndikator, 'id');
+        $filterOpd = $this->unique_multidim_array($filterOpd, 'id');
+
+        return view('dashboard.pages.hasilRealisasi.keong.index', ['filterSubIndikator' => $filterSubIndikator, 'filterOpd' => $filterOpd]);
+    }
+
+    public function export()
+    {
+        $dataRealisasi = PerencanaanKeong::with('opd', 'lokasiPerencanaanKeong', 'realisasiKeong')
+            ->where('status', 1)
+            ->where(function ($query) {
+                if (Auth::user()->role == 'OPD') {
+                    $query->where('opd_id', Auth::user()->opd_id);
+                    $query->orWhereHas('opdTerkaitKeong', function ($q) {
+                        $q->where('status', 1);
+                        $q->where('opd_id', Auth::user()->opd_id);
+                    });
+                }
+            })
+            ->latest()->get();
+        // return view('dashboard.pages.intervensi.realisasi.keong.subIndikator.export', ['dataPerencanaan' => $dataPerencanaan]);
+
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+
+        return Excel::download(new RealisasiKeongExport($dataRealisasi), "Export Data Realisasi Keong" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
+    }
+
+    public function exportHasilRealisasi()
+    {
+        $habitatKeong = LokasiPerencanaanKeong::where('status', 1)
+            ->groupBy('lokasi_keong_id')
+            ->pluck('lokasi_keong_id')
+            ->toArray();
+
+        $dataRealisasi = LokasiKeong::with('listIndikator', 'desa')->whereIn('id', $habitatKeong)
+            ->latest()->get();
+        // return view('dashboard.pages.hasilRealisasi.keong.export', ['dataRealisasi' => $dataRealisasi]);
+
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+
+        return Excel::download(new HasilRealisasiKeongExport($dataRealisasi), "Export Data Hasil Realisasi Habitat Keong" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 }

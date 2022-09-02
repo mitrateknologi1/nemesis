@@ -13,12 +13,15 @@ use App\Models\OPDTerkaitHewan;
 use App\Models\PerencanaanHewan;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\RealisasiHewanExport;
 use App\Models\DokumenRealisasiHewan;
 use App\Models\LokasiPerencanaanHewan;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
+use App\Exports\HasilRealisasiHewanExport;
 
 class RealisasiHewanController extends Controller
 {
@@ -29,19 +32,69 @@ class RealisasiHewanController extends Controller
      */
     public function index(Request $request)
     {
+        $realisasiHewan = PerencanaanHewan::with('opd', 'lokasiPerencanaanHewan', 'realisasiHewan')
+            ->where('status', 1)
+            ->where(function ($query) {
+                if (Auth::user()->role == 'OPD') {
+                    $query->where('opd_id', Auth::user()->opd_id);
+                    $query->orWhereHas('opdTerkaitHewan', function ($q) {
+                        $q->where('status', 1);
+                        $q->where('opd_id', Auth::user()->opd_id);
+                    });
+                }
+            })
+            ->latest();
         if ($request->ajax()) {
-            $data = PerencanaanHewan::with('opd', 'lokasiPerencanaanHewan', 'realisasiHewan')
-                ->where('status', 1)
-                ->where(function ($query) {
-                    if (Auth::user()->role == 'OPD') {
-                        $query->where('opd_id', Auth::user()->opd_id);
-                        $query->orWhereHas('opdTerkaitHewan', function ($q) {
-                            $q->where('status', 1);
-                            $q->where('opd_id', Auth::user()->opd_id);
+            $data = $realisasiHewan
+                // filtering
+                ->where(function ($query) use ($request) {
+                    if ($request->opd_filter && $request->opd_filter != 'semua') {
+                        $query->where('opd_id', $request->opd_filter);
+                    }
+
+                    if ($request->status_filter && $request->status_filter != 'semua') {
+
+                        if ($request->status_filter == 'selesai') {
+                            $query->whereHas('realisasiHewan', function ($query2) use ($request) {
+                                $query2->where('status', 1);
+                                $query2->havingRaw('max(progress) = 100');
+                            });
+                        }
+                        if ($request->status_filter == 'belum_selesai') {
+                            $query->where(function ($query2) use ($request) {
+                                $query2->whereHas('realisasiHewan', function ($query3) use ($request) {
+                                    $query3->where('status', 1);
+                                    $query3->havingRaw('max(progress) != 100');
+                                });
+                                $query2->orWhereDoesntHave('realisasiHewan');
+                            });
+                        }
+                        if ($request->status_filter == 'belum_ada_laporan') {
+                            $query->whereDoesntHave('realisasiHewan');
+                        }
+
+                        if (in_array($request->status_filter, array("-", 1, 2))) {
+                            $query->whereHas('realisasiHewan', function ($query2) use ($request) {
+                                if ($request->status_filter == "-") {
+                                    $query2->where('status', 0);
+                                } else {
+                                    if ($request->status_filter == 1) {
+                                        $query2->where('status', 1);
+                                        $query2->max('progress') != 100;
+                                    } else {
+                                        $query2->where('status', $request->status_filter);
+                                    }
+                                }
+                            });
+                        }
+                    }
+
+                    if ($request->search_filter) {
+                        $query->where(function ($query2) use ($request) {
+                            $query2->where('sub_indikator', 'like', '%' . $request->search_filter . '%');
                         });
                     }
-                })
-                ->latest();
+                });
             return DataTables::of($data)
                 ->addIndexColumn()
 
@@ -59,7 +112,7 @@ class RealisasiHewanController extends Controller
                 ->addColumn('status', function ($row) {
                     $status = '<div>';
                     if ($row->realisasiHewan->where('status', 1)->max('progress') == 100) {
-                        $status .=  '<span class="badge badge-success">' . $row->realisasiHewan->where('status', 1)->count() . ' Laporan Selesai</span>';
+                        $status .=  '<span class="badge badge-info">Selesai Terealisasi</span>';
                     } else {
                         if ($row->realisasiHewan->where('status', 0)->count() > 0) {
                             $status .= '<span class="badge badge-warning my-1 mx-1">Menunggu Konfirmasi : <span class="font-weight-bold">' . $row->realisasiHewan->where('status', 0)->count() . '</span></span>';
@@ -107,7 +160,7 @@ class RealisasiHewanController extends Controller
                 ])
                 ->make(true);
         }
-        return view('dashboard.pages.intervensi.realisasi.hewan.subIndikator.index');
+        return view('dashboard.pages.intervensi.realisasi.hewan.subIndikator.index', ['realisasiHewan' => $realisasiHewan]);
     }
 
 
@@ -223,6 +276,11 @@ class RealisasiHewanController extends Controller
         $getLokasiHewanBelumTerealisasi = $rencana_intervensi_hewan->lokasiPerencanaanHewan->whereNull('realisasi_hewan_id')->pluck('lokasi_hewan_id')->toArray();
         $lokasiHewan = LokasiHewan::with('desa')->whereIn('id', $getLokasiHewanBelumTerealisasi)->get();
 
+        $penggunaanAnggaran = 0;
+        foreach ($rencana_intervensi_hewan->realisasiHewan->where('status', 1) as $item) {
+            $penggunaanAnggaran += $item->penggunaan_anggaran;
+        }
+        $sisaAnggaran = $rencana_intervensi_hewan->nilai_pembiayaan - $penggunaanAnggaran;
         $data = [
             'rencanaIntervensiHewan' => $rencana_intervensi_hewan,
             'desa' => Desa::all(),
@@ -230,6 +288,7 @@ class RealisasiHewanController extends Controller
             'lokasiPerencanaanHewanArr' => $rencana_intervensi_hewan->lokasiPerencanaanHewan->whereNull('realisasi_hewan_id')->pluck('lokasi_hewan_id')->toArray(),
             'opdTerkaitHewan' => json_encode($rencana_intervensi_hewan->opdTerkaitHewan->pluck('opd_id')->toArray()),
             'dataMap' => $lokasiHewan,
+            'countSisaAnggaran' => $sisaAnggaran,
         ];
 
         return view('dashboard.pages.intervensi.realisasi.hewan.pelaporan.create', $data);
@@ -243,6 +302,13 @@ class RealisasiHewanController extends Controller
      */
     public function store(Request $request)
     {
+        $rencana_intervensi_hewan = PerencanaanHewan::find($request->id_perencanaan);
+        $penggunaanAnggaran = 0;
+        foreach ($rencana_intervensi_hewan->realisasiHewan->where('status', 1) as $item) {
+            $penggunaanAnggaran += $item->penggunaan_anggaran;
+        }
+        $sisaAnggaran = $rencana_intervensi_hewan->nilai_pembiayaan - $penggunaanAnggaran;
+
         $validator = Validator::make(
             $request->all(),
             [
@@ -251,12 +317,16 @@ class RealisasiHewanController extends Controller
             ],
             [
                 'lokasi.required' => 'Lokasi harus dipilih',
-                'penggunaan_anggaran.required' => 'Nilai Pembiayaan harus diisi',
+                'penggunaan_anggaran.required' => 'Penggunaan Anggaran harus diisi',
             ]
         );
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()]);
+        }
+
+        if ($request->penggunaan_anggaran > $sisaAnggaran) {
+            return 'max_sisa_anggaran';
         }
 
         if ($request->nama_dokumen != null) {
@@ -342,6 +412,11 @@ class RealisasiHewanController extends Controller
     public function show(PerencanaanHewan $realisasi_intervensi_hewan)
     {
         $rencana_intervensi_hewan = $realisasi_intervensi_hewan;
+        $penggunaanAnggaran = 0;
+        foreach ($rencana_intervensi_hewan->realisasiHewan->where('status', 1) as $item) {
+            $penggunaanAnggaran += $item->penggunaan_anggaran;
+        }
+        $sisaAnggaran = $rencana_intervensi_hewan->nilai_pembiayaan - $penggunaanAnggaran;
         $data = [
             'rencana_intervensi_hewan' => $rencana_intervensi_hewan,
             'tw1' => $rencana_intervensi_hewan->realisasiHewan->where('tw', 1)->where('status', 1)->max('progress'),
@@ -350,6 +425,8 @@ class RealisasiHewanController extends Controller
             'tw4' => $rencana_intervensi_hewan->realisasiHewan->where('tw', 4)->where('status', 1)->max('progress'),
             'opdTerkait' => json_encode($rencana_intervensi_hewan->opdTerkaitHewan->pluck('opd_id')->toArray()),
             'opd' => OPD::orderBy('nama')->whereNot('id', $rencana_intervensi_hewan->opd_id)->get(),
+            'countPenggunaanAnggaran' => $penggunaanAnggaran,
+            'countSisaAnggaran' => $sisaAnggaran,
         ];
         return view('dashboard.pages.intervensi.realisasi.hewan.subIndikator.show', $data);
     }
@@ -396,6 +473,12 @@ class RealisasiHewanController extends Controller
         $getLokasiHewanBelumTerealisasi = $realisasi_intervensi_hewan->perencanaanHewan->lokasiPerencanaanHewan->whereNull('realisasi_hewan_id')->pluck('lokasi_hewan_id')->toArray();
         $lokasiHewan = LokasiHewan::with('desa')->whereIn('id', $getLokasiHewanBelumTerealisasi)->get();
 
+        $rencana_intervensi_hewan = $realisasi_intervensi_hewan->perencanaanHewan;
+        $penggunaanAnggaran = 0;
+        foreach ($rencana_intervensi_hewan->realisasiHewan->where('status', 1) as $item) {
+            $penggunaanAnggaran += $item->penggunaan_anggaran;
+        }
+        $sisaAnggaran = $rencana_intervensi_hewan->nilai_pembiayaan - $penggunaanAnggaran;
         $data = [
             'realisasiIntervensiHewan' => $realisasi_intervensi_hewan,
             'rencanaIntervensiHewan' => $realisasi_intervensi_hewan->perencanaanHewan,
@@ -405,6 +488,7 @@ class RealisasiHewanController extends Controller
             'opdTerkaitHewan' => json_encode($realisasi_intervensi_hewan->perencanaanHewan->opdTerkaitHewan->pluck('opd_id')->toArray()),
             'opd' => OPD::orderBy('nama')->whereNot('id', Auth::user()->opd_id)->get(),
             'dataMap' => $lokasiHewan,
+            'countSisaAnggaran' => $sisaAnggaran,
         ];
 
         return view('dashboard.pages.intervensi.realisasi.hewan.pelaporan.edit', $data);
@@ -419,20 +503,31 @@ class RealisasiHewanController extends Controller
      */
     public function update(Request $request, RealisasiHewan $realisasi_intervensi_hewan)
     {
+        $rencana_intervensi_hewan = PerencanaanHewan::find($request->id_perencanaan);
+        $penggunaanAnggaran = 0;
+        foreach ($rencana_intervensi_hewan->realisasiHewan->where('status', 1) as $item) {
+            $penggunaanAnggaran += $item->penggunaan_anggaran;
+        }
+        $sisaAnggaran = $rencana_intervensi_hewan->nilai_pembiayaan - $penggunaanAnggaran;
+
         $validator = Validator::make(
             $request->all(),
             [
                 'lokasi' => $realisasi_intervensi_hewan->status != 1 ? 'required' : '',
-                'penggunaan_anggaran' => 'required',
+                'penggunaan_anggaran' => $realisasi_intervensi_hewan->status != 1 ? 'required' : '',
             ],
             [
                 'lokasi.required' => 'Lokasi harus dipilih',
-                'penggunaan_anggaran.required' => 'Nilai Pembiayaan harus diisi',
+                'penggunaan_anggaran.required' => 'Penggunaan Anggaran harus diisi',
             ]
         );
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()]);
+        }
+
+        if ($realisasi_intervensi_hewan->status != 1 && $request->penggunaan_anggaran > $sisaAnggaran) {
+            return 'max_sisa_anggaran';
         }
 
         // validate untuk dokumen lama
@@ -543,12 +638,12 @@ class RealisasiHewanController extends Controller
         // $countLokasiDipilih = count($request->lokasi);
         $countPencapaian = ((100 / $countTotalLokasiPerencanaan) * $countLokasiTerealisasi);
 
-        $dataRealisasi = [
-            'penggunaan_anggaran' => $request->penggunaan_anggaran,
-        ];
-
+        $dataRealisasi = [];
         if ($realisasi_intervensi_hewan->status != 1) {
-            $dataRealisasi['progress'] = round($countPencapaian, 2);
+            $dataRealisasi = [
+                'penggunaan_anggaran' => $request->penggunaan_anggaran,
+                'progress' => round($countPencapaian, 2)
+            ];
         }
 
         if (Auth::user()->role == 'OPD') {
@@ -684,6 +779,22 @@ class RealisasiHewanController extends Controller
         return response()->json(['success' => 'Berhasil menghapus laporan']);
     }
 
+    function unique_multidim_array($array, $key)
+    {
+        $temp_array = array();
+        $i = 0;
+        $key_array = array();
+
+        foreach ($array as $val) {
+            if (!in_array($val[$key], $key_array)) {
+                $key_array[$i] = $val[$key];
+                $temp_array[$i] = $val;
+            }
+            $i++;
+        }
+        return $temp_array;
+    }
+
     public function hasilRealisasi(Request $request)
     {
         $habitatHewan = LokasiPerencanaanHewan::where('status', 1)
@@ -692,9 +803,35 @@ class RealisasiHewanController extends Controller
             ->toArray();
 
 
+        $dataHabitatHewan = LokasiHewan::with('listIndikator', 'desa')->whereIn('id', $habitatHewan)
+            ->latest();
+
         if ($request->ajax()) {
-            $data = LokasiHewan::with('listIndikator', 'desa')->whereIn('id', $habitatHewan)
-                ->latest();
+            $data = $dataHabitatHewan
+                // filtering
+                ->where(function ($query) use ($request) {
+                    if ($request->opd_filter && $request->opd_filter != 'semua') {
+                        $query->whereHas('listIndikator', function ($query2) use ($request) {
+                            $query2->whereHas('perencanaanHewan', function ($query3) use ($request) {
+                                $query3->where('opd_id', $request->opd_filter);
+                            });
+                        });
+                    }
+
+                    if ($request->indikator_filter && $request->indikator_filter != 'semua') {
+                        $query->whereHas('listIndikator', function ($query2) use ($request) {
+                            $query2->whereHas('perencanaanHewan', function ($query3) use ($request) {
+                                $query3->where('id', $request->indikator_filter);
+                            });
+                        });
+                    }
+
+                    if ($request->search_filter) {
+                        $query->where(function ($query2) use ($request) {
+                            $query2->where('nama', 'like', '%' . $request->search_filter . '%');
+                        });
+                    }
+                });
             return DataTables::of($data)
                 ->addIndexColumn()
 
@@ -723,6 +860,64 @@ class RealisasiHewanController extends Controller
                 ->make(true);
         }
 
-        return view('dashboard.pages.hasilRealisasi.hewan.index');
+        $filterSubIndikator = [];
+        $filterOpd = [];
+
+        foreach ($dataHabitatHewan->get() as $item) {
+            foreach ($item->listIndikator as $row) {
+                $dataSubIndikator = [
+                    'id' => $row->perencanaanHewan->id,
+                    'sub_indikator' => $row->perencanaanHewan->sub_indikator
+                ];
+                $dataOpd = [
+                    'id' => $row->perencanaanHewan->opd->id,
+                    'opd' => $row->perencanaanHewan->opd->nama
+                ];
+                array_push($filterSubIndikator, $dataSubIndikator);
+                array_push($filterOpd, $dataOpd);
+            }
+        }
+
+        $filterSubIndikator = $this->unique_multidim_array($filterSubIndikator, 'id');
+        $filterOpd = $this->unique_multidim_array($filterOpd, 'id');
+
+        return view('dashboard.pages.hasilRealisasi.hewan.index', ['filterSubIndikator' => $filterSubIndikator, 'filterOpd' => $filterOpd]);
+    }
+
+    public function export()
+    {
+        $dataRealisasi = PerencanaanHewan::with('opd', 'lokasiPerencanaanHewan', 'realisasiHewan')
+            ->where('status', 1)
+            ->where(function ($query) {
+                if (Auth::user()->role == 'OPD') {
+                    $query->where('opd_id', Auth::user()->opd_id);
+                    $query->orWhereHas('opdTerkaitHewan', function ($q) {
+                        $q->where('status', 1);
+                        $q->where('opd_id', Auth::user()->opd_id);
+                    });
+                }
+            })
+            ->latest()->get();
+        // return view('dashboard.pages.intervensi.realisasi.hewan.subIndikator.export', ['dataPerencanaan' => $dataPerencanaan]);
+
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+
+        return Excel::download(new RealisasiHewanExport($dataRealisasi), "Export Data Realisasi Hewan" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
+    }
+
+    public function exportHasilRealisasi()
+    {
+        $habitatHewan = LokasiPerencanaanHewan::where('status', 1)
+            ->groupBy('lokasi_hewan_id')
+            ->pluck('lokasi_hewan_id')
+            ->toArray();
+
+        $dataRealisasi = LokasiHewan::with('listIndikator', 'desa')->whereIn('id', $habitatHewan)
+            ->latest()->get();
+        // return view('dashboard.pages.hasilRealisasi.hewan.export', ['dataRealisasi' => $dataRealisasi]);
+
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+
+        return Excel::download(new HasilRealisasiHewanExport($dataRealisasi), "Export Data Hasil Realisasi Hewan" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 }

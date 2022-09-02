@@ -43,6 +43,7 @@
                                 [
                                     'action' => route('realisasi-intervensi-keong.store'),
                                     'rencanaIntervensiKeong' => $rencanaIntervensiKeong,
+                                    'countSisaAnggaran' => $countSisaAnggaran,
                                     'desa' => $desa,
                                     'lokasiArr' => $lokasiPerencanaanKeongArr,
                                     'dataMap' => $dataMap,

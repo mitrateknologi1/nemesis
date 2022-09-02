@@ -13,8 +13,10 @@ use Illuminate\Validation\Rule;
 use App\Models\PerencanaanKeong;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\DokumenRealisasiKeong;
 use App\Models\LokasiPerencanaanKeong;
+use App\Exports\PerencanaanKeongExport;
 use App\Models\DokumenPerencanaanKeong;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
@@ -32,18 +34,38 @@ class PerencanaanKeongController extends Controller
      */
     public function index(Request $request)
     {
+        $perencanaanKeong = PerencanaanKeong::with('opd', 'lokasiPerencanaanKeong')
+            ->where(function ($query) {
+                if (Auth::user()->role == 'OPD') {
+                    $query->where('opd_id', Auth::user()->opd_id);
+                    $query->orWhereHas('opdTerkaitKeong', function ($q) { // OPD Terkait hanya bisa melihat yang telah di setujui
+                        $q->where('status', 1);
+                        $q->where('opd_id', Auth::user()->opd_id);
+                    });
+                }
+            })
+            ->latest();
+
         if ($request->ajax()) {
-            $data = PerencanaanKeong::with('opd', 'lokasiPerencanaanKeong')
-                ->where(function ($query) {
-                    if (Auth::user()->role == 'OPD') {
-                        $query->where('opd_id', Auth::user()->opd_id);
-                        $query->orWhereHas('opdTerkaitKeong', function ($q) { // OPD Terkait hanya bisa melihat yang telah di setujui
-                            $q->where('status', 1);
-                            $q->where('opd_id', Auth::user()->opd_id);
+            $data = $perencanaanKeong
+                // filtering
+                ->where(function ($query) use ($request) {
+                    if ($request->opd_filter && $request->opd_filter != 'semua') {
+                        $query->where('opd_id', $request->opd_filter);
+                    }
+
+                    if ($request->status_filter && $request->status_filter != 'semua') {
+                        $filter = $request->status_filter == "-" ? 0 : $request->status_filter;
+                        $query->where('status', $filter);
+                    }
+
+                    if ($request->search_filter) {
+                        $query->where(function ($query2) use ($request) {
+                            $query2->where('sub_indikator', 'like', '%' . $request->search_filter . '%');
                         });
                     }
-                })
-                ->latest();
+                });
+
             return DataTables::of($data)
                 ->addIndexColumn()
 
@@ -108,7 +130,7 @@ class PerencanaanKeongController extends Controller
                 ])
                 ->make(true);
         }
-        return view('dashboard.pages.intervensi.perencanaan.keong.subIndikator.index');
+        return view('dashboard.pages.intervensi.perencanaan.keong.subIndikator.index', ['perencanaanKeong' => $perencanaanKeong]);
     }
 
     /**
@@ -280,7 +302,7 @@ class PerencanaanKeongController extends Controller
             [
                 'sub_indikator' => 'required',
                 'lokasi' => $rencana_intervensi_keong->realisasiKeong->count() == 0 ? 'required' : '',
-                'nilai_pembiayaan' => 'required',
+                'nilai_pembiayaan' => $rencana_intervensi_keong->realisasiKeong->count() == 0 ? 'required' : '',
                 'sumber_dana' => 'required',
             ],
             [
@@ -388,9 +410,12 @@ class PerencanaanKeongController extends Controller
         // update data perencanaan
         $dataPerencanaan = [
             'sub_indikator' => $request->sub_indikator,
-            'nilai_pembiayaan' => $request->nilai_pembiayaan,
-            'sumber_dana' => $request->sumber_dana,
+            'sumber_dana' => $request->sumber_dana
         ];
+
+        if ($rencana_intervensi_keong->realisasiKeong->count() == 0) {
+            $dataPerencanaan['nilai_pembiayaan'] = $request->nilai_pembiayaan;
+        }
 
         if (Auth::user()->role == 'OPD') {
             $dataPerencanaan['status'] = 0;
@@ -495,5 +520,25 @@ class PerencanaanKeongController extends Controller
         $getLokasiKeong = $rencana_intervensi_keong->lokasiPerencanaanKeong->pluck('lokasi_keong_id')->toArray();
         $lokasiKeong = LokasiKeong::with('desa')->whereIn('id', $getLokasiKeong)->get();
         return response()->json(['status' => 'success', 'data' => $lokasiKeong]);
+    }
+
+    public function export()
+    {
+        $dataPerencanaan = PerencanaanKeong::with('opd', 'lokasiPerencanaanKeong')
+            ->where(function ($query) {
+                if (Auth::user()->role == 'OPD') {
+                    $query->where('opd_id', Auth::user()->opd_id);
+                    $query->orWhereHas('opdTerkaitKeong', function ($q) { // OPD Terkait hanya bisa melihat yang telah di setujui
+                        $q->where('status', 1);
+                        $q->where('opd_id', Auth::user()->opd_id);
+                    });
+                }
+            })
+            ->latest()->get();
+        // return view('dashboard.pages.intervensi.perencanaan.keong.subIndikator.export', ['dataPerencanaan' => $dataPerencanaan]);
+
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+
+        return Excel::download(new PerencanaanKeongExport($dataPerencanaan), "Export Data Perencanaan Keong" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 }

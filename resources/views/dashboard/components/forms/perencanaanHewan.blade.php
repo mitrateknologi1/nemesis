@@ -69,6 +69,8 @@
                             'class' => 'rupiah req',
                             'placeholder' => 'Masukkan Nilai Pembiayaan',
                             'wajib' => '<sup class="text-danger">*</sup>',
+                            'attribute' =>
+                                isset($rencanaIntervensiHewan) && $rencanaIntervensiHewan->realisasiHewan->count() > 0 ? 'disabled' : '',
                             'value' => $rencanaIntervensiHewan->nilai_pembiayaan ?? '',
                         ])
                     @endcomponent

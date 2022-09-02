@@ -404,6 +404,25 @@
                 e.preventDefault()
             }
         }
+
+        function sisaAnggaran(batasPenggunaanAnggaran) {
+            if ($('#penggunaan-anggaran').val() > batasPenggunaanAnggaran) {
+                $('.penggunaan_anggaran-error').html(
+                    '<b>Penggunaan Anggaran</b> tidak boleh melebihi nilai maksimal yang telah ditentukan.'
+                );
+                swal({
+                    title: "Gagal!",
+                    text: "Terjadi kesalahan, mohon periksa kembali data yang diinputkan.",
+                    icon: "error",
+                    button: "Ok",
+                }).then((value) => {
+                    $('.rupiah').mask('000.000.000.000.000', {
+                        reverse: true
+                    })
+                });
+                e.preventDefault();
+            }
+        }
     </script>
 
     @stack('scripts')

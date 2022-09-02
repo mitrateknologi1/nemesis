@@ -10,9 +10,11 @@ use App\Models\OPDTerkaitManusia;
 use App\Models\PerencanaanManusia;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\DokumenRealisasiManusia;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
+use App\Exports\PerencanaanManusiaExport;
 use App\Models\DokumenPerencanaanManusia;
 use Illuminate\Support\Facades\Validator;
 use App\Models\PendudukPerencanaanManusia;
@@ -28,18 +30,37 @@ class PerencanaanManusiaController extends Controller
      */
     public function index(Request $request)
     {
+        $perencanaanManusia = PerencanaanManusia::with('opd', 'pendudukPerencanaanManusia')
+            ->where(function ($query) {
+                if (Auth::user()->role == 'OPD') {
+                    $query->where('opd_id', Auth::user()->opd_id);
+                    $query->orWhereHas('opdTerkaitManusia', function ($q) { // OPD Terkait hanya bisa melihat yang telah di setujui
+                        $q->where('status', 1);
+                        $q->where('opd_id', Auth::user()->opd_id);
+                    });
+                }
+            })
+            ->latest();
+
         if ($request->ajax()) {
-            $data = PerencanaanManusia::with('opd', 'pendudukPerencanaanManusia')
-                ->where(function ($query) {
-                    if (Auth::user()->role == 'OPD') {
-                        $query->where('opd_id', Auth::user()->opd_id);
-                        $query->orWhereHas('opdTerkaitManusia', function ($q) { // OPD Terkait hanya bisa melihat yang telah di setujui
-                            $q->where('status', 1);
-                            $q->where('opd_id', Auth::user()->opd_id);
+            $data = $perencanaanManusia
+                // filtering
+                ->where(function ($query) use ($request) {
+                    if ($request->opd_filter && $request->opd_filter != 'semua') {
+                        $query->where('opd_id', $request->opd_filter);
+                    }
+
+                    if ($request->status_filter && $request->status_filter != 'semua') {
+                        $filter = $request->status_filter == "-" ? 0 : $request->status_filter;
+                        $query->where('status', $filter);
+                    }
+
+                    if ($request->search_filter) {
+                        $query->where(function ($query2) use ($request) {
+                            $query2->where('sub_indikator', 'like', '%' . $request->search_filter . '%');
                         });
                     }
-                })
-                ->latest();
+                });
             return DataTables::of($data)
                 ->addIndexColumn()
 
@@ -103,7 +124,7 @@ class PerencanaanManusiaController extends Controller
                 ])
                 ->make(true);
         }
-        return view('dashboard.pages.intervensi.perencanaan.manusia.subIndikator.index');
+        return view('dashboard.pages.intervensi.perencanaan.manusia.subIndikator.index', ['perencanaanManusia' => $perencanaanManusia]);
     }
 
     /**
@@ -274,7 +295,7 @@ class PerencanaanManusiaController extends Controller
             [
                 'sub_indikator' => 'required',
                 'penduduk' => $rencana_intervensi_manusia->realisasiManusia->count() == 0 ? 'required' : '',
-                'nilai_pembiayaan' => 'required',
+                'nilai_pembiayaan' => $rencana_intervensi_manusia->realisasiManusia->count() == 0 ? 'required' : '',
                 'sumber_dana' => 'required',
             ],
             [
@@ -404,9 +425,13 @@ class PerencanaanManusiaController extends Controller
         // update data perencanaan
         $dataPerencanaan = [
             'sub_indikator' => $request->sub_indikator,
-            'nilai_pembiayaan' => $request->nilai_pembiayaan,
             'sumber_dana' => $request->sumber_dana,
         ];
+
+        if ($rencana_intervensi_manusia->realisasiManusia->count() == 0) {
+            $dataPerencanaan['nilai_pembiayaan'] = $request->nilai_pembiayaan;
+        }
+
 
         if (Auth::user()->role == 'OPD') {
             $dataPerencanaan['status'] = 0;
@@ -482,5 +507,25 @@ class PerencanaanManusiaController extends Controller
         $rencana_intervensi_manusia->update($data);
 
         return response()->json(['success' => 'Berhasil mengkonfirmasi']);
+    }
+
+    public function export()
+    {
+        $dataPerencanaan = PerencanaanManusia::with('opd', 'pendudukPerencanaanManusia')
+            ->where(function ($query) {
+                if (Auth::user()->role == 'OPD') {
+                    $query->where('opd_id', Auth::user()->opd_id);
+                    $query->orWhereHas('opdTerkaitManusia', function ($q) { // OPD Terkait hanya bisa melihat yang telah di setujui
+                        $q->where('status', 1);
+                        $q->where('opd_id', Auth::user()->opd_id);
+                    });
+                }
+            })
+            ->latest()->get();
+        // return view('dashboard.pages.intervensi.perencanaan.keong.subIndikator.export', ['dataPerencanaan' => $dataPerencanaan]);
+
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+
+        return Excel::download(new PerencanaanManusiaExport($dataPerencanaan), "Export Data Perencanaan Manusia" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 }

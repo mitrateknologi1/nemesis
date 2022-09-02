@@ -44,7 +44,7 @@ class AkunController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('nama', function ($row) {
-                    if ($row->role == "Admin") {
+                    if ($row->role == "Admin" ||  $row->role == "Pimpinan") {
                         return $row->nama;
                     } else {
                         return $row->opd->nama;
@@ -101,9 +101,9 @@ class AkunController extends Controller
             $request->all(),
             [
                 'username' => ['required', Rule::unique('users')->withoutTrashed()],
-                'nama' => $request->role == "Admin" ? 'required' : 'nullable',
+                'nama' => $request->role == "Admin" || $request->role == "Pimpinan" ? 'required' : 'nullable',
                 'password' => 'required',
-                'opd_id' => $request->role == "Admin" ? 'nullable' : 'required',
+                'opd_id' => $request->role == "Admin" || $request->role == "Pimpinan" ? 'nullable' : 'required',
                 'role' => 'required',
                 'status' => 'required'
             ],
@@ -128,7 +128,7 @@ class AkunController extends Controller
         $user->role = $request->role;
         $user->status = $request->status;
 
-        if ($request->role == "Admin") {
+        if ($request->role == "Admin" || $request->role == "Pimpinan") {
             $user->nama = $request->nama;
             $user->opd_id = null;
         } else {
@@ -210,7 +210,7 @@ class AkunController extends Controller
         $user->username = $request->username;
         $user->role = $request->role;
         $user->status = $request->status;
-        if ($request->role == "Admin") {
+        if ($request->role == "Admin" || $request->role == "Pimpinan") {
             $user->nama = $request->nama;
             $user->opd_id = null;
         } else {

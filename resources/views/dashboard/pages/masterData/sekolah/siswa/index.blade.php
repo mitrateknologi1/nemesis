@@ -437,6 +437,14 @@
                 $('.checkData').prop('checked', false);
             }
         });
+
+        var role = "{{ Auth::user()->role }}";
+
+        $(document).ready(function() {
+            if (role != "Admin") {
+                table.column(0).visible(false);
+            }
+        })
     </script>
 
     <script>

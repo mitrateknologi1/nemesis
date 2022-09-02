@@ -13,516 +13,1286 @@
 @endsection
 
 @section('buttonPanelHeader')
-    <a href="#" class="btn btn-secondary btn-round"><i class="fas fa-plus"></i>
-        Tambah</a>
 @endsection
+
+@push('styles')
+    <style>
+        .circles-text {
+            font-size: 15px;
+        }
+    </style>
+@endpush
 
 @section('contents')
     <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-head-row">
-                        <div class="card-title">Nama tabel</div>
-                        <div class="card-tools">
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-head-row">
+                                <div class="card-title fw-bold">Intervensi</div>
+                                <div class="card-tools">
+                                    <button class="btn btn-info btn-border btn-round btn-sm mr-2" data-toggle="modal"
+                                        data-target="#modal-intervensi">
+                                        <i class="fas fa-info-circle"></i>
+                                        Lihat Detail Per-OPD
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 col-sm-6 col-md-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5><b>Perencanaan</b></h5>
+                                            <hr>
+                                            <div class="d-flex justify-content-between mt-2">
+                                                <p class="text-muted mb-0">Keong</p>
+                                                <p class="text-muted mb-0">{{ $intervensi['perencanaanKeong'] }}</p>
+                                            </div>
+                                            <div class="d-flex justify-content-between mt-2">
+                                                <p class="text-muted mb-0">Manusia</p>
+                                                <p class="text-muted mb-0">{{ $intervensi['perencanaanManusia'] }}</p>
+                                            </div>
+                                            <div class="d-flex justify-content-between mt-2">
+                                                <p class="text-muted mb-0">Hewan</p>
+                                                <p class="text-muted mb-0">{{ $intervensi['perencanaanHewan'] }}</p>
+                                            </div>
+                                            <hr>
+                                            <div class="d-flex justify-content-between mt-2">
+                                                <p class="text-muted mb-0">Total Perencanaan</p>
+                                                <p class="text-muted mb-0">
+                                                    {{ $intervensi['perencanaanKeong'] + $intervensi['perencanaanHewan'] + $intervensi['perencanaanManusia'] }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5><b>Realisasi</b></h5>
+                                            <hr>
+                                            <div class="d-flex justify-content-between mt-2">
+                                                <p class="text-muted mb-0">Keong</p>
+                                                <p class="text-muted mb-0">{{ $intervensi['realisasiKeong'] }}</p>
+                                            </div>
+                                            <div class="d-flex justify-content-between mt-2">
+                                                <p class="text-muted mb-0">Manusia</p>
+                                                <p class="text-muted mb-0">{{ $intervensi['realisasiManusia'] }}</p>
+                                            </div>
+                                            <div class="d-flex justify-content-between mt-2">
+                                                <p class="text-muted mb-0">Hewan</p>
+                                                <p class="text-muted mb-0">{{ $intervensi['realisasiHewan'] }}</p>
+                                            </div>
+                                            <hr>
+                                            <div class="d-flex justify-content-between mt-2">
+                                                <p class="text-muted mb-0">Total Realisasi</p>
+                                                <p class="text-muted mb-0">
+                                                    {{ $intervensi['realisasiKeong'] + $intervensi['realisasiManusia'] + $intervensi['realisasiHewan'] }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5><b>Persentase Realisasi</b></h5>
+                                            <hr>
+                                            <div class="d-flex flex-wrap justify-content-around pb-2 pt-4">
+                                                <div class="d-flex justify-content-between mt-2">
+                                                    <div class="px-2 pb-2 pb-md-0 text-center">
+                                                        <div id="realisasi-keong"></div>
+                                                        <h6 class="fw-bold mt-3 mb-0">Keong</h6>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-between mt-2">
+                                                    <div class="px-2 pb-2 pb-md-0 text-center">
+                                                        <div id="realisasi-manusia"></div>
+                                                        <h6 class="fw-bold mt-3 mb-0">Manusia</h6>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-between mt-2">
+                                                    <div class="px-2 pb-2 pb-md-0 text-center">
+                                                        <div id="realisasi-hewan"></div>
+                                                        <h6 class="fw-bold mt-3 mb-0">Hewan</h6>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-between mt-2">
+                                                    <div class="px-2 pb-2 pb-md-0 text-center">
+                                                        <div id="realisasi-total"></div>
+                                                        <h6 class="fw-bold mt-3 mb-0">Total Persentase Realisasi</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-head-row">
+                                <div class="card-title fw-bold">Anggaran Intervensi</div>
+                                <div class="card-tools">
+                                    <button class="btn btn-info btn-border btn-round btn-sm mr-2" data-toggle="modal"
+                                        data-target="#modal-anggaran">
+                                        <i class="fas fa-info-circle"></i>
+                                        Lihat Detail Per-OPD
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 col-sm-6 col-md-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5><b>Perencanaan Anggaran</b></h5>
+                                            <hr>
+                                            <div class="d-flex justify-content-between mt-2">
+                                                <p class="text-muted mb-0">Keong</p>
+                                                <p class="text-muted mb-0">Rp.
+                                                    {{ number_format($anggaranPerencanaan['anggaranKeong'], 0, ',', '.') }}
+                                                </p>
+                                            </div>
+                                            <div class="d-flex justify-content-between mt-2">
+                                                <p class="text-muted mb-0">Manusia</p>
+                                                <p class="text-muted mb-0">Rp.
+                                                    {{ number_format($anggaranPerencanaan['anggaranManusia'], 0, ',', '.') }}
+                                                </p>
+                                            </div>
+                                            <div class="d-flex justify-content-between mt-2">
+                                                <p class="text-muted mb-0">Hewan</p>
+                                                <p class="text-muted mb-0">Rp.
+                                                    {{ number_format($anggaranPerencanaan['anggaranHewan'], 0, ',', '.') }}
+                                                </p>
+                                            </div>
+                                            <hr>
+                                            <div class="d-flex justify-content-between mt-2">
+                                                <p class="text-muted mb-0">Total Anggaran</p>
+                                                <p class="text-muted mb-0">Rp.
+                                                    {{ number_format($anggaranPerencanaan['anggaranHewan'] + $anggaranPerencanaan['anggaranKeong'] + $anggaranPerencanaan['anggaranManusia'], 0, ',', '.') }}
+                                                </p>
+                                            </div>
+                                            <div class="d-flex justify-content-between mt-2">
+                                                <p class="text-muted mb-0">&nbsp;</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5><b>Penggunaan Anggaran</b></h5>
+                                            <hr>
+                                            <div class="d-flex justify-content-between mt-2">
+                                                <p class="text-muted mb-0">Keong</p>
+                                                <p class="text-muted mb-0">Rp.
+                                                    {{ number_format($penggunaanAnggaran['penggunaanKeong'], 0, ',', '.') }}
+                                                </p>
+                                            </div>
+                                            <div class="d-flex justify-content-between mt-2">
+                                                <p class="text-muted mb-0">Manusia</p>
+                                                <p class="text-muted mb-0">Rp.
+                                                    {{ number_format($penggunaanAnggaran['penggunaanManusia'], 0, ',', '.') }}
+                                                </p>
+                                            </div>
+                                            <div class="d-flex justify-content-between mt-2">
+                                                <p class="text-muted mb-0">Hewan</p>
+                                                <p class="text-muted mb-0">Rp.
+                                                    {{ number_format($penggunaanAnggaran['penggunaanHewan'], 0, ',', '.') }}
+                                                </p>
+                                            </div>
+                                            <hr>
+                                            <div class="d-flex justify-content-between mt-2">
+                                                <p class="text-muted mb-0">Total Penggunaan Anggaran</p>
+                                                <p class="text-muted mb-0">Rp.
+                                                    {{ number_format($penggunaanAnggaran['penggunaanHewan'] + $penggunaanAnggaran['penggunaanKeong'] + $penggunaanAnggaran['penggunaanManusia'], 0, ',', '.') }}
+                                                </p>
+                                            </div>
+                                            <div class="d-flex justify-content-between mt-2">
+                                                <p class="text-muted mb-0">Sisa Anggaran</p>
+                                                <p class="text-muted mb-0">Rp.
+                                                    {{ number_format($anggaranPerencanaan['anggaranHewan'] + $anggaranPerencanaan['anggaranKeong'] + $anggaranPerencanaan['anggaranManusia'] - ($penggunaanAnggaran['penggunaanHewan'] + $penggunaanAnggaran['penggunaanKeong'] + $penggunaanAnggaran['penggunaanManusia']), 0, ',', '.') }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5><b>Persentase Penggunaan Anggaran</b></h5>
+                                            <hr>
+                                            <div class="d-flex flex-wrap justify-content-around pb-2 pt-4">
+                                                <div class="d-flex justify-content-between mt-2">
+                                                    <div class="px-2 pb-2 pb-md-0 text-center">
+                                                        <div id="penggunaan-keong"></div>
+                                                        <h6 class="fw-bold mt-3 mb-0">Keong <br>
+                                                            (Rp.
+                                                            {{ number_format($penggunaanAnggaran['penggunaanKeong'], 0, ',', '.') }}
+                                                            /
+                                                            Rp.
+                                                            {{ number_format($anggaranPerencanaan['anggaranKeong'], 0, ',', '.') }})
+                                                        </h6>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-between mt-2">
+                                                    <div class="px-2 pb-2 pb-md-0 text-center">
+                                                        <div id="penggunaan-manusia"></div>
+                                                        <h6 class="fw-bold mt-3 mb-0">Manusia <br>
+                                                            (Rp.
+                                                            {{ number_format($penggunaanAnggaran['penggunaanManusia'], 0, ',', '.') }}
+                                                            /
+                                                            Rp.
+                                                            {{ number_format($anggaranPerencanaan['anggaranManusia'], 0, ',', '.') }})
+                                                        </h6>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-between mt-2">
+                                                    <div class="px-2 pb-2 pb-md-0 text-center">
+                                                        <div id="penggunaan-hewan"></div>
+                                                        <h6 class="fw-bold mt-3 mb-0">Hewan <br>
+                                                            (Rp.
+                                                            {{ number_format($penggunaanAnggaran['penggunaanHewan'], 0, ',', '.') }}
+                                                            /
+                                                            Rp.
+                                                            {{ number_format($anggaranPerencanaan['anggaranHewan'], 0, ',', '.') }})
+                                                        </h6>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-between mt-5">
+                                                    <div class="px-2 pb-2 pb-md-0 text-center">
+                                                        <div id="penggunaan-total"></div>
+                                                        <h6 class="fw-bold mt-3 mb-0">Total Persentase Penggunaan Anggaran
+                                                            <br>
+                                                            (Rp.
+                                                            {{ number_format($penggunaanAnggaran['penggunaanHewan'] + $penggunaanAnggaran['penggunaanKeong'] + $penggunaanAnggaran['penggunaanManusia'], 0, ',', '.') }}
+                                                            / Rp.
+                                                            {{ number_format($anggaranPerencanaan['anggaranHewan'] + $anggaranPerencanaan['anggaranKeong'] + $anggaranPerencanaan['anggaranManusia'], 0, ',', '.') }}
+                                                            )
+                                                        </h6>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-between mt-5">
+                                                    <div class="px-2 pb-2 pb-md-0 text-center">
+                                                        <div id="penggunaan-sisa"></div>
+                                                        <h6 class="fw-bold mt-3 mb-0">Sisa Anggaran
+                                                            <br>
+                                                            (Rp.
+                                                            {{ number_format($anggaranPerencanaan['anggaranHewan'] + $anggaranPerencanaan['anggaranKeong'] + $anggaranPerencanaan['anggaranManusia'] - ($penggunaanAnggaran['penggunaanHewan'] + $penggunaanAnggaran['penggunaanKeong'] + $penggunaanAnggaran['penggunaanManusia']), 0, ',', '.') }}
+                                                            / Rp.
+                                                            {{ number_format($anggaranPerencanaan['anggaranHewan'] + $anggaranPerencanaan['anggaranKeong'] + $anggaranPerencanaan['anggaranManusia'], 0, ',', '.') }})
+                                                        </h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-head-row">
+                                <div class="card-title fw-bold">Lokasi</div>
+                                {{-- <div class="card-tools">
                             @component('dashboard.components.buttons.export')
                             @endcomponent
+                        </div> --}}
+                            </div>
+                        </div>
+                        <div class="card-body px-4">
+                            <div class="row">
+                                <div class="col-12 col-sm-12 col-md-12">
+                                    <div class="card card-stats card-success card-round">
+                                        <div class="card-body ">
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <div class="icon-big text-center">
+                                                        <i class="far fa-map"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col-8 col-stats">
+                                                    <div class="numbers">
+                                                        <p class="card-category">Desa</p>
+                                                        <h4 class="card-title">{{ $lokasi['desa'] }}</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12">
+                                    <div class="card card-stats card-secondary card-round">
+                                        <div class="card-body ">
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <div class="icon-big text-center">
+                                                        <i class="fas fa-map-pin"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col-8 col-stats">
+                                                    <div class="numbers">
+                                                        <p class="card-category">Habitat Keong</p>
+                                                        <h4 class="card-title">{{ $lokasi['lokasiKeong'] }}</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12">
+                                    <div class="card card-stats card-info card-round">
+                                        <div class="card-body ">
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <div class="icon-big text-center">
+                                                        <i class="fas fa-paw"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col-8 col-stats">
+                                                    <div class="numbers">
+                                                        <p class="card-category">Hewan</p>
+                                                        <h4 class="card-title">{{ $lokasi['lokasiHewan'] }}</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <div class="chart-container" style="min-height: 375px">
-                        <canvas id="statisticsChart"></canvas>
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-head-row">
+                                <div class="card-title fw-bold">Total Hewan</div>
+                                {{-- <div class="card-tools">
+                            @component('dashboard.components.buttons.export')
+                            @endcomponent
+                        </div> --}}
+                            </div>
+                        </div>
+                        <div class="card-body px-4">
+                            <div class="row">
+                                @php
+                                    $arrayWarna = ['success', 'danger', 'primary', 'warning', 'info'];
+                                @endphp
+                                @foreach ($totalHewan as $hewan)
+                                    <div class="col-12 col-sm-12 col-md-12">
+                                        <div
+                                            class="card card-stats card-{{ $arrayWarna[$loop->index % count($arrayWarna)] }} card-round">
+                                            <div class="card-body ">
+                                                <div class="row">
+                                                    <div class="col-4">
+                                                        <div class="icon-big text-center">
+                                                            <i class="fas fa-paw"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-8 col-stats">
+                                                        <div class="numbers">
+                                                            <p class="card-category">{{ $hewan['nama_hewan'] }}</p>
+                                                            <h4 class="card-title">{{ $hewan['jumlah'] }}</h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
-                    <div id="myChartLegend"></div>
-                    <ul class="0-legend html-legend">
-                        <li><span style="background-color:#f3545d"></span>Subscribers</li>
-                        <li><span style="background-color:#fdaf4b"></span>New Visitors</li>
-                        <li><span style="background-color:#177dff"></span>Active Users</li>
+                </div>
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-head-row">
+                                <div class="card-title fw-bold">Total Data</div>
+                                {{-- <div class="card-tools">
+                            @component('dashboard.components.buttons.export')
+                            @endcomponent
+                        </div> --}}
+                            </div>
+                        </div>
+                        <div class="card-body px-4">
+                            <div class="row">
+                                <div class="col-12 col-sm-12 col-md-12">
+                                    <div class="card card-stats card-danger card-round">
+                                        <div class="card-body ">
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <div class="icon-big text-center">
+                                                        <i class="fas fa-users"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col-8 col-stats">
+                                                    <div class="numbers">
+                                                        <p class="card-category">Penduduk</p>
+                                                        <h4 class="card-title">{{ $totalData['penduduk'] }}</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12">
+                                    <div class="card card-stats card-warning card-round">
+                                        <div class="card-body ">
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <div class="icon-big text-center">
+                                                        <i class="fas fa-school"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col-8 col-stats">
+                                                    <div class="numbers">
+                                                        <p class="card-category">Sekolah</p>
+                                                        <h4 class="card-title">{{ $totalData['sekolah'] }}</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12">
+                                    <div class="card card-stats card-info card-round">
+                                        <div class="card-body ">
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <div class="icon-big text-center">
+                                                        <i class="fas fa-graduation-cap"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col-8 col-stats">
+                                                    <div class="numbers">
+                                                        <p class="card-category">Siswa Sekolah</p>
+                                                        <h4 class="card-title">{{ $totalData['siswaSekolah'] }}</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12">
+                                    <div class="card card-stats card-success card-round">
+                                        <div class="card-body ">
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <div class="icon-big text-center">
+                                                        <i class="fas fa-building"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col-8 col-stats">
+                                                    <div class="numbers">
+                                                        <p class="card-category">OPD</p>
+                                                        <h4 class="card-title">{{ $totalData['opd'] }}</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal-intervensi" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Detail Intervensi Per-OPD</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-pills nav-secondary nav-pills-no-bd" id="pills-tab-without-border" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="tab-semua" data-toggle="pill" href="#content-semua"
+                                role="tab" aria-controls="content-semua" aria-selected="false">Semua</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " id="tab-keong" data-toggle="pill" href="#content-keong" role="tab"
+                                aria-controls="content-keong" aria-selected="true">Keong</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tab-manusia" data-toggle="pill" href="#content-manusia"
+                                role="tab" aria-controls="content-manusia" aria-selected="false">Manusia</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tab-hewan" data-toggle="pill" href="#content-hewan" role="tab"
+                                aria-controls="content-hewan" aria-selected="false">Hewan</a>
+                        </li>
+
                     </ul>
+                    <div class="tab-content mt-2 mb-3" id="pills-without-border-tabContent">
+                        <div class="tab-pane fade" id="content-keong" role="tabpanel"
+                            aria-labelledby="pills-home-tab-nobd">
+                            <table class="table table-bordered mt-3">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th scope="col">No.</th>
+                                        <th scope="col">OPD</th>
+                                        <th scope="col">Perencanaan</th>
+                                        <th scope="col">Realisasi</th>
+                                        <th scope="col">Persentase Realisasi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $perencanaan = 0;
+                                        $realisasi = 0;
+                                        $persentase = 0;
+                                    @endphp
+                                    @foreach ($tabelKeong as $keong)
+                                        <tr>
+                                            <th scope="row" class="text-center">{{ $loop->iteration }}</th>
+                                            <td>{{ $keong['opd'] }}</td>
+                                            <td class="text-center">{{ $keong['perencanaan'] }}</td>
+                                            <td class="text-center">{{ $keong['realisasi'] }}</td>
+                                            <td class="text-center">
+                                                {{ $keong['persentase'] == '-' ? '-' : $keong['persentase'] . '%' }}</td>
+                                        </tr>
+                                        @php
+                                            $perencanaan += $keong['perencanaan'];
+                                            $realisasi += $keong['realisasi'];
+                                        @endphp
+                                    @endforeach
+                                    <tr>
+                                        <th scope="row" colspan="2" class="text-center">Total</th>
+                                        <td class="text-center">{{ $perencanaan }}</td>
+                                        <td class="text-center">{{ $realisasi }}</td>
+                                        <td class="text-center">{{ round(($realisasi / $perencanaan) * 100, 2) }} % </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="content-manusia" role="tabpanel"
+                            aria-labelledby="pills-profile-tab-nobd">
+                            <table class="table table-bordered mt-3">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th scope="col">No.</th>
+                                        <th scope="col">OPD</th>
+                                        <th scope="col">Perencanaan</th>
+                                        <th scope="col">Realisasi</th>
+                                        <th scope="col">Persentase Realisasi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $perencanaan = 0;
+                                        $realisasi = 0;
+                                        $persentase = 0;
+                                    @endphp
+                                    @foreach ($tabelManusia as $manusia)
+                                        <tr>
+                                            <th scope="row" class="text-center">{{ $loop->iteration }}</th>
+                                            <td>{{ $manusia['opd'] }}</td>
+                                            <td class="text-center">{{ $manusia['perencanaan'] }}</td>
+                                            <td class="text-center">{{ $manusia['realisasi'] }}</td>
+                                            <td class="text-center">
+                                                {{ $manusia['persentase'] == '-' ? '-' : $manusia['persentase'] . '%' }}
+                                            </td>
+                                        </tr>
+                                        @php
+                                            $perencanaan += $manusia['perencanaan'];
+                                            $realisasi += $manusia['realisasi'];
+                                        @endphp
+                                    @endforeach
+                                    <tr>
+                                        <th scope="row" colspan="2" class="text-center">Total</th>
+                                        <td class="text-center">{{ $perencanaan }}</td>
+                                        <td class="text-center">{{ $realisasi }}</td>
+                                        <td class="text-center">{{ round(($realisasi / $perencanaan) * 100, 2) }} % </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="content-hewan" role="tabpanel"
+                            aria-labelledby="pills-contact-tab-nobd">
+                            <table class="table table-bordered mt-3">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th scope="col">No.</th>
+                                        <th scope="col">OPD</th>
+                                        <th scope="col">Perencanaan</th>
+                                        <th scope="col">Realisasi</th>
+                                        <th scope="col">Persentase Realisasi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $perencanaan = 0;
+                                        $realisasi = 0;
+                                        $persentase = 0;
+                                    @endphp
+                                    @foreach ($tabelHewan as $hewan)
+                                        <tr>
+                                            <th scope="row" class="text-center">{{ $loop->iteration }}</th>
+                                            <td>{{ $hewan['opd'] }}</td>
+                                            <td class="text-center">{{ $hewan['perencanaan'] }}</td>
+                                            <td class="text-center">{{ $hewan['realisasi'] }}</td>
+                                            <td class="text-center">
+                                                {{ $hewan['persentase'] == '-' ? '-' : $hewan['persentase'] . '%' }}</td>
+                                        </tr>
+                                        @php
+                                            $perencanaan += $hewan['perencanaan'];
+                                            $realisasi += $hewan['realisasi'];
+                                        @endphp
+                                    @endforeach
+                                    <tr>
+                                        <th scope="row" colspan="2" class="text-center">Total</th>
+                                        <td class="text-center">{{ $perencanaan }}</td>
+                                        <td class="text-center">{{ $realisasi }}</td>
+                                        <td class="text-center">{{ round(($realisasi / $perencanaan) * 100, 2) }} % </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade show active" id="content-semua" role="tabpanel"
+                            aria-labelledby="pills-home-tab-nobd">
+                            <table class="table table-bordered mt-3">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th scope="col">No.</th>
+                                        <th scope="col">OPD</th>
+                                        <th scope="col">Perencanaan</th>
+                                        <th scope="col">Realisasi</th>
+                                        <th scope="col">Persentase Realisasi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $perencanaan = 0;
+                                        $realisasi = 0;
+                                    @endphp
+                                    @foreach ($tabelKeong as $keong)
+                                        @php
+                                            $keongPersentase = 0;
+                                            $manusiaPersentase = 0;
+                                            $hewanPersentase = 0;
+                                        @endphp
+                                        <tr>
+                                            <th scope="row" class="text-center">{{ $loop->iteration }}</th>
+                                            <td>{{ $keong['opd'] }}</td>
+                                            <td class="text-center">
+                                                {{ $keong['perencanaan'] + $tabelManusia[$loop->index]['perencanaan'] + $tabelHewan[$loop->index]['perencanaan'] }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $keong['realisasi'] + $tabelManusia[$loop->index]['realisasi'] + $tabelHewan[$loop->index]['realisasi'] }}
+                                            </td>
+                                            @php
+                                                if ($keong['persentase'] != '-') {
+                                                    $keongPersentase = $keong['persentase'];
+                                                }
+
+                                                if ($tabelManusia[$loop->index]['persentase'] != '-') {
+                                                    $manusiaPersentase = $tabelManusia[$loop->index]['persentase'];
+                                                }
+
+                                                if ($tabelHewan[$loop->index]['persentase'] != '-') {
+                                                    $hewanPersentase = $tabelHewan[$loop->index]['persentase'];
+                                                }
+                                            @endphp
+                                            <td class="text-center">
+                                                @if ($keong['perencanaan'] == 0)
+                                                    -
+                                                @else
+                                                    {{ round(($keongPersentase + $manusiaPersentase + $hewanPersentase) / 3, 2) }}
+                                                    %
+                                                @endif
+
+                                            </td>
+                                        </tr>
+                                        @php
+                                            $perencanaan += $keong['perencanaan'] + $tabelManusia[$loop->index]['perencanaan'] + $tabelHewan[$loop->index]['perencanaan'];
+                                            $realisasi += $keong['realisasi'] + $tabelManusia[$loop->index]['realisasi'] + $tabelHewan[$loop->index]['realisasi'];
+                                        @endphp
+                                    @endforeach
+                                    <tr>
+                                        <th scope="row" colspan="2" class="text-center">Total</th>
+                                        <td class="text-center">{{ $perencanaan }}</td>
+                                        <td class="text-center">{{ $realisasi }}</td>
+                                        <td class="text-center">{{ round(($realisasi / $perencanaan) * 100, 2) }} % </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    @component('dashboard.components.buttons.close')
+                    @endcomponent
                 </div>
             </div>
         </div>
     </div>
-    <div class="row mt--2">
-        <div class="col-md-6">
-            <div class="card full-height">
-                <div class="card-body">
-                    <div class="card-title">Overall statistics</div>
-                    <div class="card-category">Daily information about statistics in system</div>
-                    <div class="d-flex flex-wrap justify-content-around pb-2 pt-4">
-                        <div class="px-2 pb-2 pb-md-0 text-center">
-                            <div id="circles-1"></div>
-                            <h6 class="fw-bold mt-3 mb-0">New Users</h6>
-                        </div>
-                        <div class="px-2 pb-2 pb-md-0 text-center">
-                            <div id="circles-2"></div>
-                            <h6 class="fw-bold mt-3 mb-0">Sales</h6>
-                        </div>
-                        <div class="px-2 pb-2 pb-md-0 text-center">
-                            <div id="circles-3"></div>
-                            <h6 class="fw-bold mt-3 mb-0">Subscribers</h6>
-                        </div>
-                    </div>
+
+    <div class="modal fade" id="modal-anggaran" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Detail Anggaran Per-OPD</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card full-height">
-                <div class="card-body">
-                    <div class="card-title">Total income & spend statistics</div>
-                    <div class="row py-3">
-                        <div class="col-md-4 d-flex flex-column justify-content-around">
-                            <div>
-                                <h6 class="fw-bold text-uppercase text-success op-8">Total Income</h6>
-                                <h3 class="fw-bold">$9.782</h3>
-                            </div>
-                            <div>
-                                <h6 class="fw-bold text-uppercase text-danger op-8">Total Spend</h6>
-                                <h3 class="fw-bold">$1,248</h3>
-                            </div>
-                        </div>
-                        <div class="col-md-8">
-                            <div id="chart-container">
-                                <canvas id="totalIncomeChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row row-card-no-pd">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-head-row card-tools-still-right">
-                        <h4 class="card-title">Users Geolocation</h4>
-                        <div class="card-tools">
-                            <button class="btn btn-icon btn-link btn-primary btn-xs"><span
-                                    class="fa fa-angle-down"></span></button>
-                            <button class="btn btn-icon btn-link btn-primary btn-xs btn-refresh-card"><span
-                                    class="fa fa-sync-alt"></span></button>
-                            <button class="btn btn-icon btn-link btn-primary btn-xs"><span
-                                    class="fa fa-times"></span></button>
-                        </div>
-                    </div>
-                    <p class="card-category">
-                        Map of the distribution of users around the world</p>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="table-responsive table-hover table-sales">
-                                <table class="table">
+                <div class="modal-body">
+                    <ul class="nav nav-pills nav-secondary nav-pills-no-bd" id="pills-tab-without-border" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="tab-anggaran-semua" data-toggle="pill" href="#anggaran-semua"
+                                role="tab" aria-controls="anggaran-semua" aria-selected="false">Semua</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tab-anggaran-keong" data-toggle="pill" href="#anggaran-keong"
+                                role="tab" aria-controls="anggaran-keong" aria-selected="true">Keong</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tab-anggaran-manusia" data-toggle="pill" href="#anggaran-manusia"
+                                role="tab" aria-controls="anggaran-manusia" aria-selected="false">Manusia</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tab-anggaran-hewan" data-toggle="pill" href="#anggaran-hewan"
+                                role="tab" aria-controls="anggaran-hewan" aria-selected="false">Hewan</a>
+                        </li>
+
+                    </ul>
+                    <div class="tab-content mt-2 mb-3" id="pills-without-border-tabContent">
+                        <div class="tab-pane fade" id="anggaran-keong" role="tabpanel"
+                            aria-labelledby="pills-home-tab-nobd">
+                            <div style="overflow: auto">
+                                <table class="table table-bordered mt-3">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th scope="col" rowspan="2">No.</th>
+                                            <th scope="col" rowspan="2">OPD</th>
+                                            <th scope="col" colspan="3">Perencanaan Anggaran</th>
+                                            <th scope="col" colspan="3">Penggunaan Anggaran</th>
+                                            <th scope="col" colspan="3">Persentase Penggunaan Anggaran</th>
+                                            <th scope="col" colspan="3">Sisa Anggaran</th>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <th scope="col">DAU</th>
+                                            <th scope="col">DAK</th>
+                                            <th scope="col">Total</th>
+                                            <th scope="col">DAU</th>
+                                            <th scope="col">DAK</th>
+                                            <th scope="col">Total</th>
+                                            <th scope="col">DAU</th>
+                                            <th scope="col">DAK</th>
+                                            <th scope="col">Total</th>
+                                            <th scope="col">DAU</th>
+                                            <th scope="col">DAK</th>
+                                            <th scope="col">Total</th>
+                                        </tr>
+                                    </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="flag">
-                                                    <img src="{{ asset('assets/dashboard') }}/img/flags/id.png"
-                                                        alt="indonesia">
-                                                </div>
+                                        @php
+                                            $perencanaanDau = 0;
+                                            $perencanaanDak = 0;
+                                            $perencanaan = 0;
+                                            $realisasiDau = 0;
+                                            $realisasiDak = 0;
+                                            $realisasi = 0;
+                                            $sisaDau = 0;
+                                            $sisaDak = 0;
+                                            $sisa = 0;
+                                        @endphp
+                                        @foreach ($tabelAnggaranKeong as $anggaranKeong)
+                                            <tr>
+                                                <th scope="row" class="text-center">{{ $loop->iteration }}</th>
+                                                <td class="text-nowrap">{{ $anggaranKeong['opd'] }}</td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp. {{ number_format($anggaranKeong['perencanaanDau'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp. {{ number_format($anggaranKeong['perencanaanDak'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp. {{ number_format($anggaranKeong['perencanaan'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp. {{ number_format($anggaranKeong['realisasiDau'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp. {{ number_format($anggaranKeong['realisasiDak'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp. {{ number_format($anggaranKeong['realisasi'], 0, ',', '.') }}</td>
+                                                <td class="text-center text-nowrap">
+                                                    {{ $anggaranKeong['persentaseDau'] == '-' ? '-' : $anggaranKeong['persentaseDau'] . ' %' }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    {{ $anggaranKeong['persentaseDak'] == '-' ? '-' : $anggaranKeong['persentaseDak'] . ' %' }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    {{ $anggaranKeong['persentase'] == '-' ? '-' : $anggaranKeong['persentase'] . ' %' }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp.
+                                                    {{ number_format($anggaranKeong['perencanaanDau'] - $anggaranKeong['realisasiDau'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp.
+                                                    {{ number_format($anggaranKeong['perencanaanDak'] - $anggaranKeong['realisasiDak'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp.
+                                                    {{ number_format($anggaranKeong['perencanaan'] - $anggaranKeong['realisasi'], 0, ',', '.') }}
+                                                </td>
+                                            </tr>
+                                            @php
+                                                $perencanaanDau += $anggaranKeong['perencanaanDau'];
+                                                $perencanaanDak += $anggaranKeong['perencanaanDak'];
+                                                $perencanaan += $anggaranKeong['perencanaan'];
+                                                $realisasiDau += $anggaranKeong['realisasiDau'];
+                                                $realisasiDak += $anggaranKeong['realisasiDak'];
+                                                $realisasi += $anggaranKeong['realisasi'];
+                                                $sisaDau += $anggaranKeong['perencanaanDau'] - $anggaranKeong['realisasiDau'];
+                                                $sisaDak += $anggaranKeong['perencanaanDak'] - $anggaranKeong['realisasiDak'];
+                                                $sisa += $anggaranKeong['perencanaan'] - $anggaranKeong['realisasi'];
+                                            @endphp
+                                        @endforeach
+                                        <tr class="fw-bold text-nowrap">
+                                            <th scope="row" colspan="2" class="text-center">Total</th>
+                                            <td class="text-center">Rp. {{ number_format($perencanaanDau, 0, ',', '.') }}
                                             </td>
-                                            <td>Indonesia</td>
-                                            <td class="text-right">
-                                                2.320
+                                            <td class="text-center">Rp. {{ number_format($perencanaanDak, 0, ',', '.') }}
                                             </td>
-                                            <td class="text-right">
-                                                42.18%
+                                            <td class="text-center">Rp. {{ number_format($perencanaan, 0, ',', '.') }}
                                             </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="flag">
-                                                    <img src="{{ asset('assets/dashboard') }}/img/flags/us.png"
-                                                        alt="united states">
-                                                </div>
+                                            <td class="text-center">Rp. {{ number_format($realisasiDau, 0, ',', '.') }}
                                             </td>
-                                            <td>USA</td>
-                                            <td class="text-right">
-                                                240
+                                            <td class="text-center">Rp. {{ number_format($realisasiDak, 0, ',', '.') }}
                                             </td>
-                                            <td class="text-right">
-                                                4.36%
+                                            <td class="text-center">Rp. {{ number_format($realisasi, 0, ',', '.') }}</td>
+                                            <td class="text-center">
+                                                {{ round(($realisasiDau / $perencanaanDau) * 100, 2) }} %
+                                            <td class="text-center">
+                                                {{ round(($realisasiDak / $perencanaanDak) * 100, 2) }} %
+                                            <td class="text-center">{{ round(($realisasi / $perencanaan) * 100, 2) }} %
                                             </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="flag">
-                                                    <img src="{{ asset('assets/dashboard') }}/img/flags/au.png"
-                                                        alt="australia">
-                                                </div>
-                                            </td>
-                                            <td>Australia</td>
-                                            <td class="text-right">
-                                                119
-                                            </td>
-                                            <td class="text-right">
-                                                2.16%
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="flag">
-                                                    <img src="{{ asset('assets/dashboard') }}/img/flags/ru.png"
-                                                        alt="russia">
-                                                </div>
-                                            </td>
-                                            <td>Russia</td>
-                                            <td class="text-right">
-                                                1.081
-                                            </td>
-                                            <td class="text-right">
-                                                19.65%
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="flag">
-                                                    <img src="{{ asset('assets/dashboard') }}/img/flags/cn.png"
-                                                        alt="china">
-                                                </div>
-                                            </td>
-                                            <td>China</td>
-                                            <td class="text-right">
-                                                1.100
-                                            </td>
-                                            <td class="text-right">
-                                                20%
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="flag">
-                                                    <img src="{{ asset('assets/dashboard') }}/img/flags/br.png"
-                                                        alt="brazil">
-                                                </div>
-                                            </td>
-                                            <td>Brasil</td>
-                                            <td class="text-right">
-                                                640
-                                            </td>
-                                            <td class="text-right">
-                                                11.63%
-                                            </td>
+                                            <td class="text-center text-nowrap">Rp.
+                                                {{ number_format($sisaDau, 0, ',', '.') }}</td>
+                                            <td class="text-center text-nowrap">Rp.
+                                                {{ number_format($sisaDak, 0, ',', '.') }}</td>
+                                            <td class="text-center text-nowrap">Rp.
+                                                {{ number_format($sisa, 0, ',', '.') }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mapcontainer">
-                                <div id="map-example" class="vmap"></div>
+                        <div class="tab-pane fade" id="anggaran-manusia" role="tabpanel"
+                            aria-labelledby="pills-profile-tab-nobd">
+                            <div style="overflow: auto">
+                                <table class="table table-bordered mt-3">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th scope="col" rowspan="2">No.</th>
+                                            <th scope="col" rowspan="2">OPD</th>
+                                            <th scope="col" colspan="3">Perencanaan Anggaran</th>
+                                            <th scope="col" colspan="3">Penggunaan Anggaran</th>
+                                            <th scope="col" colspan="3">Persentase Penggunaan Anggaran</th>
+                                            <th scope="col" colspan="3">Sisa Anggaran</th>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <th scope="col">DAU</th>
+                                            <th scope="col">DAK</th>
+                                            <th scope="col">Total</th>
+                                            <th scope="col">DAU</th>
+                                            <th scope="col">DAK</th>
+                                            <th scope="col">Total</th>
+                                            <th scope="col">DAU</th>
+                                            <th scope="col">DAK</th>
+                                            <th scope="col">Total</th>
+                                            <th scope="col">DAU</th>
+                                            <th scope="col">DAK</th>
+                                            <th scope="col">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $perencanaanDau = 0;
+                                            $perencanaanDak = 0;
+                                            $perencanaan = 0;
+                                            $realisasiDau = 0;
+                                            $realisasiDak = 0;
+                                            $realisasi = 0;
+                                            $sisaDau = 0;
+                                            $sisaDak = 0;
+                                            $sisa = 0;
+                                        @endphp
+                                        @foreach ($tabelAnggaranManusia as $anggaranManusia)
+                                            <tr>
+                                                <th scope="row" class="text-center">{{ $loop->iteration }}</th>
+                                                <td class="text-nowrap">{{ $anggaranManusia['opd'] }}</td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp.
+                                                    {{ number_format($anggaranManusia['perencanaanDau'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp.
+                                                    {{ number_format($anggaranManusia['perencanaanDak'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp. {{ number_format($anggaranManusia['perencanaan'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp. {{ number_format($anggaranManusia['realisasiDau'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp. {{ number_format($anggaranManusia['realisasiDak'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp. {{ number_format($anggaranManusia['realisasi'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    {{ $anggaranManusia['persentaseDau'] == '-' ? '-' : $anggaranManusia['persentaseDau'] . ' %' }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    {{ $anggaranManusia['persentaseDak'] == '-' ? '-' : $anggaranManusia['persentaseDak'] . ' %' }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    {{ $anggaranManusia['persentase'] == '-' ? '-' : $anggaranManusia['persentase'] . ' %' }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp.
+                                                    {{ number_format($anggaranManusia['perencanaanDau'] - $anggaranManusia['realisasiDau'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp.
+                                                    {{ number_format($anggaranManusia['perencanaanDak'] - $anggaranManusia['realisasiDak'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp.
+                                                    {{ number_format($anggaranManusia['perencanaan'] - $anggaranManusia['realisasi'], 0, ',', '.') }}
+                                                </td>
+                                            </tr>
+                                            @php
+                                                $perencanaanDau += $anggaranManusia['perencanaanDau'];
+                                                $perencanaanDak += $anggaranManusia['perencanaanDak'];
+                                                $perencanaan += $anggaranManusia['perencanaan'];
+                                                $realisasiDau += $anggaranManusia['realisasiDau'];
+                                                $realisasiDak += $anggaranManusia['realisasiDak'];
+                                                $realisasi += $anggaranManusia['realisasi'];
+                                                $sisaDau += $anggaranManusia['perencanaanDau'] - $anggaranManusia['realisasiDau'];
+                                                $sisaDak += $anggaranManusia['perencanaanDak'] - $anggaranManusia['realisasiDak'];
+                                                $sisa += $anggaranManusia['perencanaan'] - $anggaranManusia['realisasi'];
+                                            @endphp
+                                        @endforeach
+                                        <tr class="fw-bold text-nowrap">
+                                            <th scope="row" colspan="2" class="text-center">Total</th>
+                                            <td class="text-center">Rp. {{ number_format($perencanaanDau, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-center">Rp. {{ number_format($perencanaanDak, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-center">Rp. {{ number_format($perencanaan, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-center">Rp. {{ number_format($realisasiDau, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-center">Rp. {{ number_format($realisasiDak, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-center">Rp. {{ number_format($realisasi, 0, ',', '.') }}</td>
+                                            <td class="text-center">
+                                                {{ round(($realisasiDau / $perencanaanDau) * 100, 2) }} %
+                                            <td class="text-center">
+                                                {{ round(($realisasiDak / $perencanaanDak) * 100, 2) }} %
+                                            <td class="text-center">{{ round(($realisasi / $perencanaan) * 100, 2) }} %
+                                            </td>
+                                            <td class="text-center text-nowrap">Rp.
+                                                {{ number_format($sisaDau, 0, ',', '.') }}</td>
+                                            <td class="text-center text-nowrap">Rp.
+                                                {{ number_format($sisaDak, 0, ',', '.') }}</td>
+                                            <td class="text-center text-nowrap">Rp.
+                                                {{ number_format($sisa, 0, ',', '.') }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="anggaran-hewan" role="tabpanel"
+                            aria-labelledby="pills-contact-tab-nobd">
+                            <div style="overflow: auto">
+                                <table class="table table-bordered mt-3">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th scope="col" rowspan="2">No.</th>
+                                            <th scope="col" rowspan="2">OPD</th>
+                                            <th scope="col" colspan="3">Perencanaan Anggaran</th>
+                                            <th scope="col" colspan="3">Penggunaan Anggaran</th>
+                                            <th scope="col" colspan="3">Persentase Penggunaan Anggaran</th>
+                                            <th scope="col" colspan="3">Sisa Anggaran</th>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <th scope="col">DAU</th>
+                                            <th scope="col">DAK</th>
+                                            <th scope="col">Total</th>
+                                            <th scope="col">DAU</th>
+                                            <th scope="col">DAK</th>
+                                            <th scope="col">Total</th>
+                                            <th scope="col">DAU</th>
+                                            <th scope="col">DAK</th>
+                                            <th scope="col">Total</th>
+                                            <th scope="col">DAU</th>
+                                            <th scope="col">DAK</th>
+                                            <th scope="col">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $perencanaanDau = 0;
+                                            $perencanaanDak = 0;
+                                            $perencanaan = 0;
+                                            $realisasiDau = 0;
+                                            $realisasiDak = 0;
+                                            $realisasi = 0;
+                                            $sisaDau = 0;
+                                            $sisaDak = 0;
+                                            $sisa = 0;
+                                        @endphp
+                                        @foreach ($tabelAnggaranHewan as $anggaranHewan)
+                                            <tr>
+                                                <th scope="row" class="text-center">{{ $loop->iteration }}</th>
+                                                <td class="text-nowrap">{{ $anggaranHewan['opd'] }}</td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp. {{ number_format($anggaranHewan['perencanaanDau'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp. {{ number_format($anggaranHewan['perencanaanDak'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp. {{ number_format($anggaranHewan['perencanaan'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp. {{ number_format($anggaranHewan['realisasiDau'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp. {{ number_format($anggaranHewan['realisasiDak'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp. {{ number_format($anggaranHewan['realisasi'], 0, ',', '.') }}</td>
+                                                <td class="text-center text-nowrap">
+                                                    {{ $anggaranHewan['persentaseDau'] == '-' ? '-' : $anggaranHewan['persentaseDau'] . ' %' }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    {{ $anggaranHewan['persentaseDak'] == '-' ? '-' : $anggaranHewan['persentaseDak'] . ' %' }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    {{ $anggaranHewan['persentase'] == '-' ? '-' : $anggaranHewan['persentase'] . ' %' }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp.
+                                                    {{ number_format($anggaranHewan['perencanaanDau'] - $anggaranHewan['realisasiDau'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp.
+                                                    {{ number_format($anggaranHewan['perencanaanDak'] - $anggaranHewan['realisasiDak'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp.
+                                                    {{ number_format($anggaranHewan['perencanaan'] - $anggaranHewan['realisasi'], 0, ',', '.') }}
+                                                </td>
+                                            </tr>
+                                            @php
+                                                $perencanaanDau += $anggaranHewan['perencanaanDau'];
+                                                $perencanaanDak += $anggaranHewan['perencanaanDak'];
+                                                $perencanaan += $anggaranHewan['perencanaan'];
+                                                $realisasiDau += $anggaranHewan['realisasiDau'];
+                                                $realisasiDak += $anggaranHewan['realisasiDak'];
+                                                $realisasi += $anggaranHewan['realisasi'];
+                                                $sisaDau += $anggaranHewan['perencanaanDau'] - $anggaranHewan['realisasiDau'];
+                                                $sisaDak += $anggaranHewan['perencanaanDak'] - $anggaranHewan['realisasiDak'];
+                                                $sisa += $anggaranHewan['perencanaan'] - $anggaranHewan['realisasi'];
+                                            @endphp
+                                        @endforeach
+                                        <tr class="fw-bold text-nowrap">
+                                            <th scope="row" colspan="2" class="text-center">Total</th>
+                                            <td class="text-center">Rp. {{ number_format($perencanaanDau, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-center">Rp. {{ number_format($perencanaanDak, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-center">Rp. {{ number_format($perencanaan, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-center">Rp. {{ number_format($realisasiDau, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-center">Rp. {{ number_format($realisasiDak, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-center">Rp. {{ number_format($realisasi, 0, ',', '.') }}</td>
+                                            <td class="text-center">
+                                                {{ round(($realisasiDau / $perencanaanDau) * 100, 2) }} %
+                                            <td class="text-center">
+                                                {{ round(($realisasiDak / $perencanaanDak) * 100, 2) }} %
+                                            <td class="text-center">{{ round(($realisasi / $perencanaan) * 100, 2) }} %
+                                            </td>
+                                            <td class="text-center text-nowrap">Rp.
+                                                {{ number_format($sisaDau, 0, ',', '.') }}</td>
+                                            <td class="text-center text-nowrap">Rp.
+                                                {{ number_format($sisaDak, 0, ',', '.') }}</td>
+                                            <td class="text-center text-nowrap">Rp.
+                                                {{ number_format($sisa, 0, ',', '.') }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade show active" id="anggaran-semua" role="tabpanel"
+                            aria-labelledby="pills-home-tab-nobd">
+                            <div style="overflow: auto">
+                                <table class="table table-bordered mt-3">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th scope="col" rowspan="2">No.</th>
+                                            <th scope="col" rowspan="2">OPD</th>
+                                            <th scope="col" colspan="3">Perencanaan Anggaran</th>
+                                            <th scope="col" colspan="3">Penggunaan Anggaran</th>
+                                            <th scope="col" colspan="3">Persentase Penggunaan Anggaran</th>
+                                            <th scope="col" colspan="3">Sisa Anggaran</th>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <th scope="col">DAU</th>
+                                            <th scope="col">DAK</th>
+                                            <th scope="col">Total</th>
+                                            <th scope="col">DAU</th>
+                                            <th scope="col">DAK</th>
+                                            <th scope="col">Total</th>
+                                            <th scope="col">DAU</th>
+                                            <th scope="col">DAK</th>
+                                            <th scope="col">Total</th>
+                                            <th scope="col">DAU</th>
+                                            <th scope="col">DAK</th>
+                                            <th scope="col">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $perencanaanDau = 0;
+                                            $perencanaanDak = 0;
+                                            $perencanaan = 0;
+                                            $realisasiDau = 0;
+                                            $realisasiDak = 0;
+                                            $realisasi = 0;
+                                            $sisaDau = 0;
+                                            $sisaDak = 0;
+                                            $sisa = 0;
+                                        @endphp
+                                        @foreach ($tabelAnggaranSemua as $anggaranSemua)
+                                            <tr>
+                                                <th scope="row" class="text-center">{{ $loop->iteration }}</th>
+                                                <td class="text-nowrap">{{ $anggaranSemua['opd'] }}</td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp. {{ number_format($anggaranSemua['perencanaanDau'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp. {{ number_format($anggaranSemua['perencanaanDak'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp. {{ number_format($anggaranSemua['perencanaan'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp. {{ number_format($anggaranSemua['realisasiDau'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp. {{ number_format($anggaranSemua['realisasiDak'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp. {{ number_format($anggaranSemua['realisasi'], 0, ',', '.') }}</td>
+                                                <td class="text-center text-nowrap">
+                                                    {{ $anggaranSemua['persentaseDau'] == '-' ? '-' : $anggaranSemua['persentaseDau'] . ' %' }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    {{ $anggaranSemua['persentaseDak'] == '-' ? '-' : $anggaranSemua['persentaseDak'] . ' %' }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    {{ $anggaranSemua['persentase'] == '-' ? '-' : $anggaranSemua['persentase'] . ' %' }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp.
+                                                    {{ number_format($anggaranSemua['perencanaanDau'] - $anggaranSemua['realisasiDau'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp.
+                                                    {{ number_format($anggaranSemua['perencanaanDak'] - $anggaranSemua['realisasiDak'], 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center text-nowrap">
+                                                    Rp.
+                                                    {{ number_format($anggaranSemua['perencanaan'] - $anggaranSemua['realisasi'], 0, ',', '.') }}
+                                                </td>
+                                            </tr>
+                                            @php
+                                                $perencanaanDau += $anggaranSemua['perencanaanDau'];
+                                                $perencanaanDak += $anggaranSemua['perencanaanDak'];
+                                                $perencanaan += $anggaranSemua['perencanaan'];
+                                                $realisasiDau += $anggaranSemua['realisasiDau'];
+                                                $realisasiDak += $anggaranSemua['realisasiDak'];
+                                                $realisasi += $anggaranSemua['realisasi'];
+                                                $sisaDau += $anggaranSemua['perencanaanDau'] - $anggaranSemua['realisasiDau'];
+                                                $sisaDak += $anggaranSemua['perencanaanDak'] - $anggaranSemua['realisasiDak'];
+                                                $sisa += $anggaranSemua['perencanaan'] - $anggaranSemua['realisasi'];
+                                            @endphp
+                                        @endforeach
+                                        <tr class="text-nowrap fw-bold">
+                                            <th scope="row" colspan="2" class="text-center">Total</th>
+                                            <td class="text-center">Rp. {{ number_format($perencanaanDau, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-center">Rp. {{ number_format($perencanaanDak, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-center">Rp. {{ number_format($perencanaan, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-center">Rp. {{ number_format($realisasiDau, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-center">Rp. {{ number_format($realisasiDak, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-center">Rp. {{ number_format($realisasi, 0, ',', '.') }}</td>
+                                            <td class="text-center">
+                                                {{ round(($realisasiDau / $perencanaanDau) * 100, 2) }} %
+                                            <td class="text-center">
+                                                {{ round(($realisasiDak / $perencanaanDak) * 100, 2) }} %
+                                            <td class="text-center">{{ round(($realisasi / $perencanaan) * 100, 2) }} %
+                                            </td>
+                                            <td class="text-center text-nowrap">Rp.
+                                                {{ number_format($sisaDau, 0, ',', '.') }}</td>
+                                            <td class="text-center text-nowrap">Rp.
+                                                {{ number_format($sisaDak, 0, ',', '.') }}</td>
+                                            <td class="text-center text-nowrap">Rp.
+                                                {{ number_format($sisa, 0, ',', '.') }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">Top Products</div>
-                </div>
-                <div class="card-body pb-0">
-                    <div class="d-flex">
-                        <div class="avatar">
-                            <img src="{{ asset('assets/dashboard') }}/img/logoproduct.svg" alt="..."
-                                class="avatar-img rounded-circle">
-                        </div>
-                        <div class="flex-1 pt-1 ml-2">
-                            <h6 class="fw-bold mb-1">CSS</h6>
-                            <small class="text-muted">Cascading Style Sheets</small>
-                        </div>
-                        <div class="d-flex ml-auto align-items-center">
-                            <h3 class="text-info fw-bold">+$17</h3>
-                        </div>
-                    </div>
-                    <div class="separator-dashed"></div>
-                    <div class="d-flex">
-                        <div class="avatar">
-                            <img src="{{ asset('assets/dashboard') }}/img/logoproduct.svg" alt="..."
-                                class="avatar-img rounded-circle">
-                        </div>
-                        <div class="flex-1 pt-1 ml-2">
-                            <h6 class="fw-bold mb-1">J.CO Donuts</h6>
-                            <small class="text-muted">The Best Donuts</small>
-                        </div>
-                        <div class="d-flex ml-auto align-items-center">
-                            <h3 class="text-info fw-bold">+$300</h3>
-                        </div>
-                    </div>
-                    <div class="separator-dashed"></div>
-                    <div class="d-flex">
-                        <div class="avatar">
-                            <img src="{{ asset('assets/dashboard') }}/img/logoproduct3.svg" alt="..."
-                                class="avatar-img rounded-circle">
-                        </div>
-                        <div class="flex-1 pt-1 ml-2">
-                            <h6 class="fw-bold mb-1">Ready Pro</h6>
-                            <small class="text-muted">Bootstrap 4 Admin Dashboard</small>
-                        </div>
-                        <div class="d-flex ml-auto align-items-center">
-                            <h3 class="text-info fw-bold">+$350</h3>
-                        </div>
-                    </div>
-                    <div class="separator-dashed"></div>
-                    <div class="pull-in">
-                        <canvas id="topProductsChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title fw-mediumbold">Suggested People</div>
-                    <div class="card-list">
-                        <div class="item-list">
-                            <div class="avatar">
-                                <img src="{{ asset('assets/dashboard') }}/img/jm_denis.jpg" alt="..."
-                                    class="avatar-img rounded-circle">
-                            </div>
-                            <div class="info-user ml-3">
-                                <div class="username">Jimmy Denis</div>
-                                <div class="status">Graphic Designer</div>
-                            </div>
-                            <button class="btn btn-icon btn-primary btn-round btn-xs">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
-                        <div class="item-list">
-                            <div class="avatar">
-                                <img src="{{ asset('assets/dashboard') }}/img/chadengle.jpg" alt="..."
-                                    class="avatar-img rounded-circle">
-                            </div>
-                            <div class="info-user ml-3">
-                                <div class="username">Chad</div>
-                                <div class="status">CEO Zeleaf</div>
-                            </div>
-                            <button class="btn btn-icon btn-primary btn-round btn-xs">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
-                        <div class="item-list">
-                            <div class="avatar">
-                                <img src="{{ asset('assets/dashboard') }}/img/talha.jpg" alt="..."
-                                    class="avatar-img rounded-circle">
-                            </div>
-                            <div class="info-user ml-3">
-                                <div class="username">Talha</div>
-                                <div class="status">Front End Designer</div>
-                            </div>
-                            <button class="btn btn-icon btn-primary btn-round btn-xs">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
-                        <div class="item-list">
-                            <div class="avatar">
-                                <img src="{{ asset('assets/dashboard') }}/img/mlane.jpg" alt="..."
-                                    class="avatar-img rounded-circle">
-                            </div>
-                            <div class="info-user ml-3">
-                                <div class="username">John Doe</div>
-                                <div class="status">Back End Developer</div>
-                            </div>
-                            <button class="btn btn-icon btn-primary btn-round btn-xs">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
-                        <div class="item-list">
-                            <div class="avatar">
-                                <img src="{{ asset('assets/dashboard') }}/img/talha.jpg" alt="..."
-                                    class="avatar-img rounded-circle">
-                            </div>
-                            <div class="info-user ml-3">
-                                <div class="username">Talha</div>
-                                <div class="status">Front End Designer</div>
-                            </div>
-                            <button class="btn btn-icon btn-primary btn-round btn-xs">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
-                        <div class="item-list">
-                            <div class="avatar">
-                                <img src="{{ asset('assets/dashboard') }}/img/jm_denis.jpg" alt="..."
-                                    class="avatar-img rounded-circle">
-                            </div>
-                            <div class="info-user ml-3">
-                                <div class="username">Jimmy Denis</div>
-                                <div class="status">Graphic Designer</div>
-                            </div>
-                            <button class="btn btn-icon btn-primary btn-round btn-xs">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card card-primary bg-primary-gradient">
-                <div class="card-body">
-                    <h4 class="mt-3 b-b1 pb-2 mb-4 fw-bold">Active user right now</h4>
-                    <h1 class="mb-4 fw-bold">17</h1>
-                    <h4 class="mt-3 b-b1 pb-2 mb-5 fw-bold">Page view per minutes</h4>
-                    <div id="activeUsersChart"></div>
-                    <h4 class="mt-5 pb-3 mb-0 fw-bold">Top active pages</h4>
-                    <ul class="list-unstyled">
-                        <li class="d-flex justify-content-between pb-1 pt-1">
-                            <small>/product/readypro/index.html</small> <span>7</span>
-                        </li>
-                        <li class="d-flex justify-content-between pb-1 pt-1">
-                            <small>/product/atlantis/demo.html</small> <span>10</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card full-height">
-                <div class="card-header">
-                    <div class="card-title">Feed Activity</div>
-                </div>
-                <div class="card-body">
-                    <ol class="activity-feed">
-                        <li class="feed-item feed-item-secondary">
-                            <time class="date" datetime="9-25">Sep 25</time>
-                            <span class="text">Responded to need <a href="#">"Volunteer
-                                    opportunity"</a></span>
-                        </li>
-                        <li class="feed-item feed-item-success">
-                            <time class="date" datetime="9-24">Sep 24</time>
-                            <span class="text">Added an interest <a href="#">"Volunteer
-                                    Activities"</a></span>
-                        </li>
-                        <li class="feed-item feed-item-info">
-                            <time class="date" datetime="9-23">Sep 23</time>
-                            <span class="text">Joined the group <a href="single-group.php">"Boardsmanship
-                                    Forum"</a></span>
-                        </li>
-                        <li class="feed-item feed-item-warning">
-                            <time class="date" datetime="9-21">Sep 21</time>
-                            <span class="text">Responded to need <a href="#">"In-Kind
-                                    Opportunity"</a></span>
-                        </li>
-                        <li class="feed-item feed-item-danger">
-                            <time class="date" datetime="9-18">Sep 18</time>
-                            <span class="text">Created need <a href="#">"Volunteer
-                                    Opportunity"</a></span>
-                        </li>
-                        <li class="feed-item">
-                            <time class="date" datetime="9-17">Sep 17</time>
-                            <span class="text">Attending the event <a href="single-event.php">"Some
-                                    New
-                                    Event"</a></span>
-                        </li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card full-height">
-                <div class="card-header">
-                    <div class="card-head-row">
-                        <div class="card-title">Support Tickets</div>
-                        <div class="card-tools">
-                            <ul class="nav nav-pills nav-secondary nav-pills-no-bd nav-sm" id="pills-tab" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link" id="pills-today" data-toggle="pill" href="#pills-today"
-                                        role="tab" aria-selected="true">Today</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link active" id="pills-week" data-toggle="pill" href="#pills-week"
-                                        role="tab" aria-selected="false">Week</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="pills-month" data-toggle="pill" href="#pills-month"
-                                        role="tab" aria-selected="false">Month</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="d-flex">
-                        <div class="avatar avatar-online">
-                            <span class="avatar-title rounded-circle border border-white bg-info">J</span>
-                        </div>
-                        <div class="flex-1 ml-3 pt-1">
-                            <h6 class="text-uppercase fw-bold mb-1">Joko Subianto <span
-                                    class="text-warning pl-3">pending</span></h6>
-                            <span class="text-muted">I am facing some trouble with my viewport. When i
-                                start my</span>
-                        </div>
-                        <div class="float-right pt-1">
-                            <small class="text-muted">8:40 PM</small>
-                        </div>
-                    </div>
-                    <div class="separator-dashed"></div>
-                    <div class="d-flex">
-                        <div class="avatar avatar-offline">
-                            <span class="avatar-title rounded-circle border border-white bg-secondary">P</span>
-                        </div>
-                        <div class="flex-1 ml-3 pt-1">
-                            <h6 class="text-uppercase fw-bold mb-1">Prabowo Widodo <span
-                                    class="text-success pl-3">open</span></h6>
-                            <span class="text-muted">I have some query regarding the license
-                                issue.</span>
-                        </div>
-                        <div class="float-right pt-1">
-                            <small class="text-muted">1 Day Ago</small>
-                        </div>
-                    </div>
-                    <div class="separator-dashed"></div>
-                    <div class="d-flex">
-                        <div class="avatar avatar-away">
-                            <span class="avatar-title rounded-circle border border-white bg-danger">L</span>
-                        </div>
-                        <div class="flex-1 ml-3 pt-1">
-                            <h6 class="text-uppercase fw-bold mb-1">Lee Chong Wei <span
-                                    class="text-muted pl-3">closed</span></h6>
-                            <span class="text-muted">Is there any update plan for RTL version near
-                                future?</span>
-                        </div>
-                        <div class="float-right pt-1">
-                            <small class="text-muted">2 Days Ago</small>
-                        </div>
-                    </div>
-                    <div class="separator-dashed"></div>
-                    <div class="d-flex">
-                        <div class="avatar avatar-offline">
-                            <span class="avatar-title rounded-circle border border-white bg-secondary">P</span>
-                        </div>
-                        <div class="flex-1 ml-3 pt-1">
-                            <h6 class="text-uppercase fw-bold mb-1">Peter Parker <span
-                                    class="text-success pl-3">open</span></h6>
-                            <span class="text-muted">I have some query regarding the license
-                                issue.</span>
-                        </div>
-                        <div class="float-right pt-1">
-                            <small class="text-muted">2 Day Ago</small>
-                        </div>
-                    </div>
-                    <div class="separator-dashed"></div>
-                    <div class="d-flex">
-                        <div class="avatar avatar-away">
-                            <span class="avatar-title rounded-circle border border-white bg-danger">L</span>
-                        </div>
-                        <div class="flex-1 ml-3 pt-1">
-                            <h6 class="text-uppercase fw-bold mb-1">Logan Paul <span class="text-muted pl-3">closed</span>
-                            </h6>
-                            <span class="text-muted">Is there any update plan for RTL version near
-                                future?</span>
-                        </div>
-                        <div class="float-right pt-1">
-                            <small class="text-muted">2 Days Ago</small>
-                        </div>
-                    </div>
+                <div class="modal-footer">
+                    @component('dashboard.components.buttons.close')
+                    @endcomponent
                 </div>
             </div>
         </div>
@@ -531,8 +1301,145 @@
 
 @push('scripts')
     <script>
-        $('#nav-dashboard').addClass('active');
+        Circles.create({
+            id: 'realisasi-keong',
+            radius: 45,
+            value: "{{ $intervensi['persentaseKeong'] }}",
+            maxValue: 100,
+            width: 7,
+            text: "{{ $intervensi['persentaseKeong'] . ' %' }}",
+            colors: ['#f1f1f1', '#2BB930'],
+            duration: 400,
+            wrpClass: 'circles-wrp',
+            textClass: 'circles-text',
+            styleWrapper: true,
+            styleText: true
+        })
 
-        console.log('{{ Auth::user() }}')
+        Circles.create({
+            id: 'realisasi-manusia',
+            radius: 45,
+            value: "{{ $intervensi['persentaseManusia'] }}",
+            maxValue: 100,
+            width: 7,
+            text: "{{ $intervensi['persentaseManusia'] . ' %' }}",
+            colors: ['#f1f1f1', '#2BB930'],
+            duration: 400,
+            wrpClass: 'circles-wrp',
+            textClass: 'circles-text',
+            styleWrapper: true,
+            styleText: true
+        })
+
+        Circles.create({
+            id: 'realisasi-hewan',
+            radius: 45,
+            value: "{{ $intervensi['persentaseHewan'] }}",
+            maxValue: 100,
+            width: 7,
+            text: "{{ $intervensi['persentaseHewan'] . ' %' }}",
+            colors: ['#f1f1f1', '#2BB930'],
+            duration: 400,
+            wrpClass: 'circles-wrp',
+            textClass: 'circles-text',
+            styleWrapper: true,
+            styleText: true
+        })
+
+        Circles.create({
+            id: 'realisasi-total',
+            radius: 45,
+            value: "{{ round((($intervensi['realisasiKeong'] + $intervensi['realisasiManusia'] + $intervensi['realisasiHewan']) / ($intervensi['perencanaanKeong'] + $intervensi['perencanaanHewan'] + $intervensi['perencanaanManusia'])) * 100, 2) }}",
+            maxValue: 100,
+            width: 7,
+            text: "{{ round((($intervensi['realisasiKeong'] + $intervensi['realisasiManusia'] + $intervensi['realisasiHewan']) / ($intervensi['perencanaanKeong'] + $intervensi['perencanaanHewan'] + $intervensi['perencanaanManusia'])) * 100, 2) . '%' }}",
+            colors: ['#f1f1f1', '#2BB930'],
+            duration: 400,
+            wrpClass: 'circles-wrp',
+            textClass: 'circles-text',
+            styleWrapper: true,
+            styleText: true
+        })
+
+        Circles.create({
+            id: 'penggunaan-keong',
+            radius: 45,
+            value: "{{ $penggunaanAnggaran['penggunaanKeong'] }}",
+            maxValue: "{{ $anggaranPerencanaan['anggaranKeong'] }}",
+            width: 7,
+            text: "{{ round(($penggunaanAnggaran['penggunaanKeong'] / $anggaranPerencanaan['anggaranKeong']) * 100, 2) . ' %' }}",
+            colors: ['#f1f1f1', '#2BB930'],
+            duration: 400,
+            wrpClass: 'circles-wrp',
+            textClass: 'circles-text',
+            styleWrapper: true,
+            styleText: true
+        })
+
+        Circles.create({
+            id: 'penggunaan-manusia',
+            radius: 45,
+            value: "{{ $penggunaanAnggaran['penggunaanManusia'] }}",
+            maxValue: "{{ $anggaranPerencanaan['anggaranManusia'] }}",
+            width: 7,
+            text: "{{ round(($penggunaanAnggaran['penggunaanManusia'] / $anggaranPerencanaan['anggaranManusia']) * 100, 2) . ' %' }}",
+            colors: ['#f1f1f1', '#2BB930'],
+            duration: 400,
+            wrpClass: 'circles-wrp',
+            textClass: 'circles-text',
+            styleWrapper: true,
+            styleText: true
+        })
+
+        Circles.create({
+            id: 'penggunaan-hewan',
+            radius: 45,
+            value: "{{ $penggunaanAnggaran['penggunaanHewan'] }}",
+            maxValue: "{{ $anggaranPerencanaan['anggaranHewan'] }}",
+            width: 7,
+            text: "{{ round(($penggunaanAnggaran['penggunaanHewan'] / $anggaranPerencanaan['anggaranHewan']) * 100, 2) . ' %' }}",
+            colors: ['#f1f1f1', '#2BB930'],
+            duration: 400,
+            wrpClass: 'circles-wrp',
+            textClass: 'circles-text',
+            styleWrapper: true,
+            styleText: true
+        })
+
+        Circles.create({
+            id: 'penggunaan-total',
+            radius: 45,
+            value: "{{ $penggunaanAnggaran['penggunaanHewan'] + $penggunaanAnggaran['penggunaanKeong'] + $penggunaanAnggaran['penggunaanManusia'] }}",
+            maxValue: "{{ $anggaranPerencanaan['anggaranHewan'] + $anggaranPerencanaan['anggaranKeong'] + $anggaranPerencanaan['anggaranManusia'] }}",
+            width: 7,
+            text: "{{ round((($penggunaanAnggaran['penggunaanHewan'] + $penggunaanAnggaran['penggunaanKeong'] + $penggunaanAnggaran['penggunaanManusia']) / ($anggaranPerencanaan['anggaranHewan'] + $anggaranPerencanaan['anggaranKeong'] + $anggaranPerencanaan['anggaranManusia'])) * 100, 2) . ' %' }}",
+            colors: ['#f1f1f1', '#2BB930'],
+            duration: 400,
+            wrpClass: 'circles-wrp',
+            textClass: 'circles-text',
+            styleWrapper: true,
+            styleText: true
+        })
+
+        Circles.create({
+            id: 'penggunaan-sisa',
+            radius: 45,
+            value: "{{ $anggaranPerencanaan['anggaranHewan'] + $anggaranPerencanaan['anggaranKeong'] + $anggaranPerencanaan['anggaranManusia'] - ($penggunaanAnggaran['penggunaanHewan'] + $penggunaanAnggaran['penggunaanKeong'] + $penggunaanAnggaran['penggunaanManusia']) }}",
+            maxValue: "{{ $anggaranPerencanaan['anggaranHewan'] + $anggaranPerencanaan['anggaranKeong'] + $anggaranPerencanaan['anggaranManusia'] }}",
+            width: 7,
+            text: "{{ round((($anggaranPerencanaan['anggaranHewan'] + $anggaranPerencanaan['anggaranKeong'] + $anggaranPerencanaan['anggaranManusia'] - ($penggunaanAnggaran['penggunaanHewan'] + $penggunaanAnggaran['penggunaanKeong'] + $penggunaanAnggaran['penggunaanManusia'])) / ($anggaranPerencanaan['anggaranHewan'] + $anggaranPerencanaan['anggaranKeong'] + $anggaranPerencanaan['anggaranManusia'])) * 100, 2) . ' %' }}",
+            colors: ['#f1f1f1', '#2BB930'],
+            duration: 400,
+            wrpClass: 'circles-wrp',
+            textClass: 'circles-text',
+            styleWrapper: true,
+            styleText: true
+        })
+    </script>
+
+    <script>
+        $('.circles-text').css('font-size', '15px');
+        $('.circles-text').css('font-weight', 'bold');
+        $('#nav-dashboard').addClass('active');
     </script>
 @endpush

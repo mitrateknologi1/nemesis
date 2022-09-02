@@ -34,7 +34,41 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body pt-3">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            @component('dashboard.components.formElements.select',
+                                [
+                                    'label' => 'OPD',
+                                    'id' => 'opd-filter',
+                                    'name' => 'opd_filter',
+                                    'class' => 'select2 filter',
+                                ])
+                                @slot('options')
+                                    <option value="semua">Semua</option>
+                                    @foreach ($filterOpd as $item)
+                                        <option value="{{ $item['id'] }}">{{ $item['opd'] }}</option>
+                                    @endforeach
+                                @endslot
+                            @endcomponent
+                        </div>
+                        <div class="col-md-6">
+                            @component('dashboard.components.formElements.select',
+                                [
+                                    'label' => 'Sub Indikator',
+                                    'id' => 'indikator-filter',
+                                    'name' => 'indikator_filter',
+                                    'class' => 'select2 filter',
+                                ])
+                                @slot('options')
+                                    <option value="semua">Semua</option>
+                                    @foreach ($filterSubIndikator as $item)
+                                        <option value="{{ $item['id'] }}">{{ $item['sub_indikator'] }}</option>
+                                    @endforeach
+                                @endslot
+                            @endcomponent
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col">
                             <div class="table-responsive">
@@ -75,10 +109,11 @@
             ],
             ajax: {
                 url: "{{ url('hasil-realisasi-hewan') }}",
-                // data: function(d) {
-                //     d.lokasiTugas = $('#lokasi-tugas').val();
-                //     d.search = $('input[type="search"]').val();
-                // }
+                data: function(d) {
+                    d.opd_filter = $('#opd-filter').val();
+                    d.indikator_filter = $('#indikator-filter').val();
+                    d.search_filter = $('input[type="search"]').val();
+                }
             },
             columns: [{
                     data: 'DT_RowIndex',
@@ -101,6 +136,10 @@
                 },
             ],
         });
+
+        $('.filter').change(function() {
+            table.draw();
+        })
 
         $(document).on('click', '.btn-delete', function() {
             let id = $(this).val();

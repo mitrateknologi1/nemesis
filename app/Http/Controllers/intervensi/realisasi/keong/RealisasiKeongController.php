@@ -732,6 +732,22 @@ class RealisasiKeongController extends Controller
         return response()->json(['success' => 'Berhasil menghapus laporan']);
     }
 
+    function unique_multidim_array($array, $key)
+    {
+        $temp_array = array();
+        $i = 0;
+        $key_array = array();
+
+        foreach ($array as $val) {
+            if (!in_array($val[$key], $key_array)) {
+                $key_array[$i] = $val[$key];
+                $temp_array[$i] = $val;
+            }
+            $i++;
+        }
+        return $temp_array;
+    }
+
     public function hasilRealisasi(Request $request)
     {
         $habitatKeong = LokasiPerencanaanKeong::where('status', 1)
@@ -739,10 +755,35 @@ class RealisasiKeongController extends Controller
             ->pluck('lokasi_keong_id')
             ->toArray();
 
+        $dataHabitatKeong = LokasiKeong::with('listIndikator', 'desa')->whereIn('id', $habitatKeong)
+            ->latest();
 
         if ($request->ajax()) {
-            $data = LokasiKeong::with('listIndikator', 'desa')->whereIn('id', $habitatKeong)
-                ->latest();
+            $data = $dataHabitatKeong
+                // filtering
+                ->where(function ($query) use ($request) {
+                    if ($request->opd_filter && $request->opd_filter != 'semua') {
+                        $query->whereHas('listIndikator', function ($query2) use ($request) {
+                            $query2->whereHas('perencanaanKeong', function ($query3) use ($request) {
+                                $query3->where('opd_id', $request->opd_filter);
+                            });
+                        });
+                    }
+
+                    if ($request->indikator_filter && $request->indikator_filter != 'semua') {
+                        $query->whereHas('listIndikator', function ($query2) use ($request) {
+                            $query2->whereHas('perencanaanKeong', function ($query3) use ($request) {
+                                $query3->where('id', $request->indikator_filter);
+                            });
+                        });
+                    }
+
+                    if ($request->search_filter) {
+                        $query->where(function ($query2) use ($request) {
+                            $query2->where('nama', 'like', '%' . $request->search_filter . '%');
+                        });
+                    }
+                });
             return DataTables::of($data)
                 ->addIndexColumn()
 
@@ -771,7 +812,28 @@ class RealisasiKeongController extends Controller
                 ->make(true);
         }
 
-        return view('dashboard.pages.hasilRealisasi.keong.index');
+        $filterSubIndikator = [];
+        $filterOpd = [];
+
+        foreach ($dataHabitatKeong->get() as $item) {
+            foreach ($item->listIndikator as $row) {
+                $dataSubIndikator = [
+                    'id' => $row->perencanaanKeong->id,
+                    'sub_indikator' => $row->perencanaanKeong->sub_indikator
+                ];
+                $dataOpd = [
+                    'id' => $row->perencanaanKeong->opd->id,
+                    'opd' => $row->perencanaanKeong->opd->nama
+                ];
+                array_push($filterSubIndikator, $dataSubIndikator);
+                array_push($filterOpd, $dataOpd);
+            }
+        }
+
+        $filterSubIndikator = $this->unique_multidim_array($filterSubIndikator, 'id');
+        $filterOpd = $this->unique_multidim_array($filterOpd, 'id');
+
+        return view('dashboard.pages.hasilRealisasi.keong.index', ['filterSubIndikator' => $filterSubIndikator, 'filterOpd' => $filterOpd]);
     }
 
     public function export()

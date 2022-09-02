@@ -32,19 +32,69 @@ class RealisasiManusiaController extends Controller
      */
     public function index(Request $request)
     {
+        $realisasiManusia = PerencanaanManusia::with('opd', 'pendudukPerencanaanManusia', 'realisasiManusia')
+            ->where('status', 1)
+            ->where(function ($query) {
+                if (Auth::user()->role == 'OPD') {
+                    $query->where('opd_id', Auth::user()->opd_id);
+                    $query->orWhereHas('opdTerkaitManusia', function ($q) {
+                        $q->where('status', 1);
+                        $q->where('opd_id', Auth::user()->opd_id);
+                    });
+                }
+            })
+            ->latest();
         if ($request->ajax()) {
-            $data = PerencanaanManusia::with('opd', 'pendudukPerencanaanManusia', 'realisasiManusia')
-                ->where('status', 1)
-                ->where(function ($query) {
-                    if (Auth::user()->role == 'OPD') {
-                        $query->where('opd_id', Auth::user()->opd_id);
-                        $query->orWhereHas('opdTerkaitManusia', function ($q) {
-                            $q->where('status', 1);
-                            $q->where('opd_id', Auth::user()->opd_id);
+            $data = $realisasiManusia
+                // filtering
+                ->where(function ($query) use ($request) {
+                    if ($request->opd_filter && $request->opd_filter != 'semua') {
+                        $query->where('opd_id', $request->opd_filter);
+                    }
+
+                    if ($request->status_filter && $request->status_filter != 'semua') {
+
+                        if ($request->status_filter == 'selesai') {
+                            $query->whereHas('realisasiManusia', function ($query2) use ($request) {
+                                $query2->where('status', 1);
+                                $query2->havingRaw('max(progress) = 100');
+                            });
+                        }
+                        if ($request->status_filter == 'belum_selesai') {
+                            $query->where(function ($query2) use ($request) {
+                                $query2->whereHas('realisasiManusia', function ($query3) use ($request) {
+                                    $query3->where('status', 1);
+                                    $query3->havingRaw('max(progress) != 100');
+                                });
+                                $query2->orWhereDoesntHave('realisasiManusia');
+                            });
+                        }
+                        if ($request->status_filter == 'belum_ada_laporan') {
+                            $query->whereDoesntHave('realisasiManusia');
+                        }
+
+                        if (in_array($request->status_filter, array("-", 1, 2))) {
+                            $query->whereHas('realisasiManusia', function ($query2) use ($request) {
+                                if ($request->status_filter == "-") {
+                                    $query2->where('status', 0);
+                                } else {
+                                    if ($request->status_filter == 1) {
+                                        $query2->where('status', 1);
+                                        $query2->max('progress') != 100;
+                                    } else {
+                                        $query2->where('status', $request->status_filter);
+                                    }
+                                }
+                            });
+                        }
+                    }
+
+                    if ($request->search_filter) {
+                        $query->where(function ($query2) use ($request) {
+                            $query2->where('sub_indikator', 'like', '%' . $request->search_filter . '%');
                         });
                     }
-                })
-                ->latest();
+                });
             return DataTables::of($data)
                 ->addIndexColumn()
 
@@ -62,7 +112,7 @@ class RealisasiManusiaController extends Controller
                 ->addColumn('status', function ($row) {
                     $status = '<div>';
                     if ($row->realisasiManusia->where('status', 1)->max('progress') == 100) {
-                        $status .=  '<span class="badge badge-success">' . $row->realisasiManusia->where('status', 1)->count() . ' Laporan Selesai</span>';
+                        $status .=  '<span class="badge badge-info">Selesai Terealisasi</span>';
                     } else {
                         if ($row->realisasiManusia->where('status', 0)->count() > 0) {
                             $status .= '<span class="badge badge-warning my-1 mx-1">Menunggu Konfirmasi : <span class="font-weight-bold">' . $row->realisasiManusia->where('status', 0)->count() . '</span></span>';
@@ -109,7 +159,7 @@ class RealisasiManusiaController extends Controller
                 ])
                 ->make(true);
         }
-        return view('dashboard.pages.intervensi.realisasi.manusia.subIndikator.index');
+        return view('dashboard.pages.intervensi.realisasi.manusia.subIndikator.index', ['realisasiManusia' => $realisasiManusia]);
     }
 
     public function tabelLaporan(Request $request)

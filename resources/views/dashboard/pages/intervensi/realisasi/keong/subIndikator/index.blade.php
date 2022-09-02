@@ -34,7 +34,43 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body pt-3">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            @component('dashboard.components.formElements.select',
+                                [
+                                    'label' => 'OPD',
+                                    'id' => 'opd-filter',
+                                    'name' => 'opd_filter',
+                                    'class' => 'select2 filter',
+                                ])
+                                @slot('options')
+                                    <option value="semua">Semua</option>
+                                    @foreach ($realisasiKeong->groupBy('opd_id')->get() as $item)
+                                        <option value="{{ $item->opd_id }}">{{ $item->opd->nama }}</option>
+                                    @endforeach
+                                @endslot
+                            @endcomponent
+                        </div>
+                        <div class="col-md-6">
+                            @component('dashboard.components.formElements.select',
+                                [
+                                    'label' => 'Status',
+                                    'id' => 'status-filter',
+                                    'name' => 'status_filter',
+                                    'class' => 'select2 filter',
+                                ])
+                                @slot('options')
+                                    <option value="semua">Semua</option>
+                                    <option value="selesai">Selesai Terealisasi</option>
+                                    <option value="belum_selesai">Belum Selesai Terealisasi</option>
+                                    <option value="belum_ada_laporan">Belum Ada Laporan Sama Sekali</option>
+                                    <option value="-">Menunggu Konfirmasi</option>
+                                    <option value="2">Ditolak</option>
+                                @endslot
+                            @endcomponent
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col">
                             <div class="table-responsive">
@@ -80,10 +116,11 @@
             ],
             ajax: {
                 url: "{{ route('realisasi-intervensi-keong.index') }}",
-                // data: function(d) {
-                //     d.lokasiTugas = $('#lokasi-tugas').val();
-                //     d.search = $('input[type="search"]').val();
-                // }
+                data: function(d) {
+                    d.opd_filter = $('#opd-filter').val();
+                    d.status_filter = $('#status-filter').val();
+                    d.search_filter = $('input[type="search"]').val();
+                },
             },
             columns: [{
                     data: 'DT_RowIndex',
@@ -143,6 +180,10 @@
                 // },
             ],
         });
+
+        $('.filter').change(function() {
+            table.draw();
+        })
 
         $(document).on('click', '.btn-delete', function() {
             let id = $(this).val();

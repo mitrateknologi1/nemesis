@@ -17,6 +17,25 @@
 
 @section('contents')
     <div class="row">
+        <div class="col-12 {{ $totalMenungguKonfirmasiRealisasiKeong == 0 ? 'd-none' : '' }}">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-head-row">
+                        <div class="card-title fw-bold text-primary"><i class="icon-bell"></i> Pemberitahuan</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} d-flex justify-content-between mb-0"
+                        role="alert">
+                        <span>
+                            Terdapat <b>{{ $totalMenungguKonfirmasiRealisasiKeong }}</b> data laporan realisasi yang
+                            {{ Auth::user()->role == 'OPD' ? 'ditolak' : 'menunggu konfirmasi' }}.
+                            {{ Auth::user()->role == 'OPD' ? 'Silahkan ubah data tersebut dan kemudian perbarui datanya.' : '' }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">

@@ -2,23 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use PDO;
+use App\Models\OPD;
 use App\Models\Desa;
 use App\Models\Hewan;
+use App\Models\Siswa;
+use App\Models\Sekolah;
+use App\Models\Penduduk;
 use App\Models\JumlahHewan;
 use App\Models\LokasiHewan;
 use App\Models\LokasiKeong;
-use App\Models\OPD;
-use App\Models\Penduduk;
-use App\Models\PerencanaanHewan;
-use App\Models\PerencanaanKeong;
-use App\Models\PerencanaanManusia;
+use Illuminate\Http\Request;
 use App\Models\RealisasiHewan;
 use App\Models\RealisasiKeong;
+use App\Models\PerencanaanHewan;
+use App\Models\PerencanaanKeong;
 use App\Models\RealisasiManusia;
-use App\Models\Sekolah;
-use App\Models\Siswa;
-use Illuminate\Http\Request;
-use PDO;
+use App\Models\PerencanaanManusia;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -40,7 +42,27 @@ class DashboardController extends Controller
         $tabelAnggaranManusia = $this->_tabelAnggaranManusia();
         $tabelAnggaranHewan = $this->_tabelAnggaranHewan();
         $tabelAnggaranSemua = $this->_tabelAnggaranSemua();
-        // dd($tabelAnggaranManusia);
+
+        if (Auth::user()->role == 'OPD') {
+            $totalMenungguKonfirmasiPerencanaanKeong = PerencanaanKeong::where('status', 2)->where('opd_id', Auth::user()->opd_id)->count();
+            $totalMenungguKonfirmasiPerencanaanManusia = PerencanaanManusia::where('status', 2)->where('opd_id', Auth::user()->opd_id)->count();
+            $totalMenungguKonfirmasiPerencanaanHewan = PerencanaanHewan::where('status', 2)->where('opd_id', Auth::user()->opd_id)->count();
+
+            $listPerencanaanKeong = PerencanaanKeong::where('opd_id', Auth::user()->opd_id)->where('status', 1)->pluck('id')->toArray();
+            $totalMenungguKonfirmasiRealisasiKeong = RealisasiKeong::whereIn('perencanaan_keong_id', $listPerencanaanKeong)->where('status', 2)->count();
+            $listPerencanaanManusia = PerencanaanManusia::where('opd_id', Auth::user()->opd_id)->where('status', 1)->pluck('id')->toArray();
+            $totalMenungguKonfirmasiRealisasiManusia = RealisasiManusia::whereIn('perencanaan_manusia_id', $listPerencanaanManusia)->where('status', 2)->count();
+            $listPerencanaanHewan = PerencanaanHewan::where('opd_id', Auth::user()->opd_id)->where('status', 1)->pluck('id')->toArray();
+            $totalMenungguKonfirmasiRealisasiHewan = RealisasiHewan::whereIn('perencanaan_hewan_id', $listPerencanaanHewan)->where('status', 2)->count();
+        } else if (in_array(Auth::user()->role, ['Admin', 'Pimpinan'])) {
+            $totalMenungguKonfirmasiPerencanaanKeong = PerencanaanKeong::where('status', 0)->count();
+            $totalMenungguKonfirmasiPerencanaanManusia = PerencanaanManusia::where('status', 0)->count();
+            $totalMenungguKonfirmasiPerencanaanHewan = PerencanaanHewan::where('status', 0)->count();
+
+            $totalMenungguKonfirmasiRealisasiKeong = RealisasiKeong::where('status', 0)->count();
+            $totalMenungguKonfirmasiRealisasiManusia = RealisasiManusia::where('status', 0)->count();
+            $totalMenungguKonfirmasiRealisasiHewan = RealisasiHewan::where('status', 0)->count();
+        }
 
         return view('dashboard.pages.dashboard', compact(
             [
@@ -56,7 +78,13 @@ class DashboardController extends Controller
                 'tabelAnggaranKeong',
                 'tabelAnggaranManusia',
                 'tabelAnggaranHewan',
-                'tabelAnggaranSemua'
+                'tabelAnggaranSemua',
+                'totalMenungguKonfirmasiPerencanaanKeong',
+                'totalMenungguKonfirmasiPerencanaanManusia',
+                'totalMenungguKonfirmasiPerencanaanHewan',
+                'totalMenungguKonfirmasiRealisasiKeong',
+                'totalMenungguKonfirmasiRealisasiManusia',
+                'totalMenungguKonfirmasiRealisasiHewan',
             ]
         ));
     }

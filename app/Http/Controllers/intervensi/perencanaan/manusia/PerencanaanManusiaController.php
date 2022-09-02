@@ -30,18 +30,37 @@ class PerencanaanManusiaController extends Controller
      */
     public function index(Request $request)
     {
+        $perencanaanManusia = PerencanaanManusia::with('opd', 'pendudukPerencanaanManusia')
+            ->where(function ($query) {
+                if (Auth::user()->role == 'OPD') {
+                    $query->where('opd_id', Auth::user()->opd_id);
+                    $query->orWhereHas('opdTerkaitManusia', function ($q) { // OPD Terkait hanya bisa melihat yang telah di setujui
+                        $q->where('status', 1);
+                        $q->where('opd_id', Auth::user()->opd_id);
+                    });
+                }
+            })
+            ->latest();
+
         if ($request->ajax()) {
-            $data = PerencanaanManusia::with('opd', 'pendudukPerencanaanManusia')
-                ->where(function ($query) {
-                    if (Auth::user()->role == 'OPD') {
-                        $query->where('opd_id', Auth::user()->opd_id);
-                        $query->orWhereHas('opdTerkaitManusia', function ($q) { // OPD Terkait hanya bisa melihat yang telah di setujui
-                            $q->where('status', 1);
-                            $q->where('opd_id', Auth::user()->opd_id);
+            $data = $perencanaanManusia
+                // filtering
+                ->where(function ($query) use ($request) {
+                    if ($request->opd_filter && $request->opd_filter != 'semua') {
+                        $query->where('opd_id', $request->opd_filter);
+                    }
+
+                    if ($request->status_filter && $request->status_filter != 'semua') {
+                        $filter = $request->status_filter == "-" ? 0 : $request->status_filter;
+                        $query->where('status', $filter);
+                    }
+
+                    if ($request->search_filter) {
+                        $query->where(function ($query2) use ($request) {
+                            $query2->where('sub_indikator', 'like', '%' . $request->search_filter . '%');
                         });
                     }
-                })
-                ->latest();
+                });
             return DataTables::of($data)
                 ->addIndexColumn()
 
@@ -105,7 +124,7 @@ class PerencanaanManusiaController extends Controller
                 ])
                 ->make(true);
         }
-        return view('dashboard.pages.intervensi.perencanaan.manusia.subIndikator.index');
+        return view('dashboard.pages.intervensi.perencanaan.manusia.subIndikator.index', ['perencanaanManusia' => $perencanaanManusia]);
     }
 
     /**

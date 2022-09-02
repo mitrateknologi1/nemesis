@@ -34,18 +34,38 @@ class PerencanaanKeongController extends Controller
      */
     public function index(Request $request)
     {
+        $perencanaanKeong = PerencanaanKeong::with('opd', 'lokasiPerencanaanKeong')
+            ->where(function ($query) {
+                if (Auth::user()->role == 'OPD') {
+                    $query->where('opd_id', Auth::user()->opd_id);
+                    $query->orWhereHas('opdTerkaitKeong', function ($q) { // OPD Terkait hanya bisa melihat yang telah di setujui
+                        $q->where('status', 1);
+                        $q->where('opd_id', Auth::user()->opd_id);
+                    });
+                }
+            })
+            ->latest();
+
         if ($request->ajax()) {
-            $data = PerencanaanKeong::with('opd', 'lokasiPerencanaanKeong')
-                ->where(function ($query) {
-                    if (Auth::user()->role == 'OPD') {
-                        $query->where('opd_id', Auth::user()->opd_id);
-                        $query->orWhereHas('opdTerkaitKeong', function ($q) { // OPD Terkait hanya bisa melihat yang telah di setujui
-                            $q->where('status', 1);
-                            $q->where('opd_id', Auth::user()->opd_id);
+            $data = $perencanaanKeong
+                // filtering
+                ->where(function ($query) use ($request) {
+                    if ($request->opd_filter && $request->opd_filter != 'semua') {
+                        $query->where('opd_id', $request->opd_filter);
+                    }
+
+                    if ($request->status_filter && $request->status_filter != 'semua') {
+                        $filter = $request->status_filter == "-" ? 0 : $request->status_filter;
+                        $query->where('status', $filter);
+                    }
+
+                    if ($request->search_filter) {
+                        $query->where(function ($query2) use ($request) {
+                            $query2->where('sub_indikator', 'like', '%' . $request->search_filter . '%');
                         });
                     }
-                })
-                ->latest();
+                });
+
             return DataTables::of($data)
                 ->addIndexColumn()
 
@@ -110,7 +130,7 @@ class PerencanaanKeongController extends Controller
                 ])
                 ->make(true);
         }
-        return view('dashboard.pages.intervensi.perencanaan.keong.subIndikator.index');
+        return view('dashboard.pages.intervensi.perencanaan.keong.subIndikator.index', ['perencanaanKeong' => $perencanaanKeong]);
     }
 
     /**

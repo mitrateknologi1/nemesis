@@ -139,7 +139,7 @@ class RealisasiHewanController extends Controller
                         } else {
                             return '<span class="badge badge-primary">' . $row->opd->nama . '</span>';
                         }
-                    } else if (Auth::user()->role == 'Admin') {
+                    } else {
                         return $row->opd->nama;
                     }
                 })
@@ -160,7 +160,14 @@ class RealisasiHewanController extends Controller
                 ])
                 ->make(true);
         }
-        return view('dashboard.pages.intervensi.realisasi.hewan.subIndikator.index', ['realisasiHewan' => $realisasiHewan]);
+
+        if (Auth::user()->role == 'OPD') {
+            $listPerencanaanHewan = PerencanaanHewan::where('opd_id', Auth::user()->opd_id)->where('status', 1)->pluck('id')->toArray();
+            $totalMenungguKonfirmasiRealisasiHewan = RealisasiHewan::whereIn('perencanaan_hewan_id', $listPerencanaanHewan)->where('status', 2)->count();
+        } else {
+            $totalMenungguKonfirmasiRealisasiHewan = RealisasiHewan::where('status', 0)->count();
+        }
+        return view('dashboard.pages.intervensi.realisasi.hewan.subIndikator.index', ['realisasiHewan' => $realisasiHewan, 'totalMenungguKonfirmasiRealisasiHewan' => $totalMenungguKonfirmasiRealisasiHewan]);
     }
 
 
@@ -211,8 +218,12 @@ class RealisasiHewanController extends Controller
                             $actionBtn .= '<a href="' . url('realisasi-intervensi-hewan/show-laporan', $row->id) . '" id="btn-show" class="btn btn-rounded btn-primary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a> ';
                             $actionBtn .= '<a href="' . route('realisasi-intervensi-hewan.edit', $row->id) . '" id="btn-edit" class="btn btn-rounded btn-warning btn-sm my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a> ';
                             $actionBtn .= '<button id="btn-delete" class="btn btn-rounded btn-danger btn-sm my-1 text-white shadow btn-delete" data-toggle="tooltip" data-placement="top" title="Hapus" value="' . $row->id . '"><i class="fas fa-trash"></i></button>';
-                        } else { //admin
-                            $actionBtn .= '<a href="' . url('realisasi-intervensi-hewan/show-laporan', $row->id) . '" id="btn-show" class="btn btn-rounded btn-secondary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Konfirmasi"><i class="fas fa-lg fa-clipboard-check"></i></a> ';
+                        } else { //admin & pimpinan
+                            if (Auth::user()->role == 'Admin') {
+                                $actionBtn .= '<a href="' . url('realisasi-intervensi-hewan/show-laporan', $row->id) . '" id="btn-show" class="btn btn-rounded btn-secondary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Konfirmasi"><i class="fas fa-lg fa-clipboard-check"></i></a> ';
+                            } else {
+                                $actionBtn .= '<a href="' . url('realisasi-intervensi-hewan/show-laporan', $row->id) . '" id="btn-show" class="btn btn-rounded btn-primary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a> ';
+                            }
                         }
                     } else if ($row->status == 1) {
                         $actionBtn .= '<a href="' . url('realisasi-intervensi-hewan/show-laporan', $row->id) . '" id="btn-show" class="btn btn-rounded btn-primary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a> ';

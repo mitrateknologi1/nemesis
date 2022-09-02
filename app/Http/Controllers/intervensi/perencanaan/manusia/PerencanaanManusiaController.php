@@ -85,7 +85,7 @@ class PerencanaanManusiaController extends Controller
                         } else {
                             return '<span class="badge badge-primary">' . $row->opd->nama . '</span>';
                         }
-                    } else if (Auth::user()->role == 'Admin') {
+                    } else {
                         return $row->opd->nama;
                     }
                 })
@@ -97,8 +97,12 @@ class PerencanaanManusiaController extends Controller
                             $actionBtn .= '<a href="' . route('rencana-intervensi-manusia.show', $row->id) . '" id="btn-show" class="btn btn-rounded btn-primary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a> ';
                             $actionBtn .= '<a href="' . route('rencana-intervensi-manusia.edit', $row->id) . '" id="btn-edit" class="btn btn-rounded btn-warning btn-sm my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a> ';
                             $actionBtn .= '<button id="btn-delete" class="btn btn-rounded btn-danger btn-sm my-1 text-white shadow btn-delete" data-toggle="tooltip" data-placement="top" title="Hapus" value="' . $row->id . '"><i class="fas fa-trash"></i></button>';
-                        } else { //admin
-                            $actionBtn .= '<a href="' . route('rencana-intervensi-manusia.show', $row->id) . '" id="btn-show" class="btn btn-rounded btn-secondary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Konfirmasi"><i class="fas fa-lg fa-clipboard-check"></i></a> ';
+                        } else { //admin & pimpinan
+                            if (Auth::user()->role == 'Admin') {
+                                $actionBtn .= '<a href="' . route('rencana-intervensi-manusia.show', $row->id) . '" id="btn-show" class="btn btn-rounded btn-secondary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Konfirmasi"><i class="fas fa-lg fa-clipboard-check"></i></a> ';
+                            } else {
+                                $actionBtn .= '<a href="' . route('rencana-intervensi-manusia.show', $row->id) . '" id="btn-show" class="btn btn-rounded btn-primary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a> ';
+                            }
                         }
                     } else if ($row->status == 1) {
                         $actionBtn .= '<a href="' . route('rencana-intervensi-manusia.show', $row->id) . '" id="btn-show" class="btn btn-rounded btn-primary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a> ';
@@ -124,7 +128,13 @@ class PerencanaanManusiaController extends Controller
                 ])
                 ->make(true);
         }
-        return view('dashboard.pages.intervensi.perencanaan.manusia.subIndikator.index', ['perencanaanManusia' => $perencanaanManusia]);
+
+        if (Auth::user()->role == 'OPD') {
+            $totalMenungguKonfirmasiPerencanaanManusia = PerencanaanManusia::where('status', 2)->where('opd_id', Auth::user()->opd_id)->count();
+        } else {
+            $totalMenungguKonfirmasiPerencanaanManusia = PerencanaanManusia::where('status', 0)->count();
+        }
+        return view('dashboard.pages.intervensi.perencanaan.manusia.subIndikator.index', ['perencanaanManusia' => $perencanaanManusia, 'totalMenungguKonfirmasiPerencanaanManusia' => $totalMenungguKonfirmasiPerencanaanManusia]);
     }
 
     /**

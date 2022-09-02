@@ -14,13 +14,13 @@ class PerencanaanManusiaTableSeeder extends Seeder
      */
     public function run()
     {
-        
+
 
         \DB::table('perencanaan_manusia')->delete();
-        
-        \DB::table('perencanaan_manusia')->insert(array (
-            0 => 
-            array (
+
+        \DB::table('perencanaan_manusia')->insert(array(
+            0 =>
+            array(
                 'alasan_ditolak' => '-',
                 'created_at' => '2022-01-24 23:45:49',
                 'id' => '00326039-0a88-495b-8670-2b9098ce4600',
@@ -32,8 +32,8 @@ class PerencanaanManusiaTableSeeder extends Seeder
                 'tanggal_konfirmasi' => '2022-01-28',
                 'updated_at' => '2022-08-28 13:29:42',
             ),
-            1 => 
-            array (
+            1 =>
+            array(
                 'alasan_ditolak' => NULL,
                 'created_at' => '2022-08-24 23:35:20',
                 'id' => '9c559147-af9e-4ce2-a414-17d2cfdd15f5',
@@ -45,8 +45,8 @@ class PerencanaanManusiaTableSeeder extends Seeder
                 'tanggal_konfirmasi' => NULL,
                 'updated_at' => '2022-08-24 23:35:20',
             ),
-            2 => 
-            array (
+            2 =>
+            array(
                 'alasan_ditolak' => 'Penduduk terlalu sedikit',
                 'created_at' => '2022-08-24 23:26:52',
                 'id' => 'bac1eb88-fb66-4a73-b51d-2d6834470217',
@@ -58,8 +58,8 @@ class PerencanaanManusiaTableSeeder extends Seeder
                 'tanggal_konfirmasi' => '2022-08-24',
                 'updated_at' => '2022-08-24 23:36:05',
             ),
-            3 => 
-            array (
+            3 =>
+            array(
                 'alasan_ditolak' => '-',
                 'created_at' => '2022-08-24 23:32:10',
                 'id' => 'e24a52eb-b522-4a5c-a03f-3e9d89f2eab0',
@@ -71,12 +71,12 @@ class PerencanaanManusiaTableSeeder extends Seeder
                 'tanggal_konfirmasi' => '2022-08-24',
                 'updated_at' => '2022-08-24 23:36:51',
             ),
-            4 => 
-            array (
+            4 =>
+            array(
                 'alasan_ditolak' => '-',
                 'created_at' => '2022-08-24 23:42:01',
                 'id' => 'fc3995c2-d9bc-4a98-800b-1298f5ae1165',
-                'nilai_pembiayaan' => 3000000,
+                'nilai_pembiayaan' => 9000000,
                 'opd_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c97',
                 'status' => 1,
                 'sub_indikator' => 'Memberikan sosialisasi kepada warga yang teridentifikasi gejala Schistosomiasis',
@@ -85,7 +85,5 @@ class PerencanaanManusiaTableSeeder extends Seeder
                 'updated_at' => '2022-08-24 23:42:15',
             ),
         ));
-        
-        
     }
 }

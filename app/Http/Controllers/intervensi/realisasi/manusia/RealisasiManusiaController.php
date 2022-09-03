@@ -139,7 +139,7 @@ class RealisasiManusiaController extends Controller
                         } else {
                             return '<span class="badge badge-primary">' . $row->opd->nama . '</span>';
                         }
-                    } else if (Auth::user()->role == 'Admin') {
+                    } else {
                         return $row->opd->nama;
                     }
                 })
@@ -159,7 +159,14 @@ class RealisasiManusiaController extends Controller
                 ])
                 ->make(true);
         }
-        return view('dashboard.pages.intervensi.realisasi.manusia.subIndikator.index', ['realisasiManusia' => $realisasiManusia]);
+
+        if (Auth::user()->role == 'OPD') {
+            $listPerencanaanManusia = PerencanaanManusia::where('opd_id', Auth::user()->opd_id)->where('status', 1)->pluck('id')->toArray();
+            $totalMenungguKonfirmasiRealisasiManusia = RealisasiManusia::whereIn('perencanaan_manusia_id', $listPerencanaanManusia)->where('status', 2)->count();
+        } else {
+            $totalMenungguKonfirmasiRealisasiManusia = RealisasiManusia::where('status', 0)->count();
+        }
+        return view('dashboard.pages.intervensi.realisasi.manusia.subIndikator.index', ['realisasiManusia' => $realisasiManusia, 'totalMenungguKonfirmasiRealisasiManusia' => $totalMenungguKonfirmasiRealisasiManusia]);
     }
 
     public function tabelLaporan(Request $request)
@@ -210,8 +217,12 @@ class RealisasiManusiaController extends Controller
                             $actionBtn .= '<a href="' . url('realisasi-intervensi-manusia/show-laporan', $row->id) . '" id="btn-show" class="btn btn-rounded btn-primary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a> ';
                             $actionBtn .= '<a href="' . route('realisasi-intervensi-manusia.edit', $row->id) . '" id="btn-edit" class="btn btn-rounded btn-warning btn-sm my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a> ';
                             $actionBtn .= '<button id="btn-delete" class="btn btn-rounded btn-danger btn-sm my-1 text-white shadow btn-delete" data-toggle="tooltip" data-placement="top" title="Hapus" value="' . $row->id . '"><i class="fas fa-trash"></i></button>';
-                        } else { //admin
-                            $actionBtn .= '<a href="' . url('realisasi-intervensi-manusia/show-laporan', $row->id) . '" id="btn-show" class="btn btn-rounded btn-secondary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Konfirmasi"><i class="fas fa-lg fa-clipboard-check"></i></a> ';
+                        } else { //admin & pimpinan
+                            if (Auth::user()->role == 'Admin') {
+                                $actionBtn .= '<a href="' . url('realisasi-intervensi-manusia/show-laporan', $row->id) . '" id="btn-show" class="btn btn-rounded btn-secondary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Konfirmasi"><i class="fas fa-lg fa-clipboard-check"></i></a> ';
+                            } else {
+                                $actionBtn .= '<a href="' . url('realisasi-intervensi-manusia/show-laporan', $row->id) . '" id="btn-show" class="btn btn-rounded btn-primary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a> ';
+                            }
                         }
                     } else if ($row->status == 1) {
                         $actionBtn .= '<a href="' . url('realisasi-intervensi-manusia/show-laporan', $row->id) . '" id="btn-show" class="btn btn-rounded btn-primary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a> ';
@@ -508,7 +519,7 @@ class RealisasiManusiaController extends Controller
             $request->all(),
             [
                 'penduduk' => $realisasi_intervensi_manusia->status != 1 ? 'required' : '',
-                'penggunaan_anggaran' => 'required',
+                'penggunaan_anggaran' => $realisasi_intervensi_manusia->status != 1 ? 'required' : '',
             ],
             [
                 'penduduk.required' => 'Penduduk harus dipilih',

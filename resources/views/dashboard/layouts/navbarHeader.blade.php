@@ -37,7 +37,7 @@
                                  </a>
                                  <a href="#">
                                      <div class="notif-img">
-                                         <img src="{{ asset('assets/dashboard') }}/img/profile2.jpg" alt="Img Profile">
+                                         <img src="{{ asset('assets/dashboard') }}/img/user.png" alt="Img Profile">
                                      </div>
                                      <div class="notif-content">
                                          <span class="block">
@@ -136,7 +136,7 @@
              <li class="nav-item dropdown hidden-caret">
                  <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
                      <div class="avatar-sm">
-                         <img src="{{ asset('assets/dashboard') }}/img/profile.jpg" alt="..."
+                         <img src="{{ asset('assets/dashboard') }}/img/user.png" alt="..."
                              class="avatar-img rounded-circle">
                      </div>
                  </a>
@@ -144,7 +144,7 @@
                      <div class="dropdown-user-scroll scrollbar-outer">
                          <li>
                              <div class="user-box">
-                                 <div class="avatar-lg"><img src="{{ asset('assets/dashboard') }}/img/profile.jpg"
+                                 <div class="avatar-lg"><img src="{{ asset('assets/dashboard') }}/img/user.png"
                                          alt="image profile" class="avatar-img rounded"></div>
                                  <div class="u-text">
                                      <h4>{{ Auth::user()->role == 'Admin' || Auth::user()->role == 'Pimpinan' ? Auth::user()->nama : Auth::user()->opd->nama }}

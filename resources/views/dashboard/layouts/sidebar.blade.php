@@ -4,7 +4,7 @@
          <div class="sidebar-content">
              <ul class="nav nav-primary">
                  <li class="nav-item" id="nav-dashboard">
-                     <a href="{{ url('/') }}">
+                     <a href="{{ url('/dashboard') }}">
                          <i class="fas fa-home"></i>
                          <p>Dashboard</p>
                      </a>
@@ -157,6 +157,14 @@
                          <p>Sekolah</p>
                      </a>
                  </li>
+                 @if (Auth::user()->role != 'OPD')
+                     <li class="nav-item" id="nav-master-opd">
+                         <a href="{{ url('master-data/opd') }}">
+                             <i class="fas fa-building"></i>
+                             <p>OPD</p>
+                         </a>
+                     </li>
+                 @endif
                  @if (Auth::user()->role == 'Admin')
                      <li class="nav-item" id="nav-master-hewan">
                          <a href="{{ url('master-data/hewan') }}">

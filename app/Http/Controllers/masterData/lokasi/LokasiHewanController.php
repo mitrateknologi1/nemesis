@@ -28,7 +28,15 @@ class LokasiHewanController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = LokasiHewan::orderBy('created_at', 'desc')->get();
+            $data = LokasiHewan::orderBy('created_at', 'desc')->where(function ($query) use ($request) {
+                if ($request->desa_id && $request->desa_id != "semua") {
+                    $query->where('desa_id', $request->desa_id);
+                }
+
+                if ($request->search) {
+                    $query->where('nama', 'like', '%' . $request->search . '%');
+                }
+            })->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('desa', function ($row) {
@@ -75,12 +83,17 @@ class LokasiHewanController extends Controller
         }
 
         $daftarJumlahHewan = $this->_getJumlahHewan();
-        return view('dashboard.pages.masterData.lokasi.hewan.index', compact(['daftarJumlahHewan']));
+        $daftarDesa = Desa::orderBy('nama', 'asc')->get();
+        return view('dashboard.pages.masterData.lokasi.hewan.index', compact(['daftarJumlahHewan', 'daftarDesa']));
     }
 
-    public function exportLokasiHewan()
+    public function exportLokasiHewan(Request $request)
     {
-        $lokasiHewan = LokasiHewan::orderBy('created_at', 'desc')->get();
+        $lokasiHewan = LokasiHewan::orderBy('created_at', 'desc')->where(function ($query) use ($request) {
+            if ($request->desa_id && $request->desa_id != "semua") {
+                $query->where('desa_id', $request->desa_id);
+            }
+        })->get();
         $jumlahLokasiHewan = [];
         $daftarHewan = Hewan::orderBy('nama', 'asc')->get();
 

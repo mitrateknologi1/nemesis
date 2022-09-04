@@ -39,14 +39,11 @@
                     <div class="card-head-row">
                         <div class="card-title">Data Hewan</div>
                         <div class="card-tools">
-                            <form action="{{ url('master-data/lokasi/hewan/export-lokasi') }}" method="POST">
-                                @csrf
-                                <button type="submit" class="btn btn-info btn-border btn-round btn-sm mr-2"
-                                    id="export-lokasi-hewan">
-                                    <i class="fas fa-lg fa-download"></i>
-                                    Export Lokasi Hewan
-                                </button>
-                            </form>
+                            <button type="submit" class="btn btn-info btn-border btn-round btn-sm mr-2"
+                                id="export-lokasi-hewan">
+                                <i class="fas fa-lg fa-download"></i>
+                                Export Lokasi Hewan
+                            </button>
                             <form action="{{ url('master-data/lokasi/hewan/export-demografi') }}" method="POST">
                                 @csrf
                                 <button type="submit" class="btn btn-info btn-border btn-round btn-sm mr-2"
@@ -86,7 +83,31 @@
                                 </div>
                                 <div class="tab-pane fade" id="pills-tabel" role="tabpanel"
                                     aria-labelledby="pills-profile-tab-nobd">
-                                    <div class="row mt-5">
+                                    <form action="{{ url('master-data/lokasi/hewan/export-lokasi') }}" method="POST"
+                                        id="form-export-data">
+                                        @csrf
+                                        <div class="row">
+                                            <div class="col-sm-12 col-lg-12">
+                                                @component('dashboard.components.formElements.select',
+                                                    [
+                                                        'label' => 'Desa',
+                                                        'id' => 'desa_id',
+                                                        'name' => 'desa_id',
+                                                        'class' => 'select2 filter',
+                                                        'wajib' => '<sup class="text-danger">*</sup>',
+                                                        'attribute' => 'style="100%"',
+                                                    ])
+                                                    @slot('options')
+                                                        <option value="semua">Semua</option>
+                                                        @foreach ($daftarDesa as $desa)
+                                                            <option value="{{ $desa->id }}">{{ $desa->nama }}</option>
+                                                        @endforeach
+                                                    @endslot
+                                                @endcomponent
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div class="row mt-3">
                                         <div class="col">
                                             <div class="card fieldset">
                                                 @component('dashboard.components.dataTables.index',
@@ -193,6 +214,11 @@
     </script>
 
     <script>
+        $('.select2').select2({
+            placeholder: "Semua",
+            theme: "bootstrap",
+            width: '100%'
+        })
         var map = null;
 
         $('#pills-home-tab-nobd').click(function() {
@@ -318,15 +344,15 @@
                 text: "Data yang sudah dihapus tidak dapat dikembalikan lagi !",
                 type: 'warning',
                 buttons: {
-                    confirm: {
-                        text: 'Hapus',
-                        className: 'btn btn-success'
-                    },
                     cancel: {
                         visible: true,
                         text: 'Batal',
+                        className: 'btn btn-light'
+                    },
+                    confirm: {
+                        text: 'Hapus',
                         className: 'btn btn-danger'
-                    }
+                    },
                 }
             }).then((Delete) => {
                 if (Delete) {
@@ -371,7 +397,13 @@
         var table = $('#table-data').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ url('master-data/lokasi/hewan') }}",
+            ajax: {
+                url: "{{ url('master-data/lokasi/hewan') }}",
+                data: function(d) {
+                    d.desa_id = $('#desa_id').val();
+                    d.search = $('input[type="search"]').val();
+                },
+            },
             columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex',
@@ -426,11 +458,18 @@
             if (role != "Admin") {
                 table.column(8).visible(false);
             }
+        })
 
+        $('#export-lokasi-hewan').click(function() {
+            $('#form-export-data').submit();
         })
     </script>
 
     <script>
+        $(".filter").change(function() {
+            table.draw();
+        })
+
         $('#nav-master-lokasi').addClass('active');
         $('#nav-master-lokasi .collapse').addClass('show');
         $('#nav-master-lokasi .collapse #li-lokasi-hewan').addClass('active');

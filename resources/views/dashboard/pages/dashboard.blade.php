@@ -176,7 +176,11 @@
                                     <button class="btn btn-info btn-border btn-round btn-sm mr-2" data-toggle="modal"
                                         data-target="#modal-intervensi">
                                         <i class="fas fa-info-circle"></i>
-                                        Lihat Detail Per-OPD
+                                        @if (Auth::user()->role != 'OPD')
+                                            Lihat Detail Per-OPD
+                                        @else
+                                            Lihat Detail
+                                        @endif
                                     </button>
                                 </div>
                             </div>
@@ -284,7 +288,11 @@
                                     <button class="btn btn-info btn-border btn-round btn-sm mr-2" data-toggle="modal"
                                         data-target="#modal-anggaran">
                                         <i class="fas fa-info-circle"></i>
-                                        Lihat Detail Per-OPD
+                                        @if (Auth::user()->role != 'OPD')
+                                            Lihat Detail Per-OPD
+                                        @else
+                                            Lihat Detail
+                                        @endif
                                     </button>
                                 </div>
                             </div>
@@ -371,8 +379,8 @@
                                         <div class="card-body">
                                             <h5><b>Persentase Penggunaan Anggaran</b></h5>
                                             <hr>
-                                            <div class="d-flex flex-wrap justify-content-around pb-2 pt-4">
-                                                <div class="d-flex justify-content-between mt-2">
+                                            <div class="d-flex justify-content-center pb-2 pt-4 row">
+                                                <div class="mt-2 col-4">
                                                     <div class="px-2 pb-2 pb-md-0 text-center">
                                                         <div id="penggunaan-keong"></div>
                                                         <h6 class="fw-bold mt-3 mb-0">Keong <br>
@@ -384,7 +392,7 @@
                                                         </h6>
                                                     </div>
                                                 </div>
-                                                <div class="d-flex justify-content-between mt-2">
+                                                <div class="mt-2 col-4">
                                                     <div class="px-2 pb-2 pb-md-0 text-center">
                                                         <div id="penggunaan-manusia"></div>
                                                         <h6 class="fw-bold mt-3 mb-0">Manusia <br>
@@ -396,7 +404,7 @@
                                                         </h6>
                                                     </div>
                                                 </div>
-                                                <div class="d-flex justify-content-between mt-2">
+                                                <div class="mt-2 col-4">
                                                     <div class="px-2 pb-2 pb-md-0 text-center">
                                                         <div id="penggunaan-hewan"></div>
                                                         <h6 class="fw-bold mt-3 mb-0">Hewan <br>
@@ -408,7 +416,7 @@
                                                         </h6>
                                                     </div>
                                                 </div>
-                                                <div class="d-flex justify-content-between mt-5">
+                                                <div class="mt-5 col-6">
                                                     <div class="px-2 pb-2 pb-md-0 text-center">
                                                         <div id="penggunaan-total"></div>
                                                         <h6 class="fw-bold mt-3 mb-0">Total Persentase Penggunaan Anggaran
@@ -421,7 +429,7 @@
                                                         </h6>
                                                     </div>
                                                 </div>
-                                                <div class="d-flex justify-content-between mt-5">
+                                                <div class="mt-5 col-6">
                                                     <div class="px-2 pb-2 pb-md-0 text-center">
                                                         <div id="penggunaan-sisa"></div>
                                                         <h6 class="fw-bold mt-3 mb-0">Sisa Anggaran
@@ -666,7 +674,13 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Detail Intervensi Per-OPD</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        @if (Auth::user()->role != 'OPD')
+                            Detail Intervensi Per-OPD
+                        @else
+                            Detail Intervensi
+                        @endif
+                    </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -724,12 +738,16 @@
                                             $realisasi += $keong['realisasi'];
                                         @endphp
                                     @endforeach
-                                    <tr>
-                                        <th scope="row" colspan="2" class="text-center">Total</th>
-                                        <td class="text-center">{{ $perencanaan }}</td>
-                                        <td class="text-center">{{ $realisasi }}</td>
-                                        <td class="text-center">{{ round(($realisasi / $perencanaan) * 100, 2) }} % </td>
-                                    </tr>
+                                    @if (Auth::user()->role != 'OPD')
+                                        <tr>
+                                            <th scope="row" colspan="2" class="text-center">Total</th>
+                                            <td class="text-center">{{ $perencanaan }}</td>
+                                            <td class="text-center">{{ $realisasi }}</td>
+                                            <td class="text-center">{{ round(($realisasi / $perencanaan) * 100, 2) }} %
+                                            </td>
+                                        </tr>
+                                    @endif
+
                                 </tbody>
                             </table>
                         </div>
@@ -766,12 +784,15 @@
                                             $realisasi += $manusia['realisasi'];
                                         @endphp
                                     @endforeach
-                                    <tr>
-                                        <th scope="row" colspan="2" class="text-center">Total</th>
-                                        <td class="text-center">{{ $perencanaan }}</td>
-                                        <td class="text-center">{{ $realisasi }}</td>
-                                        <td class="text-center">{{ round(($realisasi / $perencanaan) * 100, 2) }} % </td>
-                                    </tr>
+                                    @if (Auth::user()->role != 'OPD')
+                                        <tr>
+                                            <th scope="row" colspan="2" class="text-center">Total</th>
+                                            <td class="text-center">{{ $perencanaan }}</td>
+                                            <td class="text-center">{{ $realisasi }}</td>
+                                            <td class="text-center">{{ round(($realisasi / $perencanaan) * 100, 2) }} %
+                                            </td>
+                                        </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
@@ -807,12 +828,15 @@
                                             $realisasi += $hewan['realisasi'];
                                         @endphp
                                     @endforeach
-                                    <tr>
-                                        <th scope="row" colspan="2" class="text-center">Total</th>
-                                        <td class="text-center">{{ $perencanaan }}</td>
-                                        <td class="text-center">{{ $realisasi }}</td>
-                                        <td class="text-center">{{ round(($realisasi / $perencanaan) * 100, 2) }} % </td>
-                                    </tr>
+                                    @if (Auth::user()->role != 'OPD')
+                                        <tr>
+                                            <th scope="row" colspan="2" class="text-center">Total</th>
+                                            <td class="text-center">{{ $perencanaan }}</td>
+                                            <td class="text-center">{{ $realisasi }}</td>
+                                            <td class="text-center">{{ round(($realisasi / $perencanaan) * 100, 2) }} %
+                                            </td>
+                                        </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
@@ -852,11 +876,11 @@
                                                 if ($keong['persentase'] != '-') {
                                                     $keongPersentase = $keong['persentase'];
                                                 }
-                                                
+
                                                 if ($tabelManusia[$loop->index]['persentase'] != '-') {
                                                     $manusiaPersentase = $tabelManusia[$loop->index]['persentase'];
                                                 }
-                                                
+
                                                 if ($tabelHewan[$loop->index]['persentase'] != '-') {
                                                     $hewanPersentase = $tabelHewan[$loop->index]['persentase'];
                                                 }
@@ -876,12 +900,15 @@
                                             $realisasi += $keong['realisasi'] + $tabelManusia[$loop->index]['realisasi'] + $tabelHewan[$loop->index]['realisasi'];
                                         @endphp
                                     @endforeach
-                                    <tr>
-                                        <th scope="row" colspan="2" class="text-center">Total</th>
-                                        <td class="text-center">{{ $perencanaan }}</td>
-                                        <td class="text-center">{{ $realisasi }}</td>
-                                        <td class="text-center">{{ round(($realisasi / $perencanaan) * 100, 2) }} % </td>
-                                    </tr>
+                                    @if (Auth::user()->role != 'OPD')
+                                        <tr>
+                                            <th scope="row" colspan="2" class="text-center">Total</th>
+                                            <td class="text-center">{{ $perencanaan }}</td>
+                                            <td class="text-center">{{ $realisasi }}</td>
+                                            <td class="text-center">{{ round(($realisasi / $perencanaan) * 100, 2) }} %
+                                            </td>
+                                        </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
@@ -899,7 +926,13 @@
         <div class="modal-dialog modal-lg ">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Detail Anggaran Per-OPD</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        @if (Auth::user()->role != 'OPD')
+                            Detail Anggaran Per-OPD
+                        @else
+                            Detail Anggaran
+                        @endif
+                    </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -1020,32 +1053,44 @@
                                                 $sisa += $anggaranKeong['perencanaan'] - $anggaranKeong['realisasi'];
                                             @endphp
                                         @endforeach
-                                        <tr class="fw-bold text-nowrap">
-                                            <th scope="row" colspan="2" class="text-center">Total</th>
-                                            <td class="text-center">Rp. {{ number_format($perencanaanDau, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-center">Rp. {{ number_format($perencanaanDak, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-center">Rp. {{ number_format($perencanaan, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-center">Rp. {{ number_format($realisasiDau, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-center">Rp. {{ number_format($realisasiDak, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-center">Rp. {{ number_format($realisasi, 0, ',', '.') }}</td>
-                                            <td class="text-center">
-                                                {{ round(($realisasiDau / $perencanaanDau) * 100, 2) }} %
-                                            <td class="text-center">
-                                                {{ round(($realisasiDak / $perencanaanDak) * 100, 2) }} %
-                                            <td class="text-center">{{ round(($realisasi / $perencanaan) * 100, 2) }} %
-                                            </td>
-                                            <td class="text-center text-nowrap">Rp.
-                                                {{ number_format($sisaDau, 0, ',', '.') }}</td>
-                                            <td class="text-center text-nowrap">Rp.
-                                                {{ number_format($sisaDak, 0, ',', '.') }}</td>
-                                            <td class="text-center text-nowrap">Rp.
-                                                {{ number_format($sisa, 0, ',', '.') }}</td>
-                                        </tr>
+                                        @if (Auth::user()->role != 'OPD')
+                                            <tr class="fw-bold text-nowrap">
+                                                <th scope="row" colspan="2" class="text-center">Total</th>
+                                                <td class="text-center">Rp.
+                                                    {{ number_format($perencanaanDau, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">Rp.
+                                                    {{ number_format($perencanaanDak, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">Rp.
+                                                    {{ number_format($perencanaan, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">Rp.
+                                                    {{ number_format($realisasiDau, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">Rp.
+                                                    {{ number_format($realisasiDak, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">Rp. {{ number_format($realisasi, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $perencanaanDau == 0 ? 0 : round(($realisasiDau / $perencanaanDau) * 100, 2) }}
+                                                    %
+                                                <td class="text-center">
+                                                    {{ $perencanaanDak == 0 ? 0 : round(($realisasiDak / $perencanaanDak) * 100, 2) }}
+                                                    %
+                                                <td class="text-center">
+                                                    {{ $perencanaan == 0 ? 0 : round(($realisasi / $perencanaan) * 100, 2) }}
+                                                    %
+                                                </td>
+                                                <td class="text-center text-nowrap">Rp.
+                                                    {{ number_format($sisaDau, 0, ',', '.') }}</td>
+                                                <td class="text-center text-nowrap">Rp.
+                                                    {{ number_format($sisaDak, 0, ',', '.') }}</td>
+                                                <td class="text-center text-nowrap">Rp.
+                                                    {{ number_format($sisa, 0, ',', '.') }}</td>
+                                            </tr>
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -1148,32 +1193,44 @@
                                                 $sisa += $anggaranManusia['perencanaan'] - $anggaranManusia['realisasi'];
                                             @endphp
                                         @endforeach
-                                        <tr class="fw-bold text-nowrap">
-                                            <th scope="row" colspan="2" class="text-center">Total</th>
-                                            <td class="text-center">Rp. {{ number_format($perencanaanDau, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-center">Rp. {{ number_format($perencanaanDak, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-center">Rp. {{ number_format($perencanaan, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-center">Rp. {{ number_format($realisasiDau, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-center">Rp. {{ number_format($realisasiDak, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-center">Rp. {{ number_format($realisasi, 0, ',', '.') }}</td>
-                                            <td class="text-center">
-                                                {{ round(($realisasiDau / $perencanaanDau) * 100, 2) }} %
-                                            <td class="text-center">
-                                                {{ round(($realisasiDak / $perencanaanDak) * 100, 2) }} %
-                                            <td class="text-center">{{ round(($realisasi / $perencanaan) * 100, 2) }} %
-                                            </td>
-                                            <td class="text-center text-nowrap">Rp.
-                                                {{ number_format($sisaDau, 0, ',', '.') }}</td>
-                                            <td class="text-center text-nowrap">Rp.
-                                                {{ number_format($sisaDak, 0, ',', '.') }}</td>
-                                            <td class="text-center text-nowrap">Rp.
-                                                {{ number_format($sisa, 0, ',', '.') }}</td>
-                                        </tr>
+                                        @if (Auth::user()->role != 'OPD')
+                                            <tr class="fw-bold text-nowrap">
+                                                <th scope="row" colspan="2" class="text-center">Total</th>
+                                                <td class="text-center">Rp.
+                                                    {{ number_format($perencanaanDau, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">Rp.
+                                                    {{ number_format($perencanaanDak, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">Rp.
+                                                    {{ number_format($perencanaan, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">Rp.
+                                                    {{ number_format($realisasiDau, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">Rp.
+                                                    {{ number_format($realisasiDak, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">Rp. {{ number_format($realisasi, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $perencanaanDau == 0 ? 0 : round(($realisasiDau / $perencanaanDau) * 100, 2) }}
+                                                    %
+                                                <td class="text-center">
+                                                    {{ $perencanaanDak == 0 ? 0 : round(($realisasiDak / $perencanaanDak) * 100, 2) }}
+                                                    %
+                                                <td class="text-center">
+                                                    {{ $perencanaan == 0 ? 0 : round(($realisasi / $perencanaan) * 100, 2) }}
+                                                    %
+                                                </td>
+                                                <td class="text-center text-nowrap">Rp.
+                                                    {{ number_format($sisaDau, 0, ',', '.') }}</td>
+                                                <td class="text-center text-nowrap">Rp.
+                                                    {{ number_format($sisaDak, 0, ',', '.') }}</td>
+                                                <td class="text-center text-nowrap">Rp.
+                                                    {{ number_format($sisa, 0, ',', '.') }}</td>
+                                            </tr>
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -1273,32 +1330,45 @@
                                                 $sisa += $anggaranHewan['perencanaan'] - $anggaranHewan['realisasi'];
                                             @endphp
                                         @endforeach
-                                        <tr class="fw-bold text-nowrap">
-                                            <th scope="row" colspan="2" class="text-center">Total</th>
-                                            <td class="text-center">Rp. {{ number_format($perencanaanDau, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-center">Rp. {{ number_format($perencanaanDak, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-center">Rp. {{ number_format($perencanaan, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-center">Rp. {{ number_format($realisasiDau, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-center">Rp. {{ number_format($realisasiDak, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-center">Rp. {{ number_format($realisasi, 0, ',', '.') }}</td>
-                                            <td class="text-center">
-                                                {{ round(($realisasiDau / $perencanaanDau) * 100, 2) }} %
-                                            <td class="text-center">
-                                                {{ round(($realisasiDak / $perencanaanDak) * 100, 2) }} %
-                                            <td class="text-center">{{ round(($realisasi / $perencanaan) * 100, 2) }} %
-                                            </td>
-                                            <td class="text-center text-nowrap">Rp.
-                                                {{ number_format($sisaDau, 0, ',', '.') }}</td>
-                                            <td class="text-center text-nowrap">Rp.
-                                                {{ number_format($sisaDak, 0, ',', '.') }}</td>
-                                            <td class="text-center text-nowrap">Rp.
-                                                {{ number_format($sisa, 0, ',', '.') }}</td>
-                                        </tr>
+                                        @if (Auth::user()->role != 'OPD')
+                                            <tr class="fw-bold text-nowrap">
+                                                <th scope="row" colspan="2" class="text-center">Total</th>
+                                                <td class="text-center">Rp.
+                                                    {{ number_format($perencanaanDau, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">Rp.
+                                                    {{ number_format($perencanaanDak, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">Rp.
+                                                    {{ number_format($perencanaan, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">Rp.
+                                                    {{ number_format($realisasiDau, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">Rp.
+                                                    {{ number_format($realisasiDak, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">Rp. {{ number_format($realisasi, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $perencanaanDau == 0 ? 0 : round(($realisasiDau / $perencanaanDau) * 100, 2) }}
+                                                    %
+                                                <td class="text-center">
+                                                    {{ $perencanaanDak == 0 ? 0 : round(($realisasiDak / $perencanaanDak) * 100, 2) }}
+                                                    %
+                                                <td class="text-center">
+                                                    {{ $perencanaan == 0 ? 0 : round(($realisasi / $perencanaan) * 100, 2) }}
+                                                    %
+                                                </td>
+                                                <td class="text-center text-nowrap">Rp.
+                                                    {{ number_format($sisaDau, 0, ',', '.') }}</td>
+                                                <td class="text-center text-nowrap">Rp.
+                                                    {{ number_format($sisaDak, 0, ',', '.') }}</td>
+                                                <td class="text-center text-nowrap">Rp.
+                                                    {{ number_format($sisa, 0, ',', '.') }}</td>
+                                            </tr>
+                                        @endif
+
                                     </tbody>
                                 </table>
                             </div>
@@ -1398,32 +1468,44 @@
                                                 $sisa += $anggaranSemua['perencanaan'] - $anggaranSemua['realisasi'];
                                             @endphp
                                         @endforeach
-                                        <tr class="text-nowrap fw-bold">
-                                            <th scope="row" colspan="2" class="text-center">Total</th>
-                                            <td class="text-center">Rp. {{ number_format($perencanaanDau, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-center">Rp. {{ number_format($perencanaanDak, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-center">Rp. {{ number_format($perencanaan, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-center">Rp. {{ number_format($realisasiDau, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-center">Rp. {{ number_format($realisasiDak, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-center">Rp. {{ number_format($realisasi, 0, ',', '.') }}</td>
-                                            <td class="text-center">
-                                                {{ round(($realisasiDau / $perencanaanDau) * 100, 2) }} %
-                                            <td class="text-center">
-                                                {{ round(($realisasiDak / $perencanaanDak) * 100, 2) }} %
-                                            <td class="text-center">{{ round(($realisasi / $perencanaan) * 100, 2) }} %
-                                            </td>
-                                            <td class="text-center text-nowrap">Rp.
-                                                {{ number_format($sisaDau, 0, ',', '.') }}</td>
-                                            <td class="text-center text-nowrap">Rp.
-                                                {{ number_format($sisaDak, 0, ',', '.') }}</td>
-                                            <td class="text-center text-nowrap">Rp.
-                                                {{ number_format($sisa, 0, ',', '.') }}</td>
-                                        </tr>
+                                        @if (Auth::user()->role != 'OPD')
+                                            <tr class="text-nowrap fw-bold">
+                                                <th scope="row" colspan="2" class="text-center">Total</th>
+                                                <td class="text-center">Rp.
+                                                    {{ number_format($perencanaanDau, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">Rp.
+                                                    {{ number_format($perencanaanDak, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">Rp.
+                                                    {{ number_format($perencanaan, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">Rp.
+                                                    {{ number_format($realisasiDau, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">Rp.
+                                                    {{ number_format($realisasiDak, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">Rp. {{ number_format($realisasi, 0, ',', '.') }}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $perencanaanDau == 0 ? 0 : round(($realisasiDau / $perencanaanDau) * 100, 2) }}
+                                                    %
+                                                <td class="text-center">
+                                                    {{ $perencanaanDak == 0 ? 0 : round(($realisasiDak / $perencanaanDak) * 100, 2) }}
+                                                    %
+                                                <td class="text-center">
+                                                    {{ $perencanaan == 0 ? 0 : round(($realisasi / $perencanaan) * 100, 2) }}
+                                                    %
+                                                </td>
+                                                <td class="text-center text-nowrap">Rp.
+                                                    {{ number_format($sisaDau, 0, ',', '.') }}</td>
+                                                <td class="text-center text-nowrap">Rp.
+                                                    {{ number_format($sisaDak, 0, ',', '.') }}</td>
+                                                <td class="text-center text-nowrap">Rp.
+                                                    {{ number_format($sisa, 0, ',', '.') }}</td>
+                                            </tr>
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -1507,7 +1589,7 @@
             value: "{{ $penggunaanAnggaran['penggunaanKeong'] }}",
             maxValue: "{{ $anggaranPerencanaan['anggaranKeong'] }}",
             width: 7,
-            text: "{{ round(($penggunaanAnggaran['penggunaanKeong'] / $anggaranPerencanaan['anggaranKeong']) * 100, 2) . ' %' }}",
+            text: "{{ $penggunaanAnggaran['persenKeong'] . '%' }}",
             colors: ['#f1f1f1', '#2BB930'],
             duration: 400,
             wrpClass: 'circles-wrp',
@@ -1522,7 +1604,7 @@
             value: "{{ $penggunaanAnggaran['penggunaanManusia'] }}",
             maxValue: "{{ $anggaranPerencanaan['anggaranManusia'] }}",
             width: 7,
-            text: "{{ round(($penggunaanAnggaran['penggunaanManusia'] / $anggaranPerencanaan['anggaranManusia']) * 100, 2) . ' %' }}",
+            text: "{{ $penggunaanAnggaran['persenManusia'] . '%' }}",
             colors: ['#f1f1f1', '#2BB930'],
             duration: 400,
             wrpClass: 'circles-wrp',
@@ -1537,7 +1619,7 @@
             value: "{{ $penggunaanAnggaran['penggunaanHewan'] }}",
             maxValue: "{{ $anggaranPerencanaan['anggaranHewan'] }}",
             width: 7,
-            text: "{{ round(($penggunaanAnggaran['penggunaanHewan'] / $anggaranPerencanaan['anggaranHewan']) * 100, 2) . ' %' }}",
+            text: "{{ $penggunaanAnggaran['persenHewan'] . '%' }}",
             colors: ['#f1f1f1', '#2BB930'],
             duration: 400,
             wrpClass: 'circles-wrp',
@@ -1552,7 +1634,7 @@
             value: "{{ $penggunaanAnggaran['penggunaanHewan'] + $penggunaanAnggaran['penggunaanKeong'] + $penggunaanAnggaran['penggunaanManusia'] }}",
             maxValue: "{{ $anggaranPerencanaan['anggaranHewan'] + $anggaranPerencanaan['anggaranKeong'] + $anggaranPerencanaan['anggaranManusia'] }}",
             width: 7,
-            text: "{{ round((($penggunaanAnggaran['penggunaanHewan'] + $penggunaanAnggaran['penggunaanKeong'] + $penggunaanAnggaran['penggunaanManusia']) / ($anggaranPerencanaan['anggaranHewan'] + $anggaranPerencanaan['anggaranKeong'] + $anggaranPerencanaan['anggaranManusia'])) * 100, 2) . ' %' }}",
+            text: "{{ $penggunaanAnggaran['persenTotal'] . ' %' }}",
             colors: ['#f1f1f1', '#2BB930'],
             duration: 400,
             wrpClass: 'circles-wrp',
@@ -1567,7 +1649,7 @@
             value: "{{ $anggaranPerencanaan['anggaranHewan'] + $anggaranPerencanaan['anggaranKeong'] + $anggaranPerencanaan['anggaranManusia'] - ($penggunaanAnggaran['penggunaanHewan'] + $penggunaanAnggaran['penggunaanKeong'] + $penggunaanAnggaran['penggunaanManusia']) }}",
             maxValue: "{{ $anggaranPerencanaan['anggaranHewan'] + $anggaranPerencanaan['anggaranKeong'] + $anggaranPerencanaan['anggaranManusia'] }}",
             width: 7,
-            text: "{{ round((($anggaranPerencanaan['anggaranHewan'] + $anggaranPerencanaan['anggaranKeong'] + $anggaranPerencanaan['anggaranManusia'] - ($penggunaanAnggaran['penggunaanHewan'] + $penggunaanAnggaran['penggunaanKeong'] + $penggunaanAnggaran['penggunaanManusia'])) / ($anggaranPerencanaan['anggaranHewan'] + $anggaranPerencanaan['anggaranKeong'] + $anggaranPerencanaan['anggaranManusia'])) * 100, 2) . ' %' }}",
+            text: "{{ $penggunaanAnggaran['persenSisa'] . '%' }}",
             colors: ['#f1f1f1', '#2BB930'],
             duration: 400,
             wrpClass: 'circles-wrp',

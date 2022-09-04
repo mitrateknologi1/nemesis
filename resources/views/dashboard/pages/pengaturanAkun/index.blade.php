@@ -68,7 +68,7 @@
                                     ])
                                 @endcomponent
                             </div>
-                            @if (Auth::user()->role == 'Admin')
+                            @if (Auth::user()->role != 'OPD')
                                 <div class="col-sm-12 col-lg-12" id="form-nama">
                                     @component('dashboard.components.formElements.input',
                                         [
@@ -113,19 +113,19 @@
             var formData = new FormData(this);
             swal({
                 title: 'Apakah Anda Yakin ?',
-                icon: 'warning',
+                icon: 'info',
                 text: "Apakah Anda Yakin ?",
-                type: 'warning',
+                type: 'info',
                 buttons: {
-                    confirm: {
-                        text: 'Ya',
-                        className: 'btn btn-success'
-                    },
                     cancel: {
                         visible: true,
                         text: 'Batal',
-                        className: 'btn btn-danger'
-                    }
+                        className: 'btn btn-light'
+                    },
+                    confirm: {
+                        text: 'Ya',
+                        className: 'btn btn-info'
+                    },
                 }
             }).then((Update) => {
                 if (Update) {

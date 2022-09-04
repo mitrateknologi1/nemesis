@@ -93,8 +93,7 @@
                                             @endcomponent
                                         </div>
                                         <div class="col-12 mt-3">
-                                            <label for="TextInput" class="form-label my-2">Pilih Lokasi Habitat
-                                                Keong</label>
+                                            <label for="TextInput" class="form-label my-2">Pilih Lokasi Hewan</label>
                                             <div id="map"></div>
                                         </div>
                                         <div class="col-6">
@@ -292,19 +291,19 @@
             resetError();
             swal({
                 title: 'Apakah Anda Yakin ?',
-                icon: 'warning',
+                icon: 'info',
                 text: "Apakah Anda Yakin ?",
-                type: 'warning',
+                type: 'info',
                 buttons: {
-                    confirm: {
-                        text: 'Ya',
-                        className: 'btn btn-success'
-                    },
                     cancel: {
                         visible: true,
                         text: 'Batal',
-                        className: 'btn btn-danger'
-                    }
+                        className: 'btn btn-light'
+                    },
+                    confirm: {
+                        text: 'Ya',
+                        className: 'btn btn-info'
+                    },
                 }
             }).then((Update) => {
                 if (Update) {

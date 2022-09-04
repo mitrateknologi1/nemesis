@@ -107,6 +107,13 @@
 
 @push('scripts')
     <script>
+        $('.select2').select2({
+            placeholder: "Semua",
+            theme: "bootstrap",
+        })
+    </script>
+
+    <script>
         $(document).on('click', '#btn-delete', function() {
             let id = $(this).val();
             swal({
@@ -115,15 +122,15 @@
                 text: "Data yang sudah dihapus tidak dapat dikembalikan lagi !",
                 type: 'warning',
                 buttons: {
-                    confirm: {
-                        text: 'Hapus',
-                        className: 'btn btn-success'
-                    },
                     cancel: {
                         visible: true,
                         text: 'Batal',
+                        className: 'btn btn-light'
+                    },
+                    confirm: {
+                        text: 'Hapus',
                         className: 'btn btn-danger'
-                    }
+                    },
                 }
             }).then((Delete) => {
                 if (Delete) {

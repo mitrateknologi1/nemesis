@@ -1,8 +1,8 @@
 <!-- Logo Header -->
 <div class="logo-header" data-background-color="blue">
 
-    <a href="index.html" class="logo">
-        <img src="{{ asset('assets/dashboard') }}/img/logo.svg" alt="navbar brand" class="navbar-brand">
+    <a href="{{ url('/') }}" class="logo">
+        <img src="{{ asset('assets/dashboard') }}/img/logo-sigi.png" width="175px" alt="navbar brand" class="navbar-brand">
     </a>
     <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse"
         aria-expanded="false" aria-label="Toggle navigation">

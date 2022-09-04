@@ -100,7 +100,7 @@
         $('#btn-tambah').click(function() {
             aksiTambah = 'tambah';
             $('#modal-tambah').modal('show');
-            $('#modal-tambah-title').html('Tambah Hewan');
+            $('#modal-tambah-title').html('Tambah OPD');
             $('#nama').val('');
         })
 
@@ -117,7 +117,7 @@
                 success: function(response) {
                     aksiTambah = 'ubah';
                     $('#modal-tambah').modal('show');
-                    $('#modal-tambah-title').html('Ubah Hewan');
+                    $('#modal-tambah-title').html('Ubah OPD');
                     $('#nama').val(response.nama);
                 },
             })
@@ -127,19 +127,19 @@
             e.preventDefault();
             swal({
                 title: 'Apakah Anda Yakin ?',
-                icon: 'warning',
+                icon: 'info',
                 text: "Apakah Anda Yakin ?",
-                type: 'warning',
+                type: 'info',
                 buttons: {
-                    confirm: {
-                        text: 'Ya',
-                        className: 'btn btn-success'
-                    },
                     cancel: {
                         visible: true,
                         text: 'Batal',
-                        className: 'btn btn-danger'
-                    }
+                        className: 'btn btn-light'
+                    },
+                    confirm: {
+                        text: 'Ya',
+                        className: 'btn btn-info'
+                    },
                 }
             }).then((Update) => {
                 if (Update) {
@@ -211,15 +211,15 @@
                 text: "Data yang sudah dihapus tidak dapat dikembalikan lagi !",
                 type: 'warning',
                 buttons: {
-                    confirm: {
-                        text: 'Hapus',
-                        className: 'btn btn-success'
-                    },
                     cancel: {
                         visible: true,
                         text: 'Batal',
+                        className: 'btn btn-light'
+                    },
+                    confirm: {
+                        text: 'Hapus',
                         className: 'btn btn-danger'
-                    }
+                    },
                 }
             }).then((Delete) => {
                 if (Delete) {
@@ -305,6 +305,7 @@
     </script>
 
     <script>
+        var role = "{{ Auth::user()->role }}";
         $('#nav-master-opd').addClass('active');
 
         function printErrorMsg(msg) {
@@ -326,5 +327,11 @@
         function resetErrorElement(key) {
             $('.' + key + '-error').addClass('d-none');
         }
+
+        $(document).ready(function() {
+            if (role != "Admin") {
+                table.column(2).visible(false);
+            }
+        })
     </script>
 @endpush

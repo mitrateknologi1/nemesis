@@ -28,7 +28,7 @@ use App\Http\Controllers\intervensi\realisasi\manusia\RealisasiManusiaController
 use App\Http\Controllers\intervensi\perencanaan\manusia\PerencanaanManusiaController;
 use App\Http\Controllers\intervensi\perencanaan\hewan\PerencanaanHewanController;
 use App\Http\Controllers\intervensi\realisasi\hewan\RealisasiHewanController;
-
+use App\Http\Controllers\LandingPageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,10 +41,9 @@ use App\Http\Controllers\intervensi\realisasi\hewan\RealisasiHewanController;
 |
 */
 
+Route::get('/', [LandingPageController::class, 'index']);
+
 Route::group(['middleware' => 'guest'], function () {
-    Route::get('/', function () {
-        return view('dashboard.pages.login');
-    });
     Route::get('/login', [AuthController::class, 'index'])->name('login');
     Route::post('/cekLogin', [AuthController::class, 'cekLogin']);
 });
@@ -143,8 +142,18 @@ Route::group(['middleware' => 'auth'], function () {
     );
     Route::post('master-data/siswa/detail-siswa', [SiswaController::class, 'detailSiswa']);
 
+    Route::group(['middleware' => ['role:Admin|Pimpinan']], function () {
+        Route::resource('master-data/opd', OPDController::class)->only(
+            'index',
+            'show'
+        );
+    });
+
     Route::group(['middleware' => ['role:Admin']], function () {
-        Route::resource('master-data/opd', OPDController::class);
+        Route::resource('master-data/opd', OPDController::class)->except(
+            'index',
+            'show'
+        );
         Route::resource('master-data/hewan', HewanController::class);
         Route::resource('master-data/tahun', TahunController::class);
 

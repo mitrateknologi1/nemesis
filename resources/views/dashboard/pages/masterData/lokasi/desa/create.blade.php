@@ -32,7 +32,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Data Desa</div>
+                        <div class="card-title">Tambah Desa</div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -120,19 +120,19 @@
             resetError();
             swal({
                 title: 'Apakah Anda Yakin ?',
-                icon: 'warning',
+                icon: 'info',
                 text: "Apakah Anda Yakin ?",
-                type: 'warning',
+                type: 'info',
                 buttons: {
-                    confirm: {
-                        text: 'Ya',
-                        className: 'btn btn-success'
-                    },
                     cancel: {
                         visible: true,
                         text: 'Batal',
-                        className: 'btn btn-danger'
-                    }
+                        className: 'btn btn-light'
+                    },
+                    confirm: {
+                        text: 'Ya',
+                        className: 'btn btn-info'
+                    },
                 }
             }).then((Update) => {
                 if (Update) {

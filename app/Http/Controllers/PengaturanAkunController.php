@@ -24,7 +24,7 @@ class PengaturanAkunController extends Controller
             $request->all(),
             [
                 'username' => ['required', Rule::unique('users')->ignore($user->id)->withoutTrashed()],
-                'nama' => $request->role == "Admin" ? 'required' : 'nullable',
+                'nama' => $request->role != "OPD" ? 'required' : 'nullable',
             ],
             [
                 'username.required' => 'Username tidak boleh kosong',
@@ -42,7 +42,7 @@ class PengaturanAkunController extends Controller
             $user->password = Hash::make($request->password);
         }
 
-        if (Auth::user()->role == "Admin") {
+        if (Auth::user()->role != "OPD") {
             $user->nama = $request->nama;
         }
 

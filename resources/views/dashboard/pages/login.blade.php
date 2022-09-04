@@ -3,9 +3,9 @@
 
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Login</title>
+    <title>Schistosomiasis | Login</title>
     <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
-    <link rel="shortcut icon" href="{{ asset('assets/landingPage/favicon/favicon.ico') }}" type="image/x-icon" />
+    <link rel="icon" href="{{ asset('assets/dashboard') }}/img/lambang-sigi.png" type="image/x-icon" />
 
 
     <!-- Fonts and icons -->

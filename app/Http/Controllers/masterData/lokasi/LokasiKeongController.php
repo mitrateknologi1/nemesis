@@ -27,7 +27,15 @@ class LokasiKeongController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = LokasiKeong::orderBy('created_at', 'desc')->get();
+            $data = LokasiKeong::orderBy('created_at', 'desc')->where(function ($query) use ($request) {
+                if ($request->desa_id && $request->desa_id != "semua") {
+                    $query->where('desa_id', $request->desa_id);
+                }
+
+                if ($request->search) {
+                    $query->where('nama', 'like', '%' . $request->search . '%');
+                }
+            })->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('desa', function ($row) {
@@ -119,12 +127,15 @@ class LokasiKeongController extends Controller
         $lokasiKeong->status = $request->status;
         $lokasiKeong->save();
 
-        for ($i = 0; $i < count($request->penduduk_id); $i++) {
-            $pemilikLokasiKeong = new PemilikLokasiKeong();
-            $pemilikLokasiKeong->lokasi_keong_id = $lokasiKeong->id;
-            $pemilikLokasiKeong->penduduk_id = $request->penduduk_id[$i];
-            $pemilikLokasiKeong->save();
+        if ($request->penduduk_id) {
+            for ($i = 0; $i < count($request->penduduk_id); $i++) {
+                $pemilikLokasiKeong = new PemilikLokasiKeong();
+                $pemilikLokasiKeong->lokasi_keong_id = $lokasiKeong->id;
+                $pemilikLokasiKeong->penduduk_id = $request->penduduk_id[$i];
+                $pemilikLokasiKeong->save();
+            }
         }
+
 
         return response()->json(['status' => 'success']);
     }
@@ -204,12 +215,14 @@ class LokasiKeongController extends Controller
         $lokasiKeong->status = $request->status;
         $lokasiKeong->save();
 
-        $pemilikLokasi = PemilikLokasiKeong::where('lokasi_keong_id', $lokasiKeong->id)->whereNotIn('penduduk_id', $request->penduduk_id)->forceDelete();
-        for ($i = 0; $i < count($request->penduduk_id); $i++) {
-            $pemilikLokasi = PemilikLokasiKeong::updateOrCreate(
-                ['lokasi_keong_id' => $lokasiKeong->id, 'penduduk_id' => $request->penduduk_id[$i]],
-                []
-            );
+        if ($request->penduduk_id) {
+            $pemilikLokasi = PemilikLokasiKeong::where('lokasi_keong_id', $lokasiKeong->id)->whereNotIn('penduduk_id', $request->penduduk_id)->forceDelete();
+            for ($i = 0; $i < count($request->penduduk_id); $i++) {
+                $pemilikLokasi = PemilikLokasiKeong::updateOrCreate(
+                    ['lokasi_keong_id' => $lokasiKeong->id, 'penduduk_id' => $request->penduduk_id[$i]],
+                    []
+                );
+            }
         }
 
         return response()->json(['status' => 'success']);
@@ -244,9 +257,13 @@ class LokasiKeongController extends Controller
         }
     }
 
-    public function export()
+    public function export(Request $request)
     {
-        $lokasiKeong = LokasiKeong::orderBy('created_at', 'desc')->get();
+        $lokasiKeong = LokasiKeong::orderBy('created_at', 'desc')->where(function ($query) use ($request) {
+            if ($request->desa_id && $request->desa_id != "semua") {
+                $query->where('desa_id', $request->desa_id);
+            }
+        })->get();
         $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
 
         return Excel::download(new LokasiKeongExport($lokasiKeong), "Export Data Lokasi Keong-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');

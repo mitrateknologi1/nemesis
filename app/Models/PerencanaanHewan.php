@@ -17,7 +17,7 @@ class PerencanaanHewan extends Model
 
     public function opd()
     {
-        return $this->belongsTo(OPD::class, 'opd_id');
+        return $this->belongsTo(OPD::class, 'opd_id')->withTrashed();
     }
 
     public function opdTerkaitHewan()

@@ -7,7 +7,7 @@
     <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="icon" href="{{ asset('assets/dashboard') }}/img/icon.ico" type="image/x-icon" />
+    <link rel="icon" href="{{ asset('assets/dashboard') }}/img/lambang-sigi.png" type="image/x-icon" />
 
     <!-- Fonts and icons -->
     <script src="{{ asset('assets/dashboard') }}/js/plugin/webfont/webfont.min.js"></script>

@@ -13,8 +13,8 @@
 @endsection
 
 @section('buttonPanelHeader')
-    <a href="{{ url('master-data/sekolah' . '/' . $jenjang) }}" class="btn btn-sm btn-secondary btn-round mr-2"
-        id=""><i class="far fa-arrow-alt-circle-left"></i>
+    <a href="{{ url('master-data/sekolah' . '/' . $jenjang) }}" class="btn btn-secondary btn-round mr-2" id=""><i
+            class="far fa-arrow-alt-circle-left"></i>
         Kembali</a>
     @if (Auth::user()->role == 'Admin')
         @component('dashboard.components.buttons.add',
@@ -335,15 +335,15 @@
                 text: "Data yang sudah dihapus tidak dapat dikembalikan lagi !",
                 type: 'warning',
                 buttons: {
-                    confirm: {
-                        text: 'Hapus',
-                        className: 'btn btn-success'
-                    },
                     cancel: {
                         visible: true,
                         text: 'Batal',
+                        className: 'btn btn-light'
+                    },
+                    confirm: {
+                        text: 'Hapus',
                         className: 'btn btn-danger'
-                    }
+                    },
                 }
             }).then((Delete) => {
                 if (Delete) {

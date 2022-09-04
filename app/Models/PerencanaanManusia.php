@@ -17,7 +17,7 @@ class PerencanaanManusia extends Model
 
     public function opd()
     {
-        return $this->belongsTo(OPD::class);
+        return $this->belongsTo(OPD::class)->withTrashed();
     }
 
     public function opdTerkaitManusia()

@@ -167,15 +167,15 @@
                 text: "Data yang sudah dihapus tidak dapat dikembalikan lagi !",
                 type: 'warning',
                 buttons: {
-                    confirm: {
-                        text: 'Hapus',
-                        className: 'btn btn-success'
-                    },
                     cancel: {
                         visible: true,
                         text: 'Batal',
+                        className: 'btn btn-light'
+                    },
+                    confirm: {
+                        text: 'Hapus',
                         className: 'btn btn-danger'
-                    }
+                    },
                 }
             }).then((Delete) => {
                 if (Delete) {

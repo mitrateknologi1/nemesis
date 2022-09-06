@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\MasterPlan;
 use App\Models\Tahun;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -40,7 +41,7 @@ class MasterPlanController extends Controller
 
                     $actionBtn .= '<a target="_blank" id="btn-edit" class="btn btn-success btn-rounded btn-sm mr-1" href="' . Storage::url('uploads/dokumen/masterPlan/' . $row->file) .  '"><i class="fas fa-file-download"></i></a>';
 
-                    if ($row->role == "Admin") {
+                    if (Auth::user()->role == "Admin") {
                         $actionBtn .= '<a id="btn-edit" class="btn btn-warning btn-rounded btn-sm mr-1" href="' . url('dokumen/master-plan/' . $row->id . '/edit') . '"><i class="fas fa-edit"></i></a><button id="btn-delete" class="btn btn-danger btn-rounded btn-sm mr-1" value="' . $row->id . '" > <i class="fas fa-trash-alt"></i></button>';
                     }
 

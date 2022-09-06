@@ -1,11 +1,11 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Hewan
+    Hewan Ternak
 @endsection
 
 @section('titlePanelHeader')
-    Hewan
+    Hewan Ternak
 @endsection
 
 @section('subTitlePanelHeader')
@@ -31,7 +31,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Data Hewan</div>
+                        <div class="card-title">Data Hewan Ternak</div>
                         <div class="card-tools">
 
                         </div>
@@ -61,7 +61,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modal-tambah-title">Tambah Hewan</h5>
+                        <h5 class="modal-title" id="modal-tambah-title">Tambah Hewan Ternak</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -71,8 +71,8 @@
                             [
                                 'id' => 'nama',
                                 'type' => 'text',
-                                'label' => 'Nama Hewan',
-                                'placeholder' => 'Tambah Hewan',
+                                'label' => 'Nama Hewan Ternak',
+                                'placeholder' => 'Tambah Hewan Ternak',
                                 'name' => 'nama',
                                 'required' => true,
                             ])
@@ -100,7 +100,7 @@
         $('#btn-tambah').click(function() {
             aksiTambah = 'tambah';
             $('#modal-tambah').modal('show');
-            $('#modal-tambah-title').html('Tambah Hewan');
+            $('#modal-tambah-title').html('Tambah Hewan Ternak');
             $('#nama').val('');
         })
 
@@ -117,7 +117,7 @@
                 success: function(response) {
                     aksiTambah = 'ubah';
                     $('#modal-tambah').modal('show');
-                    $('#modal-tambah-title').html('Ubah Hewan');
+                    $('#modal-tambah-title').html('Ubah Hewan Ternak');
                     $('#nama').val(response.nama);
                 },
             })

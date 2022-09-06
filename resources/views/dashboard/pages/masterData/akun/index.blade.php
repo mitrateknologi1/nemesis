@@ -66,6 +66,7 @@
                                 @slot('options')
                                     <option value="semua">Semua</option>
                                     <option value="Admin">Admin</option>
+                                    <option value="Pimpinan">Pimpinan</option>
                                     <option value="OPD">OPD</option>
                                 @endslot
                             @endcomponent

@@ -142,7 +142,7 @@
                                         </div>
                                         <hr size="10px" width="100%" color="black" class="mt-3">
                                         <div class="col-12">
-                                            <label class="form-label my-2 fw-bold"> Tambahkan Pemilik Lokasi Keong</label>
+                                            <label class="form-label my-2 fw-bold"> Tambahkan Pemilik Lahan</label>
                                             <div class="select2-input select2-primary">
                                                 <select id="penduduk_id" name="penduduk_id[]" class="form-control multiple"
                                                     multiple="multiple" data-label="Titik Lokasi">
@@ -150,7 +150,8 @@
                                                         <optgroup label="Desa {{ $desa->nama }}"
                                                             id="desa-{{ $desa->id }}">
                                                             @foreach ($desa->penduduk as $penduduk)
-                                                                <option value="{{ $penduduk->id }}">{{ $penduduk->nama }}
+                                                                <option value="{{ $penduduk->id }}">
+                                                                    {{ $penduduk->nama . ' (' . $penduduk->nik . ') - ' . $penduduk->desa->nama }}
                                                                 </option>
                                                             @endforeach
                                                         </optgroup>

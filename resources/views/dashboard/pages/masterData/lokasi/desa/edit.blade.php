@@ -93,7 +93,8 @@
                                             <label for="textareaInput" class="form-label">Warna</label>
                                             <br>
                                             <input type="color" id="warna" class="form-control-color"
-                                                title="Choose your color" name="warna_polygon" value="{{ $desa->warna }}">
+                                                title="Choose your color" name="warna_polygon"
+                                                value="{{ $desa->warna_polygon }}">
                                             <span class="badge bg-danger mt-2 d-none warna_polygon-error"></span>
                                         </div>
                                         <div class="col-12 d-none">

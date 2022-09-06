@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AnggaranIntervensiExport;
+use App\Exports\IntervensiExport;
 use PDO;
 use App\Models\OPD;
 use App\Models\Desa;
@@ -20,7 +22,9 @@ use App\Models\PerencanaanKeong;
 use App\Models\RealisasiManusia;
 use App\Models\PerencanaanManusia;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DashboardController extends Controller
 {
@@ -91,12 +95,18 @@ class DashboardController extends Controller
 
     private function _tabelKeong()
     {
+        $tahun = $_POST['tahun_id'] ?? '';
         $tabel = [];
-        $daftarOPD = OPD::orderBy('nama', 'asc')->where(function ($query) {
-            if (Auth::user()->role == 'OPD') {
-                $query->where('id', Auth::user()->opd_id);
-            }
-        })->get();
+        if (Auth::user()->role == 'OPD') {
+            $daftarOPD = OPD::orderBy('nama', 'asc')->where('id', Auth::user()->opd_id)->withTrashed()->get();
+        } else {
+            $daftarOPD = OPD::orderBy('nama', 'asc')->where(function ($query) {
+                if (Auth::user()->role == 'OPD') {
+                    $query->where('id', Auth::user()->opd_id);
+                }
+            })->get();
+        }
+
         foreach ($daftarOPD as $opd) {
             $perencanaan = PerencanaanKeong::where('opd_id', $opd->id)->where('status', 1)->count();
             $realisasi = RealisasiKeong::with(['perencanaanKeong'])->whereHas('perencanaanKeong', function ($query) use ($opd) {
@@ -123,11 +133,15 @@ class DashboardController extends Controller
     private function _tabelManusia()
     {
         $tabel = [];
-        $daftarOPD = OPD::orderBy('nama', 'asc')->where(function ($query) {
-            if (Auth::user()->role == 'OPD') {
-                $query->where('id', Auth::user()->opd_id);
-            }
-        })->get();
+        if (Auth::user()->role == 'OPD') {
+            $daftarOPD = OPD::orderBy('nama', 'asc')->where('id', Auth::user()->opd_id)->withTrashed()->get();
+        } else {
+            $daftarOPD = OPD::orderBy('nama', 'asc')->where(function ($query) {
+                if (Auth::user()->role == 'OPD') {
+                    $query->where('id', Auth::user()->opd_id);
+                }
+            })->get();
+        }
         foreach ($daftarOPD as $opd) {
             $perencanaan = PerencanaanManusia::where('opd_id', $opd->id)->where('status', 1)->count();
             $realisasi = RealisasiManusia::with(['perencanaanManusia'])->whereHas('perencanaanManusia', function ($query) use ($opd) {
@@ -154,11 +168,15 @@ class DashboardController extends Controller
     private function _tabelHewan()
     {
         $tabel = [];
-        $daftarOPD = OPD::orderBy('nama', 'asc')->where(function ($query) {
-            if (Auth::user()->role == 'OPD') {
-                $query->where('id', Auth::user()->opd_id);
-            }
-        })->get();
+        if (Auth::user()->role == 'OPD') {
+            $daftarOPD = OPD::orderBy('nama', 'asc')->where('id', Auth::user()->opd_id)->withTrashed()->get();
+        } else {
+            $daftarOPD = OPD::orderBy('nama', 'asc')->where(function ($query) {
+                if (Auth::user()->role == 'OPD') {
+                    $query->where('id', Auth::user()->opd_id);
+                }
+            })->get();
+        }
         foreach ($daftarOPD as $opd) {
             $perencanaan = PerencanaanHewan::where('opd_id', $opd->id)->where('status', 1)->count();
             $realisasi = RealisasiHewan::with(['perencanaanHewan'])->whereHas('perencanaanHewan', function ($query) use ($opd) {
@@ -184,58 +202,78 @@ class DashboardController extends Controller
 
     private function _intervensi()
     {
-        $perencanaanKeong = PerencanaanKeong::where('status', 1)->where(function ($query) {
+        $daftarOPD = OPD::orderBy('nama', 'asc')->get()->pluck('id');
+        $data = [];
+        $perencanaanKeong = PerencanaanKeong::where('status', 1)->where(function ($query) use ($daftarOPD) {
             if (Auth::user()->role == 'OPD') {
                 $query->where('opd_id', Auth::user()->opd_id);
+            } else {
+                $query->whereIn('opd_id', $daftarOPD);
             }
         })->count();
-        $perencanaanHewan = PerencanaanHewan::where('status', 1)->where(function ($query) {
+        $perencanaanHewan = PerencanaanHewan::where('status', 1)->where(function ($query) use ($daftarOPD) {
             if (Auth::user()->role == 'OPD') {
                 $query->where('opd_id', Auth::user()->opd_id);
+            } else {
+                $query->whereIn('opd_id', $daftarOPD);
             }
         })->count();
-        $perencanaanManusia = PerencanaanManusia::where('status', 1)->where(function ($query) {
+        $perencanaanManusia = PerencanaanManusia::where('status', 1)->where(function ($query) use ($daftarOPD) {
             if (Auth::user()->role == 'OPD') {
                 $query->where('opd_id', Auth::user()->opd_id);
+            } else {
+                $query->whereIn('opd_id', $daftarOPD);
             }
         })->count();
+        $perencanaanTotal = $perencanaanHewan + $perencanaanKeong + $perencanaanManusia;
 
-        $realisasiKeong = RealisasiKeong::where('progress', '=', 100)->whereHas('perencanaanKeong', function ($query) {
-            $query->where(function ($query) {
+        $realisasiKeong = RealisasiKeong::where('progress', '=', 100)->whereHas('perencanaanKeong', function ($query) use ($daftarOPD) {
+            $query->where(function ($query) use ($daftarOPD) {
                 if (Auth::user()->role == 'OPD') {
                     $query->where('opd_id', Auth::user()->opd_id);
+                } else {
+                    $query->whereIn('opd_id', $daftarOPD);
                 }
             });
         })->count();
-        $realisasiHewan = RealisasiHewan::where('progress', '=', 100)->whereHas('perencanaanHewan', function ($query) {
-            $query->where(function ($query) {
+        $realisasiHewan = RealisasiHewan::where('progress', '=', 100)->whereHas('perencanaanHewan', function ($query) use ($daftarOPD) {
+            $query->where(function ($query) use ($daftarOPD) {
                 if (Auth::user()->role == 'OPD') {
                     $query->where('opd_id', Auth::user()->opd_id);
+                } else {
+                    $query->whereIn('opd_id', $daftarOPD);
                 }
             });
         })->count();
-        $realisasiManusia = RealisasiManusia::where('progress', '=', 100)->whereHas('perencanaanManusia', function ($query) {
-            $query->where(function ($query) {
+        $realisasiManusia = RealisasiManusia::where('progress', '=', 100)->whereHas('perencanaanManusia', function ($query) use ($daftarOPD) {
+            $query->where(function ($query) use ($daftarOPD) {
                 if (Auth::user()->role == 'OPD') {
                     $query->where('opd_id', Auth::user()->opd_id);
+                } else {
+                    $query->whereIn('opd_id', $daftarOPD);
                 }
             });
         })->count();
+        $realisasiTotal = $realisasiHewan + $realisasiKeong + $realisasiManusia;
 
-        $persentaseKeong = round(($realisasiKeong / $perencanaanKeong) * 100, 2);
-        $persentaseHewan = round(($realisasiHewan / $perencanaanHewan) * 100, 2);
-        $persentaseManusia = round(($realisasiManusia / $perencanaanManusia) * 100, 2);
+        $persentaseKeong = $perencanaanKeong == 0 ? 0 : round(($realisasiKeong / $perencanaanKeong) * 100, 2);
+        $persentaseHewan = $perencanaanHewan == 0 ? 0 : round(($realisasiHewan / $perencanaanHewan) * 100, 2);
+        $persentaseManusia = $perencanaanManusia == 0 ? 0 : round(($realisasiManusia / $perencanaanManusia) * 100, 2);
+        $persentaseTotal = $perencanaanTotal == 0 ? 0 : round(($realisasiTotal / $perencanaanTotal) * 100, 2);
 
         $data = [
             'perencanaanKeong' => $perencanaanKeong,
             'perencanaanHewan' => $perencanaanHewan,
             'perencanaanManusia' => $perencanaanManusia,
+            'perencanaanTotal' => $perencanaanTotal,
             'realisasiKeong' => $realisasiKeong,
             'realisasiHewan' => $realisasiHewan,
             'realisasiManusia' => $realisasiManusia,
+            'realisasiTotal' => $realisasiTotal,
             'persentaseKeong' => $persentaseKeong,
             'persentaseHewan' => $persentaseHewan,
             'persentaseManusia' => $persentaseManusia,
+            'persentaseTotal' => $persentaseTotal
         ];
 
         return $data;
@@ -292,19 +330,26 @@ class DashboardController extends Controller
 
     private function _anggaranPerencanaan()
     {
-        $anggaranKeong = PerencanaanKeong::where('status', 1)->where(function ($query) {
+        $daftarOPD = OPD::orderBy('nama', 'asc')->get()->pluck('id');
+        $anggaranKeong = PerencanaanKeong::where('status', 1)->where(function ($query) use ($daftarOPD) {
             if (Auth::user()->role == 'OPD') {
                 $query->where('opd_id', Auth::user()->opd_id);
+            } else {
+                $query->whereIn('opd_id', $daftarOPD);
             }
         })->sum('nilai_pembiayaan');
-        $anggaranManusia = PerencanaanManusia::where('status', 1)->where(function ($query) {
+        $anggaranManusia = PerencanaanManusia::where('status', 1)->where(function ($query) use ($daftarOPD) {
             if (Auth::user()->role == 'OPD') {
                 $query->where('opd_id', Auth::user()->opd_id);
+            } else {
+                $query->whereIn('opd_id', $daftarOPD);
             }
         })->sum('nilai_pembiayaan');
-        $anggaranHewan = PerencanaanHewan::where('status', 1)->where(function ($query) {
+        $anggaranHewan = PerencanaanHewan::where('status', 1)->where(function ($query) use ($daftarOPD) {
             if (Auth::user()->role == 'OPD') {
                 $query->where('opd_id', Auth::user()->opd_id);
+            } else {
+                $query->whereIn('opd_id', $daftarOPD);
             }
         })->sum('nilai_pembiayaan');
 
@@ -319,6 +364,7 @@ class DashboardController extends Controller
 
     private function _penggunaanAnggaran()
     {
+        $daftarOPD = OPD::orderBy('nama', 'asc')->get()->pluck('id');
         $anggaranPerencanaan = $this->_anggaranPerencanaan();
 
         $persenKeong = 0;
@@ -327,24 +373,30 @@ class DashboardController extends Controller
         $persenSisa = 0;
         $persenTotal = 0;
 
-        $penggunaanKeong = RealisasiKeong::where('status', 1)->whereHas('perencanaanKeong', function ($query) {
-            $query->where(function ($query) {
+        $penggunaanKeong = RealisasiKeong::where('status', 1)->whereHas('perencanaanKeong', function ($query) use ($daftarOPD) {
+            $query->where(function ($query) use ($daftarOPD) {
                 if (Auth::user()->role == 'OPD') {
                     $query->where('opd_id', Auth::user()->opd_id);
+                } else {
+                    $query->whereIn('opd_id', $daftarOPD);
                 }
             });
         })->sum('penggunaan_anggaran');
-        $penggunaanManusia = RealisasiManusia::where('status', 1)->whereHas('perencanaanManusia', function ($query) {
-            $query->where(function ($query) {
+        $penggunaanManusia = RealisasiManusia::where('status', 1)->whereHas('perencanaanManusia', function ($query) use ($daftarOPD) {
+            $query->where(function ($query) use ($daftarOPD) {
                 if (Auth::user()->role == 'OPD') {
                     $query->where('opd_id', Auth::user()->opd_id);
+                } else {
+                    $query->whereIn('opd_id', $daftarOPD);
                 }
             });
         })->sum('penggunaan_anggaran');
-        $penggunaanHewan = RealisasiHewan::where('status', 1)->whereHas('perencanaanHewan', function ($query) {
-            $query->where(function ($query) {
+        $penggunaanHewan = RealisasiHewan::where('status', 1)->whereHas('perencanaanHewan', function ($query) use ($daftarOPD) {
+            $query->where(function ($query) use ($daftarOPD) {
                 if (Auth::user()->role == 'OPD') {
                     $query->where('opd_id', Auth::user()->opd_id);
+                } else {
+                    $query->whereIn('opd_id', $daftarOPD);
                 }
             });
         })->sum('penggunaan_anggaran');
@@ -388,11 +440,16 @@ class DashboardController extends Controller
 
     private function _tabelAnggaranKeong()
     {
-        $daftarOPD = OPD::orderBy('nama', 'asc')->where(function ($query) {
-            if (Auth::user()->role == 'OPD') {
-                $query->where('id', Auth::user()->opd_id);
-            }
-        })->get();
+        $tabel = [];
+        if (Auth::user()->role == 'OPD') {
+            $daftarOPD = OPD::orderBy('nama', 'asc')->where('id', Auth::user()->opd_id)->withTrashed()->get();
+        } else {
+            $daftarOPD = OPD::orderBy('nama', 'asc')->where(function ($query) {
+                if (Auth::user()->role == 'OPD') {
+                    $query->where('id', Auth::user()->opd_id);
+                }
+            })->get();
+        }
         foreach ($daftarOPD as $opd) {
             $perencanaan = PerencanaanKeong::where('opd_id', $opd->id)->where('status', 1)->sum('nilai_pembiayaan');
             $perencanaanDau = PerencanaanKeong::where('opd_id', $opd->id)->where('sumber_dana', 'DAU')->where('status', 1)->sum('nilai_pembiayaan');
@@ -447,11 +504,16 @@ class DashboardController extends Controller
 
     private function _tabelAnggaranManusia()
     {
-        $daftarOPD = OPD::orderBy('nama', 'asc')->where(function ($query) {
-            if (Auth::user()->role == 'OPD') {
-                $query->where('id', Auth::user()->opd_id);
-            }
-        })->get();
+        $tabel = [];
+        if (Auth::user()->role == 'OPD') {
+            $daftarOPD = OPD::orderBy('nama', 'asc')->where('id', Auth::user()->opd_id)->withTrashed()->get();
+        } else {
+            $daftarOPD = OPD::orderBy('nama', 'asc')->where(function ($query) {
+                if (Auth::user()->role == 'OPD') {
+                    $query->where('id', Auth::user()->opd_id);
+                }
+            })->get();
+        }
         foreach ($daftarOPD as $opd) {
             $perencanaan = PerencanaanManusia::where('opd_id', $opd->id)->where('status', 1)->sum('nilai_pembiayaan');
             $perencanaanDau = PerencanaanManusia::where('opd_id', $opd->id)->where('sumber_dana', 'DAU')->where('status', 1)->sum('nilai_pembiayaan');
@@ -506,11 +568,16 @@ class DashboardController extends Controller
 
     private function _tabelAnggaranHewan()
     {
-        $daftarOPD = OPD::orderBy('nama', 'asc')->where(function ($query) {
-            if (Auth::user()->role == 'OPD') {
-                $query->where('id', Auth::user()->opd_id);
-            }
-        })->get();
+        $tabel = [];
+        if (Auth::user()->role == 'OPD') {
+            $daftarOPD = OPD::orderBy('nama', 'asc')->where('id', Auth::user()->opd_id)->withTrashed()->get();
+        } else {
+            $daftarOPD = OPD::orderBy('nama', 'asc')->where(function ($query) {
+                if (Auth::user()->role == 'OPD') {
+                    $query->where('id', Auth::user()->opd_id);
+                }
+            })->get();
+        }
         foreach ($daftarOPD as $opd) {
             $perencanaan = PerencanaanHewan::where('opd_id', $opd->id)->where('status', 1)->sum('nilai_pembiayaan');
             $perencanaanDau = PerencanaanHewan::where('opd_id', $opd->id)->where('sumber_dana', 'DAU')->where('status', 1)->sum('nilai_pembiayaan');
@@ -565,6 +632,7 @@ class DashboardController extends Controller
 
     private function _tabelAnggaranSemua()
     {
+        $tabel = [];
         $tabelAnggaranHewan = $this->_tabelAnggaranHewan();
         $tabelAnggaranKeong = $this->_tabelAnggaranKeong();
         $tabelAnggaranManusia = $this->_tabelAnggaranManusia();
@@ -610,5 +678,40 @@ class DashboardController extends Controller
         }
 
         return $tabel;
+    }
+
+    public function exportIntervensi(Request $request)
+    {
+        $tipe = $request->tipe;
+        $tahun = $request->tahun_id;
+        if (!in_array($tipe, ['semua', 'keong', 'manusia', 'hewan'])) {
+            return redirect()->back();
+        }
+
+        $tabelKeong = $this->_tabelKeong();
+        $tabelManusia = $this->_tabelManusia();
+        $tabelHewan = $this->_tabelHewan();
+
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+
+        return Excel::download(new IntervensiExport($tipe, $tabelKeong, $tabelManusia, $tabelHewan), "Export Intervensi" . "-" . $tipe . '-' . $tanggal . "-" . rand(1, 9999) . '.xlsx');
+    }
+
+    public function exportAnggaran(Request $request)
+    {
+        $tipe = $request->tipe;
+        $tahun = $request->tahun_id;
+        if (!in_array($tipe, ['semua', 'keong', 'manusia', 'hewan'])) {
+            return redirect()->back();
+        }
+
+        $tabelAnggaranKeong = $this->_tabelAnggaranKeong();
+        $tabelAnggaranManusia = $this->_tabelAnggaranManusia();
+        $tabelAnggaranHewan = $this->_tabelAnggaranHewan();
+        $tabelAnggaranSemua = $this->_tabelAnggaranSemua();
+
+        $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
+
+        return Excel::download(new AnggaranIntervensiExport($tipe, $tabelAnggaranKeong, $tabelAnggaranManusia, $tabelAnggaranHewan, $tabelAnggaranSemua), "Export Anggaran Intervensi" . "-" . $tipe . '-' . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 }

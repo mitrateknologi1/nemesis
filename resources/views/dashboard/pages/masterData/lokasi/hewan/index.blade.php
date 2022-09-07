@@ -1,11 +1,11 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Hewan Ternak
+    Lokasi Hewan Ternak
 @endsection
 
 @section('titlePanelHeader')
-    Hewan Ternak
+    Lokasi Hewan Ternak
 @endsection
 
 @section('subTitlePanelHeader')
@@ -37,12 +37,12 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Data Hewan Ternak</div>
+                        <div class="card-title">Data Lokasi Hewan Ternak</div>
                         <div class="card-tools">
                             <button type="submit" class="btn btn-info btn-border btn-round btn-sm mr-2"
                                 id="export-lokasi-hewan">
                                 <i class="fas fa-lg fa-download"></i>
-                                Export Lokasi Hewan Ternak
+                                Export Lokasi Lokasi Hewan Ternak
                             </button>
                             <form action="{{ url('master-data/lokasi/hewan/export-demografi') }}" method="POST">
                                 @csrf

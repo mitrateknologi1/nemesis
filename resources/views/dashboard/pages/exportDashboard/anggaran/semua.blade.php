@@ -6,7 +6,7 @@
              <th style="vertical-align: center;border: 1px solid black;" align="center" scope="col" rowspan="2">OPD
              </th>
              <th style="vertical-align: center;border: 1px solid black;" align="center" scope="col" colspan="3">
-                 Pembiayaan</th>
+                 Nilai Anggaran</th>
              <th style="vertical-align: center;border: 1px solid black;" align="center" scope="col" colspan="3">
                  Penggunaan Anggaran</th>
              <th style="vertical-align: center;border: 1px solid black;" align="center" scope="col" colspan="3">

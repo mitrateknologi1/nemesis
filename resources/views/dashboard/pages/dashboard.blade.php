@@ -9,7 +9,15 @@
 @endsection
 
 @section('subTitlePanelHeader')
-    <p style="font-size: 15px">Tahun : -</p>
+    <p style="font-size: 15px">Tahun :
+        @php
+            if ($tahun != '' && $tahun != 'Semua') {
+                echo $tahun;
+            } else {
+                echo 'Semua';
+            }
+        @endphp
+    </p>
 @endsection
 
 @section('buttonPanelHeader')
@@ -314,7 +322,7 @@
                                 <div class="col-12 col-sm-6 col-md-6">
                                     <div class="card">
                                         <div class="card-body">
-                                            <h5><b>Pembiayaan</b></h5>
+                                            <h5><b>Nilai Anggaran</b></h5>
                                             <hr>
                                             <div class="d-flex justify-content-between mt-2">
                                                 <p class="text-muted mb-0">Keong</p>
@@ -528,7 +536,7 @@
                                                 </div>
                                                 <div class="col-8 col-stats">
                                                     <div class="numbers">
-                                                        <p class="card-category">Hewan</p>
+                                                        <p class="card-category">Hewan Ternak</p>
                                                         <h4 class="card-title">{{ $lokasi['lokasiHewan'] }}</h4>
                                                     </div>
                                                 </div>
@@ -544,7 +552,7 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="card-head-row">
-                                <div class="card-title fw-bold">Total Hewan</div>
+                                <div class="card-title fw-bold">Total Hewan Ternak</div>
                                 {{-- <div class="card-tools">
                             @component('dashboard.components.buttons.export')
                             @endcomponent
@@ -938,8 +946,8 @@
                     <form action="{{ url('/dashboard/export/intervensi/semua') }}" method="POST"
                         id="form-export-intervensi">
                         @csrf
-                        <button class="btn btn-primary" type="submit" name="tahun_id" value="2022"><i
-                                class="fas fa-file-download"></i> Export</button>
+                        <button class="btn btn-primary" type="submit" name="tahun"
+                            value="{{ $_GET['tahun'] ?? '' }}"><i class="fas fa-file-download"></i> Export</button>
                     </form>
                 </div>
             </div>
@@ -990,7 +998,7 @@
                                         <tr class="text-center">
                                             <th scope="col" rowspan="2">No.</th>
                                             <th scope="col" rowspan="2">OPD</th>
-                                            <th scope="col" colspan="3">Pembiayaan</th>
+                                            <th scope="col" colspan="3">Nilai Anggaran</th>
                                             <th scope="col" colspan="3">Penggunaan Anggaran</th>
                                             <th scope="col" colspan="3">Persentase Penggunaan Anggaran</th>
                                             <th scope="col" colspan="3">Sisa Anggaran</th>
@@ -1127,7 +1135,7 @@
                                         <tr class="text-center">
                                             <th scope="col" rowspan="2">No.</th>
                                             <th scope="col" rowspan="2">OPD</th>
-                                            <th scope="col" colspan="3">Pembiayaan</th>
+                                            <th scope="col" colspan="3">Nilai Anggaran</th>
                                             <th scope="col" colspan="3">Penggunaan Anggaran</th>
                                             <th scope="col" colspan="3">Persentase Penggunaan Anggaran</th>
                                             <th scope="col" colspan="3">Sisa Anggaran</th>
@@ -1267,7 +1275,7 @@
                                         <tr class="text-center">
                                             <th scope="col" rowspan="2">No.</th>
                                             <th scope="col" rowspan="2">OPD</th>
-                                            <th scope="col" colspan="3">Pembiayaan</th>
+                                            <th scope="col" colspan="3">Nilai Anggaran</th>
                                             <th scope="col" colspan="3">Penggunaan Anggaran</th>
                                             <th scope="col" colspan="3">Persentase Penggunaan Anggaran</th>
                                             <th scope="col" colspan="3">Sisa Anggaran</th>
@@ -1405,7 +1413,7 @@
                                         <tr class="text-center">
                                             <th scope="col" rowspan="2">No.</th>
                                             <th scope="col" rowspan="2">OPD</th>
-                                            <th scope="col" colspan="3">Pembiayaan</th>
+                                            <th scope="col" colspan="3">Nilai Anggaran</th>
                                             <th scope="col" colspan="3">Penggunaan Anggaran</th>
                                             <th scope="col" colspan="3">Persentase Penggunaan Anggaran</th>
                                             <th scope="col" colspan="3">Sisa Anggaran</th>
@@ -1542,33 +1550,51 @@
                     <form action="{{ url('/dashboard/export/anggaran/semua') }}" method="POST"
                         id="form-export-anggaran">
                         @csrf
-                        <button class="btn btn-primary" type="submit" name="tahun_id" value="2022"><i
-                                class="fas fa-file-download"></i> Export</button>
+                        <button class="btn btn-primary" type="submit" name="tahun"
+                            value="{{ $_GET['tahun'] ?? '' }}"><i class="fas fa-file-download"></i> Export</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="modal-filter" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Filter Dashboard</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-border" data-dismiss="modal">Keluar</button>
-                    <button type="button" class="btn btn-primary">Filter</button>
+    <form action="" method="GET">
+        <div class="modal fade" id="modal-filter" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Filter Dashboard</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @component('dashboard.components.formElements.select',
+                            [
+                                'label' => 'Tahun',
+                                'id' => 'tahun',
+                                'name' => 'tahun',
+                                'class' => 'select2',
+                                'wajib' => '<sup class="text-danger">*</sup>',
+                            ])
+                            @slot('options')
+                                <option value="Semua">Semua</option>
+                                @foreach ($daftarTahun as $tahun)
+                                    <option value="{{ $tahun }}"
+                                        {{ ($_GET['tahun'] ?? '') == $tahun ? 'selected' : '' }}>
+                                        {{ $tahun }}</option>
+                                @endforeach
+                            @endslot
+                        @endcomponent
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-border" data-dismiss="modal">Keluar</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 @endsection
 
 @push('scripts')
@@ -1655,10 +1681,10 @@
         Circles.create({
             id: 'realisasi-total',
             radius: 45,
-            value: "{{ $intervensi['realisasiTotal'] }}",
+            value: "{{ $intervensi['persentaseTotal'] }}",
             maxValue: 100,
             width: 7,
-            text: "{{ $intervensi['persentaseTotal'] }}",
+            text: "{{ $intervensi['persentaseTotal'] . '%' }}",
             colors: ['#f1f1f1', '#2BB930'],
             duration: 400,
             wrpClass: 'circles-wrp',
@@ -1740,6 +1766,14 @@
             textClass: 'circles-text',
             styleWrapper: true,
             styleText: true
+        })
+    </script>
+
+    <script>
+        $('.select2').select2({
+            placeholder: "Semua",
+            theme: "bootstrap",
+            width: '100%'
         })
     </script>
 

@@ -231,7 +231,7 @@
                 <form action="{{ url('/cekLogin') }}" method="POST" id="formLogin">
                     @csrf
                     <h3 class="text-center mb-2">Masuk</h3>
-                    <p class="mt-0 text-center">Admin / OPD</p>
+                    {{-- <p class="mt-0 text-center">Admin / OPD</p> --}}
                     <div class="login-form">
                         <div class="form-group">
                             <label for="email" class="placeholder"><b>Nama Pengguna</b></label>

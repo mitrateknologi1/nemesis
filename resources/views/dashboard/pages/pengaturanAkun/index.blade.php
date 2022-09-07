@@ -140,6 +140,7 @@
                         processData: false,
                         contentType: false,
                         success: function(response) {
+                            console.log(response);
                             if (response.status == 'success') {
                                 swal("Berhasil",
                                     "Data Berhasil Disimpan, Silahkan Login Kembali", {

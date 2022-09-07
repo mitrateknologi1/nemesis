@@ -115,7 +115,7 @@
                                                 @component('dashboard.components.dataTables.index',
                                                     [
                                                         'id' => 'table-data',
-                                                        'th' => ['No', 'Nama', 'Desa', 'Deskripsi', 'Latitude / Longitude', 'Pemilik', 'Status', 'Aksi'],
+                                                        'th' => ['No', 'Nama', 'Desa', 'Deskripsi', 'Latitude / Longitude', 'Pemilik Lahan', 'Status', 'Aksi'],
                                                     ])
                                                 @endcomponent
                                             </div>
@@ -283,7 +283,7 @@
                             var pemilikKeong = '';
                             if (response.data[i].pemilik_lokasi_keong.length > 0) {
                                 pemilikKeong += '<hr class="my-1">';
-                                pemilikKeong += "<p class='my-0 fw-bold'>Pemilik : </p>";
+                                pemilikKeong += "<p class='my-0 fw-bold'>Pemilik Lahan : </p>";
                                 for (var j = 0; j < response.data[i].pemilik_lokasi_keong.length; j++) {
                                     pemilikKeong += "<p class='my-0'> -" + response.data[i]
                                         .pemilik_lokasi_keong[

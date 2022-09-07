@@ -43,7 +43,7 @@
                                         <optgroup label="Desa {{ $desa->nama }}">
                                             @foreach ($desa->penduduk->whereNotIn('id', $idSiswa) as $penduduk)
                                                 <option value="{{ $penduduk->id }}">
-                                                    {{ $penduduk->nama . ' (' . $penduduk->nik . ')' }}
+                                                    {{ $penduduk->nama . ' (' . $penduduk->nik . ') - ' . $penduduk->desa->nama }}
                                                 </option>
                                             @endforeach
                                         </optgroup>

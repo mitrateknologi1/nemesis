@@ -1,11 +1,11 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Lokasi Hewan
+    Lokasi Hewan Ternak
 @endsection
 
 @section('titlePanelHeader')
-    Lokasi Hewan
+    Lokasi Hewan Ternak
 @endsection
 
 @section('subTitlePanelHeader')
@@ -32,7 +32,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Tambah Lokasi Hewan</div>
+                        <div class="card-title">Tambah Lokasi Hewan Ternak</div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -46,12 +46,12 @@
                                         <div class="col-12">
                                             @component('dashboard.components.formElements.input',
                                                 [
-                                                    'label' => 'Nama Lokasi Hewan',
+                                                    'label' => 'Nama Lokasi Hewan Ternak',
                                                     'type' => 'text',
                                                     'id' => 'nama',
                                                     'name' => 'nama',
                                                     'wajib' => '<sup class="text-danger">*</sup>',
-                                                    'placeholder' => 'Masukkan Nama Lokasi Hewan',
+                                                    'placeholder' => 'Masukkan Nama Lokasi Hewan Ternak',
                                                 ])
                                             @endcomponent
                                         </div>
@@ -84,7 +84,7 @@
                                             @endcomponent
                                         </div>
                                         <div class="col-12 mt-3">
-                                            <label for="TextInput" class="form-label my-2">Pilih Lokasi Hewan</label>
+                                            <label for="TextInput" class="form-label my-2">Pilih Lokasi Hewan Ternak</label>
                                             <div id="map"></div>
                                         </div>
                                         <div class="col-6">
@@ -173,7 +173,7 @@
                                         </div>
                                         <hr size="10px" width="100%" color="black" class="mt-3">
                                         <div class="col-12">
-                                            <label class="form-label my-2 fw-bold"> Tambahkan Pemilik Hewan</label>
+                                            <label class="form-label my-2 fw-bold"> Tambahkan Pemilik Hewan Ternak</label>
                                             <div class="select2-input select2-primary">
                                                 <select id="pemilik-lokasi" name="penduduk_id[]"
                                                     class="form-control multiple" multiple="multiple"
@@ -181,7 +181,8 @@
                                                     @foreach ($daftarDesa as $desa)
                                                         <optgroup label="Desa {{ $desa->nama }}">
                                                             @foreach ($desa->penduduk as $penduduk)
-                                                                <option value="{{ $penduduk->id }}">{{ $penduduk->nama }}
+                                                                <option value="{{ $penduduk->id }}">
+                                                                    {{ $penduduk->nama . ' (' . $penduduk->nik . ') - ' . $penduduk->desa->nama }}
                                                                 </option>
                                                             @endforeach
                                                         </optgroup>

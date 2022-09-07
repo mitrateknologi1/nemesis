@@ -35,7 +35,7 @@
                              </li>
                              <li id="li-hewan">
                                  <a href="{{ url('rencana-intervensi-hewan') }}">
-                                     <span class="sub-item">Hewan</span>
+                                     <span class="sub-item">Lokasi Hewan Ternak</span>
                                  </a>
                              </li>
                          </ul>
@@ -61,7 +61,7 @@
                              </li>
                              <li id="li-hewan-2">
                                  <a href="{{ url('realisasi-intervensi-hewan') }}">
-                                     <span class="sub-item">Hewan</span>
+                                     <span class="sub-item">Lokasi Hewan Ternak</span>
                                  </a>
                              </li>
                          </ul>
@@ -89,7 +89,7 @@
                  <li class="nav-item" id="nav-hasil-realisasi-hewan">
                      <a href="{{ url('hasil-realisasi-hewan') }}">
                          <i class="fas fa-paw"></i>
-                         <p>Hewan</p>
+                         <p>Lokasi Hewan Ternak</p>
                      </a>
                  </li>
 
@@ -139,7 +139,7 @@
                              </li>
                              <li id="li-lokasi-hewan">
                                  <a href="{{ url('master-data/lokasi/hewan') }}">
-                                     <span class="sub-item">Hewan</span>
+                                     <span class="sub-item">Hewan Ternak</span>
                                  </a>
                              </li>
                          </ul>
@@ -169,7 +169,7 @@
                      <li class="nav-item" id="nav-master-hewan">
                          <a href="{{ url('master-data/hewan') }}">
                              <i class="fas fa-paw"></i>
-                             <p>Hewan</p>
+                             <p>Hewan Ternak</p>
                          </a>
                      </li>
                      <li class="nav-item" id="nav-master-tahun">

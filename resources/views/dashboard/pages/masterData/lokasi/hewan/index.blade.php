@@ -1,11 +1,11 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Hewan
+    Lokasi Hewan Ternak
 @endsection
 
 @section('titlePanelHeader')
-    Hewan
+    Lokasi Hewan Ternak
 @endsection
 
 @section('subTitlePanelHeader')
@@ -37,12 +37,12 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Data Hewan</div>
+                        <div class="card-title">Data Lokasi Hewan Ternak</div>
                         <div class="card-tools">
                             <button type="submit" class="btn btn-info btn-border btn-round btn-sm mr-2"
                                 id="export-lokasi-hewan">
                                 <i class="fas fa-lg fa-download"></i>
-                                Export Lokasi Hewan
+                                Export Lokasi Lokasi Hewan Ternak
                             </button>
                             <form action="{{ url('master-data/lokasi/hewan/export-demografi') }}" method="POST">
                                 @csrf
@@ -119,8 +119,8 @@
                                                             'Desa',
                                                             'Deskripsi',
                                                             'Latitude / Longitude',
-                                                            'Jumlah Hewan',
-                                                            'Pemilik',
+                                                            'Jumlah Hewan Ternak',
+                                                            'Pemilik Ternak',
                                                             'Status',
                                                             'Aksi',
                                                         ],
@@ -301,19 +301,20 @@
 
                             if (response.data[i].jumlah_hewan.length > 0) {
                                 jumlahHewan += '<hr class="my-1">';
-                                jumlahHewan += "<p class='my-0 fw-bold'>Jumlah Hewan : </p>";
+                                jumlahHewan += "<p class='my-0 fw-bold'>Jumlah Hewan Ternak: </p>";
                                 for (var j = 0; j < response.data[i].jumlah_hewan.length; j++) {
-                                    jumlahHewan += "<p class='my-0'>" + response.data[i].jumlah_hewan[j].hewan
+                                    jumlahHewan += "<p class='my-0'>- " + response.data[i].jumlah_hewan[j].hewan
                                         .nama + " : " + response.data[i].jumlah_hewan[j].jumlah + "</p>";
                                 }
                             }
 
                             if (response.data[i].pemilik_lokasi_hewan.length > 0) {
                                 pemilikHewan += '<hr class="my-1">';
-                                pemilikHewan += "<p class='my-0 fw-bold'>Pemilik : </p>";
+                                pemilikHewan += "<p class='my-0 fw-bold'>Pemilik Ternak : </p>";
                                 for (var j = 0; j < response.data[i].pemilik_lokasi_hewan.length; j++) {
-                                    pemilikHewan += "<p class='my-0'>" + response.data[i].pemilik_lokasi_hewan[
-                                        j].penduduk.nama + "</p>";
+                                    pemilikHewan += "<p class='my-0'>- " + response.data[i]
+                                        .pemilik_lokasi_hewan[
+                                            j].penduduk.nama + "</p>";
                                 }
                             }
 

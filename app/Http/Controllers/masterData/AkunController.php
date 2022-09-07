@@ -185,8 +185,8 @@ class AkunController extends Controller
             $request->all(),
             [
                 'username' => ['required', Rule::unique('users')->ignore($user->id)->withoutTrashed()],
-                'nama' => 'required',
-                'opd_id' => 'required',
+                'nama' => $request->role == "Admin" || $request->role == "Pimpinan" ? 'required' : 'nullable',
+                'opd_id' => $request->role == "Admin" || $request->role == "Pimpinan" ? 'nullable' : 'required',
                 'role' => 'required',
                 'status' => 'required'
             ],

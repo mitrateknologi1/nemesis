@@ -14,7 +14,7 @@
                 <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">Longitude</th>
                 <th scope="col" align="center"
-                    style="vertical-align: center;border: 1px solid black;font-weight : bold">Pemilik</th>
+                    style="vertical-align: center;border: 1px solid black;font-weight : bold">Pemilik Lahan</th>
             </tr>
         </thead>
         <tbody>

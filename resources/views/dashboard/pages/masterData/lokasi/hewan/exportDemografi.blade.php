@@ -8,10 +8,9 @@
                 <th scope="col" align="center" rowspan="2"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">Jumlah Lokasi Hewan</th>
                 <th scope="col" align="center" rowspan="2"
-                    style="vertical-align: center;border: 1px solid black;font-weight : bold">Jumlah Hewan</th>
+                    style="vertical-align: center;border: 1px solid black;font-weight : bold">Total Hewan Ternak</th>
                 <th scope="col" align="center" colspan="{{ count($daftarHewan) }}"
-                    style="vertical-align: center;border: 1px solid black;font-weight : bold">Jumlah Hewan Berdasarkan
-                    Nama</th>
+                    style="vertical-align: center;border: 1px solid black;font-weight : bold">Jumlah Hewan Ternak</th>
             </tr>
             <tr align="center" style="vertical-align: center;border: 1px solid black;font-weight : bold">
                 @foreach ($daftarHewan as $hewan)

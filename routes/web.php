@@ -52,6 +52,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::resource('/dashboard', DashboardController::class);
+    Route::post('/dashboard/export/intervensi/{tipe}', [DashboardController::class, 'exportIntervensi']);
+    Route::post('/dashboard/export/anggaran/{tipe}', [DashboardController::class, 'exportAnggaran']);
 
     // Keong
     Route::resource('rencana-intervensi-keong', PerencanaanKeongController::class);

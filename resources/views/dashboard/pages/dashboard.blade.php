@@ -9,10 +9,20 @@
 @endsection
 
 @section('subTitlePanelHeader')
-    {{-- Lorem ipsum dolor sit amet consectetur adipisicing elit. --}}
+    <p style="font-size: 15px">Tahun :
+        @php
+            if ($tahun != '' && $tahun != 'Semua') {
+                echo $tahun;
+            } else {
+                echo 'Semua';
+            }
+        @endphp
+    </p>
 @endsection
 
 @section('buttonPanelHeader')
+    <button class="btn btn-secondary btn-round" data-toggle="modal" data-target="#modal-filter"><i class="fas fa-filter"></i>
+        Filter</button>
 @endsection
 
 @push('styles')
@@ -27,145 +37,155 @@
     <div class="row">
         <div class="col-md-9">
             <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-head-row">
-                                <div class="card-title fw-bold text-primary"><i class="icon-bell"></i> Pemberitahuan</div>
+                @if (!(
+                    $totalMenungguKonfirmasiPerencanaanKeong == 0 &&
+                    $totalMenungguKonfirmasiPerencanaanManusia == 0 &&
+                    $totalMenungguKonfirmasiPerencanaanHewan == 0 &&
+                    $totalMenungguKonfirmasiRealisasiKeong == 0 &&
+                    $totalMenungguKonfirmasiRealisasiManusia == 0 &&
+                    $totalMenungguKonfirmasiRealisasiManusia == 0
+                ))
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-head-row">
+                                    <div class="card-title fw-bold text-primary"><i class="icon-bell"></i> Pemberitahuan
+                                    </div>
 
+                                </div>
                             </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="alert alert-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} {{ $totalMenungguKonfirmasiPerencanaanKeong == 0 ? 'd-none' : '' }}"
-                                role="alert">
-                                <div class="row">
-                                    <div class="col-10 pr-0">
-                                        <span>
-                                            <b>Perencanaan Keong:</b> Terdapat
-                                            <b>{{ $totalMenungguKonfirmasiPerencanaanKeong }}</b>
-                                            perencanaan yang
-                                            {{ Auth::user()->role == 'OPD' ? 'ditolak' : 'menunggu konfirmasi' }}.
-                                            {{ Auth::user()->role == 'OPD' ? 'Silahkan ubah data tersebut dan kemudian perbarui datanya.' : '' }}
-                                        </span>
-                                    </div>
-                                    <div class="col-2 d-flex align-items-center pl-0">
-                                        <a href="{{ url('rencana-intervensi-keong') }}"
-                                            class="badge badge-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} float-right"><i
-                                                class="fas fa-info-circle"></i>
-                                            Lihat
-                                        </a>
+                            <div class="card-body">
+                                <div class="alert alert-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} {{ $totalMenungguKonfirmasiPerencanaanKeong == 0 ? 'd-none' : '' }}"
+                                    role="alert">
+                                    <div class="row">
+                                        <div class="col-10 pr-0">
+                                            <span>
+                                                <b>Perencanaan Keong:</b> Terdapat
+                                                <b>{{ $totalMenungguKonfirmasiPerencanaanKeong }}</b>
+                                                perencanaan yang
+                                                {{ Auth::user()->role == 'OPD' ? 'ditolak' : 'menunggu konfirmasi' }}.
+                                                {{ Auth::user()->role == 'OPD' ? 'Silahkan ubah data tersebut dan kemudian perbarui datanya.' : '' }}
+                                            </span>
+                                        </div>
+                                        <div class="col-2 d-flex align-items-center pl-0">
+                                            <a href="{{ url('rencana-intervensi-keong') }}"
+                                                class="badge badge-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} float-right"><i
+                                                    class="fas fa-info-circle"></i>
+                                                Lihat
+                                            </a>
 
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="alert alert-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} {{ $totalMenungguKonfirmasiPerencanaanManusia == 0 ? 'd-none' : '' }}"
-                                role="alert">
-                                <div class="row">
-                                    <div class="col-md-10 pr-0">
-                                        <span>
-                                            <b>Perencanaan Manusia:</b> Terdapat
-                                            <b>{{ $totalMenungguKonfirmasiPerencanaanManusia }}</b>
-                                            perencanaan yang
-                                            {{ Auth::user()->role == 'OPD' ? 'ditolak' : 'menunggu konfirmasi' }}.
-                                            {{ Auth::user()->role == 'OPD' ? 'Silahkan ubah data tersebut dan kemudian perbarui datanya.' : '' }}
-                                        </span>
-                                    </div>
-                                    <div class="col-md-2 d-flex align-items-center pl-0">
-                                        <a href="{{ url('rencana-intervensi-manusia') }}"
-                                            class="badge badge-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} float-right"><i
-                                                class="fas fa-info-circle"></i>
-                                            Lihat
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="alert alert-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} {{ $totalMenungguKonfirmasiPerencanaanHewan == 0 ? 'd-none' : '' }}"
-                                role="alert">
-                                <div class="row">
-                                    <div class="col-md-10 pr-0">
-                                        <span>
-                                            <b>Perencanaan Hewan:</b> Terdapat
-                                            <b>{{ $totalMenungguKonfirmasiPerencanaanHewan }}</b>
-                                            perencanaan yang
-                                            {{ Auth::user()->role == 'OPD' ? 'ditolak' : 'menunggu konfirmasi' }}.
-                                            {{ Auth::user()->role == 'OPD' ? 'Silahkan ubah data tersebut dan kemudian perbarui datanya.' : '' }}
-                                        </span>
-                                    </div>
-                                    <div class="col-md-2 d-flex align-items-center pl-0">
-                                        <a href="{{ url('rencana-intervensi-hewan') }}"
-                                            class="badge badge-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} float-right"><i
-                                                class="fas fa-info-circle"></i>
-                                            Lihat
-                                        </a>
+                                <div class="alert alert-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} {{ $totalMenungguKonfirmasiPerencanaanManusia == 0 ? 'd-none' : '' }}"
+                                    role="alert">
+                                    <div class="row">
+                                        <div class="col-md-10 pr-0">
+                                            <span>
+                                                <b>Perencanaan Manusia:</b> Terdapat
+                                                <b>{{ $totalMenungguKonfirmasiPerencanaanManusia }}</b>
+                                                perencanaan yang
+                                                {{ Auth::user()->role == 'OPD' ? 'ditolak' : 'menunggu konfirmasi' }}.
+                                                {{ Auth::user()->role == 'OPD' ? 'Silahkan ubah data tersebut dan kemudian perbarui datanya.' : '' }}
+                                            </span>
+                                        </div>
+                                        <div class="col-md-2 d-flex align-items-center pl-0">
+                                            <a href="{{ url('rencana-intervensi-manusia') }}"
+                                                class="badge badge-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} float-right"><i
+                                                    class="fas fa-info-circle"></i>
+                                                Lihat
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="alert alert-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} {{ $totalMenungguKonfirmasiRealisasiKeong == 0 ? 'd-none' : '' }}"
-                                role="alert">
-                                <div class="row">
-                                    <div class="col-md-10 pr-0">
-                                        <span>
-                                            <b>Realisasi Keong:</b> Terdapat
-                                            <b>{{ $totalMenungguKonfirmasiRealisasiKeong }}</b>
-                                            laporan realisasi yang
-                                            {{ Auth::user()->role == 'OPD' ? 'ditolak' : 'menunggu konfirmasi' }}.
-                                            {{ Auth::user()->role == 'OPD' ? 'Silahkan ubah data tersebut dan kemudian perbarui datanya.' : '' }}
-                                        </span>
-                                    </div>
-                                    <div class="col-md-2 d-flex align-items-center pl-0">
-                                        <a href="{{ url('realisasi-intervensi-keong') }}"
-                                            class="badge badge-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} float-right"><i
-                                                class="fas fa-info-circle"></i>
-                                            Lihat
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="alert alert-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} {{ $totalMenungguKonfirmasiRealisasiManusia == 0 ? 'd-none' : '' }}"
-                                role="alert">
-                                <div class="row">
-                                    <div class="col-md-10 pr-0">
-                                        <span>
-                                            <b>Realisasi Manusia:</b> Terdapat
-                                            <b>{{ $totalMenungguKonfirmasiRealisasiManusia }}</b>
-                                            laporan realisasi yang
-                                            {{ Auth::user()->role == 'OPD' ? 'ditolak' : 'menunggu konfirmasi' }}.
-                                            {{ Auth::user()->role == 'OPD' ? 'Silahkan ubah data tersebut dan kemudian perbarui datanya.' : '' }}
-                                        </span>
-                                    </div>
-                                    <div class="col-md-2 d-flex align-items-center pl-0">
-                                        <a href="{{ url('realisasi-intervensi-manusia') }}"
-                                            class="badge badge-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} float-right"><i
-                                                class="fas fa-info-circle"></i>
-                                            Lihat
-                                        </a>
+                                <div class="alert alert-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} {{ $totalMenungguKonfirmasiPerencanaanHewan == 0 ? 'd-none' : '' }}"
+                                    role="alert">
+                                    <div class="row">
+                                        <div class="col-md-10 pr-0">
+                                            <span>
+                                                <b>Perencanaan Hewan:</b> Terdapat
+                                                <b>{{ $totalMenungguKonfirmasiPerencanaanHewan }}</b>
+                                                perencanaan yang
+                                                {{ Auth::user()->role == 'OPD' ? 'ditolak' : 'menunggu konfirmasi' }}.
+                                                {{ Auth::user()->role == 'OPD' ? 'Silahkan ubah data tersebut dan kemudian perbarui datanya.' : '' }}
+                                            </span>
+                                        </div>
+                                        <div class="col-md-2 d-flex align-items-center pl-0">
+                                            <a href="{{ url('rencana-intervensi-hewan') }}"
+                                                class="badge badge-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} float-right"><i
+                                                    class="fas fa-info-circle"></i>
+                                                Lihat
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="alert alert-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} {{ $totalMenungguKonfirmasiRealisasiHewan == 0 ? 'd-none' : '' }}"
-                                role="alert">
-                                <div class="row">
-                                    <div class="col-md-10 pr-0">
-                                        <span>
-                                            <b>Realisasi Hewan:</b> Terdapat
-                                            <b>{{ $totalMenungguKonfirmasiRealisasiHewan }}</b>
-                                            laporan realisasi yang
-                                            {{ Auth::user()->role == 'OPD' ? 'ditolak' : 'menunggu konfirmasi' }}.
-                                            {{ Auth::user()->role == 'OPD' ? 'Silahkan ubah data tersebut dan kemudian perbarui datanya.' : '' }}
-                                        </span>
+                                <div class="alert alert-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} {{ $totalMenungguKonfirmasiRealisasiKeong == 0 ? 'd-none' : '' }}"
+                                    role="alert">
+                                    <div class="row">
+                                        <div class="col-md-10 pr-0">
+                                            <span>
+                                                <b>Realisasi Keong:</b> Terdapat
+                                                <b>{{ $totalMenungguKonfirmasiRealisasiKeong }}</b>
+                                                laporan realisasi yang
+                                                {{ Auth::user()->role == 'OPD' ? 'ditolak' : 'menunggu konfirmasi' }}.
+                                                {{ Auth::user()->role == 'OPD' ? 'Silahkan ubah data tersebut dan kemudian perbarui datanya.' : '' }}
+                                            </span>
+                                        </div>
+                                        <div class="col-md-2 d-flex align-items-center pl-0">
+                                            <a href="{{ url('realisasi-intervensi-keong') }}"
+                                                class="badge badge-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} float-right"><i
+                                                    class="fas fa-info-circle"></i>
+                                                Lihat
+                                            </a>
+                                        </div>
                                     </div>
-                                    <div class="col-md-2 d-flex align-items-center pl-0">
-                                        <a href="{{ url('realisasi-intervensi-hewan') }}"
-                                            class="badge badge-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} float-right"><i
-                                                class="fas fa-info-circle"></i>
-                                            Lihat
-                                        </a>
+                                </div>
+                                <div class="alert alert-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} {{ $totalMenungguKonfirmasiRealisasiManusia == 0 ? 'd-none' : '' }}"
+                                    role="alert">
+                                    <div class="row">
+                                        <div class="col-md-10 pr-0">
+                                            <span>
+                                                <b>Realisasi Manusia:</b> Terdapat
+                                                <b>{{ $totalMenungguKonfirmasiRealisasiManusia }}</b>
+                                                laporan realisasi yang
+                                                {{ Auth::user()->role == 'OPD' ? 'ditolak' : 'menunggu konfirmasi' }}.
+                                                {{ Auth::user()->role == 'OPD' ? 'Silahkan ubah data tersebut dan kemudian perbarui datanya.' : '' }}
+                                            </span>
+                                        </div>
+                                        <div class="col-md-2 d-flex align-items-center pl-0">
+                                            <a href="{{ url('realisasi-intervensi-manusia') }}"
+                                                class="badge badge-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} float-right"><i
+                                                    class="fas fa-info-circle"></i>
+                                                Lihat
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="alert alert-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} {{ $totalMenungguKonfirmasiRealisasiHewan == 0 ? 'd-none' : '' }}"
+                                    role="alert">
+                                    <div class="row">
+                                        <div class="col-md-10 pr-0">
+                                            <span>
+                                                <b>Realisasi Hewan:</b> Terdapat
+                                                <b>{{ $totalMenungguKonfirmasiRealisasiHewan }}</b>
+                                                laporan realisasi yang
+                                                {{ Auth::user()->role == 'OPD' ? 'ditolak' : 'menunggu konfirmasi' }}.
+                                                {{ Auth::user()->role == 'OPD' ? 'Silahkan ubah data tersebut dan kemudian perbarui datanya.' : '' }}
+                                            </span>
+                                        </div>
+                                        <div class="col-md-2 d-flex align-items-center pl-0">
+                                            <a href="{{ url('realisasi-intervensi-hewan') }}"
+                                                class="badge badge-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} float-right"><i
+                                                    class="fas fa-info-circle"></i>
+                                                Lihat
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                @endif
 
                 <div class="col-12">
                     <div class="card">
@@ -302,7 +322,7 @@
                                 <div class="col-12 col-sm-6 col-md-6">
                                     <div class="card">
                                         <div class="card-body">
-                                            <h5><b>Perencanaan Anggaran</b></h5>
+                                            <h5><b>Nilai Anggaran</b></h5>
                                             <hr>
                                             <div class="d-flex justify-content-between mt-2">
                                                 <p class="text-muted mb-0">Keong</p>
@@ -516,7 +536,7 @@
                                                 </div>
                                                 <div class="col-8 col-stats">
                                                     <div class="numbers">
-                                                        <p class="card-category">Hewan</p>
+                                                        <p class="card-category">Hewan Ternak</p>
                                                         <h4 class="card-title">{{ $lokasi['lokasiHewan'] }}</h4>
                                                     </div>
                                                 </div>
@@ -532,7 +552,7 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="card-head-row">
-                                <div class="card-title fw-bold">Total Hewan</div>
+                                <div class="card-title fw-bold">Total Hewan Ternak</div>
                                 {{-- <div class="card-tools">
                             @component('dashboard.components.buttons.export')
                             @endcomponent
@@ -743,7 +763,8 @@
                                             <th scope="row" colspan="2" class="text-center">Total</th>
                                             <td class="text-center">{{ $perencanaan }}</td>
                                             <td class="text-center">{{ $realisasi }}</td>
-                                            <td class="text-center">{{ round(($realisasi / $perencanaan) * 100, 2) }} %
+                                            <td class="text-center">
+                                                {{ $perencanaan == 0 ? 0 : round(($realisasi / $perencanaan) * 100, 2) }} %
                                             </td>
                                         </tr>
                                     @endif
@@ -789,7 +810,8 @@
                                             <th scope="row" colspan="2" class="text-center">Total</th>
                                             <td class="text-center">{{ $perencanaan }}</td>
                                             <td class="text-center">{{ $realisasi }}</td>
-                                            <td class="text-center">{{ round(($realisasi / $perencanaan) * 100, 2) }} %
+                                            <td class="text-center">
+                                                {{ $perencanaan == 0 ? 0 : round(($realisasi / $perencanaan) * 100, 2) }} %
                                             </td>
                                         </tr>
                                     @endif
@@ -833,7 +855,9 @@
                                             <th scope="row" colspan="2" class="text-center">Total</th>
                                             <td class="text-center">{{ $perencanaan }}</td>
                                             <td class="text-center">{{ $realisasi }}</td>
-                                            <td class="text-center">{{ round(($realisasi / $perencanaan) * 100, 2) }} %
+                                            <td class="text-center">
+                                                {{ $perencanaan == 0 ? 0 : round(($realisasi / $perencanaan) * 100, 2) }}
+                                                %
                                             </td>
                                         </tr>
                                     @endif
@@ -889,7 +913,7 @@
                                                 @if ($keong['perencanaan'] == 0)
                                                     -
                                                 @else
-                                                    {{ round(($keongPersentase + $manusiaPersentase + $hewanPersentase) / 3, 2) }}
+                                                    {{ round((($keong['realisasi'] + $tabelManusia[$loop->index]['realisasi'] + $tabelHewan[$loop->index]['realisasi']) / ($keong['perencanaan'] + $tabelManusia[$loop->index]['perencanaan'] + $tabelHewan[$loop->index]['perencanaan'])) * 100, 2) }}
                                                     %
                                                 @endif
 
@@ -905,7 +929,9 @@
                                             <th scope="row" colspan="2" class="text-center">Total</th>
                                             <td class="text-center">{{ $perencanaan }}</td>
                                             <td class="text-center">{{ $realisasi }}</td>
-                                            <td class="text-center">{{ round(($realisasi / $perencanaan) * 100, 2) }} %
+                                            <td class="text-center">
+                                                {{ $perencanaan == 0 ? 0 : round(($realisasi / $perencanaan) * 100, 2) }}
+                                                %
                                             </td>
                                         </tr>
                                     @endif
@@ -917,6 +943,12 @@
                 <div class="modal-footer">
                     @component('dashboard.components.buttons.close')
                     @endcomponent
+                    <form action="{{ url('/dashboard/export/intervensi/semua') }}" method="POST"
+                        id="form-export-intervensi">
+                        @csrf
+                        <button class="btn btn-primary" type="submit" name="tahun"
+                            value="{{ $_GET['tahun'] ?? '' }}"><i class="fas fa-file-download"></i> Export</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -966,7 +998,7 @@
                                         <tr class="text-center">
                                             <th scope="col" rowspan="2">No.</th>
                                             <th scope="col" rowspan="2">OPD</th>
-                                            <th scope="col" colspan="3">Perencanaan Anggaran</th>
+                                            <th scope="col" colspan="3">Nilai Anggaran</th>
                                             <th scope="col" colspan="3">Penggunaan Anggaran</th>
                                             <th scope="col" colspan="3">Persentase Penggunaan Anggaran</th>
                                             <th scope="col" colspan="3">Sisa Anggaran</th>
@@ -1103,7 +1135,7 @@
                                         <tr class="text-center">
                                             <th scope="col" rowspan="2">No.</th>
                                             <th scope="col" rowspan="2">OPD</th>
-                                            <th scope="col" colspan="3">Perencanaan Anggaran</th>
+                                            <th scope="col" colspan="3">Nilai Anggaran</th>
                                             <th scope="col" colspan="3">Penggunaan Anggaran</th>
                                             <th scope="col" colspan="3">Persentase Penggunaan Anggaran</th>
                                             <th scope="col" colspan="3">Sisa Anggaran</th>
@@ -1243,7 +1275,7 @@
                                         <tr class="text-center">
                                             <th scope="col" rowspan="2">No.</th>
                                             <th scope="col" rowspan="2">OPD</th>
-                                            <th scope="col" colspan="3">Perencanaan Anggaran</th>
+                                            <th scope="col" colspan="3">Nilai Anggaran</th>
                                             <th scope="col" colspan="3">Penggunaan Anggaran</th>
                                             <th scope="col" colspan="3">Persentase Penggunaan Anggaran</th>
                                             <th scope="col" colspan="3">Sisa Anggaran</th>
@@ -1381,7 +1413,7 @@
                                         <tr class="text-center">
                                             <th scope="col" rowspan="2">No.</th>
                                             <th scope="col" rowspan="2">OPD</th>
-                                            <th scope="col" colspan="3">Perencanaan Anggaran</th>
+                                            <th scope="col" colspan="3">Nilai Anggaran</th>
                                             <th scope="col" colspan="3">Penggunaan Anggaran</th>
                                             <th scope="col" colspan="3">Persentase Penggunaan Anggaran</th>
                                             <th scope="col" colspan="3">Sisa Anggaran</th>
@@ -1515,13 +1547,91 @@
                 <div class="modal-footer">
                     @component('dashboard.components.buttons.close')
                     @endcomponent
+                    <form action="{{ url('/dashboard/export/anggaran/semua') }}" method="POST"
+                        id="form-export-anggaran">
+                        @csrf
+                        <button class="btn btn-primary" type="submit" name="tahun"
+                            value="{{ $_GET['tahun'] ?? '' }}"><i class="fas fa-file-download"></i> Export</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+
+    <form action="" method="GET">
+        <div class="modal fade" id="modal-filter" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Filter Dashboard</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @component('dashboard.components.formElements.select',
+                            [
+                                'label' => 'Tahun',
+                                'id' => 'tahun',
+                                'name' => 'tahun',
+                                'class' => 'select2',
+                                'wajib' => '<sup class="text-danger">*</sup>',
+                            ])
+                            @slot('options')
+                                <option value="Semua">Semua</option>
+                                @foreach ($daftarTahun as $tahun)
+                                    <option value="{{ $tahun }}"
+                                        {{ ($_GET['tahun'] ?? '') == $tahun ? 'selected' : '' }}>
+                                        {{ $tahun }}</option>
+                                @endforeach
+                            @endslot
+                        @endcomponent
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-border" data-dismiss="modal">Keluar</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 @endsection
 
 @push('scripts')
+    <script>
+        $('#tab-semua').click(function() {
+            $('#form-export-intervensi').attr('action', "{{ url('/dashboard/export/intervensi/semua') }}");
+        })
+
+        $('#tab-keong').click(function() {
+            $('#form-export-intervensi').attr('action', "{{ url('/dashboard/export/intervensi/keong') }}");
+        })
+
+        $('#tab-manusia').click(function() {
+            $('#form-export-intervensi').attr('action', "{{ url('/dashboard/export/intervensi/manusia') }}");
+        })
+
+        $('#tab-hewan').click(function() {
+            $('#form-export-intervensi').attr('action', "{{ url('/dashboard/export/intervensi/hewan') }}");
+        })
+
+        $('#tab-anggaran-semua').click(function() {
+            $('#form-export-anggaran').attr('action', "{{ url('/dashboard/export/anggaran/semua') }}");
+        })
+
+        $('#tab-anggaran-keong').click(function() {
+            $('#form-export-anggaran').attr('action', "{{ url('/dashboard/export/anggaran/keong') }}");
+        })
+
+        $('#tab-anggaran-manusia').click(function() {
+            $('#form-export-anggaran').attr('action', "{{ url('/dashboard/export/anggaran/manusia') }}");
+        })
+
+        $('#tab-anggaran-hewan').click(function() {
+            $('#form-export-anggaran').attr('action', "{{ url('/dashboard/export/anggaran/hewan') }}");
+        })
+    </script>
+
     <script>
         Circles.create({
             id: 'realisasi-keong',
@@ -1571,10 +1681,10 @@
         Circles.create({
             id: 'realisasi-total',
             radius: 45,
-            value: "{{ round((($intervensi['realisasiKeong'] + $intervensi['realisasiManusia'] + $intervensi['realisasiHewan']) / ($intervensi['perencanaanKeong'] + $intervensi['perencanaanHewan'] + $intervensi['perencanaanManusia'])) * 100, 2) }}",
+            value: "{{ $intervensi['persentaseTotal'] }}",
             maxValue: 100,
             width: 7,
-            text: "{{ round((($intervensi['realisasiKeong'] + $intervensi['realisasiManusia'] + $intervensi['realisasiHewan']) / ($intervensi['perencanaanKeong'] + $intervensi['perencanaanHewan'] + $intervensi['perencanaanManusia'])) * 100, 2) . '%' }}",
+            text: "{{ $intervensi['persentaseTotal'] . '%' }}",
             colors: ['#f1f1f1', '#2BB930'],
             duration: 400,
             wrpClass: 'circles-wrp',
@@ -1656,6 +1766,14 @@
             textClass: 'circles-text',
             styleWrapper: true,
             styleText: true
+        })
+    </script>
+
+    <script>
+        $('.select2').select2({
+            placeholder: "Semua",
+            theme: "bootstrap",
+            width: '100%'
         })
     </script>
 

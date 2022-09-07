@@ -246,7 +246,7 @@ class LokasiHewanController extends Controller
             $unique = array_unique($request->hewan_id);
             $duplicates = array_diff_assoc($request->hewan_id, $unique);
             foreach ($duplicates as $key => $item) {
-                $error['hewan_id' . '.' . $key] = ['Hewan Ternak Tidak Boleh Sama'];
+                $error['hewan_id' . '.' . $key] = ['Hewan Ternak Tidak Boleh Sama, Silahkan Hapus Salah 1 Data Hewan yang Sama'];
             }
 
             return response()->json(
@@ -374,7 +374,7 @@ class LokasiHewanController extends Controller
             $unique = array_unique($request->hewan_id);
             $duplicates = array_diff_assoc($request->hewan_id, $unique);
             foreach ($duplicates as $key => $item) {
-                $error['hewan_id' . '.' . $key] = ['Hewan Ternak Tidak Boleh Sama'];
+                $error['hewan_id' . '.' . $key] = ['Hewan Ternak Tidak Boleh Sama, Silahkan Hapus Salah 1 Data Hewan yang Sama'];
             }
 
             return response()->json(

@@ -24,7 +24,7 @@ class PengaturanAkunController extends Controller
             $request->all(),
             [
                 'username' => ['required', Rule::unique('users')->ignore($user->id)->withoutTrashed()],
-                'nama' => $request->role != "OPD" ? 'required' : 'nullable',
+                'nama' => $user->role != "OPD" ? 'required' : 'nullable',
             ],
             [
                 'username.required' => 'Username tidak boleh kosong',

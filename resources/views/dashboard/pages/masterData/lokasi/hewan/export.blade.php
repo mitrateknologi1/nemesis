@@ -16,10 +16,9 @@
                 <th scope="col" align="center" rowspan="2"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">Total Hewan</th>
                 <th scope="col" align="center" colspan="{{ count($daftarHewan) }}"
-                    style="vertical-align: center;border: 1px solid black;font-weight : bold">Jumlah Hewan Berdasarkan
-                    Nama</th>
+                    style="vertical-align: center;border: 1px solid black;font-weight : bold">Jumlah Hewan Ternak</th>
                 <th scope="col" align="center" rowspan="2"
-                    style="vertical-align: center;border: 1px solid black;font-weight : bold">Pemilik</th>
+                    style="vertical-align: center;border: 1px solid black;font-weight : bold">Pemilik Lokasi</th>
             </tr>
             <tr align="center" style="vertical-align: center;border: 1px solid black;font-weight : bold">
                 @foreach ($daftarHewan as $hewan)

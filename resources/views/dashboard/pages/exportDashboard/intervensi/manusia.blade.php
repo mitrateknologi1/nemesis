@@ -1,3 +1,22 @@
+<table>
+    <tr>
+        <td colspan="3">Intervensi :</td>
+        <td>Manusia</td>
+    </tr>
+    <tr>
+        <td colspan="3">Tahun :</td>
+        <td>
+            @php
+                if ($tahun != '' && $tahun != 'Semua') {
+                    echo $tahun;
+                } else {
+                    echo 'Semua';
+                }
+            @endphp
+        </td>
+    </tr>
+</table>
+
 <table class="table table-bordered mt-3">
     <thead>
         <tr>

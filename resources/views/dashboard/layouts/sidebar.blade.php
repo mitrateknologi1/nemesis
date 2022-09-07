@@ -25,7 +25,7 @@
                          <ul class="nav nav-collapse">
                              <li id="li-keong">
                                  <a href="{{ url('rencana-intervensi-keong') }}">
-                                     <span class="sub-item">Keong</span>
+                                     <span class="sub-item">Habitat Keong</span>
                                  </a>
                              </li>
                              <li id="li-manusia">
@@ -51,7 +51,7 @@
                          <ul class="nav nav-collapse">
                              <li id="li-keong-2">
                                  <a href="{{ url('realisasi-intervensi-keong') }}">
-                                     <span class="sub-item">Keong</span>
+                                     <span class="sub-item">Habitat Keong</span>
                                  </a>
                              </li>
                              <li id="li-manusia-2">

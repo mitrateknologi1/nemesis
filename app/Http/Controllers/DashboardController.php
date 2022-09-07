@@ -849,13 +849,13 @@ class DashboardController extends Controller
 
         $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
 
-        return Excel::download(new IntervensiExport($tipe, $tabelKeong, $tabelManusia, $tabelHewan), "Export Intervensi" . "-" . $tipe . '-' . $tanggal . "-" . rand(1, 9999) . '.xlsx');
+        return Excel::download(new IntervensiExport($tipe, $tabelKeong, $tabelManusia, $tabelHewan, $tahun), "Export Intervensi" . "-" . $tipe . '-' . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 
     public function exportAnggaran(Request $request)
     {
         $tipe = $request->tipe;
-        $tahun = $request->tahun_id;
+        $tahun = $request->tahun;
         if (!in_array($tipe, ['semua', 'keong', 'manusia', 'hewan'])) {
             return redirect()->back();
         }
@@ -867,6 +867,6 @@ class DashboardController extends Controller
 
         $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
 
-        return Excel::download(new AnggaranIntervensiExport($tipe, $tabelAnggaranKeong, $tabelAnggaranManusia, $tabelAnggaranHewan, $tabelAnggaranSemua), "Export Anggaran Intervensi" . "-" . $tipe . '-' . $tanggal . "-" . rand(1, 9999) . '.xlsx');
+        return Excel::download(new AnggaranIntervensiExport($tipe, $tabelAnggaranKeong, $tabelAnggaranManusia, $tabelAnggaranHewan, $tabelAnggaranSemua, $tahun), "Export Anggaran Intervensi" . "-" . $tipe . '-' . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 }

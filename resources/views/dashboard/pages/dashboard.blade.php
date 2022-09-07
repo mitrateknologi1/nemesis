@@ -60,7 +60,7 @@
                                     <div class="row">
                                         <div class="col-10 pr-0">
                                             <span>
-                                                <b>Perencanaan Keong:</b> Terdapat
+                                                <b>Perencanaan Habitat Keong:</b> Terdapat
                                                 <b>{{ $totalMenungguKonfirmasiPerencanaanKeong }}</b>
                                                 perencanaan yang
                                                 {{ Auth::user()->role == 'OPD' ? 'ditolak' : 'menunggu konfirmasi' }}.
@@ -103,7 +103,7 @@
                                     <div class="row">
                                         <div class="col-md-10 pr-0">
                                             <span>
-                                                <b>Perencanaan Hewan:</b> Terdapat
+                                                <b>Perencanaan Lokasi Hewan Ternak:</b> Terdapat
                                                 <b>{{ $totalMenungguKonfirmasiPerencanaanHewan }}</b>
                                                 perencanaan yang
                                                 {{ Auth::user()->role == 'OPD' ? 'ditolak' : 'menunggu konfirmasi' }}.
@@ -124,7 +124,7 @@
                                     <div class="row">
                                         <div class="col-md-10 pr-0">
                                             <span>
-                                                <b>Realisasi Keong:</b> Terdapat
+                                                <b>Realisasi Habitat Keong:</b> Terdapat
                                                 <b>{{ $totalMenungguKonfirmasiRealisasiKeong }}</b>
                                                 laporan realisasi yang
                                                 {{ Auth::user()->role == 'OPD' ? 'ditolak' : 'menunggu konfirmasi' }}.
@@ -166,7 +166,7 @@
                                     <div class="row">
                                         <div class="col-md-10 pr-0">
                                             <span>
-                                                <b>Realisasi Hewan:</b> Terdapat
+                                                <b>Realisasi Lokasi Hewan Ternak:</b> Terdapat
                                                 <b>{{ $totalMenungguKonfirmasiRealisasiHewan }}</b>
                                                 laporan realisasi yang
                                                 {{ Auth::user()->role == 'OPD' ? 'ditolak' : 'menunggu konfirmasi' }}.
@@ -213,7 +213,7 @@
                                             <h5><b>Perencanaan</b></h5>
                                             <hr>
                                             <div class="d-flex justify-content-between mt-2">
-                                                <p class="text-muted mb-0">Keong</p>
+                                                <p class="text-muted mb-0">Habitat Keong</p>
                                                 <p class="text-muted mb-0">{{ $intervensi['perencanaanKeong'] }}</p>
                                             </div>
                                             <div class="d-flex justify-content-between mt-2">
@@ -221,7 +221,7 @@
                                                 <p class="text-muted mb-0">{{ $intervensi['perencanaanManusia'] }}</p>
                                             </div>
                                             <div class="d-flex justify-content-between mt-2">
-                                                <p class="text-muted mb-0">Hewan</p>
+                                                <p class="text-muted mb-0">Lokasi Hewan Ternak</p>
                                                 <p class="text-muted mb-0">{{ $intervensi['perencanaanHewan'] }}</p>
                                             </div>
                                             <hr>
@@ -240,7 +240,7 @@
                                             <h5><b>Realisasi</b></h5>
                                             <hr>
                                             <div class="d-flex justify-content-between mt-2">
-                                                <p class="text-muted mb-0">Keong</p>
+                                                <p class="text-muted mb-0">Habitat Keong</p>
                                                 <p class="text-muted mb-0">{{ $intervensi['realisasiKeong'] }}</p>
                                             </div>
                                             <div class="d-flex justify-content-between mt-2">
@@ -248,7 +248,7 @@
                                                 <p class="text-muted mb-0">{{ $intervensi['realisasiManusia'] }}</p>
                                             </div>
                                             <div class="d-flex justify-content-between mt-2">
-                                                <p class="text-muted mb-0">Hewan</p>
+                                                <p class="text-muted mb-0">Lokasi Hewan Ternak</p>
                                                 <p class="text-muted mb-0">{{ $intervensi['realisasiHewan'] }}</p>
                                             </div>
                                             <hr>
@@ -270,7 +270,7 @@
                                                 <div class="d-flex justify-content-between mt-2">
                                                     <div class="px-2 pb-2 pb-md-0 text-center">
                                                         <div id="realisasi-keong"></div>
-                                                        <h6 class="fw-bold mt-3 mb-0">Keong</h6>
+                                                        <h6 class="fw-bold mt-3 mb-0">Habitat Keong</h6>
                                                     </div>
                                                 </div>
                                                 <div class="d-flex justify-content-between mt-2">
@@ -282,7 +282,7 @@
                                                 <div class="d-flex justify-content-between mt-2">
                                                     <div class="px-2 pb-2 pb-md-0 text-center">
                                                         <div id="realisasi-hewan"></div>
-                                                        <h6 class="fw-bold mt-3 mb-0">Hewan</h6>
+                                                        <h6 class="fw-bold mt-3 mb-0">Lokasi Hewan Ternak</h6>
                                                     </div>
                                                 </div>
                                                 <div class="d-flex justify-content-between mt-2">
@@ -325,7 +325,7 @@
                                             <h5><b>Nilai Anggaran</b></h5>
                                             <hr>
                                             <div class="d-flex justify-content-between mt-2">
-                                                <p class="text-muted mb-0">Keong</p>
+                                                <p class="text-muted mb-0">Habitat Keong</p>
                                                 <p class="text-muted mb-0">Rp.
                                                     {{ number_format($anggaranPerencanaan['anggaranKeong'], 0, ',', '.') }}
                                                 </p>
@@ -337,7 +337,7 @@
                                                 </p>
                                             </div>
                                             <div class="d-flex justify-content-between mt-2">
-                                                <p class="text-muted mb-0">Hewan</p>
+                                                <p class="text-muted mb-0">Lokasi Hewan Ternak</p>
                                                 <p class="text-muted mb-0">Rp.
                                                     {{ number_format($anggaranPerencanaan['anggaranHewan'], 0, ',', '.') }}
                                                 </p>
@@ -361,7 +361,7 @@
                                             <h5><b>Penggunaan Anggaran</b></h5>
                                             <hr>
                                             <div class="d-flex justify-content-between mt-2">
-                                                <p class="text-muted mb-0">Keong</p>
+                                                <p class="text-muted mb-0">Habitat Keong</p>
                                                 <p class="text-muted mb-0">Rp.
                                                     {{ number_format($penggunaanAnggaran['penggunaanKeong'], 0, ',', '.') }}
                                                 </p>
@@ -373,7 +373,7 @@
                                                 </p>
                                             </div>
                                             <div class="d-flex justify-content-between mt-2">
-                                                <p class="text-muted mb-0">Hewan</p>
+                                                <p class="text-muted mb-0">Lokasi Hewan Ternak</p>
                                                 <p class="text-muted mb-0">Rp.
                                                     {{ number_format($penggunaanAnggaran['penggunaanHewan'], 0, ',', '.') }}
                                                 </p>
@@ -403,7 +403,7 @@
                                                 <div class="mt-2 col-4">
                                                     <div class="px-2 pb-2 pb-md-0 text-center">
                                                         <div id="penggunaan-keong"></div>
-                                                        <h6 class="fw-bold mt-3 mb-0">Keong <br>
+                                                        <h6 class="fw-bold mt-3 mb-0">Habitat Keong <br>
                                                             (Rp.
                                                             {{ number_format($penggunaanAnggaran['penggunaanKeong'], 0, ',', '.') }}
                                                             /
@@ -427,7 +427,7 @@
                                                 <div class="mt-2 col-4">
                                                     <div class="px-2 pb-2 pb-md-0 text-center">
                                                         <div id="penggunaan-hewan"></div>
-                                                        <h6 class="fw-bold mt-3 mb-0">Hewan <br>
+                                                        <h6 class="fw-bold mt-3 mb-0">Lokasi Hewan Ternak <br>
                                                             (Rp.
                                                             {{ number_format($penggunaanAnggaran['penggunaanHewan'], 0, ',', '.') }}
                                                             /
@@ -536,7 +536,7 @@
                                                 </div>
                                                 <div class="col-8 col-stats">
                                                     <div class="numbers">
-                                                        <p class="card-category">Hewan Ternak</p>
+                                                        <p class="card-category">Lokasi Hewan Ternak</p>
                                                         <h4 class="card-title">{{ $lokasi['lokasiHewan'] }}</h4>
                                                     </div>
                                                 </div>
@@ -713,7 +713,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link " id="tab-keong" data-toggle="pill" href="#content-keong" role="tab"
-                                aria-controls="content-keong" aria-selected="true">Keong</a>
+                                aria-controls="content-keong" aria-selected="true">Habitat Keong</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="tab-manusia" data-toggle="pill" href="#content-manusia"
@@ -721,7 +721,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="tab-hewan" data-toggle="pill" href="#content-hewan" role="tab"
-                                aria-controls="content-hewan" aria-selected="false">Hewan</a>
+                                aria-controls="content-hewan" aria-selected="false">Lokasi Hewan Ternak</a>
                         </li>
 
                     </ul>
@@ -977,7 +977,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="tab-anggaran-keong" data-toggle="pill" href="#anggaran-keong"
-                                role="tab" aria-controls="anggaran-keong" aria-selected="true">Keong</a>
+                                role="tab" aria-controls="anggaran-keong" aria-selected="true">Habitat Keong</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="tab-anggaran-manusia" data-toggle="pill" href="#anggaran-manusia"
@@ -985,7 +985,8 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="tab-anggaran-hewan" data-toggle="pill" href="#anggaran-hewan"
-                                role="tab" aria-controls="anggaran-hewan" aria-selected="false">Hewan</a>
+                                role="tab" aria-controls="anggaran-hewan" aria-selected="false">Lokasi Hewan
+                                Ternak</a>
                         </li>
 
                     </ul>

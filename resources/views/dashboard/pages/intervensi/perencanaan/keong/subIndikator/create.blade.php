@@ -1,11 +1,11 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Tambah Perencanaan Intervensi Keong
+    Tambah Perencanaan Intervensi Habitat Keong
 @endsection
 
 @section('titlePanelHeader')
-    Tambah Perencanaan Intervensi Keong
+    Tambah Perencanaan Intervensi Habitat Keong
 @endsection
 
 @section('subTitlePanelHeader')
@@ -23,7 +23,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Form Perencanaan Intervensi Keong</div>
+                        <div class="card-title">Form Perencanaan Intervensi Habitat Keong</div>
                     </div>
                 </div>
                 <div class="card-body pt-1">

@@ -23,4 +23,9 @@ class LokasiPerencanaanKeong extends Model
     {
         return $this->belongsTo(PerencanaanKeong::class);
     }
+
+    public function realisasiKeong()
+    {
+        return $this->belongsTo(RealisasiKeong::class);
+    }
 }

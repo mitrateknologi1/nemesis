@@ -11,6 +11,7 @@ use Illuminate\Support\Carbon;
 use App\Models\OPDTerkaitKeong;
 use Illuminate\Validation\Rule;
 use App\Models\PerencanaanKeong;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -32,9 +33,9 @@ class PerencanaanKeongController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function dataPerencanaan()
     {
-        $perencanaanKeong = PerencanaanKeong::with('opd', 'lokasiPerencanaanKeong')
+        $query = PerencanaanKeong::with('opd', 'lokasiPerencanaanKeong')
             ->where(function ($query) {
                 if (Auth::user()->role == 'OPD') {
                     $query->where('opd_id', Auth::user()->opd_id);
@@ -43,13 +44,22 @@ class PerencanaanKeongController extends Controller
                         $q->where('opd_id', Auth::user()->opd_id);
                     });
                 }
-            })
-            ->latest();
+            })->latest();
+        return $query;
+    }
+
+    public function index(Request $request)
+    {
+        $perencanaanKeong = $this->dataPerencanaan();
 
         if ($request->ajax()) {
             $data = $perencanaanKeong
                 // filtering
                 ->where(function ($query) use ($request) {
+                    if ($request->tahun_filter && $request->tahun_filter != 'semua') {
+                        $query->whereYear('created_at', $request->tahun_filter);
+                    }
+
                     if ($request->opd_filter && $request->opd_filter != 'semua') {
                         $query->where('opd_id', $request->opd_filter);
                     }
@@ -140,7 +150,14 @@ class PerencanaanKeongController extends Controller
         } else {
             $totalMenungguKonfirmasiPerencanaanKeong = PerencanaanKeong::where('status', 0)->count();
         }
-        return view('dashboard.pages.intervensi.perencanaan.keong.subIndikator.index', ['perencanaanKeong' => $perencanaanKeong, 'totalMenungguKonfirmasiPerencanaanKeong' => $totalMenungguKonfirmasiPerencanaanKeong]);
+
+        $tahun = $this->dataPerencanaan()->select(DB::raw('YEAR(created_at) year'))
+            ->groupBy('year')
+            ->pluck('year');
+
+        $perencanaanKeong = $this->dataPerencanaan()->groupBy('opd_id')->get();
+
+        return view('dashboard.pages.intervensi.perencanaan.keong.subIndikator.index', ['perencanaanKeong' => $perencanaanKeong, 'totalMenungguKonfirmasiPerencanaanKeong' => $totalMenungguKonfirmasiPerencanaanKeong, 'tahun' => $tahun]);
     }
 
     /**
@@ -549,6 +566,6 @@ class PerencanaanKeongController extends Controller
 
         $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
 
-        return Excel::download(new PerencanaanKeongExport($dataPerencanaan), "Export Data Perencanaan Keong" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
+        return Excel::download(new PerencanaanKeongExport($dataPerencanaan), "Export Data Perencanaan Habitat Keong" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 }

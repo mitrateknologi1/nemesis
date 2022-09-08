@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\RealisasiKeong;
 use App\Models\OPDTerkaitKeong;
 use App\Models\PerencanaanKeong;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -24,9 +25,9 @@ use App\Exports\HasilRealisasiKeongExport;
 
 class RealisasiKeongController extends Controller
 {
-    public function index(Request $request)
+    public function dataPerencanaan()
     {
-        $realisasiKeong = PerencanaanKeong::with('opd', 'lokasiPerencanaanKeong', 'realisasiKeong')
+        $query = PerencanaanKeong::with('opd', 'lokasiPerencanaanKeong', 'realisasiKeong')
             ->where('status', 1)
             ->where(function ($query) {
                 if (Auth::user()->role == 'OPD') {
@@ -38,16 +39,26 @@ class RealisasiKeongController extends Controller
                 }
             })
             ->latest();
+        return $query;
+    }
+
+    public function index(Request $request)
+    {
+        $realisasiKeong = $this->dataPerencanaan();
+
         if ($request->ajax()) {
             $data = $realisasiKeong
                 // filtering
                 ->where(function ($query) use ($request) {
+                    if ($request->tahun_filter && $request->tahun_filter != 'semua') {
+                        $query->whereYear('created_at', $request->tahun_filter);
+                    }
+
                     if ($request->opd_filter && $request->opd_filter != 'semua') {
                         $query->where('opd_id', $request->opd_filter);
                     }
 
                     if ($request->status_filter && $request->status_filter != 'semua') {
-
                         if ($request->status_filter == 'selesai') {
                             $query->whereHas('realisasiKeong', function ($query2) use ($request) {
                                 $query2->where('status', 1);
@@ -93,7 +104,21 @@ class RealisasiKeongController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
 
-                ->addColumn('status', function ($row) {
+                ->addColumn('penggunaan_anggaran', function ($row) {
+                    $penggunaanAnggaran = 0;
+                    foreach ($row->realisasiKeong->where('status', 1) as $item) {
+                        $penggunaanAnggaran += $item->penggunaan_anggaran;
+                    }
+                    return $penggunaanAnggaran;
+                })
+
+                ->addColumn('sisa_anggaran', function ($row) {
+                    $penggunaanAnggaran = 0;
+                    foreach ($row->realisasiKeong->where('status', 1) as $item) {
+                        $penggunaanAnggaran += $item->penggunaan_anggaran;
+                    }
+                    $sisaAnggaran = $row->nilai_pembiayaan - $penggunaanAnggaran;
+                    return $sisaAnggaran;
                 })
 
                 ->addColumn('progress', function ($row) {
@@ -162,7 +187,14 @@ class RealisasiKeongController extends Controller
         } else {
             $totalMenungguKonfirmasiRealisasiKeong = RealisasiKeong::where('status', 0)->count();
         }
-        return view('dashboard.pages.intervensi.realisasi.keong.subIndikator.index', ['realisasiKeong' => $realisasiKeong, 'totalMenungguKonfirmasiRealisasiKeong' => $totalMenungguKonfirmasiRealisasiKeong]);
+
+        $tahun = $this->dataPerencanaan()->select(DB::raw('YEAR(created_at) year'))
+            ->groupBy('year')
+            ->pluck('year');
+
+        $realisasiKeong = $this->dataPerencanaan()->groupBy('opd_id')->get();
+
+        return view('dashboard.pages.intervensi.realisasi.keong.subIndikator.index', ['realisasiKeong' => $realisasiKeong, 'totalMenungguKonfirmasiRealisasiKeong' => $totalMenungguKonfirmasiRealisasiKeong, 'tahun' => $tahun]);
     }
 
     public function tabelLaporan(Request $request)
@@ -766,8 +798,7 @@ class RealisasiKeongController extends Controller
             ->pluck('lokasi_keong_id')
             ->toArray();
 
-        $dataHabitatKeong = LokasiKeong::with('listIndikator', 'desa')->whereIn('id', $habitatKeong)
-            ->latest();
+        $dataHabitatKeong = LokasiKeong::with('listIndikator', 'desa')->whereIn('id', $habitatKeong);
 
         if ($request->ajax()) {
             $data = $dataHabitatKeong
@@ -776,7 +807,15 @@ class RealisasiKeongController extends Controller
                     if ($request->opd_filter && $request->opd_filter != 'semua') {
                         $query->whereHas('listIndikator', function ($query2) use ($request) {
                             $query2->whereHas('perencanaanKeong', function ($query3) use ($request) {
-                                $query3->where('opd_id', $request->opd_filter);
+                                $query3->where(function ($query4) use ($request) {
+                                    $query4->where('opd_id', $request->opd_filter);
+                                    $query4->orWhereHas('opdTerkaitKeong', function ($query5) use ($request) {
+                                        $query5->where('opd_id', $request->opd_filter);
+                                    });
+                                });
+                                if ($request->tahun_filter && $request->tahun_filter != 'semua') {
+                                    $query3->whereYear('created_at', $request->tahun_filter);
+                                }
                             });
                         });
                     }
@@ -785,6 +824,17 @@ class RealisasiKeongController extends Controller
                         $query->whereHas('listIndikator', function ($query2) use ($request) {
                             $query2->whereHas('perencanaanKeong', function ($query3) use ($request) {
                                 $query3->where('id', $request->indikator_filter);
+                                if ($request->tahun_filter && $request->tahun_filter != 'semua') {
+                                    $query3->whereYear('created_at', $request->tahun_filter);
+                                }
+                            });
+                        });
+                    }
+
+                    if ($request->tahun_filter && $request->tahun_filter != 'semua') {
+                        $query->whereHas('listIndikator', function ($query2) use ($request) {
+                            $query2->whereHas('perencanaanKeong', function ($query3) use ($request) {
+                                $query3->whereYear('created_at', $request->tahun_filter);
                             });
                         });
                     }
@@ -798,19 +848,56 @@ class RealisasiKeongController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
 
-                ->addColumn('list_indikator', function ($row) {
+                ->addColumn('list_indikator', function ($row) use ($request) {
                     $list = '<ol class="mb-0">';
                     foreach ($row->listIndikator as $row2) {
-                        $list .= '<li>' . $row2->perencanaanKeong->sub_indikator . '</li>';
+                        if ($request->tahun_filter && $request->tahun_filter != 'semua') {
+                            if (Carbon::parse($row2->perencanaanKeong->created_at)->format('Y') == $request->tahun_filter) {
+                                $list .= '<li>' . $row2->perencanaanKeong->sub_indikator . '</li>';
+                            }
+                        } else {
+                            $list .= '<li>' . $row2->perencanaanKeong->sub_indikator . '</li>';
+                        }
                     }
                     $list .= '</ol>';
                     return $list;
                 })
 
-                ->addColumn('list_opd', function ($row) {
+                ->addColumn('list_opd', function ($row) use ($request) {
                     $list = '<ol class="mb-0">';
                     foreach ($row->listIndikator as $row2) {
-                        $list .= '<li>' . $row2->perencanaanKeong->opd->nama . '</li>';
+                        if ($request->tahun_filter && $request->tahun_filter != 'semua') {
+                            if (Carbon::parse($row2->perencanaanKeong->created_at)->format('Y') == $request->tahun_filter) {
+                                $list .= '<li class="font-weight-bold">' . $row2->perencanaanKeong->opd->nama . '</li>';
+                                if ($row2->perencanaanKeong->opdTerkaitKeong) {
+                                    foreach ($row2->perencanaanKeong->opdTerkaitKeong as $row3) {
+                                        $list .= '<p class="p-0 m-0"> -' . $row3->opd->nama . '</p>';
+                                    }
+                                }
+                            }
+                        } else {
+                            $list .= '<li class="font-weight-bold">' . $row2->perencanaanKeong->opd->nama . '</li>';
+                            if ($row2->perencanaanKeong->opdTerkaitKeong) {
+                                foreach ($row2->perencanaanKeong->opdTerkaitKeong as $row3) {
+                                    $list .= '<p class="p-0 m-0"> -' . $row3->opd->nama . '</p>';
+                                }
+                            }
+                        }
+                    }
+                    $list .= '</ol>';
+                    return $list;
+                })
+
+                ->addColumn('tanggal_intervensi', function ($row) use ($request) {
+                    $list = '<ol class="mb-0">';
+                    foreach ($row->listIndikator as $row2) {
+                        if ($request->tahun_filter && $request->tahun_filter != 'semua') {
+                            if (Carbon::parse($row2->realisasiKeong->created_at)->format('Y') == $request->tahun_filter) {
+                                $list .= '<li>' . Carbon::parse($row2->realisasiKeong->created_at)->translatedFormat('d F Y') . '</li>';
+                            }
+                        } else {
+                            $list .= '<li>' . Carbon::parse($row2->realisasiKeong->created_at)->translatedFormat('d F Y') . '</li>';
+                        }
                     }
                     $list .= '</ol>';
                     return $list;
@@ -818,7 +905,8 @@ class RealisasiKeongController extends Controller
 
                 ->rawColumns([
                     'list_indikator',
-                    'list_opd'
+                    'list_opd',
+                    'tanggal_intervensi'
                 ])
                 ->make(true);
         }
@@ -830,7 +918,9 @@ class RealisasiKeongController extends Controller
             foreach ($item->listIndikator as $row) {
                 $dataSubIndikator = [
                     'id' => $row->perencanaanKeong->id,
-                    'sub_indikator' => $row->perencanaanKeong->sub_indikator
+                    'sub_indikator' => $row->perencanaanKeong->sub_indikator,
+                    'tahun' => $row->perencanaanKeong->created_at->format('Y'),
+                    'created_at' => $row->perencanaanKeong->created_at
                 ];
                 $dataOpd = [
                     'id' => $row->perencanaanKeong->opd->id,
@@ -838,13 +928,25 @@ class RealisasiKeongController extends Controller
                 ];
                 array_push($filterSubIndikator, $dataSubIndikator);
                 array_push($filterOpd, $dataOpd);
+                if ($row->perencanaanKeong->opdTerkaitKeong) {
+                    foreach ($row->perencanaanKeong->opdTerkaitKeong as $row2) {
+                        $dataOpdTerkait = [
+                            'id' => $row2->opd->id,
+                            'opd' => $row2->opd->nama
+                        ];
+                        array_push($filterOpd, $dataOpdTerkait);
+                    }
+                }
             }
         }
 
+        array_multisort(array_column($filterSubIndikator, 'created_at'), SORT_DESC, $filterSubIndikator);
+
         $filterSubIndikator = $this->unique_multidim_array($filterSubIndikator, 'id');
         $filterOpd = $this->unique_multidim_array($filterOpd, 'id');
+        $filterTahun = $this->unique_multidim_array($filterSubIndikator, 'tahun');
 
-        return view('dashboard.pages.hasilRealisasi.keong.index', ['filterSubIndikator' => $filterSubIndikator, 'filterOpd' => $filterOpd]);
+        return view('dashboard.pages.hasilRealisasi.keong.index', ['filterSubIndikator' => $filterSubIndikator, 'filterOpd' => $filterOpd, 'filterTahun' => $filterTahun]);
     }
 
     public function export()
@@ -861,11 +963,11 @@ class RealisasiKeongController extends Controller
                 }
             })
             ->latest()->get();
-        // return view('dashboard.pages.intervensi.realisasi.keong.subIndikator.export', ['dataPerencanaan' => $dataPerencanaan]);
+        // return view('dashboard.pages.intervensi.realisasi.keong.subIndikator.export', ['dataRealisasi' => $dataRealisasi]);
 
         $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
 
-        return Excel::download(new RealisasiKeongExport($dataRealisasi), "Export Data Realisasi Keong" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
+        return Excel::download(new RealisasiKeongExport($dataRealisasi), "Export Data Realisasi Habitat Keong" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 
     public function exportHasilRealisasi()
@@ -875,8 +977,7 @@ class RealisasiKeongController extends Controller
             ->pluck('lokasi_keong_id')
             ->toArray();
 
-        $dataRealisasi = LokasiKeong::with('listIndikator', 'desa')->whereIn('id', $habitatKeong)
-            ->latest()->get();
+        $dataRealisasi = LokasiKeong::with('listIndikator', 'desa')->whereIn('id', $habitatKeong)->get();
         // return view('dashboard.pages.hasilRealisasi.keong.export', ['dataRealisasi' => $dataRealisasi]);
 
         $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');

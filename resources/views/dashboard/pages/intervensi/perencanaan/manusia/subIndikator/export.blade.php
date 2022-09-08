@@ -12,7 +12,7 @@
                 <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">OPD Terkait</th>
                 <th scope="col" align="center"
-                    style="vertical-align: center;border: 1px solid black;font-weight : bold">Pembiayaan</th>
+                    style="vertical-align: center;border: 1px solid black;font-weight : bold">Rencana Anggaran</th>
                 <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">Sumber Dana</th>
                 <th scope="col" align="center"

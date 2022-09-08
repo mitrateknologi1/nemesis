@@ -1,11 +1,11 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Perencanaan Intervensi Keong
+    Perencanaan Intervensi Habitat Keong
 @endsection
 
 @section('titlePanelHeader')
-    Perencanaan Intervensi Keong
+    Perencanaan Intervensi Habitat Keong
 @endsection
 
 @section('subTitlePanelHeader')
@@ -45,7 +45,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Data Perencanaan Intervensi Keong</div>
+                        <div class="card-title">Data Perencanaan Intervensi Habitat Keong</div>
                         <div class="card-tools">
                             <form action="{{ url('export-perencanaan-keong') }}" method="POST">
                                 @csrf
@@ -60,7 +60,23 @@
                 </div>
                 <div class="card-body pt-3">
                     <div class="row mb-4">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            @component('dashboard.components.formElements.select',
+                                [
+                                    'label' => 'Tahun',
+                                    'id' => 'tahun-filter',
+                                    'name' => 'tahun_filter',
+                                    'class' => 'select2 filter',
+                                ])
+                                @slot('options')
+                                    <option value="semua">Semua</option>
+                                    @foreach ($tahun as $item)
+                                        <option value="{{ $item }}">{{ $item }}</option>
+                                    @endforeach
+                                @endslot
+                            @endcomponent
+                        </div>
+                        <div class="col-md-4">
                             @component('dashboard.components.formElements.select',
                                 [
                                     'label' => 'OPD',
@@ -70,13 +86,13 @@
                                 ])
                                 @slot('options')
                                     <option value="semua">Semua</option>
-                                    @foreach ($perencanaanKeong->groupBy('opd_id')->get() as $item)
+                                    @foreach ($perencanaanKeong as $item)
                                         <option value="{{ $item->opd_id }}">{{ $item->opd->nama }}</option>
                                     @endforeach
                                 @endslot
                             @endcomponent
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             @component('dashboard.components.formElements.select',
                                 [
                                     'label' => 'Status',
@@ -104,7 +120,7 @@
                                             <th>Tanggal Pembuatan</th>
                                             <th>Sub Indikator</th>
                                             <th>OPD</th>
-                                            <th>Pembiayaan</th>
+                                            <th>Rencana Anggaran</th>
                                             {{-- <th>Jumlah Lokasi</th> --}}
                                             <th>Status</th>
                                             <th>Aksi</th>
@@ -143,6 +159,7 @@
             ajax: {
                 url: "{{ route('rencana-intervensi-keong.index') }}",
                 data: function(d) {
+                    d.tahun_filter = $('#tahun-filter').val();
                     d.opd_filter = $('#opd-filter').val();
                     d.status_filter = $('#status-filter').val();
                     d.search_filter = $('input[type="search"]').val();

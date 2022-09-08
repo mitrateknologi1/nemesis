@@ -1,11 +1,11 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Ubah Laporan Realisasi Intervensi Keong
+    Ubah Laporan Realisasi Intervensi Habitat Keong
 @endsection
 
 @section('titlePanelHeader')
-    Ubah Laporan Realisasi Intervensi Keong | <span style="text-decoration: underline">Laporan Tanggal:
+    Ubah Laporan Realisasi Intervensi Habitat Keong | <span style="text-decoration: underline">Laporan Tanggal:
         {{ Carbon\Carbon::parse($realisasiIntervensiKeong->created_at)->translatedFormat('j F Y') }}</span>
 @endsection
 
@@ -34,7 +34,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Form Laporan Realisasi Intervensi Keong</div>
+                        <div class="card-title">Form Laporan Realisasi Intervensi Habitat Keong</div>
                     </div>
                 </div>
                 <div class="card-body pt-1">

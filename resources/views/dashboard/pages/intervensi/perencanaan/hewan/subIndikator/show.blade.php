@@ -1,11 +1,11 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Perencanaan Intervensi Hewan
+    Perencanaan Intervensi Lokasi Hewan Ternak
 @endsection
 
 @section('titlePanelHeader')
-    Detail Perencanaan Intervensi Hewan
+    Detail Perencanaan Intervensi Lokasi Hewan Ternak
 @endsection
 
 @section('subTitlePanelHeader')
@@ -140,7 +140,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Titik Koordinat Lokasi Perencanaan Intervensi Hewan</div>
+                        <div class="card-title">Titik Koordinat Lokasi Perencanaan Intervensi Lokasi Hewan Ternak</div>
 
                     </div>
                 </div>

@@ -4,6 +4,9 @@
                 <th scope="col" align="center" style="vertical-align: center;border: 1px solid black;font-weight : bold"
                     rowspan="2">No.</th>
                 <th scope="col" align="center"
+                    style="vertical-align: center;border: 1px solid black;font-weight : bold" rowspan="2">Tanggal
+                    Pembuatan Perencanaan</th>
+                <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold" rowspan="2">Sub
                     Indikator</th>
                 <th scope="col" align="center"
@@ -13,7 +16,16 @@
                     style="vertical-align: center;border: 1px solid black;font-weight : bold" rowspan="2">OPD Terkait
                 </th>
                 <th scope="col" align="center"
-                    style="vertical-align: center;border: 1px solid black;font-weight : bold" rowspan="2">Pembiayaan
+                    style="vertical-align: center;border: 1px solid black;font-weight : bold" rowspan="2">Nilai
+                    Anggaran
+                </th>
+                <th scope="col" align="center"
+                    style="vertical-align: center;border: 1px solid black;font-weight : bold" rowspan="2">Penggunaan
+                    Anggaran
+                </th>
+                <th scope="col" align="center"
+                    style="vertical-align: center;border: 1px solid black;font-weight : bold" rowspan="2">Sisa
+                    Anggaran
                 </th>
                 <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold" rowspan="2">Sumber Dana
@@ -46,6 +58,8 @@
                 <tr style="vertical-align: center;border: 1px solid black;">
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
                         {{ $loop->iteration }}</td>
+                    <td style="vertical-align: center;border: 1px solid black;" align="center">
+                        {{ Carbon\Carbon::parse($item->created_at)->translatedFormat('j F Y') }}</td>
                     <td style="vertical-align: center;border: 1px solid black;" align="left">
                         {{ $item->sub_indikator }}</td>
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
@@ -59,6 +73,25 @@
                     </td>
                     <td style="vertical-align: center;border: 1px solid black;" align="right">
                         {{ $item->nilai_pembiayaan }}</td>
+                    <td style="vertical-align: center;border: 1px solid black;" align="right">
+                        @php
+                            $penggunaanAnggaran = 0;
+                            foreach ($item->realisasiManusia->where('status', 1) as $row) {
+                                $penggunaanAnggaran += $row->penggunaan_anggaran;
+                            }
+                            echo $penggunaanAnggaran;
+                        @endphp
+                    </td>
+                    <td style="vertical-align: center;border: 1px solid black;" align="right">
+                        @php
+                            $penggunaanAnggaran = 0;
+                            foreach ($item->realisasiManusia->where('status', 1) as $row) {
+                                $penggunaanAnggaran += $row->penggunaan_anggaran;
+                            }
+                            $sisaAnggaran = $item->nilai_pembiayaan - $penggunaanAnggaran;
+                            echo $sisaAnggaran;
+                        @endphp
+                    </td>
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
                         {{ $item->sumber_dana }}</td>
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
@@ -93,8 +126,7 @@
                     </td>
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
                         @if ($item->realisasiManusia->where('status', 1)->max('progress') == 100)
-                            <p>{{ $item->realisasiManusia->where('status', 1)->count() }}
-                                Laporan Selesai</p>
+                            <p>Selesai Terealisasi</p>
                         @else
                             @if ($item->realisasiManusia->where('status', 0)->count() > 0)
                                 <p>Menunggu Konfirmasi : </p>{{ $item->realisasiManusia->where('status', 0)->count() }}

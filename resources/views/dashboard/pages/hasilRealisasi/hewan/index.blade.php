@@ -1,11 +1,11 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Hasil Realisasi Pada Habitat/Lokasi Hewan Ternak
+    Hasil Realisasi Pada Lokasi Hewan Ternak
 @endsection
 
 @section('titlePanelHeader')
-    Hasil Realisasi Pada Habitat/Lokasi Hewan Ternak
+    Hasil Realisasi Pada Lokasi Hewan Ternak
 @endsection
 
 @section('subTitlePanelHeader')
@@ -21,7 +21,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Data Hasil Realisasi Pada Habitat/Lokasi Hewan Ternak</div>
+                        <div class="card-title">Data Hasil Realisasi Pada Lokasi Hewan Ternak</div>
                         <div class="card-tools">
                             <form action="{{ url('export-hasil-realisasi-hewan') }}" method="POST">
                                 @csrf
@@ -36,7 +36,23 @@
                 </div>
                 <div class="card-body pt-3">
                     <div class="row mb-4">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            @component('dashboard.components.formElements.select',
+                                [
+                                    'label' => 'Tampilkan Data Berdasarkan Tahun',
+                                    'id' => 'tahun-filter',
+                                    'name' => 'tahun_filter',
+                                    'class' => 'select2 filter',
+                                ])
+                                @slot('options')
+                                    <option value="semua">Semua</option>
+                                    @foreach ($filterTahun as $item)
+                                        <option value="{{ $item['tahun'] }}">{{ $item['tahun'] }}</option>
+                                    @endforeach
+                                @endslot
+                            @endcomponent
+                        </div>
+                        <div class="col-md-4">
                             @component('dashboard.components.formElements.select',
                                 [
                                     'label' => 'OPD',
@@ -52,7 +68,7 @@
                                 @endslot
                             @endcomponent
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             @component('dashboard.components.formElements.select',
                                 [
                                     'label' => 'Sub Indikator',
@@ -77,10 +93,10 @@
                                     <thead>
                                         <tr class="text-center fw-bold">
                                             <th>No</th>
-                                            <th>Habitat/Lokasi Hewan</th>
-                                            <th>List Sub Indikator</th>
+                                            <th>Lokasi Hewan Ternak</th>
+                                            <th>List Sub Indikator Intervensi</th>
                                             <th>List OPD</th>
-                                            {{-- <th>Aksi</th> --}}
+                                            <th>Tanggal Intervensi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -99,6 +115,10 @@
     <script>
         $('#nav-hasil-realisasi-hewan').addClass('active');
 
+        $('.select2').select2({
+            placeholder: "Semua",
+            theme: "bootstrap",
+        })
 
         var table = $('#dataTables').DataTable({
             processing: true,
@@ -110,6 +130,7 @@
             ajax: {
                 url: "{{ url('hasil-realisasi-hewan') }}",
                 data: function(d) {
+                    d.tahun_filter = $('#tahun-filter').val();
                     d.opd_filter = $('#opd-filter').val();
                     d.indikator_filter = $('#indikator-filter').val();
                     d.search_filter = $('input[type="search"]').val();
@@ -133,6 +154,10 @@
                 {
                     data: 'list_opd',
                     name: 'list_opd',
+                },
+                {
+                    data: 'tanggal_intervensi',
+                    name: 'tanggal_intervensi',
                 },
             ],
         });

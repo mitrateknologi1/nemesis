@@ -66,7 +66,8 @@
                                 </span>
                             </li>
                         @endif
-                        <li class="list-group-item d-flex justify-content-between align-items-center">Nilai Pembiayaan:<span
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ $rencana_intervensi_manusia->status == 1 ? 'Nilai Anggaran:' : 'Rencana Anggaran:' }}<span
                                 class="font-weight-bold"><span>Rp. </span>
                                 <span class="rupiah">{{ $rencana_intervensi_manusia->nilai_pembiayaan }}</span></span>
                         </li>

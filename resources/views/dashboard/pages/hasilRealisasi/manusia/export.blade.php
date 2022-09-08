@@ -7,10 +7,13 @@
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">Nama</th>
                 <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">List Sub
-                    Indikator
+                    Indikator Intervensi
                 </th>
                 <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">List OPD
+                </th>
+                <th scope="col" align="center"
+                    style="vertical-align: center;border: 1px solid black;font-weight : bold">Tanggal Intervensi
                 </th>
             </tr>
         </thead>
@@ -31,6 +34,20 @@
                     <td style="vertical-align: center;border: 1px solid black;" align="left">
                         @forelse ($item->listIndikator as $item2)
                             <p>{{ $loop->iteration }}. {{ $item2->perencanaanManusia->opd->nama }}</p>
+                            @if ($item2->perencanaanManusia->opdTerkaitManusia)
+                                @foreach ($item2->perencanaanManusia->opdTerkaitManusia as $item3)
+                                    <p>-{{ $item3->opd->nama }}</p>
+                                @endforeach
+                            @endif
+                        @empty
+                            <p>-</p>
+                        @endforelse
+                    </td>
+                    <td style="vertical-align: center;border: 1px solid black;" align="center">
+                        @forelse ($item->listIndikator as $item2)
+                            <p>{{ $loop->iteration }}.
+                                {{ Carbon\Carbon::parse($item2->realisasiManusia->created_at)->translatedFormat('d F Y') }}
+                            </p>
                         @empty
                             <p>-</p>
                         @endforelse

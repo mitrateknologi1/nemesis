@@ -1,11 +1,11 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Tambah Laporan Realisasi Intervensi Hewan
+    Tambah Laporan Realisasi Intervensi Lokasi Hewan Ternak
 @endsection
 
 @section('titlePanelHeader')
-    Tambah Laporan Realisasi Intervensi Hewan
+    Tambah Laporan Realisasi Intervensi Lokasi Hewan Ternak
 @endsection
 
 @section('subTitlePanelHeader')
@@ -33,7 +33,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Form Laporan Realisasi Intervensi Hewan</div>
+                        <div class="card-title">Form Laporan Realisasi Intervensi Lokasi Hewan Ternak</div>
                     </div>
                 </div>
                 <div class="card-body pt-1">

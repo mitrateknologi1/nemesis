@@ -1,11 +1,11 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Detail Laporan Realisasi Intervensi Hewan
+    Detail Laporan Realisasi Intervensi Lokasi Hewan Ternak
 @endsection
 
 @section('titlePanelHeader')
-    Detail Laporan Realisasi Intervensi Hewan | <span style="text-decoration: underline">Laporan Tanggal:
+    Detail Laporan Realisasi Intervensi Lokasi Hewan Ternak | <span style="text-decoration: underline">Laporan Tanggal:
         {{ Carbon\Carbon::parse($realisasi_intervensi_hewan->created_at)->translatedFormat('j F Y') }}</span>
 @endsection
 
@@ -141,7 +141,8 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Titik Koordinat Lokasi Laporan Realisasi Intervensi Hewan</div>
+                        <div class="card-title">Titik Koordinat Lokasi Laporan Realisasi Intervensi Lokasi Hewan Ternak
+                        </div>
 
                     </div>
                 </div>

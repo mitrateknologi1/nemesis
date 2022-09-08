@@ -219,8 +219,8 @@
                         </div>
                         <div class="card-body p-3">
                             <ul class="list-group list-group-bordered">
-                                <li class="list-group-item d-flex justify-content-between align-items-center p-2">Pagu
-                                    Awal:<span class="font-weight-bold">Rp. <span id="pagu-awal"
+                                <li class="list-group-item d-flex justify-content-between align-items-center p-2">Nilai
+                                    Anggaran:<span class="font-weight-bold">Rp. <span id="pagu-awal"
                                             class="rupiah">{{ $rencana_intervensi_manusia->nilai_pembiayaan }}</span></span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center p-2">

@@ -77,11 +77,11 @@
                 <div class="form-group p-0 pb-2">
                     @component('dashboard.components.formElements.input',
                         [
-                            'label' => 'Nilai Pembiayaan (Rp)',
+                            'label' => 'Rencana Anggaran (Rp)',
                             'id' => 'nilai-pembiayaan',
                             'name' => 'nilai_pembiayaan',
                             'class' => 'rupiah req',
-                            'placeholder' => 'Masukkan Nilai Pembiayaan',
+                            'placeholder' => 'Masukkan Rencana Anggaran',
                             'wajib' => '<sup class="text-danger">*</sup>',
                             'attribute' =>
                                 isset($rencanaIntervensiManusia) && $rencanaIntervensiManusia->realisasiManusia->count() > 0
@@ -691,10 +691,10 @@
             let size = $(this)[0].files[0].size / 1024
             let id = $(this).data('id')
             let iter = $(this).data('iter');
-            if (size > 3072) {
+            if (size > 20480) {
                 swal({
                     title: "Gagal!",
-                    text: "Ukuran dokumen terlalu besar! Maksimal 3MB",
+                    text: "Ukuran dokumen terlalu besar! Maksimal 20MB",
                     icon: "error",
                 }).then((value) => {
                     $(this).val('');
@@ -704,10 +704,10 @@
 
         $(document).on('change', '.file-dokumen', function() {
             let size = $(this)[0].files[0].size / 1024
-            if (size > 3072) {
+            if (size > 20480) {
                 swal({
                     title: "Gagal!",
-                    text: "Ukuran dokumen terlalu besar! Maksimal 3MB",
+                    text: "Ukuran dokumen terlalu besar! Maksimal 20MB",
                     icon: "error",
                 }).then((value) => {
                     $(this).val('');

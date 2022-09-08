@@ -22,4 +22,9 @@ class PendudukPerencanaanManusia extends Model
     {
         return $this->belongsTo(PerencanaanManusia::class);
     }
+
+    public function realisasiManusia()
+    {
+        return $this->belongsTo(RealisasiManusia::class);
+    }
 }

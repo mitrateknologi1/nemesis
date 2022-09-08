@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\OPDTerkaitHewan;
 use App\Models\PerencanaanHewan;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -30,9 +31,9 @@ class PerencanaanHewanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function dataPerencanaan()
     {
-        $perencanaanHewan = PerencanaanHewan::with('opd', 'lokasiPerencanaanHewan')
+        $query = PerencanaanHewan::with('opd', 'lokasiPerencanaanHewan')
             ->where(function ($query) {
                 if (Auth::user()->role == 'OPD') {
                     $query->where('opd_id', Auth::user()->opd_id);
@@ -43,10 +44,21 @@ class PerencanaanHewanController extends Controller
                 }
             })
             ->latest();
+        return $query;
+    }
+
+    public function index(Request $request)
+    {
+        $perencanaanHewan = $this->dataPerencanaan();
+
         if ($request->ajax()) {
             $data = $perencanaanHewan
                 // filtering
                 ->where(function ($query) use ($request) {
+                    if ($request->tahun_filter && $request->tahun_filter != 'semua') {
+                        $query->whereYear('created_at', $request->tahun_filter);
+                    }
+
                     if ($request->opd_filter && $request->opd_filter != 'semua') {
                         $query->where('opd_id', $request->opd_filter);
                     }
@@ -137,7 +149,14 @@ class PerencanaanHewanController extends Controller
         } else {
             $totalMenungguKonfirmasiPerencanaanHewan = PerencanaanHewan::where('status', 0)->count();
         }
-        return view('dashboard.pages.intervensi.perencanaan.hewan.subIndikator.index', ['perencanaanHewan' => $perencanaanHewan, 'totalMenungguKonfirmasiPerencanaanHewan' => $totalMenungguKonfirmasiPerencanaanHewan]);
+
+        $tahun = $this->dataPerencanaan()->select(DB::raw('YEAR(created_at) year'))
+            ->groupBy('year')
+            ->pluck('year');
+
+        $perencanaanHewan = $this->dataPerencanaan()->groupBy('opd_id')->get();
+
+        return view('dashboard.pages.intervensi.perencanaan.hewan.subIndikator.index', ['perencanaanHewan' => $perencanaanHewan, 'totalMenungguKonfirmasiPerencanaanHewan' => $totalMenungguKonfirmasiPerencanaanHewan, 'tahun' => $tahun]);
     }
 
     /**
@@ -547,6 +566,6 @@ class PerencanaanHewanController extends Controller
 
         $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
 
-        return Excel::download(new PerencanaanHewanExport($dataPerencanaan), "Export Data Perencanaan Hewan" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
+        return Excel::download(new PerencanaanHewanExport($dataPerencanaan), "Export Data Perencanaan Lokasi Hewan Ternak" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 }

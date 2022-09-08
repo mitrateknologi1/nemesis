@@ -35,7 +35,7 @@
                                     <option value="{{ $item2->id }}" data-latitude="{{ $item2->latitude }}"
                                         data-longitude="{{ $item2->longitude }}" data-nama-lokasi="{{ $item2->nama }}"
                                         data-nama-desa="{{ $item->nama }}">
-                                        {{ $item2->nama }}</option>
+                                        {{ $item2->nama }} - {{ $item2->desa->nama }}</option>
                                 @endforeach
                             </optgroup>
                         @endforeach
@@ -521,10 +521,10 @@
             let size = $(this)[0].files[0].size / 1024
             let id = $(this).data('id')
             let iter = $(this).data('iter');
-            if (size > 3072) {
+            if (size > 20480) {
                 swal({
                     title: "Gagal!",
-                    text: "Ukuran dokumen terlalu besar! Maksimal 3MB",
+                    text: "Ukuran dokumen terlalu besar! Maksimal 20MB",
                     icon: "error",
                 }).then((value) => {
                     $(this).val('');
@@ -534,10 +534,10 @@
 
         $(document).on('change', '.file-dokumen', function() {
             let size = $(this)[0].files[0].size / 1024
-            if (size > 3072) {
+            if (size > 20480) {
                 swal({
                     title: "Gagal!",
-                    text: "Ukuran dokumen terlalu besar! Maksimal 3MB",
+                    text: "Ukuran dokumen terlalu besar! Maksimal 20MB",
                     icon: "error",
                 }).then((value) => {
                     $(this).val('');

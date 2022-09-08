@@ -538,10 +538,10 @@
             let size = $(this)[0].files[0].size / 1024
             let id = $(this).data('id')
             let iter = $(this).data('iter');
-            if (size > 3072) {
+            if (size > 20480) {
                 swal({
                     title: "Gagal!",
-                    text: "Ukuran dokumen terlalu besar! Maksimal 3MB",
+                    text: "Ukuran dokumen terlalu besar! Maksimal 20MB",
                     icon: "error",
                 }).then((value) => {
                     $(this).val('');
@@ -551,10 +551,10 @@
 
         $(document).on('change', '.file-dokumen', function() {
             let size = $(this)[0].files[0].size / 1024
-            if (size > 3072) {
+            if (size > 20480) {
                 swal({
                     title: "Gagal!",
-                    text: "Ukuran dokumen terlalu besar! Maksimal 3MB",
+                    text: "Ukuran dokumen terlalu besar! Maksimal 20MB",
                     icon: "error",
                 }).then((value) => {
                     $(this).val('');

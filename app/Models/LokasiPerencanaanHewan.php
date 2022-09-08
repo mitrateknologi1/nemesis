@@ -23,4 +23,9 @@ class LokasiPerencanaanHewan extends Model
     {
         return $this->belongsTo(PerencanaanHewan::class);
     }
+
+    public function realisasiHewan()
+    {
+        return $this->belongsTo(RealisasiHewan::class);
+    }
 }

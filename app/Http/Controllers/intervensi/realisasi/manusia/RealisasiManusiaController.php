@@ -10,6 +10,7 @@ use Illuminate\Support\Carbon;
 use App\Models\RealisasiManusia;
 use App\Models\OPDTerkaitManusia;
 use App\Models\PerencanaanManusia;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -30,9 +31,9 @@ class RealisasiManusiaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function dataPerencanaan()
     {
-        $realisasiManusia = PerencanaanManusia::with('opd', 'pendudukPerencanaanManusia', 'realisasiManusia')
+        $query = PerencanaanManusia::with('opd', 'pendudukPerencanaanManusia', 'realisasiManusia')
             ->where('status', 1)
             ->where(function ($query) {
                 if (Auth::user()->role == 'OPD') {
@@ -44,16 +45,25 @@ class RealisasiManusiaController extends Controller
                 }
             })
             ->latest();
+        return $query;
+    }
+
+    public function index(Request $request)
+    {
+        $realisasiManusia = $this->dataPerencanaan();
         if ($request->ajax()) {
             $data = $realisasiManusia
                 // filtering
                 ->where(function ($query) use ($request) {
+                    if ($request->tahun_filter && $request->tahun_filter != 'semua') {
+                        $query->whereYear('created_at', $request->tahun_filter);
+                    }
+
                     if ($request->opd_filter && $request->opd_filter != 'semua') {
                         $query->where('opd_id', $request->opd_filter);
                     }
 
                     if ($request->status_filter && $request->status_filter != 'semua') {
-
                         if ($request->status_filter == 'selesai') {
                             $query->whereHas('realisasiManusia', function ($query2) use ($request) {
                                 $query2->where('status', 1);
@@ -98,7 +108,21 @@ class RealisasiManusiaController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
 
-                ->addColumn('status', function ($row) {
+                ->addColumn('penggunaan_anggaran', function ($row) {
+                    $penggunaanAnggaran = 0;
+                    foreach ($row->realisasiManusia->where('status', 1) as $item) {
+                        $penggunaanAnggaran += $item->penggunaan_anggaran;
+                    }
+                    return $penggunaanAnggaran;
+                })
+
+                ->addColumn('sisa_anggaran', function ($row) {
+                    $penggunaanAnggaran = 0;
+                    foreach ($row->realisasiManusia->where('status', 1) as $item) {
+                        $penggunaanAnggaran += $item->penggunaan_anggaran;
+                    }
+                    $sisaAnggaran = $row->nilai_pembiayaan - $penggunaanAnggaran;
+                    return $sisaAnggaran;
                 })
 
                 ->addColumn('progress', function ($row) {
@@ -166,7 +190,14 @@ class RealisasiManusiaController extends Controller
         } else {
             $totalMenungguKonfirmasiRealisasiManusia = RealisasiManusia::where('status', 0)->count();
         }
-        return view('dashboard.pages.intervensi.realisasi.manusia.subIndikator.index', ['realisasiManusia' => $realisasiManusia, 'totalMenungguKonfirmasiRealisasiManusia' => $totalMenungguKonfirmasiRealisasiManusia]);
+
+        $tahun = $this->dataPerencanaan()->select(DB::raw('YEAR(created_at) year'))
+            ->groupBy('year')
+            ->pluck('year');
+
+        $realisasiManusia = $this->dataPerencanaan()->groupBy('opd_id')->get();
+
+        return view('dashboard.pages.intervensi.realisasi.manusia.subIndikator.index', ['realisasiManusia' => $realisasiManusia, 'totalMenungguKonfirmasiRealisasiManusia' => $totalMenungguKonfirmasiRealisasiManusia, 'tahun' => $tahun]);
     }
 
     public function tabelLaporan(Request $request)
@@ -808,8 +839,7 @@ class RealisasiManusiaController extends Controller
             ->pluck('penduduk_id')
             ->toArray();
 
-        $dataPenduduk = Penduduk::with('listIndikator', 'desa')->whereIn('id', $habitatManusia)
-            ->latest();
+        $dataPenduduk = Penduduk::with('listIndikator', 'desa')->whereIn('id', $habitatManusia);
 
         if ($request->ajax()) {
             $data = $dataPenduduk
@@ -818,7 +848,15 @@ class RealisasiManusiaController extends Controller
                     if ($request->opd_filter && $request->opd_filter != 'semua') {
                         $query->whereHas('listIndikator', function ($query2) use ($request) {
                             $query2->whereHas('perencanaanManusia', function ($query3) use ($request) {
-                                $query3->where('opd_id', $request->opd_filter);
+                                $query3->where(function ($query4) use ($request) {
+                                    $query4->where('opd_id', $request->opd_filter);
+                                    $query4->orWhereHas('opdTerkaitManusia', function ($query5) use ($request) {
+                                        $query5->where('opd_id', $request->opd_filter);
+                                    });
+                                });
+                                if ($request->tahun_filter && $request->tahun_filter != 'semua') {
+                                    $query3->whereYear('created_at', $request->tahun_filter);
+                                }
                             });
                         });
                     }
@@ -827,6 +865,17 @@ class RealisasiManusiaController extends Controller
                         $query->whereHas('listIndikator', function ($query2) use ($request) {
                             $query2->whereHas('perencanaanManusia', function ($query3) use ($request) {
                                 $query3->where('id', $request->indikator_filter);
+                                if ($request->tahun_filter && $request->tahun_filter != 'semua') {
+                                    $query3->whereYear('created_at', $request->tahun_filter);
+                                }
+                            });
+                        });
+                    }
+
+                    if ($request->tahun_filter && $request->tahun_filter != 'semua') {
+                        $query->whereHas('listIndikator', function ($query2) use ($request) {
+                            $query2->whereHas('perencanaanManusia', function ($query3) use ($request) {
+                                $query3->whereYear('created_at', $request->tahun_filter);
                             });
                         });
                     }
@@ -840,19 +889,56 @@ class RealisasiManusiaController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
 
-                ->addColumn('list_indikator', function ($row) {
+                ->addColumn('list_indikator', function ($row)  use ($request) {
                     $list = '<ol class="mb-0">';
                     foreach ($row->listIndikator as $row2) {
-                        $list .= '<li>' . $row2->perencanaanManusia->sub_indikator . '</li>';
+                        if ($request->tahun_filter && $request->tahun_filter != 'semua') {
+                            if (Carbon::parse($row2->perencanaanManusia->created_at)->format('Y') == $request->tahun_filter) {
+                                $list .= '<li>' . $row2->perencanaanManusia->sub_indikator . '</li>';
+                            }
+                        } else {
+                            $list .= '<li>' . $row2->perencanaanManusia->sub_indikator . '</li>';
+                        }
                     }
                     $list .= '</ol>';
                     return $list;
                 })
 
-                ->addColumn('list_opd', function ($row) {
+                ->addColumn('list_opd', function ($row) use ($request) {
                     $list = '<ol class="mb-0">';
                     foreach ($row->listIndikator as $row2) {
-                        $list .= '<li>' . $row2->perencanaanManusia->opd->nama . '</li>';
+                        if ($request->tahun_filter && $request->tahun_filter != 'semua') {
+                            if (Carbon::parse($row2->perencanaanManusia->created_at)->format('Y') == $request->tahun_filter) {
+                                $list .= '<li class="font-weight-bold">' . $row2->perencanaanManusia->opd->nama . '</li>';
+                                if ($row2->perencanaanManusia->opdTerkaitManusia) {
+                                    foreach ($row2->perencanaanManusia->opdTerkaitManusia as $row3) {
+                                        $list .= '<p class="p-0 m-0"> -' . $row3->opd->nama . '</p>';
+                                    }
+                                }
+                            }
+                        } else {
+                            $list .= '<li class="font-weight-bold">' . $row2->perencanaanManusia->opd->nama . '</li>';
+                            if ($row2->perencanaanManusia->opdTerkaitManusia) {
+                                foreach ($row2->perencanaanManusia->opdTerkaitManusia as $row3) {
+                                    $list .= '<p class="p-0 m-0"> -' . $row3->opd->nama . '</p>';
+                                }
+                            }
+                        }
+                    }
+                    $list .= '</ol>';
+                    return $list;
+                })
+
+                ->addColumn('tanggal_intervensi', function ($row) use ($request) {
+                    $list = '<ol class="mb-0">';
+                    foreach ($row->listIndikator as $row2) {
+                        if ($request->tahun_filter && $request->tahun_filter != 'semua') {
+                            if (Carbon::parse($row2->realisasiManusia->created_at)->format('Y') == $request->tahun_filter) {
+                                $list .= '<li>' . Carbon::parse($row2->realisasiManusia->created_at)->translatedFormat('d F Y') . '</li>';
+                            }
+                        } else {
+                            $list .= '<li>' . Carbon::parse($row2->realisasiManusia->created_at)->translatedFormat('d F Y') . '</li>';
+                        }
                     }
                     $list .= '</ol>';
                     return $list;
@@ -860,7 +946,8 @@ class RealisasiManusiaController extends Controller
 
                 ->rawColumns([
                     'list_indikator',
-                    'list_opd'
+                    'list_opd',
+                    'tanggal_intervensi'
                 ])
                 ->make(true);
         }
@@ -872,7 +959,9 @@ class RealisasiManusiaController extends Controller
             foreach ($item->listIndikator as $row) {
                 $dataSubIndikator = [
                     'id' => $row->perencanaanManusia->id,
-                    'sub_indikator' => $row->perencanaanManusia->sub_indikator
+                    'sub_indikator' => $row->perencanaanManusia->sub_indikator,
+                    'tahun' => $row->perencanaanManusia->created_at->format('Y'),
+                    'created_at' => $row->perencanaanManusia->created_at
                 ];
                 $dataOpd = [
                     'id' => $row->perencanaanManusia->opd->id,
@@ -880,13 +969,25 @@ class RealisasiManusiaController extends Controller
                 ];
                 array_push($filterSubIndikator, $dataSubIndikator);
                 array_push($filterOpd, $dataOpd);
+                if ($row->perencanaanManusia->opdTerkaitManusia) {
+                    foreach ($row->perencanaanManusia->opdTerkaitManusia as $row2) {
+                        $dataOpdTerkait = [
+                            'id' => $row2->opd->id,
+                            'opd' => $row2->opd->nama
+                        ];
+                        array_push($filterOpd, $dataOpdTerkait);
+                    }
+                }
             }
         }
 
+        array_multisort(array_column($filterSubIndikator, 'created_at'), SORT_DESC, $filterSubIndikator);
+
         $filterSubIndikator = $this->unique_multidim_array($filterSubIndikator, 'id');
         $filterOpd = $this->unique_multidim_array($filterOpd, 'id');
+        $filterTahun = $this->unique_multidim_array($filterSubIndikator, 'tahun');
 
-        return view('dashboard.pages.hasilRealisasi.manusia.index', ['filterSubIndikator' => $filterSubIndikator, 'filterOpd' => $filterOpd]);
+        return view('dashboard.pages.hasilRealisasi.manusia.index', ['filterSubIndikator' => $filterSubIndikator, 'filterOpd' => $filterOpd, 'filterTahun' => $filterTahun]);
     }
 
 
@@ -919,7 +1020,7 @@ class RealisasiManusiaController extends Controller
             ->toArray();
 
         $dataRealisasi = Penduduk::with('listIndikator', 'desa')->whereIn('id', $penduduk)
-            ->latest()->get();
+            ->get();
         // return view('dashboard.pages.hasilRealisasi.manusia.export', ['dataRealisasi' => $dataRealisasi]);
 
         $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');

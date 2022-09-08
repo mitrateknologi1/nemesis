@@ -130,8 +130,8 @@
 
         .dt-button-collection .active {
             margin-bottom: 5px;
-            background-color: rgba(var(--primary-rgb), 0.15);
-            color: var(--primary-color);
+            background-color: #48ABF7;
+            color: white;
             border-color: transparent;
             display: inline-block;
             font-weight: 400;

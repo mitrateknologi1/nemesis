@@ -60,7 +60,23 @@
                 </div>
                 <div class="card-body pt-3">
                     <div class="row mb-4">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            @component('dashboard.components.formElements.select',
+                                [
+                                    'label' => 'Tahun',
+                                    'id' => 'tahun-filter',
+                                    'name' => 'tahun_filter',
+                                    'class' => 'select2 filter',
+                                ])
+                                @slot('options')
+                                    <option value="semua">Semua</option>
+                                    @foreach ($tahun as $item)
+                                        <option value="{{ $item }}">{{ $item }}</option>
+                                    @endforeach
+                                @endslot
+                            @endcomponent
+                        </div>
+                        <div class="col-md-4">
                             @component('dashboard.components.formElements.select',
                                 [
                                     'label' => 'OPD',
@@ -70,13 +86,13 @@
                                 ])
                                 @slot('options')
                                     <option value="semua">Semua</option>
-                                    @foreach ($perencanaanManusia->groupBy('opd_id')->get() as $item)
+                                    @foreach ($perencanaanManusia as $item)
                                         <option value="{{ $item->opd_id }}">{{ $item->opd->nama }}</option>
                                     @endforeach
                                 @endslot
                             @endcomponent
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             @component('dashboard.components.formElements.select',
                                 [
                                     'label' => 'Status',
@@ -104,7 +120,7 @@
                                             <th>Tanggal Pembuatan</th>
                                             <th>Sub Indikator</th>
                                             <th>OPD</th>
-                                            <th>Pembiayaan</th>
+                                            <th>Rencana Anggaran</th>
                                             {{-- <th>Jumlah Lokasi</th> --}}
                                             <th>Status</th>
                                             <th>Aksi</th>
@@ -143,6 +159,7 @@
             ajax: {
                 url: "{{ route('rencana-intervensi-manusia.index') }}",
                 data: function(d) {
+                    d.tahun_filter = $('#tahun-filter').val();
                     d.opd_filter = $('#opd-filter').val();
                     d.status_filter = $('#status-filter').val();
                     d.search_filter = $('input[type="search"]').val();

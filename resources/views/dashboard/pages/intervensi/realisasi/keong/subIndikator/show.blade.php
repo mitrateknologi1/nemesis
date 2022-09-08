@@ -1,11 +1,11 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Realisasi Intervensi Keong
+    Realisasi Intervensi Habitat Keong
 @endsection
 
 @section('titlePanelHeader')
-    Laporan Realisasi Intervensi Keong
+    Laporan Realisasi Intervensi Habitat Keong
 @endsection
 
 @section('subTitlePanelHeader')
@@ -219,8 +219,8 @@
                         </div>
                         <div class="card-body p-3">
                             <ul class="list-group list-group-bordered">
-                                <li class="list-group-item d-flex justify-content-between align-items-center p-2">Pagu
-                                    Awal:<span class="font-weight-bold">Rp. <span id="pagu-awal"
+                                <li class="list-group-item d-flex justify-content-between align-items-center p-2">Nilai
+                                    Anggaran:<span class="font-weight-bold">Rp. <span id="pagu-awal"
                                             class="rupiah">{{ $rencana_intervensi_keong->nilai_pembiayaan }}</span></span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center p-2">
@@ -328,7 +328,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Titik Koordinat Realisasi Intervensi Keong</div>
+                        <div class="card-title">Titik Koordinat Realisasi Intervensi Habitat Keong</div>
 
                     </div>
                 </div>

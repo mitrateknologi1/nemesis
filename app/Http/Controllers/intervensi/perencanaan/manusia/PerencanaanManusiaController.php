@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\OPDTerkaitManusia;
 use App\Models\PerencanaanManusia;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -28,7 +29,7 @@ class PerencanaanManusiaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function dataPerencanaan()
     {
         $perencanaanManusia = PerencanaanManusia::with('opd', 'pendudukPerencanaanManusia')
             ->where(function ($query) {
@@ -41,11 +42,21 @@ class PerencanaanManusiaController extends Controller
                 }
             })
             ->latest();
+        return $perencanaanManusia;
+    }
+
+    public function index(Request $request)
+    {
+        $perencanaanManusia = $this->dataPerencanaan();
 
         if ($request->ajax()) {
             $data = $perencanaanManusia
                 // filtering
                 ->where(function ($query) use ($request) {
+                    if ($request->tahun_filter && $request->tahun_filter != 'semua') {
+                        $query->whereYear('created_at', $request->tahun_filter);
+                    }
+
                     if ($request->opd_filter && $request->opd_filter != 'semua') {
                         $query->where('opd_id', $request->opd_filter);
                     }
@@ -134,7 +145,14 @@ class PerencanaanManusiaController extends Controller
         } else {
             $totalMenungguKonfirmasiPerencanaanManusia = PerencanaanManusia::where('status', 0)->count();
         }
-        return view('dashboard.pages.intervensi.perencanaan.manusia.subIndikator.index', ['perencanaanManusia' => $perencanaanManusia, 'totalMenungguKonfirmasiPerencanaanManusia' => $totalMenungguKonfirmasiPerencanaanManusia]);
+
+        $tahun = $this->dataPerencanaan()->select(DB::raw('YEAR(created_at) year'))
+            ->groupBy('year')
+            ->pluck('year');
+
+        $perencanaanManusia = $this->dataPerencanaan()->groupBy('opd_id')->get();
+
+        return view('dashboard.pages.intervensi.perencanaan.manusia.subIndikator.index', ['perencanaanManusia' => $perencanaanManusia, 'totalMenungguKonfirmasiPerencanaanManusia' => $totalMenungguKonfirmasiPerencanaanManusia, 'tahun' => $tahun]);
     }
 
     /**

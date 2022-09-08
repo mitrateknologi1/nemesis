@@ -1,11 +1,11 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Realisasi Intervensi Hewan
+    Realisasi Intervensi Lokasi Hewan Ternak
 @endsection
 
 @section('titlePanelHeader')
-    Realisasi Intervensi Hewan
+    Realisasi Intervensi Lokasi Hewan Ternak
 @endsection
 
 @section('subTitlePanelHeader')
@@ -40,7 +40,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Data Realisasi Intervensi Hewan</div>
+                        <div class="card-title">Data Realisasi Intervensi Lokasi Hewan Ternak</div>
                         <div class="card-tools">
                             <form action="{{ url('export-realisasi-hewan') }}" method="POST">
                                 @csrf
@@ -55,7 +55,23 @@
                 </div>
                 <div class="card-body pt-3">
                     <div class="row mb-4">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            @component('dashboard.components.formElements.select',
+                                [
+                                    'label' => 'Tahun',
+                                    'id' => 'tahun-filter',
+                                    'name' => 'tahun_filter',
+                                    'class' => 'select2 filter',
+                                ])
+                                @slot('options')
+                                    <option value="semua">Semua</option>
+                                    @foreach ($tahun as $item)
+                                        <option value="{{ $item }}">{{ $item }}</option>
+                                    @endforeach
+                                @endslot
+                            @endcomponent
+                        </div>
+                        <div class="col-md-4">
                             @component('dashboard.components.formElements.select',
                                 [
                                     'label' => 'OPD',
@@ -65,13 +81,13 @@
                                 ])
                                 @slot('options')
                                     <option value="semua">Semua</option>
-                                    @foreach ($realisasiHewan->groupBy('opd_id')->get() as $item)
+                                    @foreach ($realisasiHewan as $item)
                                         <option value="{{ $item->opd_id }}">{{ $item->opd->nama }}</option>
                                     @endforeach
                                 @endslot
                             @endcomponent
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             @component('dashboard.components.formElements.select',
                                 [
                                     'label' => 'Status',
@@ -98,12 +114,13 @@
                                     <thead>
                                         <tr class="text-center fw-bold">
                                             <th>No</th>
-                                            {{-- <th>Tanggal Disetujui</th> --}}
+                                            <th>Tanggal Pembuatan Perencanaan</th>
                                             <th>Sub Indikator</th>
                                             <th>OPD</th>
-                                            <th>Pembiayaan</th>
+                                            <th>Nilai Anggaran</th>
+                                            <th>Penggunaan Anggaran</th>
+                                            <th>Sisa Anggaran</th>
                                             <th>Progress</th>
-                                            {{-- <th>Jumlah Lokasi</th> --}}
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -126,6 +143,11 @@
         $('#nav-realisasi .collapse').addClass('show');
         $('#nav-realisasi .collapse #li-hewan-2').addClass('active');
 
+        $('.select2').select2({
+            placeholder: "Semua",
+            theme: "bootstrap",
+        })
+
         var table = $('#dataTables').DataTable({
             processing: true,
             serverSide: true,
@@ -133,9 +155,17 @@
                 [10, 25, 50, -1],
                 [10, 25, 50, "All"]
             ],
+            dom: 'lBfrtip',
+            buttons: [{
+                extend: 'colvis',
+                className: 'btn btn-sm btn-info px-2 btn-export-table d-inline ml-3 font-weight',
+                text: '<i class="fas fa-eye-slash"></i> Show/Hide Column',
+            }],
+
             ajax: {
                 url: "{{ route('realisasi-intervensi-hewan.index') }}",
                 data: function(d) {
+                    d.tahun_filter = $('#tahun-filter').val();
                     d.opd_filter = $('#opd-filter').val();
                     d.status_filter = $('#status-filter').val();
                     d.search_filter = $('input[type="search"]').val();
@@ -148,10 +178,15 @@
                     orderable: false,
                     searchable: false
                 },
-                // {
-                //     data: 'tanggal_konfirmasi',
-                //     name: 'tanggal_konfirmasi',
-                // },
+                {
+                    data: 'created_at',
+                    name: 'created_at',
+                    render: function(data) {
+                        return moment(data).format('LL');
+                    },
+                    visible: false,
+                    className: 'text-center',
+                },
                 {
                     data: 'sub_indikator',
                     name: 'sub_indikator',
@@ -168,12 +203,28 @@
                     render: $.fn.dataTable.render.number('.', ',', 0, 'Rp.')
                 },
                 {
+                    data: 'penggunaan_anggaran',
+                    name: 'penggunaan_anggaran',
+                    className: 'text-right',
+                    render: $.fn.dataTable.render.number('.', ',', 0, 'Rp.'),
+                    visible: false,
+                },
+                {
+                    data: 'sisa_anggaran',
+                    name: 'sisa_anggaran',
+                    className: 'text-right',
+                    render: $.fn.dataTable.render.number('.', ',', 0, 'Rp.'),
+                    visible: false,
+                },
+                {
                     data: 'progress',
                     name: 'progress',
+                    className: 'text-center',
                 },
                 {
                     data: 'status',
                     name: 'status',
+                    className: 'text-center',
                 },
                 {
                     data: 'action',
@@ -185,17 +236,6 @@
 
 
 
-            ],
-            columnDefs: [{
-                    targets: [4, 5],
-                    className: 'text-center',
-                },
-                // {
-                //     targets: [1],
-                //     render: function(data) {
-                //         return moment(data).format('LL');
-                //     }
-                // },
             ],
         });
 

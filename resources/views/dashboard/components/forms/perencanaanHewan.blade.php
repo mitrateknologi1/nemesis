@@ -574,7 +574,11 @@
                         "<p class='fw-bold my-0 text-center'>" + lokasiPerencanaan[i].namaLokasi +
                         "</p><hr>" +
                         "<p class='my-0'>Desa : " + lokasiPerencanaan[i]
-                        .namaDesa + "</p>"
+                        .namaDesa + "</p>" +
+                        "<p class='my-0 fw-bold'>Latitude : </p>" +
+                        "<p class='my-0'>" + lokasiPerencanaan[i].latitude + "</p>" +
+                        "<p class='my-0 fw-bold'>Longitude : </p>" +
+                        "<p class='my-0'>" + lokasiPerencanaan[i].longitude + "</p>"
                     )
                     // .on('click', L.bind(petaKlik, null, data[0][i].id))
                     .addTo(map);

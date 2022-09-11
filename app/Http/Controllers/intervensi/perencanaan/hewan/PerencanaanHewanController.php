@@ -545,7 +545,7 @@ class PerencanaanHewanController extends Controller
     public function map(PerencanaanHewan $rencana_intervensi_hewan)
     {
         $getLokasiHewan = $rencana_intervensi_hewan->lokasiPerencanaanHewan->pluck('lokasi_hewan_id')->toArray();
-        $lokasiHewan = LokasiHewan::with('desa')->whereIn('id', $getLokasiHewan)->get();
+        $lokasiHewan = LokasiHewan::with(['desa', 'jumlahHewan', 'jumlahHewan.hewan', 'pemilikLokasiHewan', 'pemilikLokasiHewan.penduduk'])->whereIn('id', $getLokasiHewan)->get();
         return response()->json(['status' => 'success', 'data' => $lokasiHewan]);
     }
 

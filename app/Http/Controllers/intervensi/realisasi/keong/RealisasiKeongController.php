@@ -305,7 +305,7 @@ class RealisasiKeongController extends Controller
         }
 
         $getLokasiKeongBelumTerealisasi = $rencana_intervensi_keong->lokasiPerencanaanKeong->whereNull('realisasi_keong_id')->pluck('lokasi_keong_id')->toArray();
-        $lokasiKeong = LokasiKeong::with('desa')->whereIn('id', $getLokasiKeongBelumTerealisasi)->get();
+        $lokasiKeong = LokasiKeong::with(['desa', 'pemilikLokasiKeong', 'pemilikLokasiKeong.penduduk'])->whereIn('id', $getLokasiKeongBelumTerealisasi)->get();
 
         $penggunaanAnggaran = 0;
         foreach ($rencana_intervensi_keong->realisasiKeong->where('status', 1) as $item) {
@@ -471,7 +471,7 @@ class RealisasiKeongController extends Controller
             })->pluck('lokasi_keong_id')->toArray();
 
         $getLokasiKeongBelumTerealisasi = $realisasi_intervensi_keong->perencanaanKeong->lokasiPerencanaanKeong->whereNull('realisasi_keong_id')->pluck('lokasi_keong_id')->toArray();
-        $lokasiKeong = LokasiKeong::with('desa')->whereIn('id', $getLokasiKeongBelumTerealisasi)->get();
+        $lokasiKeong = LokasiKeong::with(['desa', 'pemilikLokasiKeong', 'pemilikLokasiKeong.penduduk'])->whereIn('id', $getLokasiKeongBelumTerealisasi)->get();
 
         $rencana_intervensi_keong = $realisasi_intervensi_keong->perencanaanKeong;
         $penggunaanAnggaran = 0;
@@ -652,7 +652,7 @@ class RealisasiKeongController extends Controller
     public function showLaporan(RealisasiKeong $realisasi_intervensi_keong)
     {
         $getLokasiKeongTerealisasi = $realisasi_intervensi_keong->lokasiRealisasiKeong->pluck('lokasi_keong_id')->toArray();
-        $lokasiKeong = LokasiKeong::with('desa')->whereIn('id', $getLokasiKeongTerealisasi)->get();
+        $lokasiKeong = LokasiKeong::with(['desa', 'pemilikLokasiKeong', 'pemilikLokasiKeong.penduduk'])->whereIn('id', $getLokasiKeongTerealisasi)->get();
         $data = [
             'rencana_intervensi_keong' => $realisasi_intervensi_keong->perencanaanKeong,
             'realisasi_intervensi_keong' => $realisasi_intervensi_keong,

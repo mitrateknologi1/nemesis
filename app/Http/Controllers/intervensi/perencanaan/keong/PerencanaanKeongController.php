@@ -545,7 +545,7 @@ class PerencanaanKeongController extends Controller
     public function map(PerencanaanKeong $rencana_intervensi_keong)
     {
         $getLokasiKeong = $rencana_intervensi_keong->lokasiPerencanaanKeong->pluck('lokasi_keong_id')->toArray();
-        $lokasiKeong = LokasiKeong::with('desa')->whereIn('id', $getLokasiKeong)->get();
+        $lokasiKeong = LokasiKeong::with(['desa', 'pemilikLokasiKeong', 'pemilikLokasiKeong.penduduk'])->whereIn('id', $getLokasiKeong)->get();
         return response()->json(['status' => 'success', 'data' => $lokasiKeong]);
     }
 

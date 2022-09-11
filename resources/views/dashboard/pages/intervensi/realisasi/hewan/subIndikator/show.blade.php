@@ -733,15 +733,43 @@
                 success: function(response) {
                     if (response.status == 'success') {
                         for (var i = 0; i < response.data.length; i++) {
+                            var jumlahHewan = '';
+                            var pemilikHewan = '';
+
+                            if (response.data[i].jumlah_hewan.length > 0) {
+                                jumlahHewan += '<hr class="my-1">';
+                                jumlahHewan += "<p class='my-0 fw-bold'>Jumlah Hewan Ternak: </p>";
+                                for (var j = 0; j < response.data[i].jumlah_hewan.length; j++) {
+                                    jumlahHewan += "<p class='my-0'>- " + response.data[i].jumlah_hewan[j].hewan
+                                        .nama + " : " + response.data[i].jumlah_hewan[j].jumlah + "</p>";
+                                }
+                            }
+
+                            if (response.data[i].pemilik_lokasi_hewan.length > 0) {
+                                pemilikHewan += '<hr class="my-1">';
+                                pemilikHewan += "<p class='my-0 fw-bold'>Pemilik Ternak : </p>";
+                                for (var j = 0; j < response.data[i].pemilik_lokasi_hewan.length; j++) {
+                                    pemilikHewan += "<p class='my-0'>- " + response.data[i]
+                                        .pemilik_lokasi_hewan[
+                                            j].penduduk.nama + "</p>";
+                                }
+                            }
+
                             icon = pinIcon;
                             L.marker([response.data[i].latitude, response.data[i].longitude], {
                                     icon: icon
                                 })
                                 .bindPopup(
                                     "<p class='fw-bold my-0 text-center'>" + response.data[i].nama +
-                                    "</p><hr>" +
-                                    "<p class='my-0'>Desa : " + response.data[i].desa
-                                    .nama + "</p>"
+                                    "</p><hr class='my-1'>" +
+                                    "<p class='my-0 fw-bold'>Desa : </p>" +
+                                    "<p class='my-0'>" + response.data[i].desa
+                                    .nama + "</p>" +
+                                    "<p class='my-0 fw-bold'>Latitude : </p>" +
+                                    "<p class='my-0'>" + response.data[i].latitude + "</p>" +
+                                    "<p class='my-0 fw-bold'>Longitude : </p>" +
+                                    "<p class='my-0'>" + response.data[i].longitude + "</p>" +
+                                    jumlahHewan + pemilikHewan
                                 )
                                 // .on('click', L.bind(petaKlik, null, data[0][i].id))
                                 .addTo(map);

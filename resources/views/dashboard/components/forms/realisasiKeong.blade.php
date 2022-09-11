@@ -498,15 +498,32 @@
             const data = {!! $dataMap !!};
 
             for (var i = 0; i < data.length; i++) {
+                var pemilikKeong = '';
+                if (data[i].pemilik_lokasi_keong.length > 0) {
+                    pemilikKeong += '<hr class="my-1">';
+                    pemilikKeong += "<p class='my-0 fw-bold'>Pemilik Lahan : </p>";
+                    for (var j = 0; j < data[i].pemilik_lokasi_keong.length; j++) {
+                        pemilikKeong += "<p class='my-0'> -" + data[i]
+                            .pemilik_lokasi_keong[
+                                j].penduduk.nama + "</p>";
+                    }
+                }
+
                 icon = pinIcon;
                 L.marker([data[i].latitude, data[i].longitude], {
                         icon: icon
                     })
                     .bindPopup(
                         "<p class='fw-bold my-0 text-center'>" + data[i].nama +
-                        "</p><hr>" +
-                        "<p class='my-0'>Desa : " + data[i].desa
-                        .nama + "</p>"
+                        "</p><hr class='my-1'>" +
+                        "<p class='my-0 fw-bold'>Desa : </p>" +
+                        "<p class='my-0'>" + data[i].desa
+                        .nama + "</p>" +
+                        "<p class='my-0 fw-bold'>Latitude : </p>" +
+                        "<p class='my-0'>" + data[i].latitude + "</p>" +
+                        "<p class='my-0 fw-bold'>Longitude : </p>" +
+                        "<p class='my-0'>" + data[i].longitude + "</p>" +
+                        pemilikKeong
                     )
                     // .on('click', L.bind(petaKlik, null, data[0][i].id))
                     .addTo(map);

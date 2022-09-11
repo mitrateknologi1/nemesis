@@ -317,7 +317,7 @@ class RealisasiHewanController extends Controller
         }
 
         $getLokasiHewanBelumTerealisasi = $rencana_intervensi_hewan->lokasiPerencanaanHewan->whereNull('realisasi_hewan_id')->pluck('lokasi_hewan_id')->toArray();
-        $lokasiHewan = LokasiHewan::with('desa')->whereIn('id', $getLokasiHewanBelumTerealisasi)->get();
+        $lokasiHewan = LokasiHewan::with(['desa', 'jumlahHewan', 'jumlahHewan.hewan', 'pemilikLokasiHewan', 'pemilikLokasiHewan.penduduk'])->whereIn('id', $getLokasiHewanBelumTerealisasi)->get();
 
         $penggunaanAnggaran = 0;
         foreach ($rencana_intervensi_hewan->realisasiHewan->where('status', 1) as $item) {
@@ -477,7 +477,7 @@ class RealisasiHewanController extends Controller
     public function showLaporan(RealisasiHewan $realisasi_intervensi_hewan)
     {
         $getLokasiHewanTerealisasi = $realisasi_intervensi_hewan->lokasiRealisasiHewan->pluck('lokasi_hewan_id')->toArray();
-        $lokasiHewan = LokasiHewan::with('desa')->whereIn('id', $getLokasiHewanTerealisasi)->get();
+        $lokasiHewan = LokasiHewan::with(['desa', 'jumlahHewan', 'jumlahHewan.hewan', 'pemilikLokasiHewan', 'pemilikLokasiHewan.penduduk'])->whereIn('id', $getLokasiHewanTerealisasi)->get();
         $data = [
             'rencana_intervensi_hewan' => $realisasi_intervensi_hewan->perencanaanHewan,
             'realisasi_intervensi_hewan' => $realisasi_intervensi_hewan,
@@ -514,7 +514,7 @@ class RealisasiHewanController extends Controller
             })->pluck('lokasi_hewan_id')->toArray();
 
         $getLokasiHewanBelumTerealisasi = $realisasi_intervensi_hewan->perencanaanHewan->lokasiPerencanaanHewan->whereNull('realisasi_hewan_id')->pluck('lokasi_hewan_id')->toArray();
-        $lokasiHewan = LokasiHewan::with('desa')->whereIn('id', $getLokasiHewanBelumTerealisasi)->get();
+        $lokasiHewan = LokasiHewan::with(['desa', 'jumlahHewan', 'jumlahHewan.hewan', 'pemilikLokasiHewan', 'pemilikLokasiHewan.penduduk'])->whereIn('id', $getLokasiHewanBelumTerealisasi)->get();
 
         $rencana_intervensi_hewan = $realisasi_intervensi_hewan->perencanaanHewan;
         $penggunaanAnggaran = 0;

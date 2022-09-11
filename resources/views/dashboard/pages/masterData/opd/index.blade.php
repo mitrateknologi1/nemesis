@@ -159,7 +159,7 @@
                                     });
                                     resetModal();
                                 } else {
-                                    printErrorMsgx(response.error);
+                                    printErrorMsg(response.error);
                                 }
                             },
                             error: function(response) {

@@ -300,7 +300,12 @@
                                     "</p><hr class='my-1'>" +
                                     "<p class='my-0 fw-bold'>Desa : </p>" +
                                     "<p class='my-0'>" + response.data[i].desa
-                                    .nama + "</p>" + pemilikKeong
+                                    .nama + "</p>" +
+                                    "<p class='my-0 fw-bold'>Latitude : </p>" +
+                                    "<p class='my-0'>" + response.data[i].latitude + "</p>" +
+                                    "<p class='my-0 fw-bold'>Longitude : </p>" +
+                                    "<p class='my-0'>" + response.data[i].longitude + "</p>" +
+                                    pemilikKeong
                                 )
                                 // .on('click', L.bind(petaKlik, null, data[0][i].id))
                                 .addTo(map);

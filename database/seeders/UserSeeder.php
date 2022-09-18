@@ -94,7 +94,7 @@ class UserSeeder extends Seeder
                 'username' => 'opd7',
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
                 'opd_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c10',
-                'status' => 2,
+                'status' => 1,
                 'role' => 'OPD'
             ],
 

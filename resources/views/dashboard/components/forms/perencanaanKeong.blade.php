@@ -37,7 +37,7 @@
                 <div class="form-group p-0 pb-2">
                     <label class="my-2">Pilih Titik Lokasi <sup class="text-danger">*</sup></label>
                     <div class="select2-input select2-danger">
-                        <input type="hidden" name="lokasi_hidden" id="lokasi-hidden" data-label="Lokasi Titik"
+                        <input type="hidden" name="lokasi_hidden" id="lokasi-hidden" data-label="Titik Lokasi"
                             value="">
                         <select id="lokasi-perencanaan" name="lokasi[]" class="form-control multiple"
                             multiple="multiple" data-label="Titik Lokasi"

@@ -22,25 +22,12 @@
 
 @section('contents')
     <div class="row">
-        <div class="col-12 {{ $totalMenungguKonfirmasiPerencanaanHewan == 0 ? 'd-none' : '' }}">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-head-row">
-                        <div class="card-title fw-bold text-primary"><i class="icon-bell"></i> Pemberitahuan</div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="alert alert-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} d-flex justify-content-between mb-0"
-                        role="alert">
-                        <span>
-                            Terdapat <b>{{ $totalMenungguKonfirmasiPerencanaanHewan }}</b> data perencanaan yang
-                            {{ Auth::user()->role == 'OPD' ? 'ditolak' : 'menunggu konfirmasi' }}.
-                            {{ Auth::user()->role == 'OPD' ? 'Silahkan ubah data tersebut dan kemudian perbarui datanya.' : '' }}
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @component('dashboard.components.alerts.perencanaan',
+            [
+                'totalMenungguKonfirmasiPerencanaan' => $totalMenungguKonfirmasiPerencanaan,
+                'totalAlasanTidakTerselesaikan' => $totalAlasanTidakTerselesaikan,
+            ])
+        @endcomponent
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
@@ -105,6 +92,7 @@
                                     <option value="-">Menunggu Konfirmasi</option>
                                     <option value="1">Disetujui</option>
                                     <option value="2">Ditolak</option>
+                                    <option value="3">Tidak Terselesaikan Ditahun Sebelumnya</option>
                                 @endslot
                             @endcomponent
                         </div>
@@ -136,6 +124,19 @@
             </div>
         </div>
     </div>
+
+    @component('dashboard.components.modals.buatAlasanTidakTerselesaikan',
+        [
+            'action' => url('rencana-intervensi-hewan/buat-alasan-tidak-terselesaikan/'),
+        ])
+    @endcomponent
+
+    @component('dashboard.components.modals.lihatAlasanTidakTerselesaikan',
+        [
+            'action' => url('rencana-intervensi-hewan/baca-alasan-tidak-terselesaikan/'),
+        ])
+    @endcomponent
+
 @endsection
 
 @push('scripts')
@@ -242,19 +243,33 @@
                 buttons: ["Batal", "Ya"],
             }).then((result) => {
                 if (result) {
-                    $.ajax({
-                        type: 'DELETE',
-                        url: "{{ url('rencana-intervensi-hewan') }}" + '/' + id,
-                        data: {
-                            _token: _token
-                        },
-                        success: function(data) {
-                            swal({
-                                title: "Berhasil!",
-                                text: "Data yang dipilih berhasil dihapus.",
-                                icon: "success",
-                            }).then(function() {
-                                table.ajax.reload();
+                    swal({
+                        title: 'Apakah anda benar-benar yakin ingin menghapus perencanaan ?',
+                        text: "Data yang dihapus tidak akan dapat dikembalikkan lagi!",
+                        icon: "warning",
+                        dangerMode: true,
+                        buttons: ["Batal", "Ya"],
+                    }).then((result) => {
+                        if (result) {
+                            $.ajax({
+                                type: 'DELETE',
+                                url: "{{ url('rencana-intervensi-hewan') }}" + '/' + id,
+                                data: {
+                                    _token: _token
+                                },
+                                success: function(data) {
+                                    swal({
+                                        title: "Berhasil!",
+                                        text: "Data yang dipilih berhasil dihapus.",
+                                        icon: "success",
+                                    }).then(function() {
+                                        table.ajax.reload();
+                                    });
+                                }
+                            })
+                        } else {
+                            swal("Data batal dihapus.", {
+                                icon: "error",
                             });
                         }
                     })

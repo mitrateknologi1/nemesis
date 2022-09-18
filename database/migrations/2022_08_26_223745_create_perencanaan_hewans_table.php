@@ -22,6 +22,8 @@ return new class extends Migration
             $table->integer('status')->default(0); // 0/1/2
             $table->date('tanggal_konfirmasi')->nullable();
             $table->text('alasan_ditolak')->nullable();
+            $table->text('alasan_tidak_terselesaikan')->nullable();
+            $table->integer('status_baca')->nullable();
             $table->timestamps();
         });
     }

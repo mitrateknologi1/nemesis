@@ -48,6 +48,27 @@ class DashboardController extends Controller
         $tabelAnggaranHewan = $this->_tabelAnggaranHewan($tahun);
         $tabelAnggaranSemua = $this->_tabelAnggaranSemua($tahun);
 
+        $perencanaanKeong = PerencanaanKeong::where(function ($query) {
+            if (Auth::user()->role == 'OPD') {
+                $query->where('opd_id', Auth::user()->opd_id);
+            }
+        })->latest()->get();
+        $totalPerencanaanKeongTidakTerselesaikan = 0;
+
+        $perencanaanManusia = PerencanaanManusia::where(function ($query) {
+            if (Auth::user()->role == 'OPD') {
+                $query->where('opd_id', Auth::user()->opd_id);
+            }
+        })->latest()->get();
+        $totalPerencanaanManusiaTidakTerselesaikan = 0;
+
+        $perencanaanHewan = PerencanaanHewan::where(function ($query) {
+            if (Auth::user()->role == 'OPD') {
+                $query->where('opd_id', Auth::user()->opd_id);
+            }
+        })->latest()->get();
+        $totalPerencanaanHewanTidakTerselesaikan = 0;
+
         if (Auth::user()->role == 'OPD') {
             $totalMenungguKonfirmasiPerencanaanKeong = PerencanaanKeong::where('status', 2)->where('opd_id', Auth::user()->opd_id)->count();
             $totalMenungguKonfirmasiPerencanaanManusia = PerencanaanManusia::where('status', 2)->where('opd_id', Auth::user()->opd_id)->count();
@@ -59,6 +80,24 @@ class DashboardController extends Controller
             $totalMenungguKonfirmasiRealisasiManusia = RealisasiManusia::whereIn('perencanaan_manusia_id', $listPerencanaanManusia)->where('status', 2)->count();
             $listPerencanaanHewan = PerencanaanHewan::where('opd_id', Auth::user()->opd_id)->where('status', 1)->pluck('id')->toArray();
             $totalMenungguKonfirmasiRealisasiHewan = RealisasiHewan::whereIn('perencanaan_hewan_id', $listPerencanaanHewan)->where('status', 2)->count();
+
+            foreach ($perencanaanKeong as $row) {
+                if (($row->created_at->year != Carbon::now()->year) && ($row->realisasiKeong->where('status', 1)->max('progress') != 100) && ($row->alasan_tidak_terselesaikan == null) && ($row->status_baca == null)) {
+                    $totalPerencanaanKeongTidakTerselesaikan++;
+                }
+            }
+
+            foreach ($perencanaanManusia as $row) {
+                if (($row->created_at->year != Carbon::now()->year) && ($row->realisasiManusia->where('status', 1)->max('progress') != 100) && ($row->alasan_tidak_terselesaikan == null) && ($row->status_baca == null)) {
+                    $totalPerencanaanManusiaTidakTerselesaikan++;
+                }
+            }
+
+            foreach ($perencanaanHewan as $row) {
+                if (($row->created_at->year != Carbon::now()->year) && ($row->realisasiHewan->where('status', 1)->max('progress') != 100) && ($row->alasan_tidak_terselesaikan == null) && ($row->status_baca == null)) {
+                    $totalPerencanaanHewanTidakTerselesaikan++;
+                }
+            }
         } else if (in_array(Auth::user()->role, ['Admin', 'Pimpinan'])) {
             $totalMenungguKonfirmasiPerencanaanKeong = PerencanaanKeong::where('status', 0)->count();
             $totalMenungguKonfirmasiPerencanaanManusia = PerencanaanManusia::where('status', 0)->count();
@@ -67,6 +106,24 @@ class DashboardController extends Controller
             $totalMenungguKonfirmasiRealisasiKeong = RealisasiKeong::where('status', 0)->count();
             $totalMenungguKonfirmasiRealisasiManusia = RealisasiManusia::where('status', 0)->count();
             $totalMenungguKonfirmasiRealisasiHewan = RealisasiHewan::where('status', 0)->count();
+
+            foreach ($perencanaanKeong as $row) {
+                if (($row->created_at->year != Carbon::now()->year) && ($row->realisasiKeong->where('status', 1)->max('progress') != 100) && ($row->alasan_tidak_terselesaikan != null) && ($row->status_baca != 1)) {
+                    $totalPerencanaanKeongTidakTerselesaikan++;
+                }
+            }
+
+            foreach ($perencanaanManusia as $row) {
+                if (($row->created_at->year != Carbon::now()->year) && ($row->realisasiManusia->where('status', 1)->max('progress') != 100) && ($row->alasan_tidak_terselesaikan != null) && ($row->status_baca != 1)) {
+                    $totalPerencanaanManusiaTidakTerselesaikan++;
+                }
+            }
+
+            foreach ($perencanaanHewan as $row) {
+                if (($row->created_at->year != Carbon::now()->year) && ($row->realisasiHewan->where('status', 1)->max('progress') != 100) && ($row->alasan_tidak_terselesaikan != null) && ($row->status_baca != 1)) {
+                    $totalPerencanaanHewanTidakTerselesaikan++;
+                }
+            }
         }
 
         $tahunKeong = PerencanaanKeong::selectRaw('year(created_at) year')->groupBy('year')->get()->pluck('year')->toArray();
@@ -95,6 +152,9 @@ class DashboardController extends Controller
                 'totalMenungguKonfirmasiRealisasiKeong',
                 'totalMenungguKonfirmasiRealisasiManusia',
                 'totalMenungguKonfirmasiRealisasiHewan',
+                'totalPerencanaanKeongTidakTerselesaikan',
+                'totalPerencanaanManusiaTidakTerselesaikan',
+                'totalPerencanaanHewanTidakTerselesaikan',
                 'daftarTahun',
                 'tahun'
             ]

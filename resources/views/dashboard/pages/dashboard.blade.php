@@ -43,7 +43,10 @@
                     $totalMenungguKonfirmasiPerencanaanHewan == 0 &&
                     $totalMenungguKonfirmasiRealisasiKeong == 0 &&
                     $totalMenungguKonfirmasiRealisasiManusia == 0 &&
-                    $totalMenungguKonfirmasiRealisasiManusia == 0
+                    $totalMenungguKonfirmasiRealisasiManusia == 0 &&
+                    $totalPerencanaanKeongTidakTerselesaikan == 0 &&
+                    $totalPerencanaanManusiaTidakTerselesaikan == 0 &&
+                    $totalPerencanaanHewanTidakTerselesaikan == 0
                 ))
                     <div class="col-12">
                         <div class="card">
@@ -55,6 +58,74 @@
                                 </div>
                             </div>
                             <div class="card-body">
+                                <div class="alert alert-secondary {{ $totalPerencanaanKeongTidakTerselesaikan == 0 ? 'd-none' : '' }}"
+                                    role="alert">
+                                    <div class="row">
+                                        <div class="col-10 pr-0">
+                                            <span>
+                                                <b>Perencanaan Habitat Keong:</b> Terdapat
+                                                <b>{{ $totalPerencanaanKeongTidakTerselesaikan }}</b>
+                                                perencanaan yang
+                                                {{ Auth::user()->role == 'OPD'
+                                                    ? ' belum diselesaikan pada tahun sebelumnya dan belum ditambahkan alasan mengapa tidak di selesaikan. Silahkan tambahkan alasan mengapa tidak menyelesaikannya'
+                                                    : ' memberikan informasi mengenai alasan mengapa tidak menyelesaikan perencanaan tersebut pada tahun sebelumnya' }}.
+                                            </span>
+                                        </div>
+                                        <div class="col-2 d-flex align-items-center pl-0">
+                                            <a href="{{ url('rencana-intervensi-keong') }}"
+                                                class="badge badge-secondary float-right"><i class="fas fa-info-circle"></i>
+                                                Lihat
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="alert alert-secondary {{ $totalPerencanaanManusiaTidakTerselesaikan == 0 ? 'd-none' : '' }}"
+                                    role="alert">
+                                    <div class="row">
+                                        <div class="col-10 pr-0">
+                                            <span>
+                                                <b>Perencanaan Manusia:</b> Terdapat
+                                                <b>{{ $totalPerencanaanManusiaTidakTerselesaikan }}</b>
+                                                perencanaan yang
+                                                {{ Auth::user()->role == 'OPD'
+                                                    ? ' belum diselesaikan pada tahun sebelumnya dan belum ditambahkan alasan mengapa tidak di selesaikan. Silahkan tambahkan alasan mengapa tidak menyelesaikannya'
+                                                    : ' memberikan informasi mengenai alasan mengapa tidak menyelesaikan perencanaan tersebut pada tahun sebelumnya' }}.
+                                            </span>
+                                        </div>
+                                        <div class="col-2 d-flex align-items-center pl-0">
+                                            <a href="{{ url('rencana-intervensi-manusia') }}"
+                                                class="badge badge-secondary float-right"><i class="fas fa-info-circle"></i>
+                                                Lihat
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="alert alert-secondary {{ $totalPerencanaanHewanTidakTerselesaikan == 0 ? 'd-none' : '' }}"
+                                    role="alert">
+                                    <div class="row">
+                                        <div class="col-10 pr-0">
+                                            <span>
+                                                <b>Perencanaan Lokasi Hewan Ternak:</b> Terdapat
+                                                <b>{{ $totalPerencanaanHewanTidakTerselesaikan }}</b>
+                                                perencanaan yang
+                                                {{ Auth::user()->role == 'OPD'
+                                                    ? ' belum diselesaikan pada tahun sebelumnya dan belum ditambahkan alasan mengapa tidak di selesaikan. Silahkan tambahkan alasan mengapa tidak menyelesaikannya'
+                                                    : ' memberikan informasi mengenai alasan mengapa tidak menyelesaikan perencanaan tersebut pada tahun sebelumnya' }}.
+                                            </span>
+                                        </div>
+                                        <div class="col-2 d-flex align-items-center pl-0">
+                                            <a href="{{ url('rencana-intervensi-hewan') }}"
+                                                class="badge badge-secondary float-right"><i class="fas fa-info-circle"></i>
+                                                Lihat
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Batas --}}
                                 <div class="alert alert-{{ Auth::user()->role == 'OPD' ? 'danger' : 'warning' }} {{ $totalMenungguKonfirmasiPerencanaanKeong == 0 ? 'd-none' : '' }}"
                                     role="alert">
                                     <div class="row">
@@ -811,7 +882,8 @@
                                             <td class="text-center">{{ $perencanaan }}</td>
                                             <td class="text-center">{{ $realisasi }}</td>
                                             <td class="text-center">
-                                                {{ $perencanaan == 0 ? 0 : round(($realisasi / $perencanaan) * 100, 2) }} %
+                                                {{ $perencanaan == 0 ? 0 : round(($realisasi / $perencanaan) * 100, 2) }}
+                                                %
                                             </td>
                                         </tr>
                                     @endif
@@ -900,11 +972,11 @@
                                                 if ($keong['persentase'] != '-') {
                                                     $keongPersentase = $keong['persentase'];
                                                 }
-
+                                                
                                                 if ($tabelManusia[$loop->index]['persentase'] != '-') {
                                                     $manusiaPersentase = $tabelManusia[$loop->index]['persentase'];
                                                 }
-
+                                                
                                                 if ($tabelHewan[$loop->index]['persentase'] != '-') {
                                                     $hewanPersentase = $tabelHewan[$loop->index]['persentase'];
                                                 }

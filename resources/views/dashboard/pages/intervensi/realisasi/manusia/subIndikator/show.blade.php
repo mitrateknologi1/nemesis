@@ -76,8 +76,9 @@
                         <div class="row">
                             <div class="col">
                                 <div class="alert alert-info mx-2 font-weight-bold" role="alert">Info : <span
-                                        class="text-info">Anda hanya dapat melihat data laporan yang telah / berstatus
-                                        "Disetujui"</span></div>
+                                        class="text-info">Anda hanya dapat melihat data laporan. Karena yang dapat
+                                        mengajukan pelaporan pada sub indikator ini hanyalah
+                                        {{ $rencana_intervensi_manusia->opd->nama }}.</span></div>
                             </div>
                         </div>
                     @endif

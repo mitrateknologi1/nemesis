@@ -35,12 +35,12 @@ class PerencanaanKeongController extends Controller
      */
     public function dataPerencanaan()
     {
-        $query = PerencanaanKeong::with('opd', 'lokasiPerencanaanKeong')
+        $query = PerencanaanKeong::with('opd', 'lokasiPerencanaanKeong', 'opdTerkaitKeong', 'realisasiKeong')
             ->where(function ($query) {
                 if (Auth::user()->role == 'OPD') {
                     $query->where('opd_id', Auth::user()->opd_id);
                     $query->orWhereHas('opdTerkaitKeong', function ($q) { // OPD Terkait hanya bisa melihat yang telah di setujui
-                        $q->where('status', 1);
+                        // $q->where('status', 1);
                         $q->where('opd_id', Auth::user()->opd_id);
                     });
                 }
@@ -65,8 +65,23 @@ class PerencanaanKeongController extends Controller
                     }
 
                     if ($request->status_filter && $request->status_filter != 'semua') {
-                        $filter = $request->status_filter == "-" ? 0 : $request->status_filter;
-                        $query->where('status', $filter);
+                        $filter = $request->status_filter;
+                        if (in_array($filter, ["-", 1, 2])) {
+                            if ($filter == "-") {
+                                $query->where('status', 0);
+                            } else {
+                                $query->where('status', $filter);
+                            }
+                        } else {
+                            if ($filter == 3) {
+                                // $query->created_at->year != Carbon::now()->year;
+                                $query->whereYear('created_at', '!=', Carbon::now()->year);
+                                $query->whereHas('realisasiKeong', function ($q) {
+                                    $q->where('status', 1);
+                                    $q->havingRaw('max(progress) != ?', [100]);
+                                });
+                            }
+                        }
                     }
 
                     if ($request->search_filter) {
@@ -83,7 +98,34 @@ class PerencanaanKeongController extends Controller
                     if ($row->status == 0) {
                         return '<span class="badge fw-bold badge-warning">Menunggu Konfirmasi</span>';
                     } else if ($row->status == 1) {
-                        return '<span class="badge fw-bold badge-success">Disetujui</span>';
+                        $status = '<div class="my-2">';
+                        $status .= '<span class="badge fw-bold badge-success mb-1">Disetujui</span>';
+                        if ($row->realisasiKeong->where('status', 1)->count() > 0) {
+                            $status .=  '<br><a class="shadow" href="' . route('realisasi-intervensi-keong.show', $row->id) . '"><span class="badge fw-bold badge-primary">Progress: ' . $row->realisasiKeong->where('status', 1)->max('progress') . '%</span></a>';
+                        } else {
+                            $status .=  '<br><span class="badge fw-bold badge-primary">Progress: 0%</span>';
+                        }
+                        if (($row->created_at->year != Carbon::now()->year) && ($row->realisasiKeong->where('status', 1)->max('progress') != 100)) {
+                            $status .=  '<br><span class="badge fw-bold badge-secondary mt-1">Tidak Terselesaikan Ditahun ' . $row->created_at->year . '</span>';
+                            if ($row->alasan_tidak_terselesaikan == null && $row->status_baca == null) {
+                                $status .=  '<br><span class="badge fw-bold badge-danger mt-1">Belum Ada Alasan</span>';
+                                if (Auth::user()->opd_id == $row->opd_id) {
+                                    $status .=  '<br><button id="tambah-alasan" class="btn btn-sm btn-rounded shadow btn-danger mt-1 font-weight-bold tambah-alasan" data-id="' . $row->id . '" data-sub-indikator="' . $row->sub_indikator . '"><i class="fas fa-plus"></i> Tambahkan Alasan</button>';
+                                }
+                            } else {
+                                if (Auth::user()->role == 'OPD') {
+                                    $status .=  '<br><button id="lihat-alasan" class="btn btn-sm btn-rounded shadow btn-danger mt-1 font-weight-bold lihat-alasan" data-id="' . $row->id . '" data-sub-indikator="' . $row->sub_indikator . '" data-alasan="' . $row->alasan_tidak_terselesaikan . '"><i class="fas fa-eye"></i> Lihat Alasan</button>';
+                                } else {
+                                    if ($row->status_baca == 0) {
+                                        $status .=  '<br><button id="lihat-alasan" class="btn btn-sm btn-rounded shadow btn-danger mt-1 font-weight-bold lihat-alasan" data-id="' . $row->id . '" data-sub-indikator="' . $row->sub_indikator . '" data-alasan="' . $row->alasan_tidak_terselesaikan . '" data-status-baca="' . $row->status_baca . '"><i class="fas fa-eye"></i> Lihat Alasan <span class="font-weight-bold">(Belum Dibaca)</span></button>';
+                                    } else if ($row->status_baca == 1) {
+                                        $status .=  '<br><button id="lihat-alasan" class="btn btn-sm btn-rounded shadow btn-danger mt-1 font-weight-bold lihat-alasan" data-id="' . $row->id . '" data-sub-indikator="' . $row->sub_indikator . '" data-alasan="' . $row->alasan_tidak_terselesaikan . '" data-status-baca="' . $row->status_baca . '"><i class="fas fa-eye"></i> Lihat Alasan <span style="font-style: italic;">(Sudah Dibaca)</span></button>';
+                                    }
+                                }
+                            }
+                        }
+                        $status .= '</div>';
+                        return $status;
                     } else if ($row->status == 2) {
                         return '<span class="badge fw-bold badge-danger">Ditolak</span>';
                     }
@@ -110,8 +152,10 @@ class PerencanaanKeongController extends Controller
                     if ($row->status == 0) {
                         if (Auth::user()->role == 'OPD') {
                             $actionBtn .= '<a href="' . route('rencana-intervensi-keong.show', $row->id) . '" id="btn-show" class="btn btn-rounded btn-primary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a> ';
-                            $actionBtn .= '<a href="' . route('rencana-intervensi-keong.edit', $row->id) . '" id="btn-edit" class="btn btn-rounded btn-warning btn-sm my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a> ';
-                            $actionBtn .= '<button id="btn-delete" class="btn btn-rounded btn-danger btn-sm my-1 text-white shadow btn-delete" data-toggle="tooltip" data-placement="top" title="Hapus" value="' . $row->id . '"><i class="fas fa-trash"></i></button>';
+                            if (Auth::user()->opd_id == $row->opd_id) {
+                                $actionBtn .= '<a href="' . route('rencana-intervensi-keong.edit', $row->id) . '" id="btn-edit" class="btn btn-rounded btn-warning btn-sm my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a> ';
+                                $actionBtn .= '<button id="btn-delete" class="btn btn-rounded btn-danger btn-sm my-1 text-white shadow btn-delete" data-toggle="tooltip" data-placement="top" title="Hapus" value="' . $row->id . '"><i class="fas fa-trash"></i></button>';
+                            }
                         } else { //admin & pimpinan
                             if (Auth::user()->role == 'Admin') {
                                 $actionBtn .= '<a href="' . route('rencana-intervensi-keong.show', $row->id) . '" id="btn-show" class="btn btn-rounded btn-secondary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Konfirmasi"><i class="fas fa-lg fa-clipboard-check"></i></a> ';
@@ -127,7 +171,7 @@ class PerencanaanKeongController extends Controller
                         }
                     } else { // > 2
                         $actionBtn .= '<a href="' . route('rencana-intervensi-keong.show', $row->id) . '" id="btn-show" class="btn btn-rounded btn-primary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a> ';
-                        if (Auth::user()->role == 'OPD') {
+                        if ((Auth::user()->role == 'OPD') && (Auth::user()->opd_id == $row->opd_id)) {
                             $actionBtn .= '<a href="' . route('rencana-intervensi-keong.edit', $row->id) . '" id="btn-edit" class="btn btn-rounded btn-warning btn-sm my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a> ';
                             $actionBtn .= '<button id="btn-delete" class="btn btn-rounded btn-danger btn-sm my-1 text-white shadow btn-delete" data-toggle="tooltip" data-placement="top" title="Hapus" value="' . $row->id . '"><i class="fas fa-trash"></i></button>';
                         }
@@ -145,19 +189,39 @@ class PerencanaanKeongController extends Controller
                 ->make(true);
         }
 
+        $perencanaanKeong2 = PerencanaanKeong::where(function ($query) {
+            if (Auth::user()->role == 'OPD') {
+                $query->where('opd_id', Auth::user()->opd_id);
+            }
+        })->latest()->get();
+        $countPerencanaanTidakTerselesaikan = 0;
         if (Auth::user()->role == 'OPD') {
+            foreach ($perencanaanKeong2 as $row) {
+                if (($row->created_at->year != Carbon::now()->year) && ($row->realisasiKeong->where('status', 1)->max('progress') != 100) && ($row->alasan_tidak_terselesaikan == null) && ($row->status_baca == null)) {
+                    $countPerencanaanTidakTerselesaikan++;
+                }
+            }
+
             $totalMenungguKonfirmasiPerencanaanKeong = PerencanaanKeong::where('status', 2)->where('opd_id', Auth::user()->opd_id)->count();
         } else {
+            foreach ($perencanaanKeong2 as $row) {
+                if (($row->created_at->year != Carbon::now()->year) && ($row->realisasiKeong->where('status', 1)->max('progress') != 100) && ($row->alasan_tidak_terselesaikan != null) && ($row->status_baca != 1)) {
+                    $countPerencanaanTidakTerselesaikan++;
+                }
+            }
+
             $totalMenungguKonfirmasiPerencanaanKeong = PerencanaanKeong::where('status', 0)->count();
         }
+
+        $totalAlasanTidakTerselesaikan = $countPerencanaanTidakTerselesaikan;
 
         $tahun = $this->dataPerencanaan()->select(DB::raw('YEAR(created_at) year'))
             ->groupBy('year')
             ->pluck('year');
 
-        $perencanaanKeong = $this->dataPerencanaan()->groupBy('opd_id')->get();
+        $perencanaanKeong3 = $this->dataPerencanaan()->groupBy('opd_id')->get();
 
-        return view('dashboard.pages.intervensi.perencanaan.keong.subIndikator.index', ['perencanaanKeong' => $perencanaanKeong, 'totalMenungguKonfirmasiPerencanaanKeong' => $totalMenungguKonfirmasiPerencanaanKeong, 'tahun' => $tahun]);
+        return view('dashboard.pages.intervensi.perencanaan.keong.subIndikator.index', ['perencanaanKeong' => $perencanaanKeong3, 'totalMenungguKonfirmasiPerencanaan' => $totalMenungguKonfirmasiPerencanaanKeong, 'tahun' => $tahun, 'totalAlasanTidakTerselesaikan' => $totalAlasanTidakTerselesaikan]);
     }
 
     /**
@@ -167,9 +231,23 @@ class PerencanaanKeongController extends Controller
      */
     public function create()
     {
-        if (Auth::user()->role == 'Admin') {
+        if (in_array(Auth::user()->role, ['Admin', 'Pimpinan'])) {
             abort('403', 'Oops! anda tidak memiliki akses ke sini.');
         }
+
+        if (Auth::user()->role == 'OPD') {
+            $perencanaanKeong = PerencanaanKeong::where('opd_id', Auth::user()->opd_id)->get();
+            $countPerencanaanTidakTerselesaikan = null;
+            foreach ($perencanaanKeong as $row) {
+                if (($row->created_at->year != Carbon::now()->year) && ($row->realisasiKeong->where('status', 1)->max('progress') != 100) && ($row->alasan_tidak_terselesaikan == null) && ($row->status_baca == null)) {
+                    $countPerencanaanTidakTerselesaikan++;
+                }
+            }
+            if ($countPerencanaanTidakTerselesaikan) {
+                abort('403', 'Terdapat ' . $countPerencanaanTidakTerselesaikan . ' data perencanaan yang telah dibuat di tahun sebelumnya, tetapi belum meiliki alasan kenapa tidak terselesaikan. Silahkan kembali dan berikan alasan pada data perencanaan yang tidak terselesaikan pada tahun sebelumnya dengan meng-klik tombol "Tambahkan Alasan". Setelah itu anda dapat mengajukan perencanaan baru ditahun ini.');
+            }
+        }
+
         $data = [
             'desa' => Desa::all(),
             'opd' => OPD::orderBy('nama')->whereNot('id', Auth::user()->opd_id)->get(),
@@ -297,6 +375,9 @@ class PerencanaanKeongController extends Controller
                 abort('403', 'Oops! anda tidak memiliki akses ke sini.');
             }
         } else if (Auth::user()->role == 'OPD') {
+            if (Auth::user()->opd_id != $rencana_intervensi_keong->opd_id) {
+                abort('403', 'Oops! anda tidak memiliki akses ke sini.');
+            }
             if (in_array($rencana_intervensi_keong->status, [1])) {
                 abort('403', 'Oops! anda tidak memiliki akses ke sini.');
             }
@@ -567,5 +648,37 @@ class PerencanaanKeongController extends Controller
         $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
 
         return Excel::download(new PerencanaanKeongExport($dataPerencanaan), "Export Data Perencanaan Habitat Keong" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
+    }
+
+    public function buatAlasanTidakTerselesaikan(PerencanaanKeong $rencana_intervensi_keong, Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'alasan_tidak_terselesaikan' => 'required',
+            ],
+            [
+                'alasan_tidak_terselesaikan.required' => 'Alasan harus diisi',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()]);
+        }
+
+        $data = [
+            'alasan_tidak_terselesaikan' => $request->alasan_tidak_terselesaikan,
+            'status_baca' => 0
+        ];
+
+        $rencana_intervensi_keong->update($data);
+
+        return $rencana_intervensi_keong;
+    }
+
+    public function bacaAlasanTidakTerselesaikan(PerencanaanKeong $rencana_intervensi_keong)
+    {
+        $rencana_intervensi_keong->update(['status_baca' => 1]);
+        return $rencana_intervensi_keong;
     }
 }

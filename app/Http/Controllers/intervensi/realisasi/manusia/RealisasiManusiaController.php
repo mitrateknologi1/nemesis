@@ -33,7 +33,7 @@ class RealisasiManusiaController extends Controller
      */
     public function dataPerencanaan()
     {
-        $query = PerencanaanManusia::with('opd', 'pendudukPerencanaanManusia', 'realisasiManusia')
+        $query = PerencanaanManusia::with('opd', 'pendudukPerencanaanManusia', 'realisasiManusia',  'opdTerkaitManusia')
             ->where('status', 1)
             ->where(function ($query) {
                 if (Auth::user()->role == 'OPD') {
@@ -197,7 +197,7 @@ class RealisasiManusiaController extends Controller
 
         $realisasiManusia = $this->dataPerencanaan()->groupBy('opd_id')->get();
 
-        return view('dashboard.pages.intervensi.realisasi.manusia.subIndikator.index', ['realisasiManusia' => $realisasiManusia, 'totalMenungguKonfirmasiRealisasiManusia' => $totalMenungguKonfirmasiRealisasiManusia, 'tahun' => $tahun]);
+        return view('dashboard.pages.intervensi.realisasi.manusia.subIndikator.index', ['realisasiManusia' => $realisasiManusia, 'totalMenungguKonfirmasiRealisasi' => $totalMenungguKonfirmasiRealisasiManusia, 'tahun' => $tahun]);
     }
 
     public function tabelLaporan(Request $request)
@@ -215,7 +215,7 @@ class RealisasiManusiaController extends Controller
                                     $q3->where('opd_id', Auth::user()->opd_id);
                                 });
                             });
-                            $q->where('status', 1);
+                            // $q->where('status', 1);
                         });
                     }
                 })
@@ -246,12 +246,14 @@ class RealisasiManusiaController extends Controller
                     if ($row->status == 0) {
                         if (Auth::user()->role == 'OPD') {
                             $actionBtn .= '<a href="' . url('realisasi-intervensi-manusia/show-laporan', $row->id) . '" id="btn-show" class="btn btn-rounded btn-primary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a> ';
-                            $actionBtn .= '<a href="' . route('realisasi-intervensi-manusia.edit', $row->id) . '" id="btn-edit" class="btn btn-rounded btn-warning btn-sm my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a> ';
-                            $actionBtn .= '<button id="btn-delete" class="btn btn-rounded btn-danger btn-sm my-1 text-white shadow btn-delete" data-toggle="tooltip" data-placement="top" title="Hapus" value="' . $row->id . '"><i class="fas fa-trash"></i></button>';
+                            if (Auth::user()->opd_id == $row->perencanaanManusia->opd_id) {
+                                $actionBtn .= '<a href="' . route('realisasi-intervensi-manusia.edit', $row->id) . '" id="btn-edit" class="btn btn-rounded btn-warning btn-sm my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a> ';
+                                $actionBtn .= '<button id="btn-delete" class="btn btn-rounded btn-danger btn-sm my-1 text-white shadow btn-delete" data-toggle="tooltip" data-placement="top" title="Hapus" value="' . $row->id . '"><i class="fas fa-trash"></i></button>';
+                            }
                         } else { //admin & pimpinan
                             if (Auth::user()->role == 'Admin') {
                                 $actionBtn .= '<a href="' . url('realisasi-intervensi-manusia/show-laporan', $row->id) . '" id="btn-show" class="btn btn-rounded btn-secondary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Konfirmasi"><i class="fas fa-lg fa-clipboard-check"></i></a> ';
-                            } else {
+                            } else { // pimpinan
                                 $actionBtn .= '<a href="' . url('realisasi-intervensi-manusia/show-laporan', $row->id) . '" id="btn-show" class="btn btn-rounded btn-primary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a> ';
                             }
                         }
@@ -262,7 +264,7 @@ class RealisasiManusiaController extends Controller
                         }
                     } else { // > 2
                         $actionBtn .= '<a href="' . url('realisasi-intervensi-manusia/show-laporan', $row->id) . '" id="btn-show" class="btn btn-rounded btn-primary btn-sm text-white shadow btn-lihat my-1" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a> ';
-                        if (Auth::user()->role == 'OPD') {
+                        if ((Auth::user()->role == 'OPD') && (Auth::user()->opd_id == $row->perencanaanManusia->opd_id)) {
                             $actionBtn .= '<a href="' . route('realisasi-intervensi-manusia.edit', $row->id) . '" id="btn-edit" class="btn btn-rounded btn-warning btn-sm my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a> ';
                             $actionBtn .= '<button id="btn-delete" class="btn btn-rounded btn-danger btn-sm my-1 text-white shadow btn-delete" data-toggle="tooltip" data-placement="top" title="Hapus" value="' . $row->id . '"><i class="fas fa-trash"></i></button>';
                         }
@@ -293,7 +295,7 @@ class RealisasiManusiaController extends Controller
     public function createPelaporan(PerencanaanManusia $realisasi_intervensi_manusia)
     {
         $rencana_intervensi_manusia = $realisasi_intervensi_manusia;
-        if (Auth::user()->role == 'Admin' || Auth::user()->opd_id != $rencana_intervensi_manusia->opd_id) {
+        if ((Auth::user()->role == 'Admin') || (Auth::user()->opd_id != $rencana_intervensi_manusia->opd_id)) {
             abort('403', 'Oops! anda tidak memiliki akses ke sini.');
         }
 
@@ -303,15 +305,16 @@ class RealisasiManusiaController extends Controller
 
         if (Auth::user()->role == 'OPD') {
             if ($countStatusSelainDisetujui > 0) {
-                abort('403', 'Maaf, anda tidak dapat menambahkan laporan apabila terdapat laporan yang berstatus "Menunggu Dikonfirmasi" / "Ditolak". Untuk Data "Ditolak", silahkan klik tombol "Ubah" pada laporan yang berstatus "Ditolak" dan Perbarui datanya. Kemudian untuk data "Menunggu Konfirmasi", silahkan hubungi Admin untuk diproses konfirmasi.');
+                abort('403', 'Maaf, anda tidak dapat menambahkan laporan apabila terdapat laporan yang berstatus "Menunggu Dikonfirmasi" / "Ditolak". Untuk Data "Ditolak", silahkan klik tombol "Ubah" pada laporan yang berstatus "Ditolak" dan Perbarui datanya. Kemudian untuk data "Menunggu Konfirmasi", silahkan hubungi Admin untuk dapat diproses secepatnya.');
             }
             if ($rencana_intervensi_manusia->created_at->year != Carbon::now()->year) {
                 abort('403', 'Maaf, anda sudah tidak dapat membuat laporan pada sub indikator ini karena sudah berganti tahun.');
             }
-        }
 
-        if ($rencana_intervensi_manusia->realisasiManusia->where('progress', 100)->count() > 0) {
-            abort('403', 'Maaf, anda sudah tidak dapat membuat laporan pada sub indikator ini karena sudah mencapai progress 100%.');
+
+            if ($rencana_intervensi_manusia->realisasiManusia->where('progress', 100)->count() > 0) {
+                abort('403', 'Maaf, anda sudah tidak dapat membuat laporan pada sub indikator ini karena sudah mencapai progress 100%.');
+            }
         }
 
         $penggunaanAnggaran = 0;
@@ -494,6 +497,9 @@ class RealisasiManusiaController extends Controller
                 abort('403', 'Oops! anda tidak memiliki akses ke sini.');
             }
         } else if (Auth::user()->role == 'OPD') {
+            if (Auth::user()->opd_id != $realisasi_intervensi_manusia->perencanaanManusia->opd_id) {
+                abort('403', 'Oops! anda tidak memiliki akses ke sini.');
+            }
             if (in_array($realisasi_intervensi_manusia->status, [1])) {
                 abort('403', 'Oops! anda tidak memiliki akses ke sini.');
             }

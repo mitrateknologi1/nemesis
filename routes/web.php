@@ -178,6 +178,7 @@ Route::group(['middleware' => 'auth'], function () {
             'show'
         );
 
+        Route::post('master-data/penduduk/import', [PendudukController::class, 'importPenduduk']);
         Route::resource('master-data/penduduk', PendudukController::class)->except(
             'index',
             'show'
@@ -190,6 +191,7 @@ Route::group(['middleware' => 'auth'], function () {
             'show'
         );
 
+        Route::post('master-data/siswa/import', [SiswaController::class, 'importSiswa']);
         Route::resource('master-data/siswa/{sekolah}', SiswaController::class)->parameters([
             '{sekolah}' => 'siswa'
         ])->except(

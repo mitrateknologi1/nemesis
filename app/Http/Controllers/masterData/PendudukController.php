@@ -5,6 +5,7 @@ namespace App\Http\Controllers\masterData;
 use App\Exports\JumlahPendudukExport;
 use App\Exports\PendudukExport;
 use App\Http\Controllers\Controller;
+use App\Imports\ImportPenduduk;
 use App\Models\Desa;
 use App\Models\Penduduk;
 use Carbon\Carbon;
@@ -29,6 +30,11 @@ class PendudukController extends Controller
             $data = Penduduk::with(['desa'])->orderBy('created_at', 'desc')->where(function ($query) use ($request) {
                 if ($request->desa_id && $request->desa_id != "semua") {
                     $query->where('desa_id', $request->desa_id);
+                }
+
+                if ($request->search) {
+                    $query->where('nama', 'like', '%' . $request->search . '%');
+                    $query->orWhere('nik', 'like', '%' . $request->search . '%');
                 }
             })->get();
             return DataTables::of($data)
@@ -436,5 +442,28 @@ class PendudukController extends Controller
         $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
 
         return Excel::download(new JumlahPendudukExport($daftarJumlahPenduduk), "Export Data Jumlah Penduduk" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
+    }
+
+    public function importPenduduk(Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'file_import' => 'required|mimes:xlsx,xls',
+            ],
+            [
+                'file_import.required' => 'File Import tidak boleh kosong',
+                'file_import.mimes' => 'File Import harus berformat .xlsx atau .xls',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()]);
+        }
+
+        // return response()->json($request->all());
+
+        Excel::import(new ImportPenduduk(), $request->file('file_import'));
+        return response()->json(['status' => 'success']);
     }
 }

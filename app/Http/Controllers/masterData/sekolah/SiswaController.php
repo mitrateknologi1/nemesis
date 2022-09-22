@@ -4,6 +4,7 @@ namespace App\Http\Controllers\masterData\sekolah;
 
 use App\Exports\SiswaExport;
 use App\Http\Controllers\Controller;
+use App\Imports\ImportSiswa;
 use App\Models\Desa;
 use App\Models\Penduduk;
 use App\Models\Sekolah;
@@ -72,7 +73,8 @@ class SiswaController extends Controller
                 ->make(true);
         }
 
-        return view('dashboard.pages.masterData.sekolah.siswa.index', compact(['sekolah', 'jenjang']));
+        $idSekolah = $request->sekolah;
+        return view('dashboard.pages.masterData.sekolah.siswa.index', compact(['idSekolah', 'sekolah', 'jenjang']));
     }
 
     /**
@@ -213,5 +215,28 @@ class SiswaController extends Controller
         $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
         $daftarSiswa = Siswa::orderBy('created_at', 'desc')->where('sekolah_id', $sekolah->id)->get();
         return Excel::download(new SiswaExport($daftarSiswa, $sekolah), "Export Data Siswa " . $sekolah->nama . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
+    }
+
+    public function importSiswa(Request $request)
+    {
+        $sekolah = $request->sekolah;
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'file_import' => 'required|mimes:xlsx,xls',
+            ],
+            [
+                'file_import.required' => 'File Import tidak boleh kosong',
+                'file_import.mimes' => 'File Import harus berformat .xlsx atau .xls',
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()]);
+        }
+
+        // return response()->json($request->all());
+
+        Excel::import(new ImportSiswa($sekolah), $request->file('file_import'));
+        return response()->json(['status' => 'success']);
     }
 }

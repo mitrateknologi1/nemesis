@@ -40,6 +40,11 @@
                         <div class="card-title">Data Penduduk</div>
                         <div class="card-tools">
                             <div class="row">
+                                <button type="button" class="btn btn-info btn-border btn-round btn-sm mr-2"
+                                    id="import-penduduk" data-toggle="modal" data-target="#modal-import">
+                                    <i class="fas fa-file-import"></i>
+                                    Import Penduduk
+                                </button>
                                 <form action="{{ url('master-data/penduduk/export') }}" method="POST">
                                     @csrf
                                     <button type="submit" class="btn btn-info btn-border btn-round btn-sm mr-2"
@@ -368,6 +373,49 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modal-import" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Import Data Penduduk</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="form-import" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+
+                        <span class="text-subtitle">Silahkan Download Format Excel <a
+                                href="{{ asset('assets/dashboard') }}/file/format_import_penduduk.xlsx">Disini</a>
+                            untuk
+                            Mengimport Data
+                            Penduduk</span>
+                        <br>
+                        <hr>
+                        @component('dashboard.components.formElements.input',
+                            [
+                                'id' => 'file_import',
+                                'name' => 'file_import',
+                                'type' => 'file',
+                                'label' => 'File Import',
+                                'class' => 'form-control',
+                                // 'attribute' => 'required',
+                                'wajib' => '<sup class="text-danger">*</sup>',
+                            ])
+                        @endcomponent
+                    </div>
+                    <div class="modal-footer">
+                        @component('dashboard.components.buttons.close')
+                        @endcomponent
+                        <button type="submit" class="btn btn-primary">Import</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="modal" tabindex="-1" id="modal-lihat">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
@@ -504,6 +552,61 @@
     </script>
 
     <script>
+        $('#form-import').submit(function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+
+            swal({
+                title: 'Apakah Anda Yakin ?',
+                icon: 'warning',
+                text: "Apakah Anda Yakin ?",
+                type: 'warning',
+                buttons: {
+                    cancel: {
+                        visible: true,
+                        text: 'Batal',
+                        className: 'btn btn-light'
+                    },
+                    confirm: {
+                        text: 'Ya',
+                        className: 'btn btn-info'
+                    },
+                }
+            }).then((Update) => {
+                if (Update) {
+                    $.ajax({
+                        url: "{{ url('master-data/penduduk/import') }}",
+                        type: 'POST',
+                        data: formData,
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            console.log(response);
+                            if (response.status == 'success') {
+                                $('#modal-import').modal('hide');
+                                swal("Berhasil", "Data Berhasil Di import", {
+                                    icon: "success",
+                                    buttons: false,
+                                    timer: 1000,
+                                });
+                                window.location.replace("{{ url('/master-data/penduduk') }}");
+                            } else {
+                                printErrorMsg(response.error);
+                            }
+                        },
+                        error: function(response) {
+                            swal("Gagal", "Data Gagal Ditambahkan", {
+                                icon: "error",
+                                buttons: false,
+                                timer: 1000,
+                            });
+                        }
+                    })
+                }
+            });
+        })
+
         $(document).on('click', '#btn-lihat', function() {
             let id = $(this).val();
             $.ajax({
@@ -673,5 +776,11 @@
         })
 
         $('#nav-master-penduduk').addClass('active');
+
+        const printErrorMsg = (msg) => {
+            $.each(msg, function(key, value) {
+                $('.' + key + '-error').text(value);
+            });
+        }
     </script>
 @endpush

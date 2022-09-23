@@ -29,6 +29,7 @@ use App\Http\Controllers\intervensi\perencanaan\manusia\PerencanaanManusiaContro
 use App\Http\Controllers\intervensi\perencanaan\hewan\PerencanaanHewanController;
 use App\Http\Controllers\intervensi\realisasi\hewan\RealisasiHewanController;
 use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\masterData\SumberDanaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -162,6 +163,8 @@ Route::group(['middleware' => 'auth'], function () {
             'index',
             'show'
         );
+
+        Route::resource('master-data/sumber-dana', SumberDanaController::class)->parameters(['sumber-dana' => 'sumberDana']);
         Route::resource('master-data/hewan', HewanController::class);
         Route::resource('master-data/tahun', TahunController::class);
 

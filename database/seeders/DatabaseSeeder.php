@@ -88,5 +88,6 @@ class DatabaseSeeder extends Seeder
         $this->call(DokumenRealisasiHewanTableSeeder::class);
         $this->call(PerencanaanKeongTableSeeder::class);
         $this->call(DokumenPerencanaanKeongTableSeeder::class);
+        $this->call(SumberDanaSeeder::class);
     }
 }

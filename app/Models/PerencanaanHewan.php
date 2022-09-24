@@ -39,4 +39,9 @@ class PerencanaanHewan extends Model
     {
         return $this->hasMany(RealisasiHewan::class, 'perencanaan_hewan_id');
     }
+
+    public function sumberDana()
+    {
+        return $this->belongsTo(SumberDana::class);
+    }
 }

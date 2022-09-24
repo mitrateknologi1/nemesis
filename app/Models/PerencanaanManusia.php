@@ -39,4 +39,9 @@ class PerencanaanManusia extends Model
     {
         return $this->hasMany(RealisasiManusia::class);
     }
+
+    public function sumberDana()
+    {
+        return $this->belongsTo(SumberDana::class);
+    }
 }

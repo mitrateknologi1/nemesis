@@ -76,34 +76,22 @@
                     @endcomponent
                 </div>
                 <div class="form-group p-0 pb-2">
-                    <label class="form-label my-2">Sumber Dana <sup class="text-danger">*</sup></label>
-                    <div class="selectgroup w-100">
-                        @if ($method == 'POST')
-                            <input type="hidden" name="sumber_dana" value="" class="req"
-                                data-label="Sumber Dana" id="sumber-dana-hidden">
-                        @endif
-                        @component('dashboard.components.formElements.radioButton',
-                            [
-                                'label' => 'DAK',
-                                'value' => 'DAK',
-                                'name' => 'sumber_dana',
-                                'class' => 'sumber-dana req',
-                                // 'icon' => '<i class="fas fa-money-bill-wave"></i>',
-                                'checked' => isset($rencanaIntervensiHewan) && $rencanaIntervensiHewan->sumber_dana == 'DAK' ? 'checked' : '',
-                            ])
-                        @endcomponent
-                        @component('dashboard.components.formElements.radioButton',
-                            [
-                                'label' => 'DAU',
-                                'value' => 'DAU',
-                                'name' => 'sumber_dana',
-                                'class' => 'sumber-dana req',
-                                // 'icon' => '<i class="fas fa-money-bill-alt"></i>',
-                                'checked' => isset($rencanaIntervensiHewan) && $rencanaIntervensiHewan->sumber_dana == 'DAU' ? 'checked' : '',
-                            ])
-                        @endcomponent
-                    </div>
-                    <span class="text-danger error-text sumber_dana-error"></span>
+                    @component('dashboard.components.formElements.select',
+                        [
+                            'label' => 'Sumber Dana',
+                            'id' => 'sumber-dana',
+                            'name' => 'sumber_dana',
+                            'class' => 'select2 req',
+                            'wajib' => '<sup class="text-danger">*</sup>',
+                        ])
+                        @slot('options')
+                            @foreach ($sumberDana as $item)
+                                <option value="{{ $item->id }}"
+                                    {{ isset($rencanaIntervensiHewan) && $rencanaIntervensiHewan->sumber_dana_id == $item->id ? 'selected' : '' }}>
+                                    {{ $item->nama }}</option>
+                            @endforeach
+                        @endslot
+                    @endcomponent
                 </div>
                 <div class="form-group p-0 pb-2">
                     <label class="my-2">Pilih OPD Terkait <span class="text-danger">(Jika Ada)</span></label>
@@ -291,6 +279,7 @@
                 .removeClass('req');
 
             const formValidation = $('#form .req').serializeArray()
+
             validation(formValidation)
 
             if ('{{ $method == 'POST' }}') {

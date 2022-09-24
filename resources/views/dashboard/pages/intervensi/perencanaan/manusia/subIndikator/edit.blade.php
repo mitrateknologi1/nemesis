@@ -45,6 +45,7 @@
                                     'opdTerkait' => $opdTerkaitManusia,
                                     'desa' => $desa,
                                     'opd' => $opd,
+                                    'sumberDana' => $sumberDana,
                                     'maxDokumen' => $rencanaIntervensiManusia->dokumenPerencanaanManusia()->count(),
                                     'method' => 'PUT',
                                     'submitLabel' => 'Perbarui Data',

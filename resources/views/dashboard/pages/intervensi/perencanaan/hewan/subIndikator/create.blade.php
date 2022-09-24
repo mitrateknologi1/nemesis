@@ -34,6 +34,7 @@
                                     'action' => route('rencana-intervensi-hewan.store'),
                                     'desa' => $desa,
                                     'opd' => $opd,
+                                    'sumberDana' => $sumberDana,
                                     'method' => 'POST',
                                     'submitLabel' => 'Kirim Data',
                                     'submitIcon' => '<i class="fas fa-paper-plane"></i> ',

@@ -24,7 +24,7 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StorePerencanaanKeongRequest;
 use App\Http\Requests\UpdatePerencanaanKeongRequest;
-
+use App\Models\SumberDana;
 
 class PerencanaanKeongController extends Controller
 {
@@ -251,6 +251,7 @@ class PerencanaanKeongController extends Controller
         $data = [
             'desa' => Desa::all(),
             'opd' => OPD::orderBy('nama')->whereNot('id', Auth::user()->opd_id)->get(),
+            'sumberDana' => SumberDana::all()
         ];
         return view('dashboard.pages.intervensi.perencanaan.keong.subIndikator.create', $data);
     }
@@ -301,7 +302,7 @@ class PerencanaanKeongController extends Controller
             'opd_id' => Auth::user()->opd_id,
             'sub_indikator' => $request->sub_indikator,
             'nilai_pembiayaan' => $request->nilai_pembiayaan,
-            'sumber_dana' => $request->sumber_dana,
+            'sumber_dana_id' => $request->sumber_dana,
         ];
 
         $insertPerencanaan = PerencanaanKeong::create($dataPerencanaan);
@@ -387,6 +388,7 @@ class PerencanaanKeongController extends Controller
 
         $data = [
             'rencanaIntervensiKeong' => $rencana_intervensi_keong,
+            'sumberDana' => SumberDana::all(),
             'desa' => Desa::all(),
             'lokasiPerencanaanKeong' => json_encode($rencana_intervensi_keong->lokasiPerencanaanKeong->pluck('lokasi_keong_id')->toArray()),
             'opdTerkaitKeong' => json_encode($rencana_intervensi_keong->opdTerkaitKeong->pluck('opd_id')->toArray()),
@@ -518,7 +520,7 @@ class PerencanaanKeongController extends Controller
         // update data perencanaan
         $dataPerencanaan = [
             'sub_indikator' => $request->sub_indikator,
-            'sumber_dana' => $request->sumber_dana
+            'sumber_dana_id' => $request->sumber_dana
         ];
 
         if ($rencana_intervensi_keong->realisasiKeong->count() == 0) {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\intervensi\perencanaan\hewan;
 
 use App\Models\OPD;
 use App\Models\Desa;
+use App\Models\SumberDana;
 use App\Models\LokasiHewan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -250,6 +251,7 @@ class PerencanaanHewanController extends Controller
         $data = [
             'desa' => Desa::all(),
             'opd' => OPD::orderBy('nama')->whereNot('id', Auth::user()->opd_id)->get(),
+            'sumberDana' => SumberDana::all()
         ];
         return view('dashboard.pages.intervensi.perencanaan.hewan.subIndikator.create', $data);
     }
@@ -300,7 +302,7 @@ class PerencanaanHewanController extends Controller
             'opd_id' => Auth::user()->opd_id,
             'sub_indikator' => $request->sub_indikator,
             'nilai_pembiayaan' => $request->nilai_pembiayaan,
-            'sumber_dana' => $request->sumber_dana,
+            'sumber_dana_id' => $request->sumber_dana,
         ];
 
         $insertPerencanaan = PerencanaanHewan::create($dataPerencanaan);
@@ -390,7 +392,7 @@ class PerencanaanHewanController extends Controller
             'lokasiPerencanaanHewan' => json_encode($rencana_intervensi_hewan->lokasiPerencanaanHewan->pluck('lokasi_hewan_id')->toArray()),
             'opdTerkaitHewan' => json_encode($rencana_intervensi_hewan->opdTerkaitHewan->pluck('opd_id')->toArray()),
             'opd' => OPD::whereNot('id', $rencana_intervensi_hewan->opd_id)->orderBy('nama')->get(),
-
+            'sumberDana' => SumberDana::all()
         ];
         return view('dashboard.pages.intervensi.perencanaan.hewan.subIndikator.edit', $data);
     }
@@ -517,7 +519,7 @@ class PerencanaanHewanController extends Controller
         // update data perencanaan
         $dataPerencanaan = [
             'sub_indikator' => $request->sub_indikator,
-            'sumber_dana' => $request->sumber_dana,
+            'sumber_dana_id' => $request->sumber_dana,
         ];
 
         if ($rencana_intervensi_hewan->realisasiHewan->count() == 0) {

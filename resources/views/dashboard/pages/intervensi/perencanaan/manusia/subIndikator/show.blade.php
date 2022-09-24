@@ -72,7 +72,7 @@
                                 <span class="rupiah">{{ $rencana_intervensi_manusia->nilai_pembiayaan }}</span></span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">Sumber Dana:<span
-                                class="font-weight-bold">{{ $rencana_intervensi_manusia->sumber_dana }}</span>
+                                class="font-weight-bold">{{ $rencana_intervensi_manusia->sumberDana->nama }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">Status:
                             @if ($rencana_intervensi_manusia->status == 1)

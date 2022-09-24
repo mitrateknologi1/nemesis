@@ -1,22 +1,26 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    @if ($jenjang == 'sd')
+    @if ($jenjang == 'tk')
+        {{ 'TK / PAUD / Playgroup' }}
+    @elseif ($jenjang == 'sd')
         {{ 'SD' }}
     @elseif ($jenjang == 'smp')
-        {{ 'SMP' }}
+        {{ 'SMP / MTS' }}
     @else
-        {{ 'SMA / SMK' }}
+        {{ 'SMA / SMK / MA' }}
     @endif
 @endsection
 
 @section('titlePanelHeader')
-    @if ($jenjang == 'sd')
+    @if ($jenjang == 'tk')
+        {{ 'TK / PAUD / Playgroup' }}
+    @elseif ($jenjang == 'sd')
         {{ 'SD' }}
     @elseif ($jenjang == 'smp')
-        {{ 'SMP' }}
+        {{ 'SMP / MTS' }}
     @else
-        {{ 'SMA / SMK' }}
+        {{ 'SMA / SMK / MA' }}
     @endif
 @endsection
 
@@ -38,12 +42,15 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Ubah @if ($jenjang == 'sd')
+                        <div class="card-title">Ubah
+                            @if ($jenjang == 'tk')
+                                {{ 'TK / PAUD / Playgroup' }}
+                            @elseif ($jenjang == 'sd')
                                 {{ 'SD' }}
                             @elseif ($jenjang == 'smp')
-                                {{ 'SMP' }}
+                                {{ 'SMP / MTS' }}
                             @else
-                                {{ 'SMA / SMK' }}
+                                {{ 'SMA / SMK / MA' }}
                             @endif
                         </div>
                     </div>

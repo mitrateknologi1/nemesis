@@ -17,6 +17,14 @@ class SekolahSeeder extends Seeder
     {
         $data = [
             [
+                'id' => '0075b51c-49c0-4e81-a3b3-a6b4e21b3x00',
+                'nama' => 'TK Anca',
+                'jenjang' => 'TK',
+                'jenis' => 'Negeri',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c20',
+                'created_at' => '2022-04-10 21:16:59'
+            ],
+            [
                 'id' => '0075b51c-49c0-4e81-a3b3-a6b4e21b3x01',
                 'nama' => 'SD 1 Anca',
                 'jenjang' => 'SD',

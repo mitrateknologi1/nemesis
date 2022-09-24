@@ -61,7 +61,6 @@ class DatabaseSeeder extends Seeder
         $this->call(LokasiHewanSeeder::class);
         $this->call(PendudukTableSeeder::class); // new
         $this->call(LokasiKeongTableSeeder::class);
-        $this->call(UserSeeder::class);
         $this->call(RealisasiKeongTableSeeder::class);
         $this->call(DokumenRealisasiKeongTableSeeder::class);
         $this->call(LokasiPerencanaanKeongTableSeeder::class);
@@ -89,5 +88,6 @@ class DatabaseSeeder extends Seeder
         $this->call(PerencanaanKeongTableSeeder::class);
         $this->call(DokumenPerencanaanKeongTableSeeder::class);
         $this->call(SumberDanaSeeder::class);
+        $this->call(UsersTableSeeder::class);
     }
 }

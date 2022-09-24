@@ -4,6 +4,7 @@ namespace App\Http\Controllers\intervensi\perencanaan\manusia;
 
 use App\Models\OPD;
 use App\Models\Desa;
+use App\Models\SumberDana;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\OPDTerkaitManusia;
@@ -246,6 +247,7 @@ class PerencanaanManusiaController extends Controller
         $data = [
             'desa' => Desa::all(),
             'opd' => OPD::orderBy('nama')->whereNot('id', Auth::user()->opd_id)->get(),
+            'sumberDana' => SumberDana::all()
         ];
         return view('dashboard.pages.intervensi.perencanaan.manusia.subIndikator.create', $data);
     }
@@ -295,7 +297,7 @@ class PerencanaanManusiaController extends Controller
             'opd_id' => Auth::user()->opd_id,
             'sub_indikator' => $request->sub_indikator,
             'nilai_pembiayaan' => $request->nilai_pembiayaan,
-            'sumber_dana' => $request->sumber_dana,
+            'sumber_dana_id' => $request->sumber_dana,
         ];
 
         $insertPerencanaan = PerencanaanManusia::create($dataPerencanaan);
@@ -385,7 +387,7 @@ class PerencanaanManusiaController extends Controller
             'pendudukPerencanaanManusia' => json_encode($rencana_intervensi_manusia->pendudukPerencanaanManusia->pluck('penduduk_id')->toArray()),
             'opdTerkaitManusia' => json_encode($rencana_intervensi_manusia->opdTerkaitManusia->pluck('opd_id')->toArray()),
             'opd' => OPD::whereNot('id', $rencana_intervensi_manusia->opd_id)->orderBy('nama')->get(),
-
+            'sumberDana' => SumberDana::all()
         ];
         return view('dashboard.pages.intervensi.perencanaan.manusia.subIndikator.edit', $data);
     }
@@ -534,7 +536,7 @@ class PerencanaanManusiaController extends Controller
         // update data perencanaan
         $dataPerencanaan = [
             'sub_indikator' => $request->sub_indikator,
-            'sumber_dana' => $request->sumber_dana,
+            'sumber_dana_id' => $request->sumber_dana,
         ];
 
         if ($rencana_intervensi_manusia->realisasiManusia->count() == 0) {

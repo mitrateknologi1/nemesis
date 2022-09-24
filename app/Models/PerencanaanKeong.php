@@ -39,4 +39,9 @@ class PerencanaanKeong extends Model
     {
         return $this->hasMany(RealisasiKeong::class, 'perencanaan_keong_id');
     }
+
+    public function sumberDana()
+    {
+        return $this->belongsTo(SumberDana::class);
+    }
 }

@@ -45,6 +45,7 @@
                                     'opdTerkait' => $opdTerkaitHewan,
                                     'desa' => $desa,
                                     'opd' => $opd,
+                                    'sumberDana' => $sumberDana,
                                     'maxDokumen' => $rencanaIntervensiHewan->dokumenPerencanaanHewan()->count(),
                                     'method' => 'PUT',
                                     'submitLabel' => 'Perbarui Data',

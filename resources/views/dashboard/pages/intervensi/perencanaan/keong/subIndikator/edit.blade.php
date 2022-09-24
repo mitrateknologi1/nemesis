@@ -43,6 +43,7 @@
                                     'rencanaIntervensiKeong' => $rencanaIntervensiKeong,
                                     'lokasi' => $lokasiPerencanaanKeong,
                                     'opdTerkait' => $opdTerkaitKeong,
+                                    'sumberDana' => $sumberDana,
                                     'desa' => $desa,
                                     'opd' => $opd,
                                     'maxDokumen' => $rencanaIntervensiKeong->dokumenPerencanaanKeong()->count(),

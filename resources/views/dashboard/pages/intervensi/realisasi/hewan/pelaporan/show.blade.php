@@ -79,7 +79,7 @@
                                 <span class="rupiah">{{ $realisasi_intervensi_hewan->penggunaan_anggaran }}</span></span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">Sumber Dana:<span
-                                class="font-weight-bold">{{ $rencana_intervensi_hewan->sumber_dana }}</span>
+                                class="font-weight-bold">{{ $rencana_intervensi_hewan->sumberDana->nama }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">Status:
                             @if ($realisasi_intervensi_hewan->status == 1)

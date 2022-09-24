@@ -60,7 +60,9 @@
 @push('scripts')
     <script>
         var jenjang = "{{ $jenjang }}";
-        if (jenjang == 'sd') {
+        if (jenjang == 'tk') {
+            jenjang = 'TK';
+        } else if (jenjang == 'sd') {
             jenjang = 'SD';
         } else if (jenjang == 'smp') {
             jenjang = 'SMP';

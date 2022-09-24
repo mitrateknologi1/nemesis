@@ -26,13 +26,15 @@ class SekolahController extends Controller
     public function index(Request $request)
     {
         $jenjang = $request->jenjangSekolah;
-        if (!in_array($jenjang, ['sd', 'smp', 'sma-smk'])) {
+        if (!in_array($jenjang, ['tk', 'sd', 'smp', 'sma-smk'])) {
             return redirect()->back();
         }
 
         if ($request->ajax()) {
             $data = Sekolah::orderBy('created_at', 'desc')->where(function ($query) use ($jenjang) {
-                if ($jenjang == 'sd') {
+                if ($jenjang == 'tk') {
+                    $query->where('jenjang', 'TK');
+                } else if ($jenjang == 'sd') {
                     $query->where('jenjang', 'SD');
                 } else if ($jenjang == 'smp') {
                     $query->where('jenjang', 'SMP');
@@ -66,7 +68,9 @@ class SekolahController extends Controller
     private function _getJumlahData($jenjang)
     {
         $daftarSekolah = Sekolah::orderBy('created_at', 'desc')->where(function ($query) use ($jenjang) {
-            if ($jenjang == 'sd') {
+            if ($jenjang == 'tk') {
+                $query->where('jenjang', 'TK');
+            } else if ($jenjang == 'sd') {
                 $query->where('jenjang', 'SD');
             } else if ($jenjang == 'smp') {
                 $query->where('jenjang', 'SMP');
@@ -111,7 +115,7 @@ class SekolahController extends Controller
     public function create(Request $request)
     {
         $jenjang = $request->jenjangSekolah;
-        if (!in_array($jenjang, ['sd', 'smp', 'sma-smk'])) {
+        if (!in_array($jenjang, ['tk', 'sd', 'smp', 'sma-smk'])) {
             return redirect()->back();
         }
 
@@ -175,7 +179,7 @@ class SekolahController extends Controller
     public function edit(Request $request)
     {
         $jenjang = $request->jenjangSekolah;
-        if (!in_array($jenjang, ['sd', 'smp', 'sma-smk'])) {
+        if (!in_array($jenjang, ['tk', 'sd', 'smp', 'sma-smk'])) {
             return redirect()->back();
         }
 
@@ -252,7 +256,9 @@ class SekolahController extends Controller
         $daftarJumlahData = $this->_getJumlahData($jenjang);
         // dd($daftarJumlahData);
 
-        if ($jenjang == 'sd') {
+        if ($jenjang == 'tk') {
+            $jenjang = 'TK';
+        } else if ($jenjang == 'sd') {
             $jenjang = 'SD';
         } else if ($jenjang == 'smp') {
             $jenjang = 'SMP';

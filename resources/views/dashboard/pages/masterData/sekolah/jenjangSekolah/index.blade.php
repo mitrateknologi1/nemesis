@@ -70,6 +70,15 @@
                                                     <tbody>
                                                         <tr>
                                                             <td>1</td>
+                                                            <td>TK / PAUD / Playgroup</td>
+                                                            <td>
+                                                                <a href="{{ url('master-data/sekolah/tk') }}"
+                                                                    class="btn btn-success btn-rounded btn-sm"><i
+                                                                        class="far fa-eye"></i> </a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>2</td>
                                                             <td>SD</td>
                                                             <td>
                                                                 <a href="{{ url('master-data/sekolah/sd') }}"
@@ -78,8 +87,8 @@
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td>2</td>
-                                                            <td>SMP</td>
+                                                            <td>3</td>
+                                                            <td>SMP / MTS</td>
                                                             <td>
                                                                 <a href="{{ url('master-data/sekolah/smp') }}"
                                                                     class="btn btn-success btn-rounded btn-sm"><i
@@ -87,8 +96,8 @@
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td>3</td>
-                                                            <td>SMA</td>
+                                                            <td>4</td>
+                                                            <td>SMA / SMK / MA</td>
                                                             <td>
                                                                 <a href="{{ url('master-data/sekolah/sma-smk') }}"
                                                                     class="btn btn-success btn-rounded btn-sm"><i

@@ -32,7 +32,7 @@ class JenjangSekolahController extends Controller
     {
         $arrayJumlah = [];
         $arrayDesa = [];
-        $arrayJenjang = ['SD', 'SMP', 'SMA / SMK'];
+        $arrayJenjang = ['TK', 'SD', 'SMP', 'SMA / SMK'];
 
         foreach ($arrayJenjang as $jenjang) {
             $arrayDesa = [];

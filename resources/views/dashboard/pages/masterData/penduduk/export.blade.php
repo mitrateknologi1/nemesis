@@ -9,20 +9,20 @@
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">NIK</th>
                 <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">Jenis Kelamin</th>
-                <th scope="col" align="center"
-                    style="vertical-align: center;border: 1px solid black;font-weight : bold">Tempat Lahir</th>
+                {{-- <th scope="col" align="center"
+                    style="vertical-align: center;border: 1px solid black;font-weight : bold">Tempat Lahir</th> --}}
                 <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">Tanggal Lahir</th>
-                <th scope="col" align="center"
-                    style="vertical-align: center;border: 1px solid black;font-weight : bold">Agama</th>
+                {{-- <th scope="col" align="center"
+                    style="vertical-align: center;border: 1px solid black;font-weight : bold">Agama</th> --}}
                 <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">Status Pendidikan Terakhir
                 </th>
                 <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">Pekerjaan</th>
-                <th scope="col" align="center"
+                {{-- <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">Golongan Darah</th>
-                <th scope="col" align="center"
+                 <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">Status Perkawinan</th>
                 <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">Tanggal Perkawinan</th>
@@ -33,7 +33,7 @@
                 <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">Nomor Kitap</th>
                 <th scope="col" align="center"
-                    style="vertical-align: center;border: 1px solid black;font-weight : bold">Alamat</th>
+                    style="vertical-align: center;border: 1px solid black;font-weight : bold">Alamat</th> --}}
                 <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">Desa</th>
             </tr>
@@ -49,17 +49,17 @@
                         {{ $penduduk->nik }}</td>
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
                         {{ $penduduk->jenis_kelamin }}</td>
-                    <td style="vertical-align: center;border: 1px solid black;" align="center">
-                        {{ $penduduk->tempat_lahir }}</td>
+                    {{-- <td style="vertical-align: center;border: 1px solid black;" align="center">
+                        {{ $penduduk->tempat_lahir }}</td> --}}
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
                         {{ \Carbon\Carbon::parse($penduduk->tanggal_lahir)->format('d-m-Y') }}</td>
-                    <td style="vertical-align: center;border: 1px solid black;" align="center">
-                        {{ $penduduk->agama }}</td>
+                    {{-- <td style="vertical-align: center;border: 1px solid black;" align="center">
+                        {{ $penduduk->agama }}</td> --}}
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
                         {{ $penduduk->status_pendidikan }}</td>
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
                         {{ $penduduk->pekerjaan }}</td>
-                    <td style="vertical-align: center;border: 1px solid black;" align="center">
+                    {{-- <td style="vertical-align: center;border: 1px solid black;" align="center">
                         {{ $penduduk->golongan_darah }}</td>
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
                         {{ $penduduk->status_perkawinan }}</td>
@@ -72,7 +72,7 @@
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
                         {{ $penduduk->no_kitap }}</td>
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
-                        {{ $penduduk->alamat }}</td>
+                        {{ $penduduk->alamat }}</td> --}}
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
                         {{ $penduduk->desa->nama }}</td>
                 </tr>

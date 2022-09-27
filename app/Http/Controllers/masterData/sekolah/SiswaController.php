@@ -186,7 +186,7 @@ class SiswaController extends Controller
             'nama' => $penduduk->nama,
             'nik' => $penduduk->nik,
             'jenis_kelamin' => $penduduk->jenis_kelamin,
-            'ttl' => $penduduk->tempat_lahir . ', ' . Carbon::parse($penduduk->tanggal_lahir)->translatedFormat('d F Y'),
+            'ttl' => Carbon::parse($penduduk->tanggal_lahir)->translatedFormat('d F Y'),
             'agama' => $penduduk->agama,
             'pendidikan' => $penduduk->status_pendidikan ?? 'Tidak Sekolah',
             'pekerjaan' => $penduduk->pekerjaan,

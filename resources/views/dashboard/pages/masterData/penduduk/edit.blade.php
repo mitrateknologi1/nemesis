@@ -49,19 +49,9 @@
             $('#nama').val("{{ $data['nama'] }}");
             $('#nik').val("{{ $data['nik'] }}");
             $('#jenis_kelamin').val("{{ $data['jenis_kelamin'] }}").trigger('change');
-            $('#tempat_lahir').val("{{ $data['tempat_lahir'] }}");
             $('#tanggal_lahir').val("{{ $data['tanggal_lahir'] }}");
-            $('#agama').val("{{ $data['agama'] }}").trigger('change');
             $('#status_pendidikan').val("{{ $data['status_pendidikan'] }}").trigger('change');
-            $('#golongan_darah').val("{{ $data['golongan_darah'] }}").trigger('change');
-            $('#status_perkawinan').val("{{ $data['status_perkawinan'] }}").trigger('change');
-            $('#tanggal_perkawinan').val("{{ $data['tanggal_perkawinan'] }}");
             $('#pekerjaan').val("{{ $data['pekerjaan'] }}").trigger('change');
-            $("input[name=kewarganegaraan][value=" + "{{ $data['kewarganegaraan'] }}" + "]").prop('checked', true);
-            // $('#kewarganegaraan').val("{{ $data['kewarganegaraan'] }}");
-            $('#no_paspor').val("{{ $data['no_paspor'] }}");
-            $('#no_kitap').val("{{ $data['no_kitap'] }}");
-            $('#alamat').val("{{ $data['alamat'] }}");
             $('#desa_id').val("{{ $data['desa_id'] }}").trigger('change');
         })
     </script>

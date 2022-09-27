@@ -192,18 +192,18 @@ class PendudukController extends Controller
                 'nama' => 'required',
                 'nik' => ['required', Rule::unique('penduduk')->withoutTrashed(), 'digits:16'],
                 'jenis_kelamin' => 'required',
-                'tempat_lahir' => 'required',
+                // 'tempat_lahir' => 'required',
                 'tanggal_lahir' => 'required|date',
-                'agama' => 'required',
+                // 'agama' => 'required',
                 'status_pendidikan' => 'required',
                 'pekerjaan' => 'required',
-                'golongan_darah' => 'required',
-                'status_perkawinan' => 'required',
-                'tanggal_perkawinan' => $request->status_perkawinan == 'Belum Kawin' ? 'nullable' : 'required|date',
-                'kewarganegaraan' => 'required',
-                'no_paspor' => 'required',
-                'no_kitap' => 'required',
-                'alamat' => 'required',
+                // 'golongan_darah' => 'required',
+                // 'status_perkawinan' => 'required',
+                // 'tanggal_perkawinan' => $request->status_perkawinan == 'Belum Kawin' ? 'nullable' : 'required|date',
+                // 'kewarganegaraan' => 'required',
+                // 'no_paspor' => 'required',
+                // 'no_kitap' => 'required',
+                // 'alamat' => 'required',
                 'desa_id' => 'required'
             ],
             [
@@ -212,20 +212,20 @@ class PendudukController extends Controller
                 'nik.unique' => 'NIK sudah ada',
                 'nik.digits' => 'NIK harus terdiri dari 16 digit',
                 'jenis_kelamin.required' => 'Jenis kelamin tidak boleh kosong',
-                'tempat_lahir.required' => 'Tempat lahir tidak boleh kosong',
+                // 'tempat_lahir.required' => 'Tempat lahir tidak boleh kosong',
                 'tanggal_lahir.required' => 'Tanggal lahir tidak boleh kosong',
                 'tanggal_lahir.date' => 'Format tanggal lahir harus benar',
-                'agama.required' => 'Agama tidak boleh kosong',
+                // 'agama.required' => 'Agama tidak boleh kosong',
                 'pekerjaan.required' => 'Pekerjaan tidak boleh kosong',
                 'status_pendidikan.required' => 'Status pendidikan tidak boleh kosong',
-                'golongan_darah.required' => 'Golongan darah tidak boleh kosong',
-                'status_perkawinan.required' => 'Status perkawinan tidak boleh kosong',
-                'tanggal_perkawinan.required' => 'Tanggal perkawinan tidak boleh kosong',
-                'tanggal_perkawinan.date' => 'Format tanggal perkawinan harus benar',
-                'kewarganegaraan.required' => 'Kewarganegaraan tidak boleh kosong',
-                'no_paspor.required' => 'Nomor paspor tidak boleh kosong',
-                'no_kitap.required' => 'Nomor KITAP tidak boleh kosong',
-                'alamat.required' => 'Alamat tidak boleh kosong',
+                // 'golongan_darah.required' => 'Golongan darah tidak boleh kosong',
+                // 'status_perkawinan.required' => 'Status perkawinan tidak boleh kosong',
+                // 'tanggal_perkawinan.required' => 'Tanggal perkawinan tidak boleh kosong',
+                // 'tanggal_perkawinan.date' => 'Format tanggal perkawinan harus benar',
+                // 'kewarganegaraan.required' => 'Kewarganegaraan tidak boleh kosong',
+                // 'no_paspor.required' => 'Nomor paspor tidak boleh kosong',
+                // 'no_kitap.required' => 'Nomor KITAP tidak boleh kosong',
+                // 'alamat.required' => 'Alamat tidak boleh kosong',
                 'desa_id.required' => 'Desa tidak boleh kosong',
             ]
         );
@@ -238,18 +238,18 @@ class PendudukController extends Controller
         $penduduk->nama = $request->nama;
         $penduduk->nik = $request->nik;
         $penduduk->jenis_kelamin = $request->jenis_kelamin;
-        $penduduk->tempat_lahir = $request->tempat_lahir;
+        // $penduduk->tempat_lahir = $request->tempat_lahir;
         $penduduk->tanggal_lahir = Carbon::parse($request->tanggal_lahir)->format('Y-m-d');
-        $penduduk->agama = $request->agama;
+        // $penduduk->agama = $request->agama;
         $penduduk->pekerjaan = $request->pekerjaan;
         $penduduk->status_pendidikan = $request->status_pendidikan;
-        $penduduk->golongan_darah = $request->golongan_darah;
-        $penduduk->status_perkawinan = $request->status_perkawinan;
-        $penduduk->tanggal_perkawinan = $request->status_perkawinan == 'Belum Kawin' ? null : Carbon::parse($request->tanggal_perkawinan)->format('Y-m-d');
-        $penduduk->kewarganegaraan = $request->kewarganegaraan;
-        $penduduk->no_paspor = $request->no_paspor;
-        $penduduk->no_kitap = $request->no_kitap;
-        $penduduk->alamat = $request->alamat;
+        // $penduduk->golongan_darah = $request->golongan_darah;
+        // $penduduk->status_perkawinan = $request->status_perkawinan;
+        // $penduduk->tanggal_perkawinan = $request->status_perkawinan == 'Belum Kawin' ? null : Carbon::parse($request->tanggal_perkawinan)->format('Y-m-d');
+        // $penduduk->kewarganegaraan = $request->kewarganegaraan;
+        // $penduduk->no_paspor = $request->no_paspor;
+        // $penduduk->no_kitap = $request->no_kitap;
+        // $penduduk->alamat = $request->alamat;
         $penduduk->desa_id = $request->desa_id;
         $penduduk->save();
 
@@ -269,17 +269,17 @@ class PendudukController extends Controller
             'nama' => $penduduk->nama,
             'nik' => $penduduk->nik,
             'jenis_kelamin' => $penduduk->jenis_kelamin,
-            'ttl' => $penduduk->tempat_lahir . ', ' . Carbon::parse($penduduk->tanggal_lahir)->translatedFormat('d F Y'),
-            'agama' => $penduduk->agama,
+            'ttl' => Carbon::parse($penduduk->tanggal_lahir)->translatedFormat('d F Y'),
+            // 'agama' => $penduduk->agama,
             'pendidikan' => $penduduk->status_pendidikan ?? 'Tidak Sekolah',
             'pekerjaan' => $penduduk->pekerjaan,
-            'golongan_darah' => $penduduk->golongan_darah ?? 'Tidak Tahu',
-            'status_perkawinan' => $penduduk->status_perkawinan,
-            'tanggal_perkawinan' => $penduduk->tanggal_perkawinan ? Carbon::parse($penduduk->tanggal_perkawinan)->translatedFormat('d F Y') : '-',
-            'kewarganegaraan' => $penduduk->kewarganegaraan,
-            'no_paspor' => $penduduk->no_paspor ?? '-',
-            'no_kitap' => $penduduk->no_kitap ?? '-',
-            'alamat' => $penduduk->alamat,
+            // 'golongan_darah' => $penduduk->golongan_darah ?? 'Tidak Tahu',
+            // 'status_perkawinan' => $penduduk->status_perkawinan,
+            // 'tanggal_perkawinan' => $penduduk->tanggal_perkawinan ? Carbon::parse($penduduk->tanggal_perkawinan)->translatedFormat('d F Y') : '-',
+            // 'kewarganegaraan' => $penduduk->kewarganegaraan,
+            // 'no_paspor' => $penduduk->no_paspor ?? '-',
+            // 'no_kitap' => $penduduk->no_kitap ?? '-',
+            // 'alamat' => $penduduk->alamat,
             'desa' => $penduduk->desa->nama
         ];
         return response()->json([
@@ -301,18 +301,18 @@ class PendudukController extends Controller
             'nama' => $penduduk->nama,
             'nik' => $penduduk->nik,
             'jenis_kelamin' => $penduduk->jenis_kelamin,
-            'tempat_lahir' => $penduduk->tempat_lahir,
+            // 'tempat_lahir' => $penduduk->tempat_lahir,
             'tanggal_lahir' => Carbon::parse($penduduk->tanggal_lahir)->format('d-m-Y'),
-            'agama' => $penduduk->agama,
+            // 'agama' => $penduduk->agama,
             'status_pendidikan' => $penduduk->status_pendidikan,
             'pekerjaan' => $penduduk->pekerjaan,
-            'golongan_darah' => $penduduk->golongan_darah,
-            'status_perkawinan' => $penduduk->status_perkawinan,
-            'tanggal_perkawinan' => $penduduk->tanggal_perkawinan ? Carbon::parse($penduduk->tanggal_perkawinan)->format('d-m-Y') : null,
-            'kewarganegaraan' => $penduduk->kewarganegaraan,
-            'no_paspor' => $penduduk->no_paspor,
-            'no_kitap' => $penduduk->no_kitap,
-            'alamat' => $penduduk->alamat,
+            // 'golongan_darah' => $penduduk->golongan_darah,
+            // 'status_perkawinan' => $penduduk->status_perkawinan,
+            // 'tanggal_perkawinan' => $penduduk->tanggal_perkawinan ? Carbon::parse($penduduk->tanggal_perkawinan)->format('d-m-Y') : null,
+            // 'kewarganegaraan' => $penduduk->kewarganegaraan,
+            // 'no_paspor' => $penduduk->no_paspor,
+            // 'no_kitap' => $penduduk->no_kitap,
+            // 'alamat' => $penduduk->alamat,
             'desa_id' => $penduduk->desa_id
         ];
 
@@ -344,18 +344,18 @@ class PendudukController extends Controller
                 'nama' => 'required',
                 'nik' => ['required', Rule::unique('penduduk')->ignore($penduduk->id)->withoutTrashed(), 'digits:16'],
                 'jenis_kelamin' => 'required',
-                'tempat_lahir' => 'required',
+                // 'tempat_lahir' => 'required',
                 'tanggal_lahir' => 'required|date',
-                'agama' => 'required',
+                // 'agama' => 'required',
                 'status_pendidikan' => 'required',
                 'pekerjaan' => 'required',
-                'golongan_darah' => 'required',
-                'status_perkawinan' => 'required',
-                'tanggal_perkawinan' => $request->status_perkawinan == 'Belum Kawin' ? 'nullable' : 'required|date',
-                'kewarganegaraan' => 'required',
-                'no_paspor' => 'required',
-                'no_kitap' => 'required',
-                'alamat' => 'required',
+                // 'golongan_darah' => 'required',
+                // 'status_perkawinan' => 'required',
+                // 'tanggal_perkawinan' => $request->status_perkawinan == 'Belum Kawin' ? 'nullable' : 'required|date',
+                // 'kewarganegaraan' => 'required',
+                // 'no_paspor' => 'required',
+                // 'no_kitap' => 'required',
+                // 'alamat' => 'required',
                 'desa_id' => 'required'
             ],
             [
@@ -364,20 +364,20 @@ class PendudukController extends Controller
                 'nik.unique' => 'NIK sudah ada',
                 'nik.digits' => 'NIK harus terdiri dari 16 digit',
                 'jenis_kelamin.required' => 'Jenis kelamin tidak boleh kosong',
-                'tempat_lahir.required' => 'Tempat lahir tidak boleh kosong',
+                // 'tempat_lahir.required' => 'Tempat lahir tidak boleh kosong',
                 'tanggal_lahir.required' => 'Tanggal lahir tidak boleh kosong',
                 'tanggal_lahir.date' => 'Format tanggal lahir harus benar',
-                'agama.required' => 'Agama tidak boleh kosong',
+                // 'agama.required' => 'Agama tidak boleh kosong',
                 'pekerjaan.required' => 'Pekerjaan tidak boleh kosong',
                 'status_pendidikan.required' => 'Status pendidikan tidak boleh kosong',
-                'golongan_darah.required' => 'Golongan darah tidak boleh kosong',
-                'status_perkawinan.required' => 'Status perkawinan tidak boleh kosong',
-                'tanggal_perkawinan.required' => 'Tanggal perkawinan tidak boleh kosong',
-                'tanggal_perkawinan.date' => 'Format tanggal perkawinan harus benar',
-                'kewarganegaraan.required' => 'Kewarganegaraan tidak boleh kosong',
-                'no_paspor.required' => 'Nomor paspor tidak boleh kosong',
-                'no_kitap.required' => 'Nomor KITAP tidak boleh kosong',
-                'alamat.required' => 'Alamat tidak boleh kosong',
+                // 'golongan_darah.required' => 'Golongan darah tidak boleh kosong',
+                // 'status_perkawinan.required' => 'Status perkawinan tidak boleh kosong',
+                // 'tanggal_perkawinan.required' => 'Tanggal perkawinan tidak boleh kosong',
+                // 'tanggal_perkawinan.date' => 'Format tanggal perkawinan harus benar',
+                // 'kewarganegaraan.required' => 'Kewarganegaraan tidak boleh kosong',
+                // 'no_paspor.required' => 'Nomor paspor tidak boleh kosong',
+                // 'no_kitap.required' => 'Nomor KITAP tidak boleh kosong',
+                // 'alamat.required' => 'Alamat tidak boleh kosong',
                 'desa_id.required' => 'Desa tidak boleh kosong',
             ]
         );
@@ -389,18 +389,18 @@ class PendudukController extends Controller
         $penduduk->nama = $request->nama;
         $penduduk->nik = $request->nik;
         $penduduk->jenis_kelamin = $request->jenis_kelamin;
-        $penduduk->tempat_lahir = $request->tempat_lahir;
+        // $penduduk->tempat_lahir = $request->tempat_lahir;
         $penduduk->tanggal_lahir = Carbon::parse($request->tanggal_lahir)->format('Y-m-d');
-        $penduduk->agama = $request->agama;
+        // $penduduk->agama = $request->agama;
         $penduduk->pekerjaan = $request->pekerjaan;
         $penduduk->status_pendidikan = $request->status_pendidikan;
-        $penduduk->golongan_darah = $request->golongan_darah;
-        $penduduk->status_perkawinan = $request->status_perkawinan;
-        $penduduk->tanggal_perkawinan = $request->status_perkawinan == 'Belum Kawin' ? null : Carbon::parse($request->tanggal_perkawinan)->format('Y-m-d');
-        $penduduk->kewarganegaraan = $request->kewarganegaraan;
-        $penduduk->no_paspor = $request->no_paspor;
-        $penduduk->no_kitap = $request->no_kitap;
-        $penduduk->alamat = $request->alamat;
+        // $penduduk->golongan_darah = $request->golongan_darah;
+        // $penduduk->status_perkawinan = $request->status_perkawinan;
+        // $penduduk->tanggal_perkawinan = $request->status_perkawinan == 'Belum Kawin' ? null : Carbon::parse($request->tanggal_perkawinan)->format('Y-m-d');
+        // $penduduk->kewarganegaraan = $request->kewarganegaraan;
+        // $penduduk->no_paspor = $request->no_paspor;
+        // $penduduk->no_kitap = $request->no_kitap;
+        // $penduduk->alamat = $request->alamat;
         $penduduk->desa_id = $request->desa_id;
         $penduduk->save();
 

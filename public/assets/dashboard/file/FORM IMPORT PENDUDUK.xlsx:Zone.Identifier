@@ -1,0 +1,4 @@
+[ZoneTransfer]
+ZoneId=3
+ReferrerUrl=http://nemesis.test/master-data/penduduk
+HostUrl=http://nemesis.test/assets/dashboard/file/format_import_penduduk.xlsx

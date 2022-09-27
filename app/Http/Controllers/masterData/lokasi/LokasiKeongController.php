@@ -98,7 +98,7 @@ class LokasiKeongController extends Controller
             $request->all(),
             [
                 'nama' => 'required',
-                'deskripsi' => 'required',
+                // 'deskripsi' => 'required',
                 'desa_id' => 'required',
                 'latitude' => 'required',
                 'longitude' => 'required',
@@ -106,7 +106,7 @@ class LokasiKeongController extends Controller
             ],
             [
                 'nama.required' => 'Nama Lokasi tidak boleh kosong',
-                'deskripsi.required' => 'Deskripsi lokasi tidak boleh kosong',
+                // 'deskripsi.required' => 'Deskripsi lokasi tidak boleh kosong',
                 'desa_id.required' => 'Desa tidak boleh kosong',
                 'latitude.required' => 'Latitude tidak boleh kosong',
                 'longitude.required' => 'Longitude tidak boleh kosong',
@@ -187,7 +187,7 @@ class LokasiKeongController extends Controller
             $request->all(),
             [
                 'nama' => 'required',
-                'deskripsi' => 'required',
+                // 'deskripsi' => 'required',
                 'desa_id' => 'required',
                 'latitude' => 'required',
                 'longitude' => 'required',
@@ -195,7 +195,7 @@ class LokasiKeongController extends Controller
             ],
             [
                 'nama.required' => 'Nama Lokasi tidak boleh kosong',
-                'deskripsi.required' => 'Deskripsi lokasi tidak boleh kosong',
+                // 'deskripsi.required' => 'Deskripsi lokasi tidak boleh kosong',
                 'desa_id.required' => 'Desa tidak boleh kosong',
                 'latitude.required' => 'Latitude tidak boleh kosong',
                 'longitude.required' => 'Longitude tidak boleh kosong',

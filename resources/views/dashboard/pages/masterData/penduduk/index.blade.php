@@ -445,17 +445,17 @@
                         </p>
                     </div>
                     <div class="d-flex justify-content-between mt-2">
-                        <p class=" mb-0">Tempat, Tanggal Lahir : </p>
+                        <p class=" mb-0">Tanggal Lahir : </p>
                         <p id="ttl">
                             -
                         </p>
                     </div>
-                    <div class="d-flex justify-content-between mt-2">
+                    {{-- <div class="d-flex justify-content-between mt-2">
                         <p class=" mb-0">Agama : </p>
                         <p id="agama">
                             -
                         </p>
-                    </div>
+                    </div> --}}
                     <div class="d-flex justify-content-between mt-2">
                         <p class=" mb-0">Pendidikan Terakhir : </p>
                         <p id="pendidikan">
@@ -468,7 +468,7 @@
                             -
                         </p>
                     </div>
-                    <div class="d-flex justify-content-between mt-2">
+                    {{-- <div class="d-flex justify-content-between mt-2">
                         <p class=" mb-0">Golongan Darah : </p>
                         <p id="golongan-darah">
                             -
@@ -509,7 +509,7 @@
                         <p id="alamat">
                             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia, repellat!
                         </p>
-                    </div>
+                    </div> --}}
                     <div class="d-flex justify-content-between mt-2">
                         <p class=" mb-0">Desa : </p>
                         <p id="desa">
@@ -618,16 +618,16 @@
                         $('#nik').html(response.data.nik);
                         $('#jenis-kelamin').html(response.data.jenis_kelamin);
                         $('#ttl').html(response.data.ttl);
-                        $('#agama').html(response.data.agama);
+                        // $('#agama').html(response.data.agama);
                         $('#pendidikan').html(response.data.pendidikan);
                         $('#pekerjaan').html(response.data.pekerjaan);
-                        $('#golongan-darah').html(response.data.golongan_darah);
-                        $('#status-perkawinan').html(response.data.status_perkawinan);
-                        $('#tanggal-perkawinan').html(response.data.tanggal_perkawinan);
-                        $('#kewarganegaraan').html(response.data.kewarganegaraan);
-                        $('#nomor-paspor').html(response.data.no_paspor);
-                        $('#nomor-kitap').html(response.data.no_kitap);
-                        $('#alamat').html(response.data.alamat);
+                        // $('#golongan-darah').html(response.data.golongan_darah);
+                        // $('#status-perkawinan').html(response.data.status_perkawinan);
+                        // $('#tanggal-perkawinan').html(response.data.tanggal_perkawinan);
+                        // $('#kewarganegaraan').html(response.data.kewarganegaraan);
+                        // $('#nomor-paspor').html(response.data.no_paspor);
+                        // $('#nomor-kitap').html(response.data.no_kitap);
+                        // $('#alamat').html(response.data.alamat);
                         $('#desa').html(response.data.desa);
                         $('#modal-lihat').modal('show');
                         $("#link-edit").attr("href", "{{ url('master-data/penduduk') }}" + '/' + id +

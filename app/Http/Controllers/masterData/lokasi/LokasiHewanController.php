@@ -202,7 +202,7 @@ class LokasiHewanController extends Controller
             $request->all(),
             [
                 'nama' => 'required',
-                'deskripsi' => 'required',
+                // 'deskripsi' => 'required',
                 'desa_id' => 'required',
                 'latitude' => 'required',
                 'longitude' => 'required',
@@ -213,7 +213,7 @@ class LokasiHewanController extends Controller
             ],
             [
                 'nama.required' => 'Nama Lokasi tidak boleh kosong',
-                'deskripsi.required' => 'Deskripsi lokasi tidak boleh kosong',
+                // 'deskripsi.required' => 'Deskripsi lokasi tidak boleh kosong',
                 'desa_id.required' => 'Desa tidak boleh kosong',
                 'latitude.required' => 'Latitude tidak boleh kosong',
                 'longitude.required' => 'Longitude tidak boleh kosong',
@@ -330,7 +330,7 @@ class LokasiHewanController extends Controller
             $request->all(),
             [
                 'nama' => 'required',
-                'deskripsi' => 'required',
+                // 'deskripsi' => 'required',
                 'desa_id' => 'required',
                 'latitude' => 'required',
                 'longitude' => 'required',
@@ -341,7 +341,7 @@ class LokasiHewanController extends Controller
             ],
             [
                 'nama.required' => 'Nama Lokasi tidak boleh kosong',
-                'deskripsi.required' => 'Deskripsi lokasi tidak boleh kosong',
+                // 'deskripsi.required' => 'Deskripsi lokasi tidak boleh kosong',
                 'desa_id.required' => 'Desa tidak boleh kosong',
                 'latitude.required' => 'Latitude tidak boleh kosong',
                 'longitude.required' => 'Longitude tidak boleh kosong',

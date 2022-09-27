@@ -44,18 +44,17 @@
                 @endslot
             @endcomponent
         </div>
-        <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.input',
-                [
-                    'label' => 'Tempat Lahir',
-                    'type' => 'text',
-                    'id' => 'tempat_lahir',
-                    'name' => 'tempat_lahir',
-                    'wajib' => '<sup class="text-danger">*</sup>',
-                    'placeholder' => 'Masukkan Tempat Lahir',
-                ])
+        {{-- <div class="col-sm-12 col-lg-6">
+            @component('dashboard.components.formElements.input', [
+    'label' => 'Tempat Lahir',
+    'type' => 'text',
+    'id' => 'tempat_lahir',
+    'name' => 'tempat_lahir',
+    'wajib' => '<sup class="text-danger">*</sup>',
+    'placeholder' => 'Masukkan Tempat Lahir',
+])
             @endcomponent
-        </div>
+        </div> --}}
         <div class="col-sm-12 col-lg-6">
             @component('dashboard.components.formElements.input',
                 [
@@ -69,15 +68,14 @@
                 ])
             @endcomponent
         </div>
-        <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.select',
-                [
-                    'label' => 'Agama',
-                    'id' => 'agama',
-                    'name' => 'agama',
-                    'class' => 'select2',
-                    'wajib' => '<sup class="text-danger">*</sup>',
-                ])
+        {{-- <div class="col-sm-12 col-lg-6">
+            @component('dashboard.components.formElements.select', [
+    'label' => 'Agama',
+    'id' => 'agama',
+    'name' => 'agama',
+    'class' => 'select2',
+    'wajib' => '<sup class="text-danger">*</sup>',
+])
                 @slot('options')
                     <option value="Islam">Islam</option>
                     <option value="Kristen">Kristen</option>
@@ -87,7 +85,7 @@
                     <option value="Konghucu">Konghucu</option>
                 @endslot
             @endcomponent
-        </div>
+        </div> --}}
         <div class="col-sm-12 col-lg-6">
             @component('dashboard.components.formElements.select',
                 [
@@ -111,15 +109,14 @@
                 @endslot
             @endcomponent
         </div>
-        <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.select',
-                [
-                    'label' => 'Golongan Darah',
-                    'id' => 'golongan_darah',
-                    'name' => 'golongan_darah',
-                    'class' => 'select2',
-                    'wajib' => '<sup class="text-danger">*</sup>',
-                ])
+        {{-- <div class="col-sm-12 col-lg-6">
+            @component('dashboard.components.formElements.select', [
+    'label' => 'Golongan Darah',
+    'id' => 'golongan_darah',
+    'name' => 'golongan_darah',
+    'class' => 'select2',
+    'wajib' => '<sup class="text-danger">*</sup>',
+])
                 @slot('options')
                     <option value="Tidak Tahu">Tidak Tahu</option>
                     <option value="A">A</option>
@@ -138,14 +135,13 @@
             @endcomponent
         </div>
         <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.select',
-                [
-                    'label' => 'Status Perkawinan',
-                    'id' => 'status_perkawinan',
-                    'name' => 'status_perkawinan',
-                    'class' => 'select2',
-                    'wajib' => '<sup class="text-danger">*</sup>',
-                ])
+            @component('dashboard.components.formElements.select', [
+    'label' => 'Status Perkawinan',
+    'id' => 'status_perkawinan',
+    'name' => 'status_perkawinan',
+    'class' => 'select2',
+    'wajib' => '<sup class="text-danger">*</sup>',
+])
                 @slot('options')
                     <option value="Belum Kawin">Belum Kawin</option>
                     <option value="Kawin Belum Tercatat">Kawin Belum Tercatat</option>
@@ -156,18 +152,17 @@
             @endcomponent
         </div>
         <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.input',
-                [
-                    'label' => 'Tanggal Perkawinan (Tanggal-Bulan-Tanggal, Contoh : 01-11-2022)',
-                    'type' => 'text',
-                    'id' => 'tanggal_perkawinan',
-                    'name' => 'tanggal_perkawinan',
-                    'class' => 'tanggal',
-                    'wajib' => '<sup class="text-danger">*</sup>',
-                    'placeholder' => 'Masukkan Tanggal Perkawinan',
-                ])
+            @component('dashboard.components.formElements.input', [
+    'label' => 'Tanggal Perkawinan (Tanggal-Bulan-Tanggal, Contoh : 01-11-2022)',
+    'type' => 'text',
+    'id' => 'tanggal_perkawinan',
+    'name' => 'tanggal_perkawinan',
+    'class' => 'tanggal',
+    'wajib' => '<sup class="text-danger">*</sup>',
+    'placeholder' => 'Masukkan Tanggal Perkawinan',
+])
             @endcomponent
-        </div>
+        </div> --}}
         <div class="col-sm-12 col-lg-6">
             @component('dashboard.components.formElements.select',
                 [
@@ -189,7 +184,7 @@
                 @endslot
             @endcomponent
         </div>
-        <div class="col-sm-12 col-lg-6">
+        {{-- <div class="col-sm-12 col-lg-6">
             <div class="form-group">
                 <label class="form-label">Kewarganegaraan</label>
                 <br>
@@ -208,43 +203,40 @@
             </div>
         </div>
         <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.input',
-                [
-                    'label' => 'Nomor Paspor',
-                    'type' => 'text',
-                    'id' => 'no_paspor',
-                    'name' => 'no_paspor',
-                    'wajib' => '<sup class="text-danger">*</sup>',
-                    'placeholder' => 'Masukkan Nomor Paspor',
-                    'value' => '-',
-                ])
+            @component('dashboard.components.formElements.input', [
+    'label' => 'Nomor Paspor',
+    'type' => 'text',
+    'id' => 'no_paspor',
+    'name' => 'no_paspor',
+    'wajib' => '<sup class="text-danger">*</sup>',
+    'placeholder' => 'Masukkan Nomor Paspor',
+    'value' => '-',
+])
             @endcomponent
         </div>
         <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.input',
-                [
-                    'label' => 'Nomor Kitap',
-                    'type' => 'text',
-                    'id' => 'no_kitap',
-                    'name' => 'no_kitap',
-                    'wajib' => '<sup class="text-danger">*</sup>',
-                    'placeholder' => 'Masukkan Nomor Kitap',
-                    'value' => '-',
-                ])
+            @component('dashboard.components.formElements.input', [
+    'label' => 'Nomor Kitap',
+    'type' => 'text',
+    'id' => 'no_kitap',
+    'name' => 'no_kitap',
+    'wajib' => '<sup class="text-danger">*</sup>',
+    'placeholder' => 'Masukkan Nomor Kitap',
+    'value' => '-',
+])
             @endcomponent
         </div>
         <div class="col-sm-12 col-lg-12">
-            @component('dashboard.components.formElements.input',
-                [
-                    'label' => 'Alamat',
-                    'type' => 'text',
-                    'id' => 'alamat',
-                    'name' => 'alamat',
-                    'wajib' => '<sup class="text-danger">*</sup>',
-                    'placeholder' => 'Masukkan Alamat',
-                ])
+            @component('dashboard.components.formElements.input', [
+    'label' => 'Alamat',
+    'type' => 'text',
+    'id' => 'alamat',
+    'name' => 'alamat',
+    'wajib' => '<sup class="text-danger">*</sup>',
+    'placeholder' => 'Masukkan Alamat',
+])
             @endcomponent
-        </div>
+        </div> --}}
         <div class="col-sm-12 col-lg-12">
             @component('dashboard.components.formElements.select',
                 [

@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use App\Traits\TraitUuid;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class LokasiPerencanaanKeong extends Model
+class LokasiRealisasiKeong extends Model
 {
     use HasFactory, TraitUuid;
 
-    protected $table = 'lokasi_perencanaan_keong';
+    protected $table = 'lokasi_realisasi_keong';
     protected $guarded = ['id'];
 
     public function lokasiKeong()

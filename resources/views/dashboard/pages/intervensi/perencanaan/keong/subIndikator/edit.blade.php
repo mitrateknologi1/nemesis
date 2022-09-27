@@ -41,7 +41,6 @@
                                 [
                                     'action' => route('rencana-intervensi-keong.update', $rencanaIntervensiKeong->id),
                                     'rencanaIntervensiKeong' => $rencanaIntervensiKeong,
-                                    'lokasi' => $lokasiPerencanaanKeong,
                                     'opdTerkait' => $opdTerkaitKeong,
                                     'sumberDana' => $sumberDana,
                                     'desa' => $desa,

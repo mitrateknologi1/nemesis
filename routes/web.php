@@ -59,21 +59,15 @@ Route::group(['middleware' => 'auth'], function () {
     // Keong
     Route::resource('rencana-intervensi-keong', PerencanaanKeongController::class);
     Route::post('rencana-intervensi-keong/konfirmasi/{rencana_intervensi_keong}', PerencanaanKeongController::class . '@konfirmasi');
-    Route::get('rencana-intervensi-keong/map/{rencana_intervensi_keong}', PerencanaanKeongController::class . '@map');
     Route::post('export-perencanaan-keong', PerencanaanKeongController::class . '@export');
     Route::put('rencana-intervensi-keong/buat-alasan-tidak-terselesaikan/{rencana_intervensi_keong}', PerencanaanKeongController::class . '@buatAlasanTidakTerselesaikan');
     Route::post('rencana-intervensi-keong/baca-alasan-tidak-terselesaikan/{rencana_intervensi_keong}', PerencanaanKeongController::class . '@bacaAlasanTidakTerselesaikan');
 
 
     Route::resource('realisasi-intervensi-keong', RealisasiKeongController::class);
-    Route::get('tabel-laporan-realisasi-keong', RealisasiKeongController::class . '@tabelLaporan');
-    Route::get('realisasi-intervensi-keong/create-pelaporan/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@createPelaporan');
-    Route::get('realisasi-intervensi-keong/show-laporan/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@showLaporan');
+    Route::get('realisasi-intervensi-keong/map/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@map');
     Route::post('realisasi-intervensi-keong/konfirmasi/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@konfirmasi');
-    Route::post('realisasi-intervensi-keong/update-opd/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@updateOPD');
-    Route::delete('realisasi-intervensi-keong/delete-opd/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@deleteOPD');
-    Route::delete('realisasi-intervensi-keong/delete-laporan/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@deleteLaporan');
-    Route::delete('realisasi-intervensi-keong/delete-semua-laporan/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@deleteSemuaLaporan');
+
     Route::get('hasil-realisasi-keong', RealisasiKeongController::class . '@hasilRealisasi');
     Route::post('export-realisasi-keong', RealisasiKeongController::class . '@export');
     Route::post('export-hasil-realisasi-keong', RealisasiKeongController::class . '@exportHasilRealisasi');

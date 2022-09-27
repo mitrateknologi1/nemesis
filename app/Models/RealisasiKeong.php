@@ -21,7 +21,7 @@ class RealisasiKeong extends Model
 
     public function lokasiRealisasiKeong()
     {
-        return $this->hasMany(LokasiPerencanaanKeong::class, 'realisasi_keong_id')->orderBy('updated_at', 'DESC');
+        return $this->hasMany(LokasiRealisasiKeong::class, 'realisasi_keong_id')->orderBy('updated_at', 'DESC');
     }
 
     public function dokumenRealisasiKeong()

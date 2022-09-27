@@ -35,7 +35,7 @@ class PerencanaanKeongController extends Controller
      */
     public function dataPerencanaan()
     {
-        $query = PerencanaanKeong::with('opd', 'lokasiPerencanaanKeong', 'opdTerkaitKeong', 'realisasiKeong')
+        $query = PerencanaanKeong::with('opd', 'lokasiRealisasiKeong', 'opdTerkaitKeong', 'realisasiKeong')
             ->where(function ($query) {
                 if (Auth::user()->role == 'OPD') {
                     $query->where('opd_id', Auth::user()->opd_id);
@@ -66,19 +66,31 @@ class PerencanaanKeongController extends Controller
 
                     if ($request->status_filter && $request->status_filter != 'semua') {
                         $filter = $request->status_filter;
-                        if (in_array($filter, ["-", 1, 2])) {
+                        if (in_array($filter, ["-", 1, 10, 11, 2])) {
                             if ($filter == "-") {
                                 $query->where('status', 0);
                             } else {
-                                $query->where('status', $filter);
+                                if ($filter == 10) {
+                                    $query->where('status', 1);
+                                    $query->doesntHave('realisasiKeong');
+                                } else if ($filter == 11) {
+                                    $query->where('status', 1);
+                                    $query->whereHas('realisasiKeong', function ($q) {
+                                        $q->where('status', 1);
+                                    });
+                                } else {
+                                    $query->where('status', $filter);
+                                }
                             }
                         } else {
                             if ($filter == 3) {
                                 // $query->created_at->year != Carbon::now()->year;
                                 $query->whereYear('created_at', '!=', Carbon::now()->year);
-                                $query->whereHas('realisasiKeong', function ($q) {
-                                    $q->where('status', 1);
-                                    $q->havingRaw('max(progress) != ?', [100]);
+                                $query->where(function ($q) {
+                                    $q->doesntHave('realisasiKeong');
+                                    $q->orWhereHas('realisasiKeong', function ($q) {
+                                        $q->where('status', '!=', 1);
+                                    });
                                 });
                             }
                         }
@@ -89,7 +101,7 @@ class PerencanaanKeongController extends Controller
                             $query2->where('sub_indikator', 'like', '%' . $request->search_filter . '%');
                         });
                     }
-                });
+                })->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -100,12 +112,12 @@ class PerencanaanKeongController extends Controller
                     } else if ($row->status == 1) {
                         $status = '<div class="my-2">';
                         $status .= '<span class="badge fw-bold badge-success mb-1">Disetujui</span>';
-                        if ($row->realisasiKeong->where('status', 1)->count() > 0) {
-                            $status .=  '<br><a class="shadow" href="' . route('realisasi-intervensi-keong.show', $row->id) . '"><span class="badge fw-bold badge-primary">Progress: ' . $row->realisasiKeong->where('status', 1)->max('progress') . '%</span></a>';
+                        if (($row->realisasiKeong) && ($row->realisasiKeong->status == 1)) {
+                            $status .=  '<br><a class="shadow" href="' . route('realisasi-intervensi-keong.show', $row->realisasiKeong->id) . '"><span class="badge fw-bold badge-primary">Sudah Terealisasi</span></a>';
                         } else {
-                            $status .=  '<br><span class="badge fw-bold badge-primary">Progress: 0%</span>';
+                            $status .=  '<br><span class="badge fw-bold badge-dark">Belum Terealisasi</span>';
                         }
-                        if (($row->created_at->year != Carbon::now()->year) && ($row->realisasiKeong->where('status', 1)->max('progress') != 100)) {
+                        if (($row->created_at->year != Carbon::now()->year) && ((!$row->realisasiKeong) || (($row->realisasiKeong) && ($row->realisasiKeong->status != 1)))) {
                             $status .=  '<br><span class="badge fw-bold badge-secondary mt-1">Tidak Terselesaikan Ditahun ' . $row->created_at->year . '</span>';
                             if ($row->alasan_tidak_terselesaikan == null && $row->status_baca == null) {
                                 $status .=  '<br><span class="badge fw-bold badge-danger mt-1">Belum Ada Alasan</span>';
@@ -132,7 +144,7 @@ class PerencanaanKeongController extends Controller
                 })
 
                 ->addColumn('jumlah_lokasi', function ($row) {
-                    return $row->lokasiPerencanaanKeong->count();
+                    return $row->lokasiRealisasiKeong->count();
                 })
 
                 ->addColumn('opd', function ($row) {
@@ -189,7 +201,7 @@ class PerencanaanKeongController extends Controller
                 ->make(true);
         }
 
-        $perencanaanKeong2 = PerencanaanKeong::where(function ($query) {
+        $perencanaanKeong2 = PerencanaanKeong::with('realisasiKeong')->where(function ($query) {
             if (Auth::user()->role == 'OPD') {
                 $query->where('opd_id', Auth::user()->opd_id);
             }
@@ -197,7 +209,7 @@ class PerencanaanKeongController extends Controller
         $countPerencanaanTidakTerselesaikan = 0;
         if (Auth::user()->role == 'OPD') {
             foreach ($perencanaanKeong2 as $row) {
-                if (($row->created_at->year != Carbon::now()->year) && ($row->realisasiKeong->where('status', 1)->max('progress') != 100) && ($row->alasan_tidak_terselesaikan == null) && ($row->status_baca == null)) {
+                if (($row->created_at->year != Carbon::now()->year) && ((!$row->realisasiKeong) || (($row->realisasiKeong) && ($row->realisasiKeong->status != 1))) && ($row->alasan_tidak_terselesaikan == null) && ($row->status_baca == null)) {
                     $countPerencanaanTidakTerselesaikan++;
                 }
             }
@@ -205,7 +217,7 @@ class PerencanaanKeongController extends Controller
             $totalMenungguKonfirmasiPerencanaanKeong = PerencanaanKeong::where('status', 2)->where('opd_id', Auth::user()->opd_id)->count();
         } else {
             foreach ($perencanaanKeong2 as $row) {
-                if (($row->created_at->year != Carbon::now()->year) && ($row->realisasiKeong->where('status', 1)->max('progress') != 100) && ($row->alasan_tidak_terselesaikan != null) && ($row->status_baca != 1)) {
+                if (($row->created_at->year != Carbon::now()->year) && ((!$row->realisasiKeong) || (($row->realisasiKeong) && ($row->realisasiKeong->status != 1)))  && ($row->alasan_tidak_terselesaikan != null) && ($row->status_baca != 1)) {
                     $countPerencanaanTidakTerselesaikan++;
                 }
             }
@@ -236,10 +248,10 @@ class PerencanaanKeongController extends Controller
         }
 
         if (Auth::user()->role == 'OPD') {
-            $perencanaanKeong = PerencanaanKeong::where('opd_id', Auth::user()->opd_id)->get();
+            $perencanaanKeong = PerencanaanKeong::with('realisasiKeong')->where('opd_id', Auth::user()->opd_id)->get();
             $countPerencanaanTidakTerselesaikan = null;
             foreach ($perencanaanKeong as $row) {
-                if (($row->created_at->year != Carbon::now()->year) && ($row->realisasiKeong->where('status', 1)->max('progress') != 100) && ($row->alasan_tidak_terselesaikan == null) && ($row->status_baca == null)) {
+                if (($row->created_at->year != Carbon::now()->year) && (!($row->realisasiKeong)) && ($row->alasan_tidak_terselesaikan == null) && ($row->status_baca == null)) {
                     $countPerencanaanTidakTerselesaikan++;
                 }
             }
@@ -268,13 +280,11 @@ class PerencanaanKeongController extends Controller
             $request->all(),
             [
                 'sub_indikator' => 'required',
-                'lokasi' => 'required',
                 'nilai_pembiayaan' => 'required',
                 'sumber_dana' => 'required',
             ],
             [
                 'sub_indikator.required' => 'Sub Indikator harus diisi',
-                'lokasi.required' => 'Lokasi harus dipilih',
                 'nilai_pembiayaan.required' => 'Nilai Pembiayaan harus diisi',
                 'sumber_dana.required' => 'Sumber Dana harus dipilih',
             ]
@@ -306,16 +316,6 @@ class PerencanaanKeongController extends Controller
         ];
 
         $insertPerencanaan = PerencanaanKeong::create($dataPerencanaan);
-
-        if ($request->lokasi != null) {
-            foreach ($request->lokasi as $lokasi) {
-                $dataLokasi = [
-                    'perencanaan_keong_id' => $insertPerencanaan->id,
-                    'lokasi_keong_id' => $lokasi,
-                ];
-                $insertLokasi = LokasiPerencanaanKeong::create($dataLokasi);
-            }
-        }
 
         if ($request->opd_terkait != null) {
             foreach ($request->opd_terkait as $opd) {
@@ -390,7 +390,6 @@ class PerencanaanKeongController extends Controller
             'rencanaIntervensiKeong' => $rencana_intervensi_keong,
             'sumberDana' => SumberDana::all(),
             'desa' => Desa::all(),
-            'lokasiPerencanaanKeong' => json_encode($rencana_intervensi_keong->lokasiPerencanaanKeong->pluck('lokasi_keong_id')->toArray()),
             'opdTerkaitKeong' => json_encode($rencana_intervensi_keong->opdTerkaitKeong->pluck('opd_id')->toArray()),
             'opd' => OPD::whereNot('id', $rencana_intervensi_keong->opd_id)->orderBy('nama')->get(),
 
@@ -411,13 +410,11 @@ class PerencanaanKeongController extends Controller
             $request->all(),
             [
                 'sub_indikator' => 'required',
-                'lokasi' => $rencana_intervensi_keong->realisasiKeong->count() == 0 ? 'required' : '',
-                'nilai_pembiayaan' => $rencana_intervensi_keong->realisasiKeong->count() == 0 ? 'required' : '',
+                'nilai_pembiayaan' => 'required',
                 'sumber_dana' => 'required',
             ],
             [
                 'sub_indikator.required' => 'Sub Indikator harus diisi',
-                'lokasi.required' => 'Lokasi harus dipilih',
                 'nilai_pembiayaan.required' => 'Nilai Pembiayaan harus diisi',
                 'sumber_dana.required' => 'Sumber Dana harus dipilih',
             ]
@@ -443,20 +440,6 @@ class PerencanaanKeongController extends Controller
                 }
             } else {
                 return 'nama_dokumen_kosong_dan_file_dokumen_kosong';
-            }
-        }
-
-        // update lokasi perencanaan
-        if ($rencana_intervensi_keong->realisasiKeong->count() == 0) {
-            $rencana_intervensi_keong->lokasiPerencanaanKeong()->delete();
-            if ($request->lokasi != null) {
-                foreach ($request->lokasi as $lokasi) {
-                    $dataLokasi = [
-                        'perencanaan_keong_id' => $rencana_intervensi_keong->id,
-                        'lokasi_keong_id' => $lokasi,
-                    ];
-                    $insertLokasi = LokasiPerencanaanKeong::create($dataLokasi);
-                }
             }
         }
 
@@ -520,12 +503,9 @@ class PerencanaanKeongController extends Controller
         // update data perencanaan
         $dataPerencanaan = [
             'sub_indikator' => $request->sub_indikator,
-            'sumber_dana_id' => $request->sumber_dana
+            'sumber_dana_id' => $request->sumber_dana,
+            'nilai_pembiayaan' => $request->nilai_pembiayaan
         ];
-
-        if ($rencana_intervensi_keong->realisasiKeong->count() == 0) {
-            $dataPerencanaan['nilai_pembiayaan'] = $request->nilai_pembiayaan;
-        }
 
         if (Auth::user()->role == 'OPD') {
             $dataPerencanaan['status'] = 0;
@@ -566,9 +546,6 @@ class PerencanaanKeongController extends Controller
      */
     public function destroy(PerencanaanKeong $rencana_intervensi_keong)
     {
-        $rencana_intervensi_keong->opdTerkaitKeong()->delete();
-        $rencana_intervensi_keong->lokasiPerencanaanKeong()->delete();
-
         if ($rencana_intervensi_keong->dokumenPerencanaanKeong) {
             foreach ($rencana_intervensi_keong->dokumenPerencanaanKeong as $item) {
                 if (Storage::exists('uploads/dokumen/perencanaan/keong/' . $item->file)) {
@@ -579,17 +556,17 @@ class PerencanaanKeongController extends Controller
         $rencana_intervensi_keong->dokumenPerencanaanKeong()->delete();
 
         if ($rencana_intervensi_keong->realisasiKeong) {
-            foreach ($rencana_intervensi_keong->realisasiKeong as $item) {
-                foreach ($item->dokumenRealisasiKeong as $doc) {
-                    if (Storage::exists('uploads/dokumen/realisasi/keong/' . $doc->file)) {
-                        Storage::delete('uploads/dokumen/realisasi/keong/' . $doc->file);
-                    }
-                    DokumenRealisasiKeong::where('id', $item->id)->delete();
+            foreach ($rencana_intervensi_keong->realisasiKeong->dokumenRealisasiKeong as $doc) {
+                if (Storage::exists('uploads/dokumen/realisasi/keong/' . $doc->file)) {
+                    Storage::delete('uploads/dokumen/realisasi/keong/' . $doc->file);
                 }
-                $item->dokumenRealisasiKeong()->delete();
+                DokumenRealisasiKeong::where('id', $doc->id)->delete();
             }
+
+            $rencana_intervensi_keong->realisasiKeong->lokasiRealisasiKeong()->delete();
         }
 
+        $rencana_intervensi_keong->opdTerkaitKeong()->delete();
         $rencana_intervensi_keong->realisasiKeong()->delete();
         $rencana_intervensi_keong->delete();
 
@@ -625,21 +602,13 @@ class PerencanaanKeongController extends Controller
         return response()->json(['success' => 'Berhasil mengkonfirmasi']);
     }
 
-    public function map(PerencanaanKeong $rencana_intervensi_keong)
-    {
-        $getLokasiKeong = $rencana_intervensi_keong->lokasiPerencanaanKeong->pluck('lokasi_keong_id')->toArray();
-        $lokasiKeong = LokasiKeong::with(['desa', 'pemilikLokasiKeong', 'pemilikLokasiKeong.penduduk'])->whereIn('id', $getLokasiKeong)->get();
-        return response()->json(['status' => 'success', 'data' => $lokasiKeong]);
-    }
-
     public function export()
     {
-        $dataPerencanaan = PerencanaanKeong::with('opd', 'lokasiPerencanaanKeong')
+        $dataPerencanaan = PerencanaanKeong::with('opd', 'lokasiRealisasiKeong')
             ->where(function ($query) {
                 if (Auth::user()->role == 'OPD') {
                     $query->where('opd_id', Auth::user()->opd_id);
                     $query->orWhereHas('opdTerkaitKeong', function ($q) { // OPD Terkait hanya bisa melihat yang telah di setujui
-                        $q->where('status', 1);
                         $q->where('opd_id', Auth::user()->opd_id);
                     });
                 }

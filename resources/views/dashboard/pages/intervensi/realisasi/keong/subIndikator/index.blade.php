@@ -13,6 +13,11 @@
 @endsection
 
 @section('buttonPanelHeader')
+    @if (Auth::user()->role == 'OPD')
+        <a href="{{ route('realisasi-intervensi-keong.create') }}" class="btn btn-secondary btn-round"><i
+                class="fas fa-plus"></i>
+            Tambah</a>
+    @endif
 @endsection
 
 @section('contents')
@@ -67,8 +72,9 @@
                                 ])
                                 @slot('options')
                                     <option value="semua">Semua</option>
-                                    @foreach ($realisasiKeong as $item)
-                                        <option value="{{ $item->opd_id }}">{{ $item->opd->nama }}</option>
+                                    @foreach ($opdFilter as $item)
+                                        <option value="{{ $item['id'] }}">
+                                            {{ $item['nama'] }}</option>
                                     @endforeach
                                 @endslot
                             @endcomponent
@@ -83,10 +89,8 @@
                                 ])
                                 @slot('options')
                                     <option value="semua">Semua</option>
-                                    <option value="selesai">Selesai Terealisasi</option>
-                                    <option value="belum_selesai">Belum Selesai Terealisasi</option>
-                                    <option value="belum_ada_laporan">Belum Ada Laporan Sama Sekali</option>
                                     <option value="-">Menunggu Konfirmasi</option>
+                                    <option value="1">Disetujui</option>
                                     <option value="2">Ditolak</option>
                                 @endslot
                             @endcomponent
@@ -100,14 +104,11 @@
                                     <thead>
                                         <tr class="text-center fw-bold">
                                             <th>No</th>
-                                            <th>Tanggal Pembuatan Perencanaan</th>
+                                            <th>Tanggal Pelaporan</th>
                                             <th>Sub Indikator</th>
                                             <th>OPD</th>
                                             <th>Nilai Anggaran</th>
-                                            <th>Penggunaan Anggaran</th>
-                                            <th>Sisa Anggaran</th>
-                                            <th>Progress</th>
-                                            <th>Status</th>
+                                            <th>Status Laporan</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -141,13 +142,6 @@
                 [10, 25, 50, -1],
                 [10, 25, 50, "All"]
             ],
-            dom: 'lBfrtip',
-            buttons: [{
-                extend: 'colvis',
-                className: 'btn btn-sm btn-info px-2 btn-export-table d-inline ml-3 font-weight',
-                text: '<i class="fas fa-eye-slash"></i> Show/Hide Column',
-            }],
-
             ajax: {
                 url: "{{ route('realisasi-intervensi-keong.index') }}",
                 data: function(d) {
@@ -170,7 +164,6 @@
                     render: function(data) {
                         return moment(data).format('LL');
                     },
-                    visible: false,
                     className: 'text-center',
                 },
                 {
@@ -183,29 +176,10 @@
                     className: 'text-center'
                 },
                 {
-                    data: 'nilai_pembiayaan',
-                    name: 'nilai_pembiayaan',
-                    className: 'text-right',
-                    render: $.fn.dataTable.render.number('.', ',', 0, 'Rp.'),
-                },
-                {
                     data: 'penggunaan_anggaran',
                     name: 'penggunaan_anggaran',
                     className: 'text-right',
                     render: $.fn.dataTable.render.number('.', ',', 0, 'Rp.'),
-                    visible: false,
-                },
-                {
-                    data: 'sisa_anggaran',
-                    name: 'sisa_anggaran',
-                    className: 'text-right',
-                    render: $.fn.dataTable.render.number('.', ',', 0, 'Rp.'),
-                    visible: false,
-                },
-                {
-                    data: 'progress',
-                    name: 'progress',
-                    className: 'text-center',
                 },
                 {
                     data: 'status',
@@ -239,7 +213,7 @@
                 if (result) {
                     $.ajax({
                         type: 'DELETE',
-                        url: "{{ url('rencana-intervensi-keong') }}" + '/' + id,
+                        url: "{{ url('realisasi-intervensi-keong') }}" + '/' + id,
                         data: {
                             _token: _token
                         },

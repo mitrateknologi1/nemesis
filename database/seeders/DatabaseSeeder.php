@@ -63,7 +63,7 @@ class DatabaseSeeder extends Seeder
         $this->call(LokasiKeongTableSeeder::class);
         $this->call(RealisasiKeongTableSeeder::class);
         $this->call(DokumenRealisasiKeongTableSeeder::class);
-        $this->call(LokasiPerencanaanKeongTableSeeder::class);
+        $this->call(LokasiRealisasiKeongTableSeeder::class);
         $this->call(TahunSeeder::class);
         $this->call(RoadMapSeeder::class);
         $this->call(MasterPlanSeeder::class);

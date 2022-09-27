@@ -13,10 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('lokasi_perencanaan_keong', function (Blueprint $table) {
+        Schema::create('lokasi_realisasi_keong', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('perencanaan_keong_id');
-            $table->uuid('realisasi_keong_id')->nullable();
+            $table->uuid('realisasi_keong_id');
             $table->uuid('lokasi_keong_id');
             $table->integer('status')->default(0); // 0/1/2
             $table->timestamps();
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lokasi_perencanaan_keong');
+        Schema::dropIfExists('lokasi_realisasi_keong');
     }
 };

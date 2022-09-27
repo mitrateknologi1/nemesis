@@ -25,9 +25,9 @@ class PerencanaanKeong extends Model
         return $this->hasMany(OPDTerkaitKeong::class, 'perencanaan_keong_id');
     }
 
-    public function lokasiPerencanaanKeong()
+    public function lokasiRealisasiKeong()
     {
-        return $this->hasMany(LokasiPerencanaanKeong::class, 'perencanaan_keong_id')->orderBy('updated_at', 'DESC');
+        return $this->hasMany(LokasiRealisasiKeong::class, 'realisasi_keong_id')->orderBy('updated_at', 'DESC');
     }
 
     public function dokumenPerencanaanKeong()
@@ -37,11 +37,11 @@ class PerencanaanKeong extends Model
 
     public function realisasiKeong()
     {
-        return $this->hasMany(RealisasiKeong::class, 'perencanaan_keong_id');
+        return $this->hasOne(RealisasiKeong::class);
     }
 
     public function sumberDana()
     {
-        return $this->belongsTo(SumberDana::class);
+        return $this->belongsTo(SumberDana::class)->withTrashed();
     }
 }

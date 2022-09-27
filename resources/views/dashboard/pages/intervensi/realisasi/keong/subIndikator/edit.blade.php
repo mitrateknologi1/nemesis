@@ -10,7 +10,7 @@
 @endsection
 
 @section('subTitlePanelHeader')
-    {{ $rencanaIntervensiKeong->sub_indikator }}
+    {{ $realisasiIntervensiKeong->perencanaanKeong->sub_indikator }}
 @endsection
 
 @section('buttonPanelHeader')
@@ -52,12 +52,11 @@
                                 [
                                     'action' => route('realisasi-intervensi-keong.update', $realisasiIntervensiKeong->id),
                                     'realisasiIntervensiKeong' => $realisasiIntervensiKeong,
-                                    'rencanaIntervensiKeong' => $rencanaIntervensiKeong,
-                                    'countSisaAnggaran' => $countSisaAnggaran,
+                                    'listPerencanaan' => $listPerencanaan,
+                                    'opdTerkaitKeong' => $opdTerkaitKeong,
+                                    'opd' => $opd,
                                     'desa' => $desa,
-                                    'lokasi' => $lokasiPerencanaanKeong,
-                                    'lokasiArr' => $lokasiPerencanaanKeongArr,
-                                    'dataMap' => $dataMap,
+                                    'lokasi' => $lokasiRealisasiKeong,
                                     'maxDokumen' => $realisasiIntervensiKeong->dokumenRealisasiKeong()->count(),
                                     'method' => 'PUT',
                                     'submitLabel' => 'Perbarui Data',
@@ -69,54 +68,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4 order-md-2">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-head-row">
-                        <div class="card-title">Lokasi Yang Belum Terealisasi</div>
-                    </div>
-                </div>
-                <div class="card-body px-2">
-                    <div class="table-responsive">
-                        <table class="table table-hover table-striped" id="tabelLokasiTerealisasi" cellspacing="0"
-                            width="100%">
-                            <thead>
-                                <tr class="text-center fw-bold">
-                                    <th>No</th>
-                                    <th>Nama Lokasi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($rencanaIntervensiKeong->lokasiPerencanaanKeong->whereNull('realisasi_keong_id') as $item)
-                                    <tr>
-                                        <td class="text-center">
-                                            {{ $loop->iteration }}
-                                        </td>
-                                        <td>{{ $item->lokasiKeong->nama }}</td>
-
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-head-row">
-                        <div class="card-title">Titik Koordinat Yang Belum Terealisasi</div>
-                    </div>
-                </div>
-                <div class="card-body px-2">
-                    <div id="peta"></div>
-                </div>
-            </div>
-        </div>
-
     </div>
 @endsection
 

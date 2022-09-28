@@ -91,6 +91,8 @@
                                     <option value="semua">Semua</option>
                                     <option value="-">Menunggu Konfirmasi</option>
                                     <option value="1">Disetujui</option>
+                                    <option value="10">Disetujui Tapi Belum Terealisasi</option>
+                                    <option value="11">Disetujui dan Telah Terealisasi</option>
                                     <option value="2">Ditolak</option>
                                     <option value="3">Tidak Terselesaikan Ditahun Sebelumnya</option>
                                 @endslot
@@ -109,7 +111,6 @@
                                             <th>Sub Indikator</th>
                                             <th>OPD</th>
                                             <th>Rencana Anggaran</th>
-                                            {{-- <th>Jumlah Lokasi</th> --}}
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -191,14 +192,6 @@
                     className: 'text-right',
                     render: $.fn.dataTable.render.number('.', ',', 0, 'Rp.')
                 },
-                // {
-                //     data: 'jumlah_lokasi',
-                //     name: 'jumlah_lokasi',
-                // },
-                // {
-                //     data: 'lokasi_hewan',
-                //     name: 'lokasi_hewan',
-                // },
                 {
                     data: 'status',
                     name: 'status',
@@ -210,9 +203,6 @@
                     searchable: false,
                     className: 'text-center'
                 },
-
-
-
             ],
             columnDefs: [{
                     targets: [3, 4, 5],

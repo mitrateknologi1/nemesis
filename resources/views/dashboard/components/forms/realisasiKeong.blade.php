@@ -29,7 +29,6 @@
                         'name' => 'sub_indikator',
                         'class' => 'select2 req',
                         'wajib' => '<sup class="text-danger">*</sup>',
-                        // 'attribute' => isset($realisasiIntervensiKeong) && $realisasiIntervensiKeong->status == 1 ? 'disabled' : '',
                     ])
                     @slot('options')
                         @foreach ($listPerencanaan as $item)
@@ -52,13 +51,12 @@
                     </select>
                 </div>
             </div>
-
             <div class="form-group pb-0">
                 <label class="my-2">Pilih Titik Lokasi <sup class="text-danger">*</sup></label>
                 <div class="select2-input select2-danger">
                     <input type="hidden" name="lokasi_hidden" id="lokasi-hidden" data-label="Titik Lokasi"
                         value="">
-                    <select id="lokasi-perencanaan" name="lokasi[]" class="form-control multiple" multiple="multiple"
+                    <select id="lokasi-realisasi" name="lokasi[]" class="form-control multiple" multiple="multiple"
                         data-label="Titik Lokasi">
                         @foreach ($desa as $item)
                             <optgroup label="{{ $item->nama }}">
@@ -78,7 +76,6 @@
             </div>
         </div>
         <div class="col-lg-4">
-
             <div class="form-group p-0 pb-2">
                 <label for="" class="mt-1 mb-2">Dokumen Pendukung <sup class="text-danger">*</sup></label>
                 {{-- <label for="">(Surat-surat Kendaraan, Berita Acara, dan Lainnya)</label> --}}
@@ -205,7 +202,7 @@
                             <p class="text-danger error-text dokumen-error my-0" id="dokumen-error-1"></p>
                         </div>
                     @endif
-                    <div class="col-md-4 col-lg-4 col-xl-12 align-self-center col-add-dokumen">
+                    <div class="col-12 align-self-center col-add-dokumen">
                         <div class="text-center text-muted" onclick="addDokumen()" style="cursor: pointer">
                             <h1><i class="fas fa-plus-circle"></i></h1>
                             <h6>Tambah Dokumen</h6>
@@ -262,7 +259,7 @@
             e.preventDefault();
             clearTextError()
 
-            $('#lokasi-perencanaan').val() == '' ? $('#lokasi-hidden').addClass('req') : $('#lokasi-hidden')
+            $('#lokasi-realisasi').val() == '' ? $('#lokasi-hidden').addClass('req') : $('#lokasi-hidden')
                 .removeClass('req');
 
             const formValidation = $('#form .req').serializeArray()
@@ -444,9 +441,9 @@
         if ('{{ isset($lokasi) }}' || '{{ isset($realisasiIntervensiKeong) }}') {
             const lokasi = {!! $lokasi ?? '[]' !!};
             for (let i = 0; i < lokasi.length; i++) {
-                $('#lokasi-perencanaan option[value="' + lokasi[i] + '"]').prop('selected', true);
+                $('#lokasi-realisasi option[value="' + lokasi[i] + '"]').prop('selected', true);
             }
-            $('#lokasi-perencanaan').trigger('change');
+            $('#lokasi-realisasi').trigger('change');
             temp = 0;
         }
     </script>
@@ -461,7 +458,7 @@
 
         function setTitik() {
             lokasiPerencanaan = [];
-            $('#lokasi-perencanaan option:selected').each(function() {
+            $('#lokasi-realisasi option:selected').each(function() {
                 lokasiPerencanaan.push({
                     'latitude': $(this).data('latitude'),
                     'longitude': $(this).data('longitude'),
@@ -472,7 +469,7 @@
         }
 
         let temp = 1;
-        $('#lokasi-perencanaan').change(function() {
+        $('#lokasi-realisasi').change(function() {
             setTitik()
             if (temp == 0 || '{{ !isset($realisasiIntervensiKeong) }}') {
                 initializeMap();
@@ -482,10 +479,10 @@
         if ('{{ isset($lokasi) }}' || '{{ isset($realisasiIntervensiKeong) }}') {
             const lokasi = {!! $lokasi ?? '[]' !!};
             for (let i = 0; i < lokasi.length; i++) {
-                $('#lokasi-perencanaan option[value="' + lokasi[i] + '"]').prop('selected', true);
+                $('#lokasi-realisasi option[value="' + lokasi[i] + '"]').prop('selected', true);
                 setTitik()
             }
-            $('#lokasi-perencanaan').trigger('change');
+            $('#lokasi-realisasi').trigger('change');
             temp = 0;
         }
 
@@ -712,7 +709,7 @@
                 </div>
                 <p class="text-danger error-text dokumen-error my-0" id="dokumen-error-1"></p>
             </div>
-            <div class="col-md-4 col-lg-4 col-xl-12 align-self-center col-add-dokumen">
+            <div class="col-12 align-self-center col-add-dokumen">
                 <div class="text-center text-muted" onclick="addDokumen()" style="cursor: pointer">
                     <h1><i class="fas fa-plus-circle"></i></h1>
                     <h6>Tambah Dokumen</h6>

@@ -203,7 +203,7 @@
                             <p class="text-danger error-text dokumen-error my-0" id="dokumen-error-1"></p>
                         </div>
                     @endif
-                    <div class="col-lg-4 col-xl-12 align-self-center col-add-dokumen">
+                    <div class="col-12 align-self-center col-add-dokumen">
                         <div class="text-center text-muted" onclick="addDokumen()" style="cursor: pointer">
                             <h1><i class="fas fa-plus-circle"></i></h1>
                             <h6>Tambah Dokumen</h6>
@@ -282,7 +282,6 @@
                         processData: false,
                         contentType: false,
                         success: function(response) {
-                            console.log(response)
                             $('.rupiah').mask('000.000.000.000.000', {
                                 reverse: true
                             })
@@ -544,7 +543,7 @@
                 </div>
                 <p class="text-danger error-text dokumen-error my-0" id="dokumen-error-1"></p>
             </div>
-            <div class="col-md-4 col-lg-4 col-xl-12 align-self-center col-add-dokumen">
+            <div class="col-12 align-self-center col-add-dokumen">
                 <div class="text-center text-muted" onclick="addDokumen()" style="cursor: pointer">
                     <h1><i class="fas fa-plus-circle"></i></h1>
                     <h6>Tambah Dokumen</h6>

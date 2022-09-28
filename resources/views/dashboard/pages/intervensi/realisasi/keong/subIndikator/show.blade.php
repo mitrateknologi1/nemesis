@@ -232,46 +232,6 @@
             </div>
         @endif
     </div>
-
-    {{-- Modal OPD --}}
-    <div class="modal fade" id="btnTambahOPD" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Tambah OPD Terkait</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form action="#" id="{{ $form ?? 'form' }}" method="POST" enctype="multipart/form-data"
-                    autocomplete="off">
-                    <div class="modal-body">
-                        @csrf
-                        <div class="form-group p-0">
-                            <label class="my-2">Pilih OPD Terkait <span class="text-info">(Bisa lebih dari
-                                    satu)</span></label>
-                            <div class="select2-input select2-primary">
-                                <input type="hidden" name="opd_terkait_hidden" id="opd-terkait-hidden"
-                                    data-label="OPD Terkait" value="">
-                                <select id="opd-terkait" name="opd_terkait[]" class="form-control multiple"
-                                    multiple="multiple" data-label="OPD Terkait">
-                                    @foreach ($opd as $item3)
-                                        <option value="{{ $item3->id }}">{{ $item3->nama }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <span class="text-danger error-text opd_terkait_hidden-error"></span>
-                            <span class="text-danger error-text opd_terkait-error"></span>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-secondary"><i class="fas fa-save"></i> Simpan</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 @endsection
 
 @push('scripts')
@@ -355,7 +315,6 @@
                 type: "GET",
                 success: function(response) {
                     if (response.status == 'success') {
-
                         for (var i = 0; i < response.data.length; i++) {
                             var pemilikKeong = '';
                             if (response.data[i].pemilik_lokasi_keong.length > 0) {

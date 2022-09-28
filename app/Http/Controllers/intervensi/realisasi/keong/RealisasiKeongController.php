@@ -155,10 +155,8 @@ class RealisasiKeongController extends Controller
 
                 ->rawColumns([
                     'status',
-                    'progress',
                     'opd',
                     'action',
-                    'lokasi_keong',
                 ])
                 ->make(true);
         }
@@ -173,12 +171,6 @@ class RealisasiKeongController extends Controller
         $tahun = $this->dataRealisasi()->select(DB::raw('YEAR(created_at) year'))
             ->groupBy('year')
             ->pluck('year');
-
-        $realisasiKeong = $this->dataRealisasi()
-            ->whereHas('perencanaanKeong', function ($query) {
-                $query->groupBy('opd_id');
-            })->get();
-
 
         $opdFilter = [];
         $iter = 1;
@@ -253,7 +245,6 @@ class RealisasiKeongController extends Controller
                 OPDTerkaitKeong::create($data);
             }
         }
-
 
         if ($request->nama_dokumen != null) {
             $countFileDokumen = count($request->file_dokumen ?? []);
@@ -358,7 +349,7 @@ class RealisasiKeongController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'sub_indikator' => $realisasi_intervensi_keong->status != 1 ? 'required' : '',
+                'sub_indikator' => 'required',
                 'lokasi' => 'required',
             ],
             [
@@ -411,6 +402,9 @@ class RealisasiKeongController extends Controller
                     'realisasi_keong_id' => $realisasi_intervensi_keong->id,
                     'lokasi_keong_id' => $lokasi,
                 ];
+                if (Auth::user()->role == 'Admin') {
+                    $dataLokasi['status'] = $realisasi_intervensi_keong->status;
+                }
                 $insertLokasi = LokasiRealisasiKeong::create($dataLokasi);
             }
         }
@@ -481,7 +475,6 @@ class RealisasiKeongController extends Controller
                 $no_dokumen++;
             }
         }
-
 
         $dataRealisasi = [];
 
@@ -559,16 +552,17 @@ class RealisasiKeongController extends Controller
 
     public function destroy(RealisasiKeong $realisasi_intervensi_keong)
     {
-        $realisasi_intervensi_keong->lokasiRealisasiKeong()->delete();
-
-        foreach ($realisasi_intervensi_keong->dokumenRealisasiKeong as $doc) {
-            if (Storage::exists('uploads/dokumen/realisasi/keong/' . $doc->file)) {
-                Storage::delete('uploads/dokumen/realisasi/keong/' . $doc->file);
+        if ($realisasi_intervensi_keong->dokumenRealisasiKeong) {
+            foreach ($realisasi_intervensi_keong->dokumenRealisasiKeong as $doc) {
+                if (Storage::exists('uploads/dokumen/realisasi/keong/' . $doc->file)) {
+                    Storage::delete('uploads/dokumen/realisasi/keong/' . $doc->file);
+                }
+                DokumenRealisasiKeong::where('id', $realisasi_intervensi_keong->id)->delete();
             }
-            DokumenRealisasiKeong::where('id', $realisasi_intervensi_keong->id)->delete();
+            $realisasi_intervensi_keong->dokumenRealisasiKeong()->delete();
         }
 
-        $realisasi_intervensi_keong->dokumenRealisasiKeong()->delete();
+        $realisasi_intervensi_keong->lokasiRealisasiKeong()->delete();
         $realisasi_intervensi_keong->delete();
 
         return response()->json(['success' => 'Data berhasil dihapus']);

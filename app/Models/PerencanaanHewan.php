@@ -25,11 +25,6 @@ class PerencanaanHewan extends Model
         return $this->hasMany(OPDTerkaitHewan::class, 'perencanaan_hewan_id');
     }
 
-    public function lokasiPerencanaanHewan()
-    {
-        return $this->hasMany(LokasiPerencanaanHewan::class, 'perencanaan_hewan_id')->orderBy('updated_at', 'DESC');
-    }
-
     public function dokumenPerencanaanHewan()
     {
         return $this->hasMany(DokumenPerencanaanHewan::class, 'perencanaan_hewan_id')->orderBy('no_urut');
@@ -37,11 +32,11 @@ class PerencanaanHewan extends Model
 
     public function realisasiHewan()
     {
-        return $this->hasMany(RealisasiHewan::class, 'perencanaan_hewan_id');
+        return $this->hasOne(RealisasiHewan::class, 'perencanaan_hewan_id');
     }
 
     public function sumberDana()
     {
-        return $this->belongsTo(SumberDana::class);
+        return $this->belongsTo(SumberDana::class)->withTrashed();
     }
 }

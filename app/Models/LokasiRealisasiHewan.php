@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use App\Traits\TraitUuid;
 
 
-class LokasiPerencanaanHewan extends Model
+class LokasiRealisasiHewan extends Model
 {
     use HasFactory, TraitUuid;
 
-    protected $table = 'lokasi_perencanaan_hewan';
+    protected $table = 'lokasi_realisasi_hewan';
     protected $guarded = ['id'];
 
     public function lokasiHewan()

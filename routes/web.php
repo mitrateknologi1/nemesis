@@ -1,13 +1,9 @@
 <?php
 
-use App\Models\Siswa;
-use App\Models\Perencanaan;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ListController;
-use App\Http\Controllers\ImportController;
 use App\Http\Controllers\DashboardController;
-use Database\Seeders\PerencanaanManusiaSeeder;
 use App\Http\Controllers\masterData\OPDController;
 use App\Http\Controllers\PengaturanAkunController;
 use App\Http\Controllers\dokumen\RoadMapController;
@@ -63,11 +59,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('rencana-intervensi-keong/buat-alasan-tidak-terselesaikan/{rencana_intervensi_keong}', PerencanaanKeongController::class . '@buatAlasanTidakTerselesaikan');
     Route::post('rencana-intervensi-keong/baca-alasan-tidak-terselesaikan/{rencana_intervensi_keong}', PerencanaanKeongController::class . '@bacaAlasanTidakTerselesaikan');
 
-
     Route::resource('realisasi-intervensi-keong', RealisasiKeongController::class);
     Route::get('realisasi-intervensi-keong/map/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@map');
     Route::post('realisasi-intervensi-keong/konfirmasi/{realisasi_intervensi_keong}', RealisasiKeongController::class . '@konfirmasi');
-
     Route::get('hasil-realisasi-keong', RealisasiKeongController::class . '@hasilRealisasi');
     Route::post('export-realisasi-keong', RealisasiKeongController::class . '@export');
     Route::post('export-hasil-realisasi-keong', RealisasiKeongController::class . '@exportHasilRealisasi');
@@ -102,25 +96,16 @@ Route::group(['middleware' => 'auth'], function () {
     // Hewan
     Route::resource('rencana-intervensi-hewan', PerencanaanHewanController::class);
     Route::post('rencana-intervensi-hewan/konfirmasi/{rencana_intervensi_hewan}', PerencanaanHewanController::class . '@konfirmasi');
-    Route::get('rencana-intervensi-hewan/map/{rencana_intervensi_hewan}', PerencanaanHewanController::class . '@map');
     Route::post('export-perencanaan-hewan', PerencanaanHewanController::class . '@export');
     Route::put('rencana-intervensi-hewan/buat-alasan-tidak-terselesaikan/{rencana_intervensi_hewan}', PerencanaanHewanController::class . '@buatAlasanTidakTerselesaikan');
     Route::post('rencana-intervensi-hewan/baca-alasan-tidak-terselesaikan/{rencana_intervensi_hewan}', PerencanaanHewanController::class . '@bacaAlasanTidakTerselesaikan');
 
-
     Route::resource('realisasi-intervensi-hewan', RealisasiHewanController::class);
-    Route::get('tabel-laporan-realisasi-hewan', RealisasiHewanController::class . '@tabelLaporan');
-    Route::get('realisasi-intervensi-hewan/create-pelaporan/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@createPelaporan');
-    Route::get('realisasi-intervensi-hewan/show-laporan/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@showLaporan');
+    Route::get('realisasi-intervensi-hewan/map/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@map');
     Route::post('realisasi-intervensi-hewan/konfirmasi/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@konfirmasi');
-    Route::post('realisasi-intervensi-hewan/update-opd/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@updateOPD');
-    Route::delete('realisasi-intervensi-hewan/delete-opd/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@deleteOPD');
-    Route::delete('realisasi-intervensi-hewan/delete-laporan/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@deleteLaporan');
-    Route::delete('realisasi-intervensi-hewan/delete-semua-laporan/{realisasi_intervensi_hewan}', RealisasiHewanController::class . '@deleteSemuaLaporan');
     Route::get('hasil-realisasi-hewan', RealisasiHewanController::class . '@hasilRealisasi');
     Route::post('export-realisasi-hewan', RealisasiHewanController::class . '@export');
     Route::post('export-hasil-realisasi-hewan', RealisasiHewanController::class . '@exportHasilRealisasi');
-
 
 
     // Master Data

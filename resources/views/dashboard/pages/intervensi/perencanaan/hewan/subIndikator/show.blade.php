@@ -47,19 +47,6 @@
                         <li class="list-group-item d-flex justify-content-between align-items-center">OPD:<span
                                 class="font-weight-bold">{{ $rencana_intervensi_hewan->opd->nama }}</span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">Lokasi
-                            ({{ $rencana_intervensi_hewan->lokasiPerencanaanHewan->count() }}):<span
-                                class="font-weight-bold">
-                                <ul>
-                                    @foreach ($rencana_intervensi_hewan->lokasiPerencanaanHewan as $item)
-                                        <li class="d-flex justify-content-end align-items-end">
-                                            {{ $item->lokasiHewan->nama . ' ' }}
-                                            (<span>{{ $item->lokasiHewan->desa->nama }}</span>)
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </span>
-                        </li>
                         @if ($rencana_intervensi_hewan->opdTerkaitHewan->count() > 0)
                             <li class="list-group-item d-flex justify-content-between align-items-center">OPD Terkait
                                 ({{ $rencana_intervensi_hewan->opdTerkaitHewan->count() }}):<span class="font-weight-bold">
@@ -134,24 +121,7 @@
                     </ul>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-head-row">
-                        <div class="card-title">Titik Koordinat Lokasi Perencanaan Intervensi Lokasi Hewan Ternak</div>
-
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div id="peta"></div>
-                </div>
-            </div>
-        </div>
-        @if ($rencana_intervensi_hewan->status == 0 && Auth::user()->role == 'Admin')
-            <div class="col-md-4">
+            @if ($rencana_intervensi_hewan->status == 0 && Auth::user()->role == 'Admin')
                 <div class="card">
                     <div class="card-header">
                         <div class="card-head-row">
@@ -167,8 +137,8 @@
                         @endcomponent
                     </div>
                 </div>
-            </div>
-        @endif
+            @endif
+        </div>
     </div>
 @endsection
 
@@ -177,125 +147,5 @@
         $('#nav-perencanaan').addClass('active');
         $('#nav-perencanaan .collapse').addClass('show');
         $('#nav-perencanaan .collapse #li-hewan').addClass('active');
-
-        $(document).ready(function() {
-            initializeMap();
-        })
-
-        var map = null;
-
-        function initializeMap() {
-            if (map != undefined || map != null) {
-                map.remove();
-            }
-
-            var center = [-1.3618072, 120.1619337];
-
-            map = L.map("peta", {
-                maxBounds: [
-                    [-1.511127, 119.9637063],
-                    [-1.21458, 120.2912363]
-                ]
-            }).setView(center, 11);
-            map.addControl(new L.Control.Fullscreen());
-
-            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                attribution: 'Data © <a href="http://osm.org/copyright">OpenStreetMap</a>',
-                maxZoom: 18,
-                minZoom: 11
-            }).addTo(map);
-
-            var pin = L.Icon.extend({
-                options: {
-                    iconSize: [50, 50],
-                    iconAnchor: [22, 94],
-                    shadowAnchor: [4, 62],
-                    popupAnchor: [-3, -76],
-                },
-            });
-
-            var pinIcon = new pin({
-                iconUrl: "{{ asset('assets/dashboard/img/pin/pin_red_x.png') }}",
-                iconSize: [40, 40],
-                iconAnchor: [25, 20],
-                popupAnchor: [-4, -20]
-            });
-
-            map.invalidateSize();
-
-            $.ajax({
-                url: "{{ url('/map/desa') }}",
-                type: "GET",
-                success: function(response) {
-                    if (response.status == 'success') {
-                        for (var i = 0; i < response.data.length; i++) {
-                            L.polygon(response.data[i].koordinatPolygon, {
-                                    color: response.data[i].warna_polygon,
-                                    weight: 1,
-                                    opacity: 1,
-                                    fillOpacity: 1
-                                })
-                                .bindTooltip(response.data[i].nama, {
-                                    permanent: true,
-                                    direction: "center",
-                                    className: 'labelPolygon'
-                                })
-                                .addTo(map);
-                        }
-                    }
-                },
-            })
-
-            $.ajax({
-                url: "{{ url('rencana-intervensi-hewan/map/' . $rencana_intervensi_hewan->id) }}",
-                type: "GET",
-                success: function(response) {
-                    if (response.status == 'success') {
-                        for (var i = 0; i < response.data.length; i++) {
-                            var jumlahHewan = '';
-                            var pemilikHewan = '';
-
-                            if (response.data[i].jumlah_hewan.length > 0) {
-                                jumlahHewan += '<hr class="my-1">';
-                                jumlahHewan += "<p class='my-0 fw-bold'>Jumlah Hewan Ternak: </p>";
-                                for (var j = 0; j < response.data[i].jumlah_hewan.length; j++) {
-                                    jumlahHewan += "<p class='my-0'>- " + response.data[i].jumlah_hewan[j].hewan
-                                        .nama + " : " + response.data[i].jumlah_hewan[j].jumlah + "</p>";
-                                }
-                            }
-
-                            if (response.data[i].pemilik_lokasi_hewan.length > 0) {
-                                pemilikHewan += '<hr class="my-1">';
-                                pemilikHewan += "<p class='my-0 fw-bold'>Pemilik Ternak : </p>";
-                                for (var j = 0; j < response.data[i].pemilik_lokasi_hewan.length; j++) {
-                                    pemilikHewan += "<p class='my-0'>- " + response.data[i]
-                                        .pemilik_lokasi_hewan[
-                                            j].penduduk.nama + "</p>";
-                                }
-                            }
-
-                            icon = pinIcon;
-                            L.marker([response.data[i].latitude, response.data[i].longitude], {
-                                    icon: icon
-                                })
-                                .bindPopup(
-                                    "<p class='fw-bold my-0 text-center'>" + response.data[i].nama +
-                                    "</p><hr class='my-1'>" +
-                                    "<p class='my-0 fw-bold'>Desa : </p>" +
-                                    "<p class='my-0'>" + response.data[i].desa
-                                    .nama + "</p>" +
-                                    "<p class='my-0 fw-bold'>Latitude : </p>" +
-                                    "<p class='my-0'>" + response.data[i].latitude + "</p>" +
-                                    "<p class='my-0 fw-bold'>Longitude : </p>" +
-                                    "<p class='my-0'>" + response.data[i].longitude + "</p>" +
-                                    jumlahHewan + pemilikHewan
-                                )
-                                // .on('click', L.bind(petaKlik, null, data[0][i].id))
-                                .addTo(map);
-                        }
-                    }
-                },
-            })
-        }
     </script>
 @endpush

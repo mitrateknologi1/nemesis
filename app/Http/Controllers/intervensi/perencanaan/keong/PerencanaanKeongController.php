@@ -4,26 +4,20 @@ namespace App\Http\Controllers\intervensi\perencanaan\keong;
 
 use App\Models\OPD;
 use App\Models\Desa;
-use App\Models\LokasiKeong;
 use Illuminate\Http\Request;
-use App\Models\RealisasiKeong;
 use Illuminate\Support\Carbon;
 use App\Models\OPDTerkaitKeong;
-use Illuminate\Validation\Rule;
 use App\Models\PerencanaanKeong;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\DokumenRealisasiKeong;
-use App\Models\LokasiPerencanaanKeong;
 use App\Exports\PerencanaanKeongExport;
 use App\Models\DokumenPerencanaanKeong;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Requests\StorePerencanaanKeongRequest;
-use App\Http\Requests\UpdatePerencanaanKeongRequest;
 use App\Models\SumberDana;
 
 class PerencanaanKeongController extends Controller
@@ -35,7 +29,7 @@ class PerencanaanKeongController extends Controller
      */
     public function dataPerencanaan()
     {
-        $query = PerencanaanKeong::with('opd', 'lokasiRealisasiKeong', 'opdTerkaitKeong', 'realisasiKeong')
+        $query = PerencanaanKeong::with('opd', 'opdTerkaitKeong', 'realisasiKeong')
             ->where(function ($query) {
                 if (Auth::user()->role == 'OPD') {
                     $query->where('opd_id', Auth::user()->opd_id);
@@ -141,10 +135,6 @@ class PerencanaanKeongController extends Controller
                     } else if ($row->status == 2) {
                         return '<span class="badge fw-bold badge-danger">Ditolak</span>';
                     }
-                })
-
-                ->addColumn('jumlah_lokasi', function ($row) {
-                    return $row->lokasiRealisasiKeong->count();
                 })
 
                 ->addColumn('opd', function ($row) {
@@ -330,7 +320,7 @@ class PerencanaanKeongController extends Controller
         $no_dokumen = 1;
         if ($request->nama_dokumen != null) {
             for ($i = 0; $i < $countFileDokumen; $i++) {
-                $namaFile = mt_rand() . '-' . $request->nama_dokumen[$i] . '-' . $request->sub_indikator . '-' . $no_dokumen . '.' . $request->file_dokumen[$i]->getClientOriginalExtension();
+                $namaFile = mt_rand() . '-' . $request->nama_dokumen[$i] . '-' . Auth::user()->opd->nama . '-' . $no_dokumen . '.' . $request->file_dokumen[$i]->getClientOriginalExtension();
 
                 $request->file_dokumen[$i]->storeAs(
                     'uploads/dokumen/perencanaan/keong',
@@ -488,7 +478,7 @@ class PerencanaanKeongController extends Controller
                     Storage::delete('uploads/dokumen/perencanaan/keong/' . $dataDokumen->file);
                 }
 
-                $namaFile = mt_rand() . '-' . $request->nama_dokumen_old[$key] . '-' . $request->sub_indikator . '-' .  $dataDokumen->no_urut . '.' . $value->getClientOriginalExtension();
+                $namaFile = mt_rand() . '-' . $request->nama_dokumen_old[$key] . '-' . $rencana_intervensi_keong->opd->nama . '-' .  $dataDokumen->no_urut . '.' . $value->getClientOriginalExtension();
                 $value->storeAs('uploads/dokumen/perencanaan/keong/', $namaFile);
 
                 $update = [
@@ -517,7 +507,7 @@ class PerencanaanKeongController extends Controller
         $no_dokumen = $rencana_intervensi_keong->dokumenPerencanaanKeong->max('no_urut') + 1;
         if ($request->nama_dokumen != null) {
             for ($i = 0; $i < $countFileDokumen; $i++) {
-                $namaFile = mt_rand() . '-' . $request->nama_dokumen[$i] . '-' . $request->sub_indikator . '-' .  $no_dokumen . '.' . $request->file_dokumen[$i]->getClientOriginalExtension();
+                $namaFile = mt_rand() . '-' . $request->nama_dokumen[$i] . '-' . $rencana_intervensi_keong->opd->nama . '-' .  $no_dokumen . '.' . $request->file_dokumen[$i]->getClientOriginalExtension();
                 $request->file_dokumen[$i]->storeAs(
                     'uploads/dokumen/perencanaan/keong/',
                     $namaFile
@@ -604,7 +594,7 @@ class PerencanaanKeongController extends Controller
 
     public function export()
     {
-        $dataPerencanaan = PerencanaanKeong::with('opd', 'lokasiRealisasiKeong')
+        $dataPerencanaan = PerencanaanKeong::with('opd')
             ->where(function ($query) {
                 if (Auth::user()->role == 'OPD') {
                     $query->where('opd_id', Auth::user()->opd_id);

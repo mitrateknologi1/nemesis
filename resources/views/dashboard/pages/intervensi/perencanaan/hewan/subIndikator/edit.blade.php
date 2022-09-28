@@ -41,11 +41,10 @@
                                 [
                                     'action' => route('rencana-intervensi-hewan.update', $rencanaIntervensiHewan->id),
                                     'rencanaIntervensiHewan' => $rencanaIntervensiHewan,
-                                    'lokasi' => $lokasiPerencanaanHewan,
                                     'opdTerkait' => $opdTerkaitHewan,
+                                    'sumberDana' => $sumberDana,
                                     'desa' => $desa,
                                     'opd' => $opd,
-                                    'sumberDana' => $sumberDana,
                                     'maxDokumen' => $rencanaIntervensiHewan->dokumenPerencanaanHewan()->count(),
                                     'method' => 'PUT',
                                     'submitLabel' => 'Perbarui Data',

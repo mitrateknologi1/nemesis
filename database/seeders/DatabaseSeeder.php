@@ -12,28 +12,20 @@ use Database\Seeders\UserSeeder;
 use Database\Seeders\HewanSeeder;
 use Database\Seeders\SiswaSeeder;
 use Database\Seeders\TahunSeeder;
-use App\Models\PemilikLokasiKeong;
 use Database\Seeders\RoadMapSeeder;
 use Database\Seeders\SekolahSeeder;
-use Database\Seeders\PendudukSeeder;
 use Illuminate\Support\Facades\File;
 use Database\Seeders\MasterPlanSeeder;
-use App\Models\DokumenPerencanaanKeong;
 use Database\Seeders\LokasiHewanSeeder;
-use Database\Seeders\LokasiKeongSeeder;
 use Illuminate\Support\Facades\Storage;
 use Database\Seeders\PendudukTableSeeder;
 use Database\Seeders\JumlahHewanTableSeeder;
 use Database\Seeders\LokasiKeongTableSeeder;
-use Database\Seeders\PerencanaanKeongSeeder;
 use Database\Seeders\PemilikLokasiKeongSeeder;
 use Database\Seeders\RealisasiKeongTableSeeder;
-use Database\Seeders\LokasiPerencanaanKeongSeeder;
 use Database\Seeders\OpdTerkaitManusiaTableSeeder;
-use Database\Seeders\DokumenPerencanaanKeongSeeder;
 use Database\Seeders\PemilikLokasiHewanTableSeeder;
 use Database\Seeders\DokumenRealisasiKeongTableSeeder;
-use Database\Seeders\LokasiPerencanaanKeongTableSeeder;
 use Database\Seeders\DokumenRealisasiManusiaTableSeeder;
 
 class DatabaseSeeder extends Seeder
@@ -82,8 +74,8 @@ class DatabaseSeeder extends Seeder
         $this->call(PerencanaanHewanTableSeeder::class); // new
         $this->call(OpdTerkaitHewanTableSeeder::class); // new
         $this->call(DokumenPerencanaanHewanTableSeeder::class); // new
-        $this->call(LokasiPerencanaanHewanTableSeeder::class); // new
         $this->call(RealisasiHewanTableSeeder::class);
+        $this->call(LokasiRealisasiHewanTableSeeder::class); // new
         $this->call(DokumenRealisasiHewanTableSeeder::class);
         $this->call(PerencanaanKeongTableSeeder::class);
         $this->call(DokumenPerencanaanKeongTableSeeder::class);

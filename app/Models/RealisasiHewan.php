@@ -21,7 +21,7 @@ class RealisasiHewan extends Model
 
     public function lokasiRealisasiHewan()
     {
-        return $this->hasMany(LokasiPerencanaanHewan::class, 'realisasi_hewan_id')->orderBy('updated_at', 'DESC');
+        return $this->hasMany(LokasiRealisasiHewan::class, 'realisasi_hewan_id')->orderBy('updated_at', 'DESC');
     }
 
     public function dokumenRealisasiHewan()

@@ -192,14 +192,6 @@
                     className: 'text-right',
                     render: $.fn.dataTable.render.number('.', ',', 0, 'Rp.')
                 },
-                // {
-                //     data: 'jumlah_lokasi',
-                //     name: 'jumlah_lokasi',
-                // },
-                // {
-                //     data: 'lokasi_keong',
-                //     name: 'lokasi_keong',
-                // },
                 {
                     data: 'status',
                     name: 'status',
@@ -211,9 +203,6 @@
                     searchable: false,
                     className: 'text-center'
                 },
-
-
-
             ],
             columnDefs: [{
                     targets: [3, 4, 5],

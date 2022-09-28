@@ -20,21 +20,50 @@
     @endif
 
     <div class="row">
-        <div class="col-md-8">
-            <div class="form-group p-0 pb-2">
+        <div class="col-lg-8">
+            <div class="form-group pb-0">
+                @component('dashboard.components.formElements.select',
+                    [
+                        'label' => 'Sub Indikator',
+                        'id' => 'sub-indikator',
+                        'name' => 'sub_indikator',
+                        'class' => 'select2 req',
+                        'wajib' => '<sup class="text-danger">*</sup>',
+                    ])
+                    @slot('options')
+                        @foreach ($listPerencanaan as $item)
+                            <option value="{{ $item->id }}"
+                                {{ isset($realisasiIntervensiHewan) && $realisasiIntervensiHewan->perencanaanHewan->id == $item->id ? 'selected' : '' }}
+                                data-opd="{{ $item->opdTerkaitHewan->pluck('opd_id') }}">
+                                {{ $item->sub_indikator }}</option>
+                        @endforeach
+                    @endslot
+                @endcomponent
+            </div>
+            <div class="form-group pb-0">
+                <label class="my-2">Pilih OPD Terkait <span class="text-danger">(Boleh Dikosongkan)</span></label>
+                <div class="select2-input select2-primary">
+                    <select id="opd-terkait" name="opd_terkait[]" class="form-control multiple" multiple="multiple"
+                        data-label="OPD Terkait">
+                        @foreach ($opd as $item)
+                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="form-group pb-0">
                 <label class="my-2">Pilih Titik Lokasi <sup class="text-danger">*</sup></label>
                 <div class="select2-input select2-danger">
                     <input type="hidden" name="lokasi_hidden" id="lokasi-hidden" data-label="Titik Lokasi"
                         value="">
-                    <select id="lokasi-perencanaan" name="lokasi[]" class="form-control multiple" multiple="multiple"
-                        data-label="Titik Lokasi"
-                        {{ isset($realisasiIntervensiHewan) && $realisasiIntervensiHewan->status == 1 ? 'disabled' : '' }}>
+                    <select id="lokasi-realisasi" name="lokasi[]" class="form-control multiple" multiple="multiple"
+                        data-label="Titik Lokasi">
                         @foreach ($desa as $item)
                             <optgroup label="{{ $item->nama }}">
-                                @foreach ($item->lokasiHewan->whereIn('id', $lokasiArr) as $item2)
+                                @foreach ($item->lokasiHewan as $item2)
                                     <option value="{{ $item2->id }}" data-latitude="{{ $item2->latitude }}"
-                                        data-longitude="{{ $item2->longitude }}" data-nama-lokasi="{{ $item2->nama }}"
-                                        data-nama-desa="{{ $item->nama }}">
+                                        data-longitude="{{ $item2->longitude }}"
+                                        data-nama-lokasi="{{ $item2->nama }}" data-nama-desa="{{ $item->nama }}">
                                         {{ $item2->nama }} - {{ $item2->desa->nama }}</option>
                                 @endforeach
                             </optgroup>
@@ -43,31 +72,11 @@
                 </div>
                 <span class="text-danger error-text lokasi_hidden-error"></span>
                 <span class="text-danger error-text lokasi-error"></span>
-            </div>
-            <div class="form-group p-0 pb-3">
-                @component('dashboard.components.formElements.input',
-                    [
-                        'label' => 'Penggunaan Anggaran (Rp)',
-                        'id' => 'penggunaan-anggaran',
-                        'name' => 'penggunaan_anggaran',
-                        'class' => 'rupiah req',
-                        'placeholder' => 'Masukkan Penggunaan Anggaran',
-                        'wajib' => '<sup class="text-danger">*</sup>',
-                        'value' => $realisasiIntervensiHewan->penggunaan_anggaran ?? '',
-                        'attribute' => Auth::user()->role != 'OPD' ? 'disabled' : '',
-                    ])
-                    @if (Auth::user()->role == 'OPD')
-                        @slot('info')
-                            Maksimal penggunaan anggaran adalah Rp <span class="rupiah font-weight-bold">
-                                {!! $countSisaAnggaran !!}
-                            </span>
-                        @endslot
-                    @endif
-                @endcomponent
+                <div id="peta" class="mt-3"></div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="form-group  p-0 pb-2">
+        <div class="col-lg-4">
+            <div class="form-group p-0 pb-2">
                 <label for="" class="mt-1 mb-2">Dokumen Pendukung <sup class="text-danger">*</sup></label>
                 {{-- <label for="">(Surat-surat Kendaraan, Berita Acara, dan Lainnya)</label> --}}
                 <div class="row" id="dokumen-hewan">
@@ -193,7 +202,7 @@
                             <p class="text-danger error-text dokumen-error my-0" id="dokumen-error-1"></p>
                         </div>
                     @endif
-                    <div class="col-md-4 col-lg-4 col-xl-12 align-self-center col-add-dokumen">
+                    <div class="col-12 align-self-center col-add-dokumen">
                         <div class="text-center text-muted" onclick="addDokumen()" style="cursor: pointer">
                             <h1><i class="fas fa-plus-circle"></i></h1>
                             <h6>Tambah Dokumen</h6>
@@ -223,6 +232,24 @@
             $('#sumber-dana-hidden').val($(this).val());
         });
 
+        $('#sub-indikator').change(function() {
+            $("#opd-terkait option:selected").prop("selected", false);
+            $('#opd-terkait').trigger('change');
+            $('#sub-indikator option:selected').each(function() {
+                const opdTerkait = $(this).data('opd')
+                if (opdTerkait.length) {
+                    for (let i = 0; i < opdTerkait.length; i++) {
+                        $('#opd-terkait option[value="' + opdTerkait[i] + '"]').prop('selected', true);
+                        $('#opd-terkait').trigger('change');
+                    }
+                }
+            })
+        })
+
+        if ('{{ isset($realisasiIntervensiHewan) }}') {
+            $('#sub-indikator').trigger('change');
+        }
+
         $('.multiple').select2({
             placeholder: "- Bisa Pilih Lebih Dari Satu -",
             theme: "bootstrap",
@@ -232,7 +259,7 @@
             e.preventDefault();
             clearTextError()
 
-            $('#lokasi-perencanaan').val() == '' ? $('#lokasi-hidden').addClass('req') : $('#lokasi-hidden')
+            $('#lokasi-realisasi').val() == '' ? $('#lokasi-hidden').addClass('req') : $('#lokasi-hidden')
                 .removeClass('req');
 
             const formValidation = $('#form .req').serializeArray()
@@ -248,7 +275,6 @@
 
             $('.rupiah').unmask();
             let formData = new FormData(this);
-            formData.append('id_perencanaan', '{{ $rencanaIntervensiHewan->id }}')
 
             if ('{{ $method }}' == 'PUT') {
                 formData.append('deleteDocumentOld', itemDocumentOld)
@@ -272,7 +298,6 @@
                         processData: false,
                         contentType: false,
                         success: function(response) {
-                            console.log(response)
                             $('.rupiah').mask('000.000.000.000.000', {
                                 reverse: true
                             })
@@ -296,15 +321,13 @@
                                     $.each($('.nama-dokumen-old'), function(index, value) {
                                         if ($(value).val() == '') {
                                             $(value).addClass('is-invalid');
-                                            $('#nama_dokumen-error-' + $(value)
-                                                .data(
-                                                    'iter')).text(
+                                            $('#nama_dokumen-error-' + $(value).data(
+                                                'iter')).text(
                                                 'Nama Dokumen tidak boleh kosong.'
                                             )
                                         }
                                     });
                                 }
-
                                 if (response == 'nama_dokumen_kosong') {
                                     swal({
                                         title: "Gagal!",
@@ -418,9 +441,9 @@
         if ('{{ isset($lokasi) }}' || '{{ isset($rencanaIntervensiHewan) }}') {
             const lokasi = {!! $lokasi ?? '[]' !!};
             for (let i = 0; i < lokasi.length; i++) {
-                $('#lokasi-perencanaan option[value="' + lokasi[i] + '"]').prop('selected', true);
+                $('#lokasi-realisasi option[value="' + lokasi[i] + '"]').prop('selected', true);
             }
-            $('#lokasi-perencanaan').trigger('change');
+            $('#lokasi-realisasi').trigger('change');
             temp = 0;
         }
     </script>
@@ -432,6 +455,44 @@
         })
 
         let lokasiPerencanaan = [];
+
+        function setTitik() {
+            lokasiPerencanaan = [];
+            $('#lokasi-realisasi option:selected').each(function() {
+                lokasiPerencanaan.push({
+                    'latitude': $(this).data('latitude'),
+                    'longitude': $(this).data('longitude'),
+                    'namaDesa': $(this).data('namaDesa'),
+                    'namaLokasi': $(this).data('namaLokasi'),
+                });
+            });
+        }
+
+        let temp = 1;
+        $('#lokasi-realisasi').change(function() {
+            setTitik()
+            if (temp == 0 || '{{ !isset($realisasiIntervensiHewan) }}') {
+                initializeMap();
+            }
+        });
+
+        if ('{{ isset($lokasi) }}' || '{{ isset($realisasiIntervensiHewan) }}') {
+            const lokasi = {!! $lokasi ?? '[]' !!};
+            for (let i = 0; i < lokasi.length; i++) {
+                $('#lokasi-realisasi option[value="' + lokasi[i] + '"]').prop('selected', true);
+                setTitik()
+            }
+            $('#lokasi-realisasi').trigger('change');
+            temp = 0;
+        }
+
+        if ('{{ isset($opdTerkait) }}') {
+            const opdTerkait = {!! $opdTerkait ?? '[]' !!};
+            for (let i = 0; i < opdTerkait.length; i++) {
+                $('#opd-terkait option[value="' + opdTerkait[i] + '"]').prop('selected', true);
+                $('#opd-terkait').trigger('change');
+            }
+        }
 
         var map = null;
 
@@ -497,48 +558,21 @@
                 },
             })
 
-            const data = {!! $dataMap !!};
-
-            for (var i = 0; i < data.length; i++) {
-                var jumlahHewan = '';
-                var pemilikHewan = '';
-
-                if (data[i].jumlah_hewan.length > 0) {
-                    jumlahHewan += '<hr class="my-1">';
-                    jumlahHewan += "<p class='my-0 fw-bold'>Jumlah Hewan Ternak: </p>";
-                    for (var j = 0; j < data[i].jumlah_hewan.length; j++) {
-                        jumlahHewan += "<p class='my-0'>- " + data[i].jumlah_hewan[j].hewan
-                            .nama + " : " + data[i].jumlah_hewan[j].jumlah + "</p>";
-                    }
-                }
-
-                if (data[i].pemilik_lokasi_hewan.length > 0) {
-                    pemilikHewan += '<hr class="my-1">';
-                    pemilikHewan += "<p class='my-0 fw-bold'>Pemilik Ternak : </p>";
-                    for (var j = 0; j < data[i].pemilik_lokasi_hewan.length; j++) {
-                        pemilikHewan += "<p class='my-0'>- " + data[i]
-                            .pemilik_lokasi_hewan[
-                                j].penduduk.nama + "</p>";
-                    }
-                }
-
+            for (var i = 0; i < lokasiPerencanaan.length; i++) {
                 icon = pinIcon;
-                L.marker([data[i].latitude, data[i].longitude], {
+                L.marker([lokasiPerencanaan[i].latitude, lokasiPerencanaan[i].longitude], {
                         icon: icon
                     })
                     .bindPopup(
-                        "<p class='fw-bold my-0 text-center'>" + data[i].nama +
-                        "</p><hr class='my-1'>" +
-                        "<p class='my-0 fw-bold'>Desa : </p>" +
-                        "<p class='my-0'>" + data[i].desa
-                        .nama + "</p>" +
+                        "<p class='fw-bold my-0 text-center'>" + lokasiPerencanaan[i].namaLokasi +
+                        "</p><hr>" +
+                        "<p class='my-0'>Desa : " + lokasiPerencanaan[i]
+                        .namaDesa + "</p>" +
                         "<p class='my-0 fw-bold'>Latitude : </p>" +
-                        "<p class='my-0'>" + data[i].latitude + "</p>" +
+                        "<p class='my-0'>" + lokasiPerencanaan[i].latitude + "</p>" +
                         "<p class='my-0 fw-bold'>Longitude : </p>" +
-                        "<p class='my-0'>" + data[i].longitude + "</p>" +
-                        jumlahHewan + pemilikHewan
+                        "<p class='my-0'>" + lokasiPerencanaan[i].longitude + "</p>"
                     )
-                    // .on('click', L.bind(petaKlik, null, data[0][i].id))
                     .addTo(map);
             }
         }
@@ -675,7 +709,7 @@
                 </div>
                 <p class="text-danger error-text dokumen-error my-0" id="dokumen-error-1"></p>
             </div>
-            <div class="col-md-4 col-lg-4 col-xl-12 align-self-center col-add-dokumen">
+            <div class="col-12 align-self-center col-add-dokumen">
                 <div class="text-center text-muted" onclick="addDokumen()" style="cursor: pointer">
                     <h1><i class="fas fa-plus-circle"></i></h1>
                     <h6>Tambah Dokumen</h6>

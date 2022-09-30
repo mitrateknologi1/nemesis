@@ -162,8 +162,9 @@ class RealisasiKeongController extends Controller
         }
 
         if (Auth::user()->role == 'OPD') {
-            $listPerencanaanKeong = PerencanaanKeong::where('opd_id', Auth::user()->opd_id)->where('status', 1)->pluck('id')->toArray();
-            $totalMenungguKonfirmasiRealisasiKeong = RealisasiKeong::whereIn('perencanaan_keong_id', $listPerencanaanKeong)->where('status', 2)->count();
+            $totalMenungguKonfirmasiRealisasiKeong = RealisasiKeong::with('perencanaanKeong')->whereHas('perencanaanKeong', function ($q) {
+                $q->where('opd_id', Auth::user()->opd_id);
+            })->where('status', 2)->count();
         } else {
             $totalMenungguKonfirmasiRealisasiKeong = RealisasiKeong::where('status', 0)->count();
         }
@@ -195,6 +196,10 @@ class RealisasiKeongController extends Controller
 
     public function create()
     {
+        if (in_array(Auth::user()->role, ['Admin', 'Pimpinan'])) {
+            abort('403', 'Oops! anda tidak memiliki akses ke sini.');
+        }
+
         $listPerencanaan = PerencanaanKeong::with('opdTerkaitKeong')->whereDoesntHave('realisasiKeong')->where('opd_id', Auth::user()->opd_id)->where('status', 1)->whereYear('created_at', Carbon::now()->year)->get();
 
         $data = [

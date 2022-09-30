@@ -41,11 +41,10 @@
                                 [
                                     'action' => route('rencana-intervensi-manusia.update', $rencanaIntervensiManusia->id),
                                     'rencanaIntervensiManusia' => $rencanaIntervensiManusia,
-                                    'penduduk' => $pendudukPerencanaanManusia,
                                     'opdTerkait' => $opdTerkaitManusia,
+                                    'sumberDana' => $sumberDana,
                                     'desa' => $desa,
                                     'opd' => $opd,
-                                    'sumberDana' => $sumberDana,
                                     'maxDokumen' => $rencanaIntervensiManusia->dokumenPerencanaanManusia()->count(),
                                     'method' => 'PUT',
                                     'submitLabel' => 'Perbarui Data',

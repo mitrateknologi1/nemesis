@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\OPD;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Traits\TraitUuid;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PerencanaanManusia extends Model
 {
-    use HasFactory;
-
     use HasFactory, TraitUuid;
 
     protected $table = 'perencanaan_manusia';
@@ -25,11 +25,6 @@ class PerencanaanManusia extends Model
         return $this->hasMany(OPDTerkaitManusia::class);
     }
 
-    public function pendudukPerencanaanManusia()
-    {
-        return $this->hasMany(PendudukPerencanaanManusia::class)->orderBy('updated_at', 'DESC');
-    }
-
     public function dokumenPerencanaanManusia()
     {
         return $this->hasMany(DokumenPerencanaanManusia::class)->orderBy('no_urut');
@@ -37,11 +32,11 @@ class PerencanaanManusia extends Model
 
     public function realisasiManusia()
     {
-        return $this->hasMany(RealisasiManusia::class);
+        return $this->hasOne(RealisasiManusia::class);
     }
 
     public function sumberDana()
     {
-        return $this->belongsTo(SumberDana::class);
+        return $this->belongsTo(SumberDana::class)->withTrashed();
     }
 }

@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Traits\TraitUuid;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class PendudukPerencanaanManusia extends Model
+class PendudukRealisasiManusia extends Model
 {
     use HasFactory, TraitUuid;
 
-    protected $table = 'penduduk_perencanaan_manusia';
+    protected $table = 'penduduk_realisasi_manusia';
     protected $guarded = ['id'];
 
     public function penduduk()

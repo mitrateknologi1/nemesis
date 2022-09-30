@@ -18,18 +18,48 @@
     @endif
 
     <div class="row">
-        <div class="col-md-8">
-            <div class="form-group p-0 pb-2">
+        <div class="col-lg-8">
+            <div class="form-group pb-0">
+                @component('dashboard.components.formElements.select',
+                    [
+                        'label' => 'Sub Indikator',
+                        'id' => 'sub-indikator',
+                        'name' => 'sub_indikator',
+                        'class' => 'select2 req',
+                        'wajib' => '<sup class="text-danger">*</sup>',
+                    ])
+                    @slot('options')
+                        @foreach ($listPerencanaan as $item)
+                            <option value="{{ $item->id }}"
+                                {{ isset($realisasiIntervensiManusia) && $realisasiIntervensiManusia->perencanaanManusia->id == $item->id ? 'selected' : '' }}
+                                data-opd="{{ $item->opdTerkaitManusia->pluck('opd_id') }}">
+                                {{ $item->sub_indikator }}</option>
+                        @endforeach
+                    @endslot
+                @endcomponent
+            </div>
+            <div class="form-group pb-0">
+                <label class="my-2">Pilih OPD Terkait <span class="text-danger">(Boleh Dikosongkan)</span></label>
+                <div class="select2-input select2-primary">
+                    <select id="opd-terkait" name="opd_terkait[]" class="form-control multiple" multiple="multiple"
+                        data-label="OPD Terkait">
+                        @foreach ($opd as $item)
+                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="form-group pb-0">
                 <label class="my-2">Pilih Penduduk <sup class="text-danger">*</sup></label>
                 <div class="select2-input select2-danger">
                     <input type="hidden" name="penduduk_hidden" id="penduduk-hidden" data-label="Penduduk"
                         value="">
                     <select id="penduduk" name="penduduk[]" class="form-control multiple" multiple="multiple"
                         data-label="Penduduk"
-                        {{ isset($realisasiIntervensiManusia) && $realisasiIntervensiManusia->status == 1 ? 'disabled' : '' }}>
+                        {{ isset($rencanaIntervensiManusia) && $rencanaIntervensiManusia->realisasiManusia->count() > 0 ? 'disabled' : '' }}>
                         @foreach ($desa as $item)
                             <optgroup label="{{ $item->nama }}">
-                                @foreach ($item->penduduk->whereIn('id', $pendudukArr) as $item2)
+                                @foreach ($item->penduduk as $item2)
                                     <option value="{{ $item2->id }}" data-nik="{{ $item2->nik }}"
                                         data-nama="{{ $item2->nama }}" data-desa="{{ $item2->desa->nama }}">
                                         {{ $item2->nama . ' (' . $item2->nik . ') - ' . $item2->desa->nama }}
@@ -42,46 +72,28 @@
                 <span class="text-danger error-text penduduk_hidden-error"></span>
                 <span class="text-danger error-text penduduk-error"></span>
             </div>
-            <div class="table-responsive mt-2">
-                <table class="table table-hover table-striped table-bordered" id="{{ $id ?? 'dataTables' }}"
-                    cellspacing="0" width="100%">
-                    <thead>
-                        <tr class="text-center fw-bold">
-                            <th>No</th>
-                            <th>Nama</th>
-                            <th>NIK</th>
-                            <th>Desa</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+            <div class="form-group pb-0">
+                <div class="table-responsive mt-2">
+                    <table class="table table-hover table-striped table-bordered" id="{{ $id ?? 'dataTables' }}"
+                        cellspacing="0" width="100%">
+                        <thead>
+                            <tr class="text-center fw-bold">
+                                <th>No</th>
+                                <th>Nama</th>
+                                <th>NIK</th>
+                                <th>Desa</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="form-group p-0 pb-3">
-                @component('dashboard.components.formElements.input',
-                    [
-                        'label' => 'Penggunaan Anggaran (Rp)',
-                        'id' => 'penggunaan-anggaran',
-                        'name' => 'penggunaan_anggaran',
-                        'class' => 'rupiah req',
-                        'placeholder' => 'Masukkan Penggunaan Anggaran',
-                        'wajib' => '<sup class="text-danger">*</sup>',
-                        'value' => $realisasiIntervensiManusia->penggunaan_anggaran ?? '',
-                        'attribute' => Auth::user()->role != 'OPD' ? 'disabled' : '',
-                    ])
-                    @if (Auth::user()->role == 'OPD')
-                        @slot('info')
-                            Maksimal penggunaan anggaran adalah Rp <span class="rupiah font-weight-bold">
-                                {!! $countSisaAnggaran !!}
-                            </span>
-                        @endslot
-                    @endif
-                @endcomponent
-            </div>
-            <div class="form-group  p-0 pb-2">
+
+        <div class="col-lg-4">
+            <div class="form-group p-0 pb-2">
                 <label for="" class="mt-1 mb-2">Dokumen Pendukung <sup class="text-danger">*</sup></label>
                 {{-- <label for="">(Surat-surat Kendaraan, Berita Acara, dan Lainnya)</label> --}}
                 <div class="row" id="dokumen-manusia">
@@ -209,7 +221,7 @@
                             <p class="text-danger error-text dokumen-error my-0" id="dokumen-error-1"></p>
                         </div>
                     @endif
-                    <div class="col-md-4 col-lg-4 col-xl-12 align-self-center col-add-dokumen">
+                    <div class="col-12 align-self-center col-add-dokumen">
                         <div class="text-center text-muted" onclick="addDokumen()" style="cursor: pointer">
                             <h1><i class="fas fa-plus-circle"></i></h1>
                             <h6>Tambah Dokumen</h6>
@@ -219,7 +231,6 @@
             </div>
         </div>
     </div>
-
 
     <div class="form-group text-right">
         @component('dashboard.components.buttons.submit')
@@ -233,11 +244,91 @@
     </div>
 </form>
 
+{{-- Modal Penduduk --}}
+<div class="modal fade" tabindex="-1" id="modal-lihat">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detail Penduduk</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-between mt-2">
+                    <p class=" mb-0">Nama : </p>
+                    <p id="nama">
+                        -
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <p class=" mb-0">NIK : </p>
+                    <p id="nik">
+                        -
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <p class=" mb-0">Jenis Kelamin : </p>
+                    <p id="jenis-kelamin">
+                        -
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <p class=" mb-0">Tanggal Lahir : </p>
+                    <p id="ttl">
+                        -
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <p class=" mb-0">Pendidikan Terakhir : </p>
+                    <p id="pendidikan">
+                        -
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <p class=" mb-0">Pekerjaan : </p>
+                    <p id="pekerjaan">
+                        -
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <p class=" mb-0">Desa : </p>
+                    <p id="desa">
+                        -
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @component('dashboard.components.buttons.close')
+                @endcomponent
+            </div>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
     <script>
         $('.sumber-dana').click(function() {
             $('#sumber-dana-hidden').val($(this).val());
         });
+
+        $('#sub-indikator').change(function() {
+            $("#opd-terkait option:selected").prop("selected", false);
+            $('#opd-terkait').trigger('change');
+            $('#sub-indikator option:selected').each(function() {
+                const opdTerkait = $(this).data('opd')
+                if (opdTerkait.length) {
+                    for (let i = 0; i < opdTerkait.length; i++) {
+                        $('#opd-terkait option[value="' + opdTerkait[i] + '"]').prop('selected', true);
+                        $('#opd-terkait').trigger('change');
+                    }
+                }
+            })
+        })
+
+        if ('{{ isset($realisasiIntervensiManusia) }}') {
+            $('#sub-indikator').trigger('change');
+        }
 
         $('.multiple').select2({
             placeholder: "- Bisa Pilih Lebih Dari Satu -",
@@ -264,7 +355,6 @@
 
             $('.rupiah').unmask();
             let formData = new FormData(this);
-            formData.append('id_perencanaan', '{{ $rencanaIntervensiManusia->id }}')
 
             if ('{{ $method }}' == 'PUT') {
                 formData.append('deleteDocumentOld', itemDocumentOld)
@@ -505,16 +595,8 @@
                         $('#nik').html(response.data.nik);
                         $('#jenis-kelamin').html(response.data.jenis_kelamin);
                         $('#ttl').html(response.data.ttl);
-                        $('#agama').html(response.data.agama);
                         $('#pendidikan').html(response.data.pendidikan);
                         $('#pekerjaan').html(response.data.pekerjaan);
-                        $('#golongan-darah').html(response.data.golongan_darah);
-                        $('#status-perkawinan').html(response.data.status_perkawinan);
-                        $('#tanggal-perkawinan').html(response.data.tanggal_perkawinan);
-                        $('#kewarganegaraan').html(response.data.kewarganegaraan);
-                        $('#nomor-paspor').html(response.data.no_paspor);
-                        $('#nomor-kitap').html(response.data.no_kitap);
-                        $('#alamat').html(response.data.alamat);
                         $('#desa').html(response.data.desa);
                         $('#modal-lihat').modal('show');
                     }
@@ -662,7 +744,7 @@
                 </div>
                 <p class="text-danger error-text dokumen-error my-0" id="dokumen-error-1"></p>
             </div>
-            <div class="col-md-4 col-lg-4 col-xl-12 align-self-center col-add-dokumen">
+            <div class="col-12 align-self-center col-add-dokumen">
                 <div class="text-center text-muted" onclick="addDokumen()" style="cursor: pointer">
                     <h1><i class="fas fa-plus-circle"></i></h1>
                     <h6>Tambah Dokumen</h6>

@@ -162,8 +162,9 @@ class RealisasiHewanController extends Controller
         }
 
         if (Auth::user()->role == 'OPD') {
-            $listPerencanaanHewan = PerencanaanHewan::where('opd_id', Auth::user()->opd_id)->where('status', 1)->pluck('id')->toArray();
-            $totalMenungguKonfirmasiRealisasiHewan = RealisasiHewan::whereIn('perencanaan_hewan_id', $listPerencanaanHewan)->where('status', 2)->count();
+            $totalMenungguKonfirmasiRealisasiHewan = RealisasiHewan::with('perencanaanHewan')->whereHas('perencanaanHewan', function ($q) {
+                $q->where('opd_id', Auth::user()->opd_id);
+            })->where('status', 2)->count();
         } else {
             $totalMenungguKonfirmasiRealisasiHewan = RealisasiHewan::where('status', 0)->count();
         }
@@ -195,6 +196,10 @@ class RealisasiHewanController extends Controller
 
     public function create()
     {
+        if (in_array(Auth::user()->role, ['Admin', 'Pimpinan'])) {
+            abort('403', 'Oops! anda tidak memiliki akses ke sini.');
+        }
+
         $listPerencanaan = PerencanaanHewan::with('opdTerkaitHewan')->whereDoesntHave('realisasiHewan')->where('opd_id', Auth::user()->opd_id)->where('status', 1)->whereYear('created_at', Carbon::now()->year)->get();
 
         $data = [

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\TraitUuid;
 
+
 class RealisasiManusia extends Model
 {
     use HasFactory, TraitUuid;
@@ -20,7 +21,7 @@ class RealisasiManusia extends Model
 
     public function pendudukRealisasiManusia()
     {
-        return $this->hasMany(PendudukPerencanaanManusia::class, 'realisasi_manusia_id')->orderBy('updated_at', 'DESC');
+        return $this->hasMany(PendudukRealisasiManusia::class, 'realisasi_manusia_id')->orderBy('updated_at', 'DESC');
     }
 
     public function dokumenRealisasiManusia()

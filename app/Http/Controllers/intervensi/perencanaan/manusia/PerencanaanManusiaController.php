@@ -4,7 +4,6 @@ namespace App\Http\Controllers\intervensi\perencanaan\manusia;
 
 use App\Models\OPD;
 use App\Models\Desa;
-use App\Models\SumberDana;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\OPDTerkaitManusia;
@@ -19,9 +18,7 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Exports\PerencanaanManusiaExport;
 use App\Models\DokumenPerencanaanManusia;
 use Illuminate\Support\Facades\Validator;
-use App\Models\PendudukPerencanaanManusia;
-use App\Http\Requests\StorePerencanaanManusiaRequest;
-use App\Http\Requests\UpdatePerencanaanManusiaRequest;
+use App\Models\SumberDana;
 
 class PerencanaanManusiaController extends Controller
 {
@@ -32,7 +29,7 @@ class PerencanaanManusiaController extends Controller
      */
     public function dataPerencanaan()
     {
-        $perencanaanManusia = PerencanaanManusia::with('opd', 'pendudukPerencanaanManusia', 'opdTerkaitManusia', 'realisasiManusia')
+        $query = PerencanaanManusia::with('opd', 'opdTerkaitManusia', 'realisasiManusia')
             ->where(function ($query) {
                 if (Auth::user()->role == 'OPD') {
                     $query->where('opd_id', Auth::user()->opd_id);
@@ -43,7 +40,7 @@ class PerencanaanManusiaController extends Controller
                 }
             })
             ->latest();
-        return $perencanaanManusia;
+        return $query;
     }
 
     public function index(Request $request)
@@ -64,30 +61,42 @@ class PerencanaanManusiaController extends Controller
 
                     if ($request->status_filter && $request->status_filter != 'semua') {
                         $filter = $request->status_filter;
-                        if (in_array($filter, ["-", 1, 2])) {
+                        if (in_array($filter, ["-", 1, 10, 11, 2])) {
                             if ($filter == "-") {
                                 $query->where('status', 0);
                             } else {
-                                $query->where('status', $filter);
+                                if ($filter == 10) {
+                                    $query->where('status', 1);
+                                    $query->doesntHave('realisasiManusia');
+                                } else if ($filter == 11) {
+                                    $query->where('status', 1);
+                                    $query->whereHas('realisasiManusia', function ($q) {
+                                        $q->where('status', 1);
+                                    });
+                                } else {
+                                    $query->where('status', $filter);
+                                }
                             }
                         } else {
                             if ($filter == 3) {
                                 // $query->created_at->year != Carbon::now()->year;
                                 $query->whereYear('created_at', '!=', Carbon::now()->year);
-                                $query->whereHas('realisasiManusia', function ($q) {
-                                    $q->where('status', 1);
-                                    $q->havingRaw('max(progress) != ?', [100]);
+                                $query->where(function ($q) {
+                                    $q->doesntHave('realisasiManusia');
+                                    $q->orWhereHas('realisasiManusia', function ($q) {
+                                        $q->where('status', '!=', 1);
+                                    });
                                 });
                             }
                         }
                     }
-
                     if ($request->search_filter) {
                         $query->where(function ($query2) use ($request) {
                             $query2->where('sub_indikator', 'like', '%' . $request->search_filter . '%');
                         });
                     }
-                });
+                })->get();
+
             return DataTables::of($data)
                 ->addIndexColumn()
 
@@ -97,12 +106,12 @@ class PerencanaanManusiaController extends Controller
                     } else if ($row->status == 1) {
                         $status = '<div class="my-2">';
                         $status .= '<span class="badge fw-bold badge-success mb-1">Disetujui</span>';
-                        if ($row->realisasiManusia->where('status', 1)->count() > 0) {
-                            $status .=  '<br><a class="shadow" href="' . route('realisasi-intervensi-manusia.show', $row->id) . '"><span class="badge fw-bold badge-primary">Progress: ' . $row->realisasiManusia->where('status', 1)->max('progress') . '%</span></a>';
+                        if (($row->realisasiManusia) && ($row->realisasiManusia->status == 1)) {
+                            $status .=  '<br><a class="shadow" href="' . route('realisasi-intervensi-manusia.show', $row->realisasiManusia->id) . '"><span class="badge fw-bold badge-primary">Sudah Terealisasi</span></a>';
                         } else {
-                            $status .=  '<br><span class="badge fw-bold badge-primary">Progress: 0%</span>';
+                            $status .=  '<br><span class="badge fw-bold badge-dark">Belum Terealisasi</span>';
                         }
-                        if (($row->created_at->year != Carbon::now()->year) && ($row->realisasiManusia->where('status', 1)->max('progress') != 100)) {
+                        if (($row->created_at->year != Carbon::now()->year) && ((!$row->realisasiManusia) || (($row->realisasiManusia) && ($row->realisasiManusia->status != 1)))) {
                             $status .=  '<br><span class="badge fw-bold badge-secondary mt-1">Tidak Terselesaikan Ditahun ' . $row->created_at->year . '</span>';
                             if ($row->alasan_tidak_terselesaikan == null && $row->status_baca == null) {
                                 $status .=  '<br><span class="badge fw-bold badge-danger mt-1">Belum Ada Alasan</span>';
@@ -126,10 +135,6 @@ class PerencanaanManusiaController extends Controller
                     } else if ($row->status == 2) {
                         return '<span class="badge fw-bold badge-danger">Ditolak</span>';
                     }
-                })
-
-                ->addColumn('jumlah_penduduk', function ($row) {
-                    return $row->pendudukPerencanaanManusia->count();
                 })
 
                 ->addColumn('opd', function ($row) {
@@ -181,6 +186,7 @@ class PerencanaanManusiaController extends Controller
                     'status',
                     'opd',
                     'action',
+                    'penduduk'
                 ])
                 ->make(true);
         }
@@ -193,7 +199,7 @@ class PerencanaanManusiaController extends Controller
         $countPerencanaanTidakTerselesaikan = 0;
         if (Auth::user()->role == 'OPD') {
             foreach ($perencanaanManusia2 as $row) {
-                if (($row->created_at->year != Carbon::now()->year) && ($row->realisasiManusia->where('status', 1)->max('progress') != 100) && ($row->alasan_tidak_terselesaikan == null) && ($row->status_baca == null)) {
+                if (($row->created_at->year != Carbon::now()->year) && ((!$row->realisasiManusia) || (($row->realisasiManusia) && ($row->realisasiManusia->status != 1))) && ($row->alasan_tidak_terselesaikan == null) && ($row->status_baca == null)) {
                     $countPerencanaanTidakTerselesaikan++;
                 }
             }
@@ -201,7 +207,7 @@ class PerencanaanManusiaController extends Controller
             $totalMenungguKonfirmasiPerencanaanManusia = PerencanaanManusia::where('status', 2)->where('opd_id', Auth::user()->opd_id)->count();
         } else {
             foreach ($perencanaanManusia2 as $row) {
-                if (($row->created_at->year != Carbon::now()->year) && ($row->realisasiManusia->where('status', 1)->max('progress') != 100) && ($row->alasan_tidak_terselesaikan != null) && ($row->status_baca != 1)) {
+                if (($row->created_at->year != Carbon::now()->year) && ((!$row->realisasiManusia) || (($row->realisasiManusia) && ($row->realisasiManusia->status != 1)))  && ($row->alasan_tidak_terselesaikan != null) && ($row->status_baca != 1)) {
                     $countPerencanaanTidakTerselesaikan++;
                 }
             }
@@ -235,7 +241,7 @@ class PerencanaanManusiaController extends Controller
             $perencanaanManusia = PerencanaanManusia::where('opd_id', Auth::user()->opd_id)->get();
             $countPerencanaanTidakTerselesaikan = null;
             foreach ($perencanaanManusia as $row) {
-                if (($row->created_at->year != Carbon::now()->year) && ($row->realisasiManusia->where('status', 1)->max('progress') != 100) && ($row->alasan_tidak_terselesaikan == null) && ($row->status_baca == null)) {
+                if (($row->created_at->year != Carbon::now()->year) && (!($row->realisasiManusia)) && ($row->alasan_tidak_terselesaikan == null) && ($row->status_baca == null)) {
                     $countPerencanaanTidakTerselesaikan++;
                 }
             }
@@ -264,13 +270,11 @@ class PerencanaanManusiaController extends Controller
             $request->all(),
             [
                 'sub_indikator' => 'required',
-                'penduduk' => 'required',
                 'nilai_pembiayaan' => 'required',
                 'sumber_dana' => 'required',
             ],
             [
                 'sub_indikator.required' => 'Sub Indikator harus diisi',
-                'penduduk.required' => 'Penduduk harus dipilih',
                 'nilai_pembiayaan.required' => 'Nilai Pembiayaan harus diisi',
                 'sumber_dana.required' => 'Sumber Dana harus dipilih',
             ]
@@ -279,6 +283,7 @@ class PerencanaanManusiaController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()]);
         }
+
 
         if ($request->nama_dokumen != null) {
             $countFileDokumen = count($request->file_dokumen ?? []);
@@ -302,16 +307,6 @@ class PerencanaanManusiaController extends Controller
 
         $insertPerencanaan = PerencanaanManusia::create($dataPerencanaan);
 
-        if ($request->penduduk != null) {
-            foreach ($request->penduduk as $penduduk) {
-                $dataPenduduk = [
-                    'perencanaan_manusia_id' => $insertPerencanaan->id,
-                    'penduduk_id' => $penduduk,
-                ];
-                $insertPenduduk = PendudukPerencanaanManusia::create($dataPenduduk);
-            }
-        }
-
         if ($request->opd_terkait != null) {
             foreach ($request->opd_terkait as $opd) {
                 $dataOPDTerkait = [
@@ -325,7 +320,7 @@ class PerencanaanManusiaController extends Controller
         $no_dokumen = 1;
         if ($request->nama_dokumen != null) {
             for ($i = 0; $i < $countFileDokumen; $i++) {
-                $namaFile = mt_rand() . '-' . $request->nama_dokumen[$i] . '-' . $request->sub_indikator . '-' . $no_dokumen . '.' . $request->file_dokumen[$i]->getClientOriginalExtension();
+                $namaFile = mt_rand() . '-' . $request->nama_dokumen[$i] . '-' . Auth::user()->opd->nama . '-' . $no_dokumen . '.' . $request->file_dokumen[$i]->getClientOriginalExtension();
 
                 $request->file_dokumen[$i]->storeAs(
                     'uploads/dokumen/perencanaan/manusia',
@@ -383,11 +378,11 @@ class PerencanaanManusiaController extends Controller
 
         $data = [
             'rencanaIntervensiManusia' => $rencana_intervensi_manusia,
+            'sumberDana' => SumberDana::all(),
             'desa' => Desa::all(),
-            'pendudukPerencanaanManusia' => json_encode($rencana_intervensi_manusia->pendudukPerencanaanManusia->pluck('penduduk_id')->toArray()),
             'opdTerkaitManusia' => json_encode($rencana_intervensi_manusia->opdTerkaitManusia->pluck('opd_id')->toArray()),
             'opd' => OPD::whereNot('id', $rencana_intervensi_manusia->opd_id)->orderBy('nama')->get(),
-            'sumberDana' => SumberDana::all()
+
         ];
         return view('dashboard.pages.intervensi.perencanaan.manusia.subIndikator.edit', $data);
     }
@@ -405,13 +400,11 @@ class PerencanaanManusiaController extends Controller
             $request->all(),
             [
                 'sub_indikator' => 'required',
-                'penduduk' => $rencana_intervensi_manusia->realisasiManusia->count() == 0 ? 'required' : '',
-                'nilai_pembiayaan' => $rencana_intervensi_manusia->realisasiManusia->count() == 0 ? 'required' : '',
+                'nilai_pembiayaan' => 'required',
                 'sumber_dana' => 'required',
             ],
             [
                 'sub_indikator.required' => 'Sub Indikator harus diisi',
-                'penduduk.required' => 'Lokasi harus dipilih',
                 'nilai_pembiayaan.required' => 'Nilai Pembiayaan harus diisi',
                 'sumber_dana.required' => 'Sumber Dana harus dipilih',
             ]
@@ -437,20 +430,6 @@ class PerencanaanManusiaController extends Controller
                 }
             } else {
                 return 'nama_dokumen_kosong_dan_file_dokumen_kosong';
-            }
-        }
-
-        // update lokasi perencanaan
-        if ($rencana_intervensi_manusia->realisasiManusia->count() == 0) {
-            $rencana_intervensi_manusia->pendudukPerencanaanManusia()->delete();
-            if ($request->penduduk != null) {
-                foreach ($request->penduduk as $penduduk) {
-                    $dataPenduduk = [
-                        'perencanaan_manusia_id' => $rencana_intervensi_manusia->id,
-                        'penduduk_id' => $penduduk,
-                    ];
-                    $insertPenduduk = PendudukPerencanaanManusia::create($dataPenduduk);
-                }
             }
         }
 
@@ -499,7 +478,7 @@ class PerencanaanManusiaController extends Controller
                     Storage::delete('uploads/dokumen/perencanaan/manusia/' . $dataDokumen->file);
                 }
 
-                $namaFile = mt_rand() . '-' . $request->nama_dokumen_old[$key] . '-' . $request->sub_indikator . '-' .  $dataDokumen->no_urut . '.' . $value->getClientOriginalExtension();
+                $namaFile = mt_rand() . '-' . $request->nama_dokumen_old[$key] . '-' . $rencana_intervensi_manusia->opd->nama . '-' .  $dataDokumen->no_urut . '.' . $value->getClientOriginalExtension();
                 $value->storeAs('uploads/dokumen/perencanaan/manusia/', $namaFile);
 
                 $update = [
@@ -511,11 +490,24 @@ class PerencanaanManusiaController extends Controller
             }
         }
 
+        // update data perencanaan
+        $dataPerencanaan = [
+            'sub_indikator' => $request->sub_indikator,
+            'sumber_dana_id' => $request->sumber_dana,
+            'nilai_pembiayaan' => $request->nilai_pembiayaan
+        ];
+
+        if (Auth::user()->role == 'OPD') {
+            $dataPerencanaan['status'] = 0;
+            $dataPerencanaan['alasan_ditolak'] = '-';
+        }
+        $rencana_intervensi_manusia->update($dataPerencanaan);
+
         // update dokumen baru
         $no_dokumen = $rencana_intervensi_manusia->dokumenPerencanaanManusia->max('no_urut') + 1;
         if ($request->nama_dokumen != null) {
             for ($i = 0; $i < $countFileDokumen; $i++) {
-                $namaFile = mt_rand() . '-' . $request->nama_dokumen[$i] . '-' . $request->sub_indikator . '-' .  $no_dokumen . '.' . $request->file_dokumen[$i]->getClientOriginalExtension();
+                $namaFile = mt_rand() . '-' . $request->nama_dokumen[$i] . '-' . $rencana_intervensi_manusia->opd->nama . '-' .  $no_dokumen . '.' . $request->file_dokumen[$i]->getClientOriginalExtension();
                 $request->file_dokumen[$i]->storeAs(
                     'uploads/dokumen/perencanaan/manusia/',
                     $namaFile
@@ -533,23 +525,6 @@ class PerencanaanManusiaController extends Controller
             }
         }
 
-        // update data perencanaan
-        $dataPerencanaan = [
-            'sub_indikator' => $request->sub_indikator,
-            'sumber_dana_id' => $request->sumber_dana,
-        ];
-
-        if ($rencana_intervensi_manusia->realisasiManusia->count() == 0) {
-            $dataPerencanaan['nilai_pembiayaan'] = $request->nilai_pembiayaan;
-        }
-
-
-        if (Auth::user()->role == 'OPD') {
-            $dataPerencanaan['status'] = 0;
-            $dataPerencanaan['alasan_ditolak'] = '-';
-        }
-        $rencana_intervensi_manusia->update($dataPerencanaan);
-
         return response()->json('perbarui');
     }
 
@@ -561,9 +536,6 @@ class PerencanaanManusiaController extends Controller
      */
     public function destroy(PerencanaanManusia $rencana_intervensi_manusia)
     {
-        $rencana_intervensi_manusia->opdTerkaitManusia()->delete();
-        $rencana_intervensi_manusia->pendudukPerencanaanManusia()->delete();
-
         if ($rencana_intervensi_manusia->dokumenPerencanaanManusia) {
             foreach ($rencana_intervensi_manusia->dokumenPerencanaanManusia as $item) {
                 if (Storage::exists('uploads/dokumen/perencanaan/manusia/' . $item->file)) {
@@ -574,17 +546,17 @@ class PerencanaanManusiaController extends Controller
         $rencana_intervensi_manusia->dokumenPerencanaanManusia()->delete();
 
         if ($rencana_intervensi_manusia->realisasiManusia) {
-            foreach ($rencana_intervensi_manusia->realisasiManusia as $item) {
-                foreach ($item->dokumenRealisasiManusia as $doc) {
-                    if (Storage::exists('uploads/dokumen/realisasi/manusia/' . $doc->file)) {
-                        Storage::delete('uploads/dokumen/realisasi/manusia/' . $doc->file);
-                    }
-                    DokumenRealisasiManusia::where('id', $item->id)->delete();
+            foreach ($rencana_intervensi_manusia->realisasiManusia->dokumenRealisasiManusia as $doc) {
+                if (Storage::exists('uploads/dokumen/realisasi/manusia/' . $doc->file)) {
+                    Storage::delete('uploads/dokumen/realisasi/manusia/' . $doc->file);
                 }
-                $item->dokumenRealisasiManusia()->delete();
+                DokumenRealisasiManusia::where('id', $doc->id)->delete();
             }
+
+            $rencana_intervensi_manusia->realisasiManusia->pendudukRealisasiManusia()->delete();
         }
 
+        $rencana_intervensi_manusia->opdTerkaitManusia()->delete();
         $rencana_intervensi_manusia->realisasiManusia()->delete();
         $rencana_intervensi_manusia->delete();
 
@@ -622,12 +594,11 @@ class PerencanaanManusiaController extends Controller
 
     public function export()
     {
-        $dataPerencanaan = PerencanaanManusia::with('opd', 'pendudukPerencanaanManusia')
+        $dataPerencanaan = PerencanaanManusia::with('opd')
             ->where(function ($query) {
                 if (Auth::user()->role == 'OPD') {
                     $query->where('opd_id', Auth::user()->opd_id);
                     $query->orWhereHas('opdTerkaitManusia', function ($q) { // OPD Terkait hanya bisa melihat yang telah di setujui
-                        $q->where('status', 1);
                         $q->where('opd_id', Auth::user()->opd_id);
                     });
                 }

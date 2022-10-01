@@ -588,11 +588,13 @@ class RealisasiKeongController extends Controller
                 ->where(function ($query) use ($request) {
                     if ($request->opd_filter && $request->opd_filter != 'semua') {
                         $query->whereHas('listIndikator', function ($query2) use ($request) {
-                            $query2->whereHas('perencanaanKeong', function ($query3) use ($request) {
-                                $query3->where(function ($query4) use ($request) {
-                                    $query4->where('opd_id', $request->opd_filter);
-                                    $query4->orWhereHas('opdTerkaitKeong', function ($query5) use ($request) {
+                            $query2->whereHas('realisasiKeong', function ($query3) use ($request) {
+                                $query3->whereHas('perencanaanKeong', function ($query4) use ($request) {
+                                    $query4->where(function ($query5) use ($request) {
                                         $query5->where('opd_id', $request->opd_filter);
+                                        $query5->orWhereHas('opdTerkaitKeong', function ($query6) use ($request) {
+                                            $query6->where('opd_id', $request->opd_filter);
+                                        });
                                     });
                                 });
                                 if ($request->tahun_filter && $request->tahun_filter != 'semua') {
@@ -604,8 +606,10 @@ class RealisasiKeongController extends Controller
 
                     if ($request->indikator_filter && $request->indikator_filter != 'semua') {
                         $query->whereHas('listIndikator', function ($query2) use ($request) {
-                            $query2->whereHas('perencanaanKeong', function ($query3) use ($request) {
-                                $query3->where('id', $request->indikator_filter);
+                            $query2->whereHas('realisasiKeong', function ($query3) use ($request) {
+                                $query3->whereHas('perencanaanKeong', function ($query4) use ($request) {
+                                    $query4->where('id', $request->indikator_filter);
+                                });
                                 if ($request->tahun_filter && $request->tahun_filter != 'semua') {
                                     $query3->whereYear('created_at', $request->tahun_filter);
                                 }
@@ -615,7 +619,7 @@ class RealisasiKeongController extends Controller
 
                     if ($request->tahun_filter && $request->tahun_filter != 'semua') {
                         $query->whereHas('listIndikator', function ($query2) use ($request) {
-                            $query2->whereHas('perencanaanKeong', function ($query3) use ($request) {
+                            $query2->whereHas('realisasiKeong', function ($query3) use ($request) {
                                 $query3->whereYear('created_at', $request->tahun_filter);
                             });
                         });
@@ -634,11 +638,11 @@ class RealisasiKeongController extends Controller
                     $list = '<ol class="mb-0">';
                     foreach ($row->listIndikator as $row2) {
                         if ($request->tahun_filter && $request->tahun_filter != 'semua') {
-                            if (Carbon::parse($row2->perencanaanKeong->created_at)->format('Y') == $request->tahun_filter) {
-                                $list .= '<li>' . $row2->perencanaanKeong->sub_indikator . '</li>';
+                            if (Carbon::parse($row2->realisasiKeong->created_at)->format('Y') == $request->tahun_filter) {
+                                $list .= '<li>' . $row2->realisasiKeong->perencanaanKeong->sub_indikator . '</li>';
                             }
                         } else {
-                            $list .= '<li>' . $row2->perencanaanKeong->sub_indikator . '</li>';
+                            $list .= '<li>' . $row2->realisasiKeong->perencanaanKeong->sub_indikator . '</li>';
                         }
                     }
                     $list .= '</ol>';
@@ -649,18 +653,18 @@ class RealisasiKeongController extends Controller
                     $list = '<ol class="mb-0">';
                     foreach ($row->listIndikator as $row2) {
                         if ($request->tahun_filter && $request->tahun_filter != 'semua') {
-                            if (Carbon::parse($row2->perencanaanKeong->created_at)->format('Y') == $request->tahun_filter) {
-                                $list .= '<li class="font-weight-bold">' . $row2->perencanaanKeong->opd->nama . '</li>';
-                                if ($row2->perencanaanKeong->opdTerkaitKeong) {
-                                    foreach ($row2->perencanaanKeong->opdTerkaitKeong as $row3) {
+                            if (Carbon::parse($row2->realisasiKeong->created_at)->format('Y') == $request->tahun_filter) {
+                                $list .= '<li class="font-weight-bold">' . $row2->realisasiKeong->perencanaanKeong->opd->nama . '</li>';
+                                if ($row2->realisasiKeong->perencanaanKeong->opdTerkaitKeong) {
+                                    foreach ($row2->realisasiKeong->perencanaanKeong->opdTerkaitKeong as $row3) {
                                         $list .= '<p class="p-0 m-0"> -' . $row3->opd->nama . '</p>';
                                     }
                                 }
                             }
                         } else {
-                            $list .= '<li class="font-weight-bold">' . $row2->perencanaanKeong->opd->nama . '</li>';
-                            if ($row2->perencanaanKeong->opdTerkaitKeong) {
-                                foreach ($row2->perencanaanKeong->opdTerkaitKeong as $row3) {
+                            $list .= '<li class="font-weight-bold">' . $row2->realisasiKeong->perencanaanKeong->opd->nama . '</li>';
+                            if ($row2->realisasiKeong->perencanaanKeong->opdTerkaitKeong) {
+                                foreach ($row2->realisasiKeong->perencanaanKeong->opdTerkaitKeong as $row3) {
                                     $list .= '<p class="p-0 m-0"> -' . $row3->opd->nama . '</p>';
                                 }
                             }
@@ -699,19 +703,19 @@ class RealisasiKeongController extends Controller
         foreach ($dataHabitatKeong->get() as $item) {
             foreach ($item->listIndikator as $row) {
                 $dataSubIndikator = [
-                    'id' => $row->perencanaanKeong->id,
-                    'sub_indikator' => $row->perencanaanKeong->sub_indikator,
-                    'tahun' => $row->perencanaanKeong->created_at->format('Y'),
-                    'created_at' => $row->perencanaanKeong->created_at
+                    'id' => $row->realisasiKeong->perencanaanKeong->id,
+                    'sub_indikator' => $row->realisasiKeong->perencanaanKeong->sub_indikator,
+                    'tahun' => $row->realisasiKeong->perencanaanKeong->created_at->format('Y'),
+                    'created_at' => $row->realisasiKeong->perencanaanKeong->created_at
                 ];
                 $dataOpd = [
-                    'id' => $row->perencanaanKeong->opd->id,
-                    'opd' => $row->perencanaanKeong->opd->nama
+                    'id' => $row->realisasiKeong->perencanaanKeong->opd->id,
+                    'opd' => $row->realisasiKeong->perencanaanKeong->opd->nama
                 ];
                 array_push($filterSubIndikator, $dataSubIndikator);
                 array_push($filterOpd, $dataOpd);
-                if ($row->perencanaanKeong->opdTerkaitKeong) {
-                    foreach ($row->perencanaanKeong->opdTerkaitKeong as $row2) {
+                if ($row->realisasiKeong->perencanaanKeong->opdTerkaitKeong) {
+                    foreach ($row->realisasiKeong->perencanaanKeong->opdTerkaitKeong as $row2) {
                         $dataOpdTerkait = [
                             'id' => $row2->opd->id,
                             'opd' => $row2->opd->nama

@@ -26,6 +26,6 @@ class LokasiRealisasiHewan extends Model
 
     public function realisasiHewan()
     {
-        return $this->belongsTo(RealisasiHewan::class);
+        return $this->belongsTo(RealisasiHewan::class, 'realisasi_hewan_id');
     }
 }

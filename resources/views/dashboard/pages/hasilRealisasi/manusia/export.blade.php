@@ -26,16 +26,17 @@
                         {{ $item->nama }}</td>
                     <td style="vertical-align: center;border: 1px solid black;" align="left">
                         @forelse ($item->listIndikator as $item2)
-                            <p>{{ $loop->iteration }}. {{ $item2->perencanaanManusia->sub_indikator }}</p>
+                            <p>{{ $loop->iteration }}. {{ $item2->realisasiManusia->perencanaanManusia->sub_indikator }}
+                            </p>
                         @empty
                             <p>-</p>
                         @endforelse
                     </td>
                     <td style="vertical-align: center;border: 1px solid black;" align="left">
                         @forelse ($item->listIndikator as $item2)
-                            <p>{{ $loop->iteration }}. {{ $item2->perencanaanManusia->opd->nama }}</p>
-                            @if ($item2->perencanaanManusia->opdTerkaitManusia)
-                                @foreach ($item2->perencanaanManusia->opdTerkaitManusia as $item3)
+                            <p>{{ $loop->iteration }}. {{ $item2->realisasiManusia->perencanaanManusia->opd->nama }}</p>
+                            @if ($item2->realisasiManusia->perencanaanManusia->opdTerkaitManusia)
+                                @foreach ($item2->realisasiManusia->perencanaanManusia->opdTerkaitManusia as $item3)
                                     <p>-{{ $item3->opd->nama }}</p>
                                 @endforeach
                             @endif

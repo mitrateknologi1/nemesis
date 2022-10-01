@@ -588,11 +588,13 @@ class RealisasiHewanController extends Controller
                 ->where(function ($query) use ($request) {
                     if ($request->opd_filter && $request->opd_filter != 'semua') {
                         $query->whereHas('listIndikator', function ($query2) use ($request) {
-                            $query2->whereHas('perencanaanHewan', function ($query3) use ($request) {
-                                $query3->where(function ($query4) use ($request) {
-                                    $query4->where('opd_id', $request->opd_filter);
-                                    $query4->orWhereHas('opdTerkaitHewan', function ($query5) use ($request) {
+                            $query2->whereHas('realisasiHewan', function ($query3) use ($request) {
+                                $query3->whereHas('perencanaanHewan', function ($query4) use ($request) {
+                                    $query4->where(function ($query5) use ($request) {
                                         $query5->where('opd_id', $request->opd_filter);
+                                        $query5->orWhereHas('opdTerkaitHewan', function ($query6) use ($request) {
+                                            $query6->where('opd_id', $request->opd_filter);
+                                        });
                                     });
                                 });
                                 if ($request->tahun_filter && $request->tahun_filter != 'semua') {
@@ -604,8 +606,10 @@ class RealisasiHewanController extends Controller
 
                     if ($request->indikator_filter && $request->indikator_filter != 'semua') {
                         $query->whereHas('listIndikator', function ($query2) use ($request) {
-                            $query2->whereHas('perencanaanHewan', function ($query3) use ($request) {
-                                $query3->where('id', $request->indikator_filter);
+                            $query2->whereHas('realisasiHewan', function ($query3) use ($request) {
+                                $query3->whereHas('perencanaanHewan', function ($query4) use ($request) {
+                                    $query4->where('id', $request->indikator_filter);
+                                });
                                 if ($request->tahun_filter && $request->tahun_filter != 'semua') {
                                     $query3->whereYear('created_at', $request->tahun_filter);
                                 }
@@ -615,7 +619,7 @@ class RealisasiHewanController extends Controller
 
                     if ($request->tahun_filter && $request->tahun_filter != 'semua') {
                         $query->whereHas('listIndikator', function ($query2) use ($request) {
-                            $query2->whereHas('perencanaanHewan', function ($query3) use ($request) {
+                            $query2->whereHas('realisasiHewan', function ($query3) use ($request) {
                                 $query3->whereYear('created_at', $request->tahun_filter);
                             });
                         });
@@ -634,11 +638,11 @@ class RealisasiHewanController extends Controller
                     $list = '<ol class="mb-0">';
                     foreach ($row->listIndikator as $row2) {
                         if ($request->tahun_filter && $request->tahun_filter != 'semua') {
-                            if (Carbon::parse($row2->perencanaanHewan->created_at)->format('Y') == $request->tahun_filter) {
-                                $list .= '<li>' . $row2->perencanaanHewan->sub_indikator . '</li>';
+                            if (Carbon::parse($row2->realisasiHewan->created_at)->format('Y') == $request->tahun_filter) {
+                                $list .= '<li>' . $row2->realisasiHewan->perencanaanHewan->sub_indikator . '</li>';
                             }
                         } else {
-                            $list .= '<li>' . $row2->perencanaanHewan->sub_indikator . '</li>';
+                            $list .= '<li>' . $row2->realisasiHewan->perencanaanHewan->sub_indikator . '</li>';
                         }
                     }
                     $list .= '</ol>';
@@ -649,18 +653,18 @@ class RealisasiHewanController extends Controller
                     $list = '<ol class="mb-0">';
                     foreach ($row->listIndikator as $row2) {
                         if ($request->tahun_filter && $request->tahun_filter != 'semua') {
-                            if (Carbon::parse($row2->perencanaanHewan->created_at)->format('Y') == $request->tahun_filter) {
-                                $list .= '<li class="font-weight-bold">' . $row2->perencanaanHewan->opd->nama . '</li>';
-                                if ($row2->perencanaanHewan->opdTerkaitHewan) {
-                                    foreach ($row2->perencanaanHewan->opdTerkaitHewan as $row3) {
+                            if (Carbon::parse($row2->realisasiHewan->created_at)->format('Y') == $request->tahun_filter) {
+                                $list .= '<li class="font-weight-bold">' . $row2->realisasiHewan->perencanaanHewan->opd->nama . '</li>';
+                                if ($row2->realisasiHewan->perencanaanHewan->opdTerkaitHewan) {
+                                    foreach ($row2->realisasiHewan->perencanaanHewan->opdTerkaitHewan as $row3) {
                                         $list .= '<p class="p-0 m-0"> -' . $row3->opd->nama . '</p>';
                                     }
                                 }
                             }
                         } else {
-                            $list .= '<li class="font-weight-bold">' . $row2->perencanaanHewan->opd->nama . '</li>';
-                            if ($row2->perencanaanHewan->opdTerkaitHewan) {
-                                foreach ($row2->perencanaanHewan->opdTerkaitHewan as $row3) {
+                            $list .= '<li class="font-weight-bold">' . $row2->realisasiHewan->perencanaanHewan->opd->nama . '</li>';
+                            if ($row2->realisasiHewan->perencanaanHewan->opdTerkaitHewan) {
+                                foreach ($row2->realisasiHewan->perencanaanHewan->opdTerkaitHewan as $row3) {
                                     $list .= '<p class="p-0 m-0"> -' . $row3->opd->nama . '</p>';
                                 }
                             }
@@ -699,19 +703,19 @@ class RealisasiHewanController extends Controller
         foreach ($dataHabitatHewan->get() as $item) {
             foreach ($item->listIndikator as $row) {
                 $dataSubIndikator = [
-                    'id' => $row->perencanaanHewan->id,
-                    'sub_indikator' => $row->perencanaanHewan->sub_indikator,
-                    'tahun' => $row->perencanaanHewan->created_at->format('Y'),
-                    'created_at' => $row->perencanaanHewan->created_at
+                    'id' => $row->realisasiHewan->perencanaanHewan->id,
+                    'sub_indikator' => $row->realisasiHewan->perencanaanHewan->sub_indikator,
+                    'tahun' => $row->realisasiHewan->perencanaanHewan->created_at->format('Y'),
+                    'created_at' => $row->realisasiHewan->perencanaanHewan->created_at
                 ];
                 $dataOpd = [
-                    'id' => $row->perencanaanHewan->opd->id,
-                    'opd' => $row->perencanaanHewan->opd->nama
+                    'id' => $row->realisasiHewan->perencanaanHewan->opd->id,
+                    'opd' => $row->realisasiHewan->perencanaanHewan->opd->nama
                 ];
                 array_push($filterSubIndikator, $dataSubIndikator);
                 array_push($filterOpd, $dataOpd);
-                if ($row->perencanaanHewan->opdTerkaitHewan) {
-                    foreach ($row->perencanaanHewan->opdTerkaitHewan as $row2) {
+                if ($row->realisasiHewan->perencanaanHewan->opdTerkaitHewan) {
+                    foreach ($row->realisasiHewan->perencanaanHewan->opdTerkaitHewan as $row2) {
                         $dataOpdTerkait = [
                             'id' => $row2->opd->id,
                             'opd' => $row2->opd->nama

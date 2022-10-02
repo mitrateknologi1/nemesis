@@ -66,7 +66,7 @@
                 @endcomponent
             </div>
             <div class="form-group pb-0">
-                <label class="my-2">Pilih OPD Terkait <span class="text-danger">(Jika Ada)</span></label>
+                <label class="my-2">Pilih OPD Terkait <span class="text-danger">(Boleh Dikosongkan)</span></label>
                 <div class="select2-input select2-primary">
                     <select id="opd-terkait" name="opd_terkait[]" class="form-control multiple" multiple="multiple"
                         data-label="OPD Terkait">

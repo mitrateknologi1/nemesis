@@ -12,14 +12,16 @@ class IntervensiExport implements FromView
     protected $tabelKeong;
     protected $tabelManusia;
     protected $tabelHewan;
+    protected $tabelSemua;
     protected $tahun;
 
-    function __construct($tipe, $tabelKeong, $tabelManusia, $tabelHewan, $tahun)
+    function __construct($tipe, $tabelKeong, $tabelManusia, $tabelHewan, $tabelSemua, $tahun)
     {
         $this->tipe = $tipe;
         $this->tabelKeong = $tabelKeong;
         $this->tabelManusia = $tabelManusia;
         $this->tabelHewan = $tabelHewan;
+        $this->tabelSemua = $tabelSemua;
         $this->tahun = $tahun;
     }
     /**
@@ -31,6 +33,7 @@ class IntervensiExport implements FromView
         $tabelKeong = $this->tabelKeong;
         $tabelManusia = $this->tabelManusia;
         $tabelHewan = $this->tabelHewan;
+        $tabelSemua = $this->tabelSemua;
         $tahun = $this->tahun;
         $view = '';
 
@@ -48,6 +51,7 @@ class IntervensiExport implements FromView
             'tabelKeong',
             'tabelManusia',
             'tabelHewan',
+            'tabelSemua',
             'tahun'
         ]));
     }

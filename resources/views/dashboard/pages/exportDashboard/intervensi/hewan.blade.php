@@ -29,36 +29,29 @@
         </tr>
     </thead>
     <tbody>
-        @php
-            $perencanaan = 0;
-            $realisasi = 0;
-            $persentase = 0;
-        @endphp
-        @foreach ($tabelHewan as $hewan)
+        @foreach ($tabelHewan['tabel'] as $hewan)
             <tr>
-                <th style="vertical-align: center;border: 1px solid black;" align="center" scope="row">
-                    {{ $loop->iteration }}</th>
+                <th style="vertical-align: center;border: 1px solid black;" align="center" scope="row"
+                    class="text-center">{{ $loop->iteration }}</th>
                 <td style="vertical-align: center;border: 1px solid black;" align="center">{{ $hewan['opd'] }}</td>
-                <td style="vertical-align: center;border: 1px solid black;" align="center">{{ $hewan['perencanaan'] }}
-                </td>
-                <td style="vertical-align: center;border: 1px solid black;" align="center">{{ $hewan['realisasi'] }}
-                </td>
-                <td style="vertical-align: center;border: 1px solid black;" align="center">
-                    {{ $hewan['persentase'] == '-' ? '-' : $hewan['persentase'] . '%' }}</td>
+                <td style="vertical-align: center;border: 1px solid black;" align="center" class="text-center">
+                    {{ $hewan['perencanaan'] }}</td>
+                <td style="vertical-align: center;border: 1px solid black;" align="center" class="text-center">
+                    {{ $hewan['realisasi'] }}</td>
+                <td style="vertical-align: center;border: 1px solid black;" align="center" class="text-center">
+                    {{ $hewan['persentase'] . '%' }}</td>
             </tr>
-            @php
-                $perencanaan += $hewan['perencanaan'];
-                $realisasi += $hewan['realisasi'];
-            @endphp
         @endforeach
         @if (Auth::user()->role != 'OPD')
             <tr>
-                <th style="vertical-align: center;border: 1px solid black;" align="center" scope="row"
-                    colspan="2">Total</th>
-                <td style="vertical-align: center;border: 1px solid black;" align="center">{{ $perencanaan }}</td>
-                <td style="vertical-align: center;border: 1px solid black;" align="center">{{ $realisasi }}</td>
-                <td style="vertical-align: center;border: 1px solid black;" align="center">
-                    {{ $perencanaan == 0 ? 0 : round(($realisasi / $perencanaan) * 100, 2) }}
+                <th style="vertical-align: center;border: 1px solid black;" align="center" scope="row" colspan="2"
+                    class="text-center">Total</th>
+                <td style="vertical-align: center;border: 1px solid black;" align="center" class="text-center">
+                    {{ $tabelHewan['total']['totalPerencanaan'] }}</td>
+                <td style="vertical-align: center;border: 1px solid black;" align="center" class="text-center">
+                    {{ $tabelHewan['total']['totalRealisasi'] }}</td>
+                <td style="vertical-align: center;border: 1px solid black;" align="center" class="text-center">
+                    {{ $tabelHewan['total']['totalPersen'] }}
                     %
                 </td>
             </tr>

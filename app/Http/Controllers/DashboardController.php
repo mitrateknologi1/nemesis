@@ -84,19 +84,19 @@ class DashboardController extends Controller
             $totalMenungguKonfirmasiRealisasiHewan = RealisasiHewan::whereIn('perencanaan_hewan_id', $listPerencanaanHewan)->where('status', 2)->count();
 
             foreach ($perencanaanKeong as $row) {
-                if (($row->created_at->year != Carbon::now()->year) && ($row->alasan_tidak_terselesaikan == null) && ($row->status_baca == null)) {
+                if (($row->created_at->year != Carbon::now()->year) && (!$row->realisasiKeong) && ($row->alasan_tidak_terselesaikan == null) && ($row->status_baca == null)) {
                     $totalPerencanaanKeongTidakTerselesaikan++;
                 }
             }
 
             foreach ($perencanaanManusia as $row) {
-                if (($row->created_at->year != Carbon::now()->year) && ($row->alasan_tidak_terselesaikan == null) && ($row->status_baca == null)) {
+                if (($row->created_at->year != Carbon::now()->year) && (!$row->realisasiManusia) && ($row->alasan_tidak_terselesaikan == null) && ($row->status_baca == null)) {
                     $totalPerencanaanManusiaTidakTerselesaikan++;
                 }
             }
 
             foreach ($perencanaanHewan as $row) {
-                if (($row->created_at->year != Carbon::now()->year)  && ($row->alasan_tidak_terselesaikan == null) && ($row->status_baca == null)) {
+                if (($row->created_at->year != Carbon::now()->year) && (!$row->realisasiHewan) && ($row->alasan_tidak_terselesaikan == null) && ($row->status_baca == null)) {
                     $totalPerencanaanHewanTidakTerselesaikan++;
                 }
             }
@@ -110,19 +110,19 @@ class DashboardController extends Controller
             $totalMenungguKonfirmasiRealisasiHewan = RealisasiHewan::where('status', 0)->count();
 
             foreach ($perencanaanKeong as $row) {
-                if (($row->created_at->year != Carbon::now()->year)  && ($row->alasan_tidak_terselesaikan != null) && ($row->status_baca != 1)) {
+                if (($row->created_at->year != Carbon::now()->year) && (!$row->realisasiKeong) && ($row->alasan_tidak_terselesaikan != null) && ($row->status_baca != 1)) {
                     $totalPerencanaanKeongTidakTerselesaikan++;
                 }
             }
 
             foreach ($perencanaanManusia as $row) {
-                if (($row->created_at->year != Carbon::now()->year)  && ($row->alasan_tidak_terselesaikan != null) && ($row->status_baca != 1)) {
+                if (($row->created_at->year != Carbon::now()->year) && (!$row->realisasiManusia) && ($row->alasan_tidak_terselesaikan != null) && ($row->status_baca != 1)) {
                     $totalPerencanaanManusiaTidakTerselesaikan++;
                 }
             }
 
             foreach ($perencanaanHewan as $row) {
-                if (($row->created_at->year != Carbon::now()->year)  && ($row->alasan_tidak_terselesaikan != null) && ($row->status_baca != 1)) {
+                if (($row->created_at->year != Carbon::now()->year) && (!$row->realisasiHewan) && ($row->alasan_tidak_terselesaikan != null) && ($row->status_baca != 1)) {
                     $totalPerencanaanHewanTidakTerselesaikan++;
                 }
             }

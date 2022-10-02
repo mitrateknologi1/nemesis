@@ -32,6 +32,6 @@ class LokasiHewan extends Model
 
     public function listIndikator()
     { // untuk hasil realisasi
-        return $this->hasMany(LokasiPerencanaanHewan::class)->where('status', 1);
+        return $this->hasMany(LokasiRealisasiHewan::class)->where('status', 1);
     }
 }

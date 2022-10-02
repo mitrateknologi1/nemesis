@@ -43,6 +43,7 @@
                         'placeholder' => 'Masukkan Rencana Anggaran',
                         'wajib' => '<sup class="text-danger">*</sup>',
                         'value' => $rencanaIntervensiKeong->nilai_pembiayaan ?? '',
+                        'info' => 'Apabila tidak ada anggaran, silahkan masukkan angka 0',
                     ])
                 @endcomponent
             </div>

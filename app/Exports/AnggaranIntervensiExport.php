@@ -14,8 +14,9 @@ class AnggaranIntervensiExport implements FromView
     protected $tabelAnggaranHewan;
     protected $tabelAnggaranSemua;
     protected $tahun;
+    protected $daftarSumberDana;
 
-    function __construct($tipe, $tabelAnggaranKeong, $tabelAnggaranManusia, $tabelAnggaranHewan, $tabelAnggaranSemua, $tahun)
+    function __construct($tipe, $tabelAnggaranKeong, $tabelAnggaranManusia, $tabelAnggaranHewan, $tabelAnggaranSemua, $tahun, $daftarSumberDana)
     {
         $this->tipe = $tipe;
         $this->tabelAnggaranKeong = $tabelAnggaranKeong;
@@ -23,6 +24,7 @@ class AnggaranIntervensiExport implements FromView
         $this->tabelAnggaranHewan = $tabelAnggaranHewan;
         $this->tabelAnggaranSemua = $tabelAnggaranSemua;
         $this->tahun = $tahun;
+        $this->daftarSumberDana = $daftarSumberDana;
     }
 
     /**
@@ -36,6 +38,7 @@ class AnggaranIntervensiExport implements FromView
         $tabelAnggaranHewan = $this->tabelAnggaranHewan;
         $tabelAnggaranSemua = $this->tabelAnggaranSemua;
         $tahun = $this->tahun;
+        $daftarSumberDana = $this->daftarSumberDana;
         $view = '';
 
         if ($tipe == 'semua') {
@@ -53,7 +56,8 @@ class AnggaranIntervensiExport implements FromView
             'tabelAnggaranManusia',
             'tabelAnggaranHewan',
             'tabelAnggaranSemua',
-            'tahun'
+            'tahun',
+            'daftarSumberDana'
         ]));
     }
 }

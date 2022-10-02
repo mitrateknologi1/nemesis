@@ -29,62 +29,29 @@
         </tr>
     </thead>
     <tbody>
-        @php
-            $perencanaan = 0;
-            $realisasi = 0;
-        @endphp
-        @foreach ($tabelKeong as $keong)
-            @php
-                $keongPersentase = 0;
-                $manusiaPersentase = 0;
-                $hewanPersentase = 0;
-            @endphp
+        @foreach ($tabelSemua['tabel'] as $semua)
             <tr>
-                <th scope="row" style="vertical-align: center;border: 1px solid black;" align="center">
-                    {{ $loop->iteration }}</th>
-                <td style="vertical-align: center;border: 1px solid black;" align="center">{{ $keong['opd'] }}</td>
-                <td style="vertical-align: center;border: 1px solid black;" align="center">
-                    {{ $keong['perencanaan'] + $tabelManusia[$loop->index]['perencanaan'] + $tabelHewan[$loop->index]['perencanaan'] }}
-                </td>
-                <td style="vertical-align: center;border: 1px solid black;" align="center">
-                    {{ $keong['realisasi'] + $tabelManusia[$loop->index]['realisasi'] + $tabelHewan[$loop->index]['realisasi'] }}
-                </td>
-                @php
-                    if ($keong['persentase'] != '-') {
-                        $keongPersentase = $keong['persentase'];
-                    }
-
-                    if ($tabelManusia[$loop->index]['persentase'] != '-') {
-                        $manusiaPersentase = $tabelManusia[$loop->index]['persentase'];
-                    }
-
-                    if ($tabelHewan[$loop->index]['persentase'] != '-') {
-                        $hewanPersentase = $tabelHewan[$loop->index]['persentase'];
-                    }
-                @endphp
-                <td style="vertical-align: center;border: 1px solid black;" align="center">
-                    @if ($keong['perencanaan'] == 0)
-                        -
-                    @else
-                        {{ round((($keong['realisasi'] + $tabelManusia[$loop->index]['realisasi'] + $tabelHewan[$loop->index]['realisasi']) / ($keong['perencanaan'] + $tabelManusia[$loop->index]['perencanaan'] + $tabelHewan[$loop->index]['perencanaan'])) * 100, 2) }}
-                        %
-                    @endif
-
-                </td>
+                <th style="vertical-align: center;border: 1px solid black;" align="center" scope="row"
+                    class="text-center">{{ $loop->iteration }}</th>
+                <td style="vertical-align: center;border: 1px solid black;" align="center">{{ $semua['opd'] }}</td>
+                <td style="vertical-align: center;border: 1px solid black;" align="center" class="text-center">
+                    {{ $semua['perencanaan'] }}</td>
+                <td style="vertical-align: center;border: 1px solid black;" align="center" class="text-center">
+                    {{ $semua['realisasi'] }}</td>
+                <td style="vertical-align: center;border: 1px solid black;" align="center" class="text-center">
+                    {{ $semua['persentase'] . '%' }}</td>
             </tr>
-            @php
-                $perencanaan += $keong['perencanaan'] + $tabelManusia[$loop->index]['perencanaan'] + $tabelHewan[$loop->index]['perencanaan'];
-                $realisasi += $keong['realisasi'] + $tabelManusia[$loop->index]['realisasi'] + $tabelHewan[$loop->index]['realisasi'];
-            @endphp
         @endforeach
         @if (Auth::user()->role != 'OPD')
             <tr>
-                <th scope="row" colspan="2" style="vertical-align: center;border: 1px solid black;"
-                    align="center">Total</th>
-                <td style="vertical-align: center;border: 1px solid black;" align="center">{{ $perencanaan }}</td>
-                <td style="vertical-align: center;border: 1px solid black;" align="center">{{ $realisasi }}</td>
-                <td style="vertical-align: center;border: 1px solid black;" align="center">
-                    {{ $perencanaan == 0 ? 0 : round(($realisasi / $perencanaan) * 100, 2) }}
+                <th style="vertical-align: center;border: 1px solid black;" align="center" scope="row" colspan="2"
+                    class="text-center">Total</th>
+                <td style="vertical-align: center;border: 1px solid black;" align="center" class="text-center">
+                    {{ $tabelSemua['total']['totalPerencanaan'] }}</td>
+                <td style="vertical-align: center;border: 1px solid black;" align="center" class="text-center">
+                    {{ $tabelSemua['total']['totalRealisasi'] }}</td>
+                <td style="vertical-align: center;border: 1px solid black;" align="center" class="text-center">
+                    {{ $tabelSemua['total']['totalPersen'] }}
                     %
                 </td>
             </tr>

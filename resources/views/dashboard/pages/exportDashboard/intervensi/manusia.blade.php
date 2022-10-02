@@ -34,32 +34,30 @@
             $realisasi = 0;
             $persentase = 0;
         @endphp
-        @foreach ($tabelManusia as $manusia)
+        @foreach ($tabelManusia['tabel'] as $manusia)
             <tr>
-                <th style="vertical-align: center;border: 1px solid black;" align="center" scope="row">
-                    {{ $loop->iteration }}</th>
+                <th style="vertical-align: center;border: 1px solid black;" align="center" scope="row"
+                    class="text-center">{{ $loop->iteration }}</th>
                 <td style="vertical-align: center;border: 1px solid black;" align="center">{{ $manusia['opd'] }}</td>
-                <td style="vertical-align: center;border: 1px solid black;" align="center">{{ $manusia['perencanaan'] }}
-                </td>
-                <td style="vertical-align: center;border: 1px solid black;" align="center">{{ $manusia['realisasi'] }}
-                </td>
-                <td style="vertical-align: center;border: 1px solid black;" align="center">
-                    {{ $manusia['persentase'] == '-' ? '-' : $manusia['persentase'] . '%' }}
-                </td>
+                <td style="vertical-align: center;border: 1px solid black;" align="center" class="text-center">
+                    {{ $manusia['perencanaan'] }}</td>
+                <td style="vertical-align: center;border: 1px solid black;" align="center" class="text-center">
+                    {{ $manusia['realisasi'] }}</td>
+                <td style="vertical-align: center;border: 1px solid black;" align="center" class="text-center">
+                    {{ $manusia['persentase'] . '%' }}</td>
             </tr>
-            @php
-                $perencanaan += $manusia['perencanaan'];
-                $realisasi += $manusia['realisasi'];
-            @endphp
         @endforeach
         @if (Auth::user()->role != 'OPD')
             <tr>
-                <th style="vertical-align: center;border: 1px solid black;" align="center" scope="row"
-                    colspan="2">Total</th>
-                <td style="vertical-align: center;border: 1px solid black;" align="center">{{ $perencanaan }}</td>
-                <td style="vertical-align: center;border: 1px solid black;" align="center">{{ $realisasi }}</td>
-                <td style="vertical-align: center;border: 1px solid black;" align="center">
-                    {{ $perencanaan == 0 ? 0 : round(($realisasi / $perencanaan) * 100, 2) }} %
+                <th style="vertical-align: center;border: 1px solid black;" align="center" scope="row" colspan="2"
+                    class="text-center">Total</th>
+                <td style="vertical-align: center;border: 1px solid black;" align="center" class="text-center">
+                    {{ $tabelManusia['total']['totalPerencanaan'] }}</td>
+                <td style="vertical-align: center;border: 1px solid black;" align="center" class="text-center">
+                    {{ $tabelManusia['total']['totalRealisasi'] }}</td>
+                <td style="vertical-align: center;border: 1px solid black;" align="center" class="text-center">
+                    {{ $tabelManusia['total']['totalPersen'] }}
+                    %
                 </td>
             </tr>
         @endif

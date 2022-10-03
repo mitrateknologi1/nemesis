@@ -79,12 +79,12 @@ class RealisasiKeongController extends Controller
                         }
                     }
 
-                    if ($request->search_filter) {
-                        $query->where(function ($query2) use ($request) {
-                            $query2->where('sub_indikator', 'like', '%' . $request->search_filter . '%');
+                    if ($request->search_filter && $request->search_filter != '') {
+                        $query->whereHas('perencanaanKeong', function ($q) use ($request) {
+                            $q->where('sub_indikator', 'like', '%' . $request->search_filter . '%');
                         });
                     }
-                });
+                })->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()

@@ -179,6 +179,13 @@
                                                                         </p>
                                                                     </div>
                                                                     <div class="d-flex justify-content-between mt-2">
+                                                                        <p class=" mb-0">TK : </p>
+                                                                        <p
+                                                                            class="badge bg-primary text-light border-0 mb-0">
+                                                                            {{ $jumlahPenduduk['tk'] }}
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="d-flex justify-content-between mt-2">
                                                                         <p class=" mb-0">SD : </p>
                                                                         <p
                                                                             class="badge bg-primary text-light border-0 mb-0">
@@ -204,6 +211,13 @@
                                                                         <p
                                                                             class="badge bg-primary text-light border-0 mb-0">
                                                                             {{ $jumlahPenduduk['diploma_1'] }}
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="d-flex justify-content-between mt-2">
+                                                                        <p class=" mb-0">Diploma 1 / 2 : </p>
+                                                                        <p
+                                                                            class="badge bg-primary text-light border-0 mb-0">
+                                                                            {{ $jumlahPenduduk['diploma_12'] }}
                                                                         </p>
                                                                     </div>
                                                                     <div class="d-flex justify-content-between mt-2">
@@ -352,6 +366,34 @@
                                                                         <p
                                                                             class="badge bg-primary text-light border-0 mb-0">
                                                                             {{ $jumlahPenduduk['pelajar'] }}
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="d-flex justify-content-between mt-2">
+                                                                        <p class=" mb-0">Nelayan / Perikanan : </p>
+                                                                        <p
+                                                                            class="badge bg-primary text-light border-0 mb-0">
+                                                                            {{ $jumlahPenduduk['nelayan'] }}
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="d-flex justify-content-between mt-2">
+                                                                        <p class=" mb-0">Pegawai Honorer : </p>
+                                                                        <p
+                                                                            class="badge bg-primary text-light border-0 mb-0">
+                                                                            {{ $jumlahPenduduk['honorer'] }}
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="d-flex justify-content-between mt-2">
+                                                                        <p class=" mb-0">Pendeta : </p>
+                                                                        <p
+                                                                            class="badge bg-primary text-light border-0 mb-0">
+                                                                            {{ $jumlahPenduduk['pendeta'] }}
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="d-flex justify-content-between mt-2">
+                                                                        <p class=" mb-0">Lainnya : </p>
+                                                                        <p
+                                                                            class="badge bg-primary text-light border-0 mb-0">
+                                                                            {{ $jumlahPenduduk['lainnya'] }}
                                                                         </p>
                                                                     </div>
                                                                 </div>

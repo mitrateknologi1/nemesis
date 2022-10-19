@@ -23,8 +23,8 @@ class ImportPenduduk implements ToCollection, WithHeadingRow
     {
         $array_jenis_kelamin = ['Laki-Laki', 'Perempuan'];
         // $array_agama = ['Islam', 'Kristen', 'Hindu', 'Budha', 'Katolik', 'Konghucu'];
-        $array_status_pendidikan = ['Tidak Sekolah', 'SD', 'SMP', 'SMA', 'Diploma 1', 'Diploma 2', 'Diploma 3', 'S1 / Diploma 4', 'S2', 'S3'];
-        $array_pekerjaan = ['Tidak Bekerja', 'Ibu Rumah Tangga', 'Karyawan Swasta', 'PNS / TNI-POLRI', 'Wiraswasta / Wirausaha', 'Petani / Pekebun', 'Pekerjaan Tidak Tetap', 'Pelajar / Mahasiswa'];
+        $array_status_pendidikan = ['Tidak Sekolah', 'TK', 'SD', 'SMP', 'SMA', 'Diploma 1', 'Diploma 1/2', 'Diploma 2', 'Diploma 3', 'S1 / Diploma 4', 'S2', 'S3'];
+        $array_pekerjaan = ['Tidak Bekerja', 'Ibu Rumah Tangga', 'Karyawan Swasta', 'PNS / TNI-POLRI', 'Wiraswasta / Wirausaha', 'Petani / Pekebun', 'Pekerjaan Tidak Tetap', 'Pelajar / Mahasiswa', 'Nelayan / Perikanan', 'Pendeta', 'Pegawai Honorer', 'Lainnya'];
         // $array_golongan_darah = ['Tidak Tahu', 'A', 'B', 'AB', 'O', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
         // $array_status_perkawinan = ['Belum Kawin', 'Kawin Belum Tercatat', 'Kawin Tercatat', 'Cerai Hidup', 'Cerai Mati'];
         // $array_kewarganegaraan = ['WNI', 'WNA'];

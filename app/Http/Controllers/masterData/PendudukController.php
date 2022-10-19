@@ -84,10 +84,12 @@ class PendudukController extends Controller
                 $query->where('status_pendidikan', 'Tidak Sekolah');
                 $query->orWhere('status_pendidikan', null);
             })->count();
+            $tk = Penduduk::where('desa_id', $desa->id)->where('status_pendidikan', 'TK')->count();
             $sd = Penduduk::where('desa_id', $desa->id)->where('status_pendidikan', 'SD')->count();
             $smp = Penduduk::where('desa_id', $desa->id)->where('status_pendidikan', 'SMP')->count();
             $sma = Penduduk::where('desa_id', $desa->id)->where('status_pendidikan', 'SMA')->count();
             $diploma1 = Penduduk::where('desa_id', $desa->id)->where('status_pendidikan', 'Diploma 1')->count();
+            $diploma12 = Penduduk::where('desa_id', $desa->id)->where('status_pendidikan', 'Diploma 1/2')->count();
             $diploma2 = Penduduk::where('desa_id', $desa->id)->where('status_pendidikan', 'Diploma 2')->count();
             $diploma3 = Penduduk::where('desa_id', $desa->id)->where('status_pendidikan', 'Diploma 3')->count();
             $s1 = Penduduk::where('desa_id', $desa->id)->where('status_pendidikan', 'S1 / Diploma 4')->count();
@@ -106,6 +108,10 @@ class PendudukController extends Controller
             $petani = Penduduk::where('desa_id', $desa->id)->where('pekerjaan', 'Petani / Pekebun')->count();
             $tidakTetap = Penduduk::where('desa_id', $desa->id)->where('pekerjaan', 'Pekerjaan Tidak Tetap')->count();
             $pelajar = Penduduk::where('desa_id', $desa->id)->where('pekerjaan', 'Pelajar / Mahasiswa')->count();
+            $nelayan = Penduduk::where('desa_id', $desa->id)->where('pekerjaan', 'Nelayan / Perikanan')->count();
+            $honorer = Penduduk::where('desa_id', $desa->id)->where('pekerjaan', 'Pegawai Honorer')->count();
+            $pendeta = Penduduk::where('desa_id', $desa->id)->where('pekerjaan', 'Pendeta')->count();
+            $lainnya = Penduduk::where('desa_id', $desa->id)->where('pekerjaan', 'Lainnya')->count();
 
             // Umur
             $baduta = Penduduk::where(DB::raw('TIMESTAMPDIFF(YEAR,tanggal_lahir,CURDATE())'), '>=', 0)
@@ -138,10 +144,12 @@ class PendudukController extends Controller
                 'penduduk_perempuan' => $pendudukPerempuan,
                 'total_penduduk' => $totalPenduduk,
                 'tidak_sekolah' => $tidakSekolah,
+                'tk' => $tk,
                 'sd' => $sd,
                 'smp' => $smp,
                 'sma' => $sma,
                 'diploma_1' => $diploma1,
+                'diploma_12' => $diploma12,
                 'diploma_2' => $diploma2,
                 'diploma_3' => $diploma3,
                 's1' => $s1,
@@ -155,12 +163,16 @@ class PendudukController extends Controller
                 'petani' => $petani,
                 'pekerjaan_tidak_tetap' => $tidakTetap,
                 'pelajar' => $pelajar,
+                'nelayan' => $nelayan,
+                'honorer' => $honorer,
+                'pendeta' => $pendeta,
+                'lainnya' => $lainnya,
                 'baduta' => $baduta,
                 'balita' => $balita,
                 'anak' => $anak,
                 'remaja' => $remaja,
                 'dewasa' => $dewasa,
-                'lansia' => $lansia
+                'lansia' => $lansia,
             ];
         }
 

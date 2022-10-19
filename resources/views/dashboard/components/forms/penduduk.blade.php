@@ -97,10 +97,12 @@
                 ])
                 @slot('options')
                     <option value="Tidak Sekolah">Tidak Sekolah</option>
+                    <option value="TK">TK</option>
                     <option value="SD">SD</option>
                     <option value="SMP">SMP</option>
                     <option value="SMA">SMA</option>
                     <option value="Diploma 1">Diploma 1</option>
+                    <option value="Diploma 1/2">Diploma 1/2</option>
                     <option value="Diploma 2">Diploma 2</option>
                     <option value="Diploma 3">Diploma 3</option>
                     <option value="S1 / Diploma 4">S1 / Diploma 4</option>
@@ -176,11 +178,15 @@
                     <option value="Tidak Bekerja">Tidak Bekerja</option>
                     <option value="Ibu Rumah Tangga">Ibu Rumah Tangga</option>
                     <option value="Karyawan Swasta">Karyawan Swasta</option>
+                    <option value="Nelayan / Perikanan">Nelayan / Perikanan</option>
+                    <option value="Pendeta">Pendeta</option>
+                    <option value="Pegawai Honorer">Pegawai Honorer</option>
+                    <option value="Pekerjaan Tidak Tetap">Pekerjaan Tidak Tetap</option>
+                    <option value="Petani / Pekebun">Petani / Pekebun</option>
+                    <option value="Pelajar / Mahasiswa">Pelajar / Mahasiswa</option>
                     <option value="PNS / TNI-POLRI">PNS / TNI-POLRI</option>
                     <option value="Wiraswasta / Wirausaha">Wiraswasta / Wirausaha</option>
-                    <option value="Petani / Pekebun">Petani / Pekebun</option>
-                    <option value="Pekerjaan Tidak Tetap">Pekerjaan Tidak Tetap</option>
-                    <option value="Pelajar / Mahasiswa">Pelajar / Mahasiswa</option>
+                    <option value="Lainnya">Lainnya</option>
                 @endslot
             @endcomponent
         </div>

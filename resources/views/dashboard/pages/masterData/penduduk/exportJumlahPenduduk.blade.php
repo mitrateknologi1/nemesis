@@ -42,6 +42,8 @@
                 <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">Tidak Sekolah</th>
                 <th scope="col" align="center"
+                    style="vertical-align: center;border: 1px solid black;font-weight : bold">TK</th>
+                <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">SD</th>
                 <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">SMP</th>
@@ -49,6 +51,8 @@
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">SMA</th>
                 <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">Diploma 1</th>
+                <th scope="col" align="center"
+                    style="vertical-align: center;border: 1px solid black;font-weight : bold">Diploma 1/2</th>
                 <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">Diploma 2</th>
                 <th scope="col" align="center"
@@ -66,6 +70,8 @@
                 <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">Karyawan Swasta</th>
                 <th scope="col" align="center"
+                    style="vertical-align: center;border: 1px solid black;font-weight : bold">Pegawai Honorer</th>
+                <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">PNS / TNI-POLRI</th>
                 <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">Wiraswasta / Wirausaha
@@ -73,10 +79,16 @@
                 <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">Petani / Pekebun</th>
                 <th scope="col" align="center"
+                    style="vertical-align: center;border: 1px solid black;font-weight : bold">Nelayan / Perikanan</th>
+                <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">Pekerjaan Tidak Tetap
                 </th>
                 <th scope="col" align="center"
+                    style="vertical-align: center;border: 1px solid black;font-weight : bold">Pendeta</th>
+                <th scope="col" align="center"
                     style="vertical-align: center;border: 1px solid black;font-weight : bold">Pelajar / Mahasiswa</th>
+                <th scope="col" align="center"
+                    style="vertical-align: center;border: 1px solid black;font-weight : bold">Lainnya</th>
             </tr>
         </thead>
         <tbody>
@@ -107,6 +119,8 @@
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
                         {{ $penduduk['tidak_sekolah'] }}</td>
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
+                        {{ $penduduk['tk'] }}</td>
+                    <td style="vertical-align: center;border: 1px solid black;" align="center">
                         {{ $penduduk['sd'] }}</td>
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
                         {{ $penduduk['smp'] }}</td>
@@ -114,6 +128,8 @@
                         {{ $penduduk['sma'] }}</td>
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
                         {{ $penduduk['diploma_1'] }}</td>
+                    <td style="vertical-align: center;border: 1px solid black;" align="center">
+                        {{ $penduduk['diploma_12'] }}</td>
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
                         {{ $penduduk['diploma_2'] }}</td>
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
@@ -131,15 +147,23 @@
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
                         {{ $penduduk['karyawan_swasta'] }}</td>
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
+                        {{ $penduduk['honorer'] }}</td>
+                    <td style="vertical-align: center;border: 1px solid black;" align="center">
                         {{ $penduduk['pns'] }}</td>
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
                         {{ $penduduk['wiraswasta'] }}</td>
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
                         {{ $penduduk['petani'] }}</td>
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
+                        {{ $penduduk['nelayan'] }}</td>
+                    <td style="vertical-align: center;border: 1px solid black;" align="center">
                         {{ $penduduk['pekerjaan_tidak_tetap'] }}</td>
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
+                        {{ $penduduk['pendeta'] }}</td>
+                    <td style="vertical-align: center;border: 1px solid black;" align="center">
                         {{ $penduduk['pelajar'] }}</td>
+                    <td style="vertical-align: center;border: 1px solid black;" align="center">
+                        {{ $penduduk['lainnya'] }}</td>
                 </tr>
             @endforeach
         </tbody>

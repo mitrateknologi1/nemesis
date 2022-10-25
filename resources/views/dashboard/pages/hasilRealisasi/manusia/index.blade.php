@@ -9,11 +9,36 @@
 @endsection
 
 @section('subTitlePanelHeader')
-    {{-- Lorem ipsum dolor sit amet consectetur adipisicing elit. --}}
+    <p style="font-size: 15px">Tahun : <span id="tahunLabel">
+            @php
+                if ($tahun != '' && $tahun != 'Semua') {
+                    echo $tahun;
+                } else {
+                    echo 'Semua';
+                }
+            @endphp
+        </span>
+    </p>
 @endsection
 
 @section('buttonPanelHeader')
+    <button class="btn btn-secondary btn-round" data-toggle="modal" data-target="#modal-filter"><i class="fas fa-filter"></i>
+        Filter Tahun</button>
 @endsection
+
+@push('styles')
+    <style>
+        .dataTables_wrapper {
+            padding-left: 0px !important;
+            padding-right: 0px !important;
+        }
+
+
+        .select2-container {
+            width: 100% !important;
+        }
+    </style>
+@endpush
 
 @section('contents')
     <div class="row">
@@ -21,10 +46,13 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Data Hasil Realisasi Pada Manusia</div>
+                        <div class="card-title">Data Hasil Realisasi Pada Manusia <div
+                                class="title-card-tahun d-inline fw-bold"></div>
+                        </div>
                         <div class="card-tools">
                             <form action="{{ url('export-hasil-realisasi-manusia') }}" method="POST">
                                 @csrf
+                                <input type="hidden" name="tahun_filter" value="" class="tahun-filter-export">
                                 <button type="submit" class="btn btn-info btn-border btn-round btn-sm mr-2"
                                     id="export-penduduk" value="" name="desa_id">
                                     <i class="fas fa-lg fa-download"></i>
@@ -36,23 +64,7 @@
                 </div>
                 <div class="card-body pt-3">
                     <div class="row mb-4">
-                        <div class="col-md-4">
-                            @component('dashboard.components.formElements.select',
-                                [
-                                    'label' => 'Tampilkan Data Berdasarkan Tahun',
-                                    'id' => 'tahun-filter',
-                                    'name' => 'tahun_filter',
-                                    'class' => 'select2 filter',
-                                ])
-                                @slot('options')
-                                    <option value="semua">Semua</option>
-                                    @foreach ($filterTahun as $item)
-                                        <option value="{{ $item['tahun'] }}">{{ $item['tahun'] }}</option>
-                                    @endforeach
-                                @endslot
-                            @endcomponent
-                        </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             @component('dashboard.components.formElements.select',
                                 [
                                     'label' => 'OPD',
@@ -61,14 +73,14 @@
                                     'class' => 'select2 filter',
                                 ])
                                 @slot('options')
-                                    <option value="semua">Semua</option>
+                                    <option value="Semua">Semua</option>
                                     @foreach ($filterOpd as $item)
                                         <option value="{{ $item['id'] }}">{{ $item['opd'] }}</option>
                                     @endforeach
                                 @endslot
                             @endcomponent
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             @component('dashboard.components.formElements.select',
                                 [
                                     'label' => 'Sub Indikator',
@@ -77,7 +89,7 @@
                                     'class' => 'select2 filter',
                                 ])
                                 @slot('options')
-                                    <option value="semua">Semua</option>
+                                    <option value="Semua">Semua</option>
                                     @foreach ($filterSubIndikator as $item)
                                         <option value="{{ $item['id'] }}">{{ $item['sub_indikator'] }}</option>
                                     @endforeach
@@ -109,11 +121,56 @@
             </div>
         </div>
     </div>
+
+    {{-- Modal Filter Tahun --}}
+    <form action="" method="GET">
+        <div class="modal fade" id="modal-filter" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Filter Dashboard</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @component('dashboard.components.formElements.select',
+                            [
+                                'label' => 'Tahun',
+                                'id' => 'tahun',
+                                'name' => 'tahun',
+                                'class' => 'select2',
+                                'wajib' => '<sup class="text-danger">*</sup>',
+                            ])
+                            @slot('options')
+                                <option value="Semua">Semua</option>
+                                @foreach ($daftarTahun as $tahun)
+                                    <option value="{{ $tahun }}" {{ ($_GET['tahun'] ?? '') == $tahun ? 'selected' : '' }}>
+                                        {{ $tahun }}</option>
+                                @endforeach
+                            @endslot
+                        @endcomponent
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-border" data-dismiss="modal">Keluar</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 @endsection
 
 @push('scripts')
     <script>
         $('#nav-hasil-realisasi-manusia').addClass('active');
+
+        let tahun = $('#tahunLabel').text().trim()
+        $('.tahun-filter-export').val(tahun)
+
+        if (tahun != "Semua") {
+            $('.title-card-tahun').text(' | Tahun: ' + tahun)
+        }
 
         $('.select2').select2({
             placeholder: "Semua",
@@ -130,7 +187,7 @@
             ajax: {
                 url: "{{ url('hasil-realisasi-manusia') }}",
                 data: function(d) {
-                    d.tahun_filter = $('#tahun-filter').val();
+                    d.tahun_filter = tahun
                     d.opd_filter = $('#opd-filter').val();
                     d.indikator_filter = $('#indikator-filter').val();
                     d.search_filter = $('input[type="search"]').val();

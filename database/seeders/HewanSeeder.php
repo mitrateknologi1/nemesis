@@ -18,11 +18,11 @@ class HewanSeeder extends Seeder
         $data = [
             [
                 'id' => '0075b51c-49c0-4e81-a3b3-a6b4e21b3c10',
-                'nama' => 'Kerbau',
+                'nama' => 'Sapi',
             ],
             [
                 'id' => '0075b51c-49c0-4e81-a3b3-a6b4e21b3c11',
-                'nama' => 'Sapi',
+                'nama' => 'Sapi Bali',
             ],
             [
                 'id' => '0075b51c-49c0-4e81-a3b3-a6b4e21b3c12',
@@ -30,7 +30,7 @@ class HewanSeeder extends Seeder
             ],
             [
                 'id' => '0075b51c-49c0-4e81-a3b3-a6b4e21b3c13',
-                'nama' => 'Anjing',
+                'nama' => 'Kelinci',
             ],
             [
                 'id' => '0075b51c-49c0-4e81-a3b3-a6b4e21b3c14',

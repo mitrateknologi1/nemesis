@@ -49,37 +49,44 @@ class DatabaseSeeder extends Seeder
         $this->call(OPDSeeder::class);
         $this->call(DesaSeeder::class);
         $this->call(HewanSeeder::class);
-        $this->call(LokasiKeongTableSeeder::class);
-        $this->call(LokasiHewanSeeder::class);
-        $this->call(PendudukTableSeeder::class); // new
-        $this->call(LokasiKeongTableSeeder::class);
-        $this->call(RealisasiKeongTableSeeder::class);
-        $this->call(DokumenRealisasiKeongTableSeeder::class);
-        $this->call(LokasiRealisasiKeongTableSeeder::class);
+        // $this->call(LokasiKeongTableSeeder::class);
+        // $this->call(LokasiHewanSeeder::class);
+        // $this->call(PendudukTableSeeder::class); // new
+        // $this->call(RealisasiKeongTableSeeder::class);
+        // $this->call(DokumenRealisasiKeongTableSeeder::class);
+        // $this->call(LokasiRealisasiKeongTableSeeder::class);
         $this->call(TahunSeeder::class);
         $this->call(RoadMapSeeder::class);
         $this->call(MasterPlanSeeder::class);
-        $this->call(JumlahHewanTableSeeder::class);
-        $this->call(PemilikLokasiHewanTableSeeder::class);
-        $this->call(SekolahSeeder::class);
-        $this->call(SiswaSeeder::class);
-        $this->call(PemilikLokasiKeongSeeder::class);
-        $this->call(OpdTerkaitManusiaTableSeeder::class);
-        $this->call(PerencanaanManusiaTableSeeder::class);
-        $this->call(DokumenPerencanaanManusiaTableSeeder::class);
-        $this->call(RealisasiManusiaTableSeeder::class);
-        $this->call(DokumenRealisasiManusiaTableSeeder::class);
-        $this->call(OpdTerkaitKeongTableSeeder::class);
-        $this->call(PerencanaanHewanTableSeeder::class); // new
-        $this->call(OpdTerkaitHewanTableSeeder::class); // new
-        $this->call(DokumenPerencanaanHewanTableSeeder::class); // new
-        $this->call(RealisasiHewanTableSeeder::class);
-        $this->call(LokasiRealisasiHewanTableSeeder::class); // new
-        $this->call(DokumenRealisasiHewanTableSeeder::class);
-        $this->call(PerencanaanKeongTableSeeder::class);
-        $this->call(DokumenPerencanaanKeongTableSeeder::class);
+        // $this->call(JumlahHewanTableSeeder::class);
+        // $this->call(PemilikLokasiHewanTableSeeder::class);
+        // $this->call(SekolahSeeder::class);
+        // $this->call(SiswaSeeder::class);
+        // $this->call(PemilikLokasiKeongSeeder::class);
+        // $this->call(OpdTerkaitManusiaTableSeeder::class);
+        // $this->call(PerencanaanManusiaTableSeeder::class);
+        // $this->call(DokumenPerencanaanManusiaTableSeeder::class);
+        // $this->call(RealisasiManusiaTableSeeder::class);
+        // $this->call(DokumenRealisasiManusiaTableSeeder::class);
+        // $this->call(OpdTerkaitKeongTableSeeder::class);
+        // $this->call(PerencanaanHewanTableSeeder::class); // new
+        // $this->call(OpdTerkaitHewanTableSeeder::class); // new
+        // $this->call(DokumenPerencanaanHewanTableSeeder::class); // new
+        // $this->call(RealisasiHewanTableSeeder::class);
+        // $this->call(LokasiRealisasiHewanTableSeeder::class); // new
+        // $this->call(DokumenRealisasiHewanTableSeeder::class);
+        // $this->call(PerencanaanKeongTableSeeder::class);
+        // $this->call(DokumenPerencanaanKeongTableSeeder::class);
         $this->call(SumberDanaSeeder::class);
         $this->call(UsersTableSeeder::class);
-        $this->call(PendudukRealisasiManusiaTableSeeder::class);
+        // $this->call(PendudukRealisasiManusiaTableSeeder::class);
+
+
+        // Production
+        $this->call(LokasiKeongTableSeeder::class);
+        $this->call(ProductionPendudukTableSeeder::class);
+        $this->call(ProductionLokasiHewanTableSeeder::class);
+        $this->call(ProductionJumlahHewanTableSeeder::class);
+        $this->call(ProductionPemilikLokasiHewanTableSeeder::class);
     }
 }

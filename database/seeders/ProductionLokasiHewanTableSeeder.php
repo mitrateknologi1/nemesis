@@ -21,6 +21,32 @@ class ProductionLokasiHewanTableSeeder extends Seeder
         \DB::table('lokasi_hewan')->insert(array (
             0 => 
             array (
+                'id' => '03c84da3-b958-469b-abce-ea7e9b42b317',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Okto Lanyama',
+                'latitude' => '-1.381292513554',
+                'longitude' => '120.04250049591',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 15:00:13',
+                'updated_at' => '2022-11-12 15:00:13',
+                'deleted_at' => NULL,
+            ),
+            1 => 
+            array (
+                'id' => '05f0ad5b-a23e-4b04-8a40-fc303266b13d',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Guntur',
+                'latitude' => '-1.365246784849',
+                'longitude' => '120.06721973419',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 14:45:28',
+                'updated_at' => '2022-11-12 14:45:28',
+                'deleted_at' => NULL,
+            ),
+            2 => 
+            array (
                 'id' => '064913e9-f4e9-426d-8751-4b0df1821eba',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c20',
                 'nama' => 'Ternak Ifan Tamaliki',
@@ -32,7 +58,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 19:50:17',
                 'deleted_at' => NULL,
             ),
-            1 => 
+            3 => 
             array (
                 'id' => '068304c9-d709-4ac0-83a4-d6c7fa9ce21b',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -45,7 +71,20 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:25:03',
                 'deleted_at' => NULL,
             ),
-            2 => 
+            4 => 
+            array (
+                'id' => '0a5e4063-c1de-4006-ba8a-18d0c664079b',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Gembira Lago',
+                'latitude' => '-1.386483754930',
+                'longitude' => '120.04417419433',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 15:15:00',
+                'updated_at' => '2022-11-12 15:15:00',
+                'deleted_at' => NULL,
+            ),
+            5 => 
             array (
                 'id' => '0db731b8-cb92-46a4-8b79-4a891ae5377b',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -58,7 +97,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:31:38',
                 'deleted_at' => NULL,
             ),
-            3 => 
+            6 => 
             array (
                 'id' => '0de5cd04-645b-455d-9c66-8dbc4c7b190f',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -71,7 +110,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:43:04',
                 'deleted_at' => NULL,
             ),
-            4 => 
+            7 => 
             array (
                 'id' => '0fe7d585-9396-44ed-87a8-d9dc37959593',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -84,7 +123,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:06:38',
                 'deleted_at' => NULL,
             ),
-            5 => 
+            8 => 
             array (
                 'id' => '13a7e0b5-2939-4604-b0db-2f7371564ac0',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -97,7 +136,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:27:47',
                 'deleted_at' => NULL,
             ),
-            6 => 
+            9 => 
             array (
                 'id' => '1619fc16-a334-4d5b-84a8-e4b581e2eec6',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -110,7 +149,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:09:43',
                 'deleted_at' => NULL,
             ),
-            7 => 
+            10 => 
             array (
                 'id' => '162f0076-aa6c-49d3-910f-506928439fc4',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -123,7 +162,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:35:55',
                 'deleted_at' => NULL,
             ),
-            8 => 
+            11 => 
             array (
                 'id' => '16c73fb6-f254-4c24-86ca-84389f405a2d',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c20',
@@ -136,7 +175,20 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 19:56:12',
                 'deleted_at' => NULL,
             ),
-            9 => 
+            12 => 
+            array (
+                'id' => '17f1c021-1c0c-43b8-88a5-8e8053ef8c52',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Ribka Tarima',
+                'latitude' => '-1.360741948658',
+                'longitude' => '120.04679203033',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 15:15:35',
+                'updated_at' => '2022-11-12 15:15:35',
+                'deleted_at' => NULL,
+            ),
+            13 => 
             array (
                 'id' => '1acd27eb-ee07-42fa-86fe-0d3557e7bf88',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c20',
@@ -149,7 +201,33 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 19:55:33',
                 'deleted_at' => NULL,
             ),
-            10 => 
+            14 => 
+            array (
+                'id' => '1b207e2f-f1f4-45d2-973f-a73cf6427559',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Jefri Tempo',
+                'latitude' => '-1.384338614973',
+                'longitude' => '120.03529071807',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 15:07:51',
+                'updated_at' => '2022-11-12 15:07:51',
+                'deleted_at' => NULL,
+            ),
+            15 => 
+            array (
+                'id' => '1cadc403-436b-4d4b-9c6b-943b57a904c8',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Marten Ngale',
+                'latitude' => '-1.383737976091',
+                'longitude' => '120.05726337432',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 15:16:18',
+                'updated_at' => '2022-11-12 15:16:18',
+                'deleted_at' => NULL,
+            ),
+            16 => 
             array (
                 'id' => '1dffb3ba-07a6-4e06-a54d-37600429618f',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -162,7 +240,20 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:44:04',
                 'deleted_at' => NULL,
             ),
-            11 => 
+            17 => 
+            array (
+                'id' => '1f52395a-dd9f-476b-af1f-7ba0d7615a48',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Enos P. Tarese',
+                'latitude' => '-1.368593229128',
+                'longitude' => '120.04005432128',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 15:09:01',
+                'updated_at' => '2022-11-12 15:09:01',
+                'deleted_at' => NULL,
+            ),
+            18 => 
             array (
                 'id' => '1f9e3252-06fb-4eef-b6d5-91509e6b51b0',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -175,7 +266,20 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:10:46',
                 'deleted_at' => NULL,
             ),
-            12 => 
+            19 => 
+            array (
+                'id' => '216054af-e187-4dc7-9a1d-5e998eda2334',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Silas Nangi',
+                'latitude' => '-1.391888064018',
+                'longitude' => '120.06202697753',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 14:49:42',
+                'updated_at' => '2022-11-12 14:49:42',
+                'deleted_at' => NULL,
+            ),
+            20 => 
             array (
                 'id' => '22e94eae-bf2c-42af-a7c1-d5d893afc585',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -188,7 +292,20 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:35:13',
                 'deleted_at' => NULL,
             ),
-            13 => 
+            21 => 
+            array (
+                'id' => '244c6ff5-f133-4d62-b8fc-f6cfd5db8dd5',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Adril',
+                'latitude' => '-1.361685819796',
+                'longitude' => '120.06159782409',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 14:44:59',
+                'updated_at' => '2022-11-12 14:44:59',
+                'deleted_at' => NULL,
+            ),
+            22 => 
             array (
                 'id' => '24dfd08f-4ed0-4c73-bd1e-c9195f76f73b',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -201,7 +318,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:45:29',
                 'deleted_at' => NULL,
             ),
-            14 => 
+            23 => 
             array (
                 'id' => '2869c712-b08d-4267-be1f-fcced029152c',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -214,7 +331,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:16:09',
                 'deleted_at' => NULL,
             ),
-            15 => 
+            24 => 
             array (
                 'id' => '2be0d694-8779-43e8-95a8-e22f3fa6aea5',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -227,7 +344,33 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:11:18',
                 'deleted_at' => NULL,
             ),
-            16 => 
+            25 => 
+            array (
+                'id' => '30c1fa19-69b7-4618-9bbc-617cb9f4d7b8',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Nikodemus Sedi',
+                'latitude' => '-1.377345445904',
+                'longitude' => '120.02387523651',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 15:14:26',
+                'updated_at' => '2022-11-12 15:14:26',
+                'deleted_at' => NULL,
+            ),
+            26 => 
+            array (
+                'id' => '314ffe3f-ec9b-4b61-a821-fc8eeaef4d74',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Andrian Akino',
+                'latitude' => '-1.366705491903',
+                'longitude' => '120.06232738494',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 15:02:32',
+                'updated_at' => '2022-11-12 15:02:32',
+                'deleted_at' => NULL,
+            ),
+            27 => 
             array (
                 'id' => '36284a26-900a-4836-9680-5c46076ad472',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c20',
@@ -240,7 +383,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 14:56:42',
                 'deleted_at' => NULL,
             ),
-            17 => 
+            28 => 
             array (
                 'id' => '3b470bcb-740b-4cbe-bb25-2ec1ffda1a36',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -253,7 +396,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:27:07',
                 'deleted_at' => NULL,
             ),
-            18 => 
+            29 => 
             array (
                 'id' => '3ef5c674-ec9f-48e9-bd50-3aa5ff0a0271',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -266,7 +409,20 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:17:18',
                 'deleted_at' => NULL,
             ),
-            19 => 
+            30 => 
+            array (
+                'id' => '3f167bfa-d1a1-451c-8b16-9e0514c573d9',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Samuel K. Lago',
+                'latitude' => '-1.374985782118',
+                'longitude' => '120.05413055419',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 15:17:15',
+                'updated_at' => '2022-11-12 15:17:15',
+                'deleted_at' => NULL,
+            ),
+            31 => 
             array (
                 'id' => '3fc74fe1-bc66-41b1-9646-c422596c0276',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -279,7 +435,46 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:22:41',
                 'deleted_at' => NULL,
             ),
-            20 => 
+            32 => 
+            array (
+                'id' => '440ceb82-17cd-49e8-ab4a-f48746dc50a3',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Sondakh Lago',
+                'latitude' => '-1.380262844363',
+                'longitude' => '120.02945423126',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 15:17:53',
+                'updated_at' => '2022-11-12 15:17:53',
+                'deleted_at' => NULL,
+            ),
+            33 => 
+            array (
+                'id' => '440fbbc7-2610-422f-ac2b-5af95597cc3e',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Sakeus',
+                'latitude' => '-1.371768056563',
+                'longitude' => '120.06189823150',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 14:59:41',
+                'updated_at' => '2022-11-12 14:59:41',
+                'deleted_at' => NULL,
+            ),
+            34 => 
+            array (
+                'id' => '4494f4db-0dee-4e51-9c26-994173f30a48',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Andi Mohamat Yasin',
+                'latitude' => '-1.369966127340',
+                'longitude' => '120.03863811492',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 14:56:52',
+                'updated_at' => '2022-11-12 14:56:52',
+                'deleted_at' => NULL,
+            ),
+            35 => 
             array (
                 'id' => '4820d004-b03b-43bb-a662-5476b36b5268',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c20',
@@ -292,7 +487,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 14:54:31',
                 'deleted_at' => NULL,
             ),
-            21 => 
+            36 => 
             array (
                 'id' => '49d6d5fd-5bea-428b-9bd7-5dd6931c8b04',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -305,7 +500,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:13:53',
                 'deleted_at' => NULL,
             ),
-            22 => 
+            37 => 
             array (
                 'id' => '4b61c091-654f-4247-a86c-a4d76301ed04',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -318,7 +513,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:46:47',
                 'deleted_at' => NULL,
             ),
-            23 => 
+            38 => 
             array (
                 'id' => '5c1dcd20-e333-4a89-98b1-5196eb3d9974',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -331,7 +526,33 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:15:12',
                 'deleted_at' => NULL,
             ),
-            24 => 
+            39 => 
+            array (
+                'id' => '5e6e6db8-43af-4de7-a439-cc973050295e',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Estefani',
+                'latitude' => '-1.384939255011',
+                'longitude' => '120.05142688751',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 15:04:20',
+                'updated_at' => '2022-11-12 15:04:20',
+                'deleted_at' => NULL,
+            ),
+            40 => 
+            array (
+                'id' => '5f2dba80-d1aa-493f-afca-d3c7f58bb927',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Yakson',
+                'latitude' => '-1.376144163147',
+                'longitude' => '120.04211425781',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 15:08:18',
+                'updated_at' => '2022-11-12 15:08:18',
+                'deleted_at' => NULL,
+            ),
+            41 => 
             array (
                 'id' => '61263600-303e-45cc-8668-48ca1dee1b44',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -344,7 +565,33 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:07:34',
                 'deleted_at' => NULL,
             ),
-            25 => 
+            42 => 
+            array (
+                'id' => '615b62bb-d9c7-41f0-86a8-d74bcf91b9fe',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Pongku A Tobubu',
+                'latitude' => '-1.408093783833',
+                'longitude' => '120.05001068115',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 14:47:21',
+                'updated_at' => '2022-11-12 14:47:21',
+                'deleted_at' => NULL,
+            ),
+            43 => 
+            array (
+                'id' => '6556f5bb-a3d7-4e2e-8cf1-3ca905600e88',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Gusman Mpoa',
+                'latitude' => '-1.404902919547',
+                'longitude' => '120.04748940467',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 14:56:15',
+                'updated_at' => '2022-11-12 14:56:15',
+                'deleted_at' => NULL,
+            ),
+            44 => 
             array (
                 'id' => '66284472-a4d6-4135-8efc-c32df0b9772b',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -357,7 +604,20 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:43:35',
                 'deleted_at' => NULL,
             ),
-            26 => 
+            45 => 
+            array (
+                'id' => '69d51da4-bc8f-4445-8f22-ac2db9be7f6c',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Titus Ntolaki',
+                'latitude' => '-1.379233174727',
+                'longitude' => '120.03614902496',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 15:07:18',
+                'updated_at' => '2022-11-12 15:07:18',
+                'deleted_at' => NULL,
+            ),
+            46 => 
             array (
                 'id' => '69ef7267-f028-4898-8ad6-8547971d2611',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c20',
@@ -370,7 +630,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 19:54:59',
                 'deleted_at' => NULL,
             ),
-            27 => 
+            47 => 
             array (
                 'id' => '6a514fdc-fe8a-46d8-abdf-d7d4f1b01541',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -383,7 +643,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:05:52',
                 'deleted_at' => NULL,
             ),
-            28 => 
+            48 => 
             array (
                 'id' => '6c517a5f-1336-44a2-a489-d04f32f1947b',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -396,7 +656,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:09:02',
                 'deleted_at' => NULL,
             ),
-            29 => 
+            49 => 
             array (
                 'id' => '6c85c452-5c1e-4e1f-a148-b9ecfe20aef3',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -409,7 +669,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:37:10',
                 'deleted_at' => NULL,
             ),
-            30 => 
+            50 => 
             array (
                 'id' => '72183a0e-3058-43db-afed-71e4c2deb12e',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -422,7 +682,20 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:17:58',
                 'deleted_at' => NULL,
             ),
-            31 => 
+            51 => 
+            array (
+                'id' => '7272ccc2-26d1-4360-9b71-a6129ada14fe',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Poniman',
+                'latitude' => '-1.359798077151',
+                'longitude' => '120.02426147460',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 15:19:39',
+                'updated_at' => '2022-11-12 15:19:39',
+                'deleted_at' => NULL,
+            ),
+            52 => 
             array (
                 'id' => '78c172c0-c5b0-427e-99b7-4b545f0cb6fb',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -435,7 +708,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:16:07',
                 'deleted_at' => NULL,
             ),
-            32 => 
+            53 => 
             array (
                 'id' => '7cb2880a-6239-4d39-a2c0-7a39d01bc456',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -448,7 +721,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:39:49',
                 'deleted_at' => NULL,
             ),
-            33 => 
+            54 => 
             array (
                 'id' => '7e514f47-5425-437e-a00a-d7ed4999b7b5',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -461,7 +734,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:12:48',
                 'deleted_at' => NULL,
             ),
-            34 => 
+            55 => 
             array (
                 'id' => '7e7615c0-8e18-4724-a8d1-fd939d882dd2',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -474,7 +747,20 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:26:30',
                 'deleted_at' => NULL,
             ),
-            35 => 
+            56 => 
+            array (
+                'id' => '83e52f4c-6452-47ae-8467-43243fd647f7',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Kriston',
+                'latitude' => '-1.387899546892',
+                'longitude' => '120.06421566009',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 15:03:38',
+                'updated_at' => '2022-11-12 15:03:38',
+                'deleted_at' => NULL,
+            ),
+            57 => 
             array (
                 'id' => '8622d87c-41fc-462c-92a8-f63b5af08ce9',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -487,7 +773,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:41:02',
                 'deleted_at' => NULL,
             ),
-            36 => 
+            58 => 
             array (
                 'id' => '8703dd48-7656-40cb-9ee3-5271391eca33',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -500,7 +786,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:32:08',
                 'deleted_at' => NULL,
             ),
-            37 => 
+            59 => 
             array (
                 'id' => '890c08a0-ca79-44bb-87af-dcbba4bb18b1',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c20',
@@ -513,7 +799,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 19:50:52',
                 'deleted_at' => NULL,
             ),
-            38 => 
+            60 => 
             array (
                 'id' => '891c0b08-d002-4abc-8ab9-b7a371a4b8dd',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c20',
@@ -526,7 +812,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 14:55:13',
                 'deleted_at' => NULL,
             ),
-            39 => 
+            61 => 
             array (
                 'id' => '8ea1f176-8241-40aa-b7e8-da06e18f7105',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -539,7 +825,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:12:45',
                 'deleted_at' => NULL,
             ),
-            40 => 
+            62 => 
             array (
                 'id' => '9070d9bd-0d0e-40fb-b192-fe514f8986f3',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -552,7 +838,46 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:28:43',
                 'deleted_at' => NULL,
             ),
-            41 => 
+            63 => 
+            array (
+                'id' => '936a225f-c39b-4db5-a976-c693f9ee63dd',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Kelfin Laiga',
+                'latitude' => '-1.367529946712',
+                'longitude' => '120.06824970245',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 14:55:19',
+                'updated_at' => '2022-11-12 14:55:19',
+                'deleted_at' => NULL,
+            ),
+            64 => 
+            array (
+                'id' => '94ac2226-7f98-46ea-83ab-08d779b7feb4',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Maroleng',
+                'latitude' => '-1.372497408217',
+                'longitude' => '120.02778053283',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 15:18:58',
+                'updated_at' => '2022-11-12 15:18:58',
+                'deleted_at' => NULL,
+            ),
+            65 => 
+            array (
+                'id' => '992c6ccc-5520-497a-b6f6-112027c03311',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Sarlis Tobubu',
+                'latitude' => '-1.381292512899',
+                'longitude' => '120.03293037414',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 15:04:52',
+                'updated_at' => '2022-11-12 15:04:52',
+                'deleted_at' => NULL,
+            ),
+            66 => 
             array (
                 'id' => '9bdd212c-b354-4b34-b265-db1eb48d411f',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -565,7 +890,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:19:17',
                 'deleted_at' => NULL,
             ),
-            42 => 
+            67 => 
             array (
                 'id' => '9d559484-19f8-4461-9744-646513c39a03',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -578,7 +903,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:42:32',
                 'deleted_at' => NULL,
             ),
-            43 => 
+            68 => 
             array (
                 'id' => '9dd5a556-7a6e-4be5-89c5-bed48cbb9cab',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -591,7 +916,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:17:23',
                 'deleted_at' => NULL,
             ),
-            44 => 
+            69 => 
             array (
                 'id' => '9e300225-3ee5-4162-b961-b5541c5b9c22',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -604,7 +929,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:37:05',
                 'deleted_at' => NULL,
             ),
-            45 => 
+            70 => 
             array (
                 'id' => '9f3f2b9d-9ebb-4673-9cb8-10501887d985',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -617,7 +942,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:25:43',
                 'deleted_at' => NULL,
             ),
-            46 => 
+            71 => 
             array (
                 'id' => 'a23efbdd-6581-4992-a7e7-69a5846808e0',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c20',
@@ -630,7 +955,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 19:49:28',
                 'deleted_at' => NULL,
             ),
-            47 => 
+            72 => 
             array (
                 'id' => 'a33d7f6c-abe1-46ba-b545-5ca7aa738e01',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c20',
@@ -643,7 +968,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 19:54:29',
                 'deleted_at' => NULL,
             ),
-            48 => 
+            73 => 
             array (
                 'id' => 'a548a030-8436-4a1a-be78-04d3e577b8b6',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -656,7 +981,20 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:05:09',
                 'deleted_at' => NULL,
             ),
-            49 => 
+            74 => 
+            array (
+                'id' => 'a6e21a04-482c-41f0-9d88-eb883ce36b4c',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Yani',
+                'latitude' => '-1.378246407575',
+                'longitude' => '120.05541801452',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 14:58:58',
+                'updated_at' => '2022-11-12 14:58:58',
+                'deleted_at' => NULL,
+            ),
+            75 => 
             array (
                 'id' => 'abd5cc45-4b8a-4024-b8ae-086a5c719add',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -669,7 +1007,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:24:36',
                 'deleted_at' => NULL,
             ),
-            50 => 
+            76 => 
             array (
                 'id' => 'af36f573-0f93-4228-bc55-828de6fadaea',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -682,7 +1020,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:46:09',
                 'deleted_at' => NULL,
             ),
-            51 => 
+            77 => 
             array (
                 'id' => 'b7e1447f-1c35-403d-abca-0524183db062',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -695,7 +1033,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:29:13',
                 'deleted_at' => NULL,
             ),
-            52 => 
+            78 => 
             array (
                 'id' => 'bdd257ad-fad9-4ffd-be7c-7337d81409c3',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -708,7 +1046,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:09:42',
                 'deleted_at' => NULL,
             ),
-            53 => 
+            79 => 
             array (
                 'id' => 'c2ed79a9-0786-4476-a9cf-3d41931ea252',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -721,7 +1059,46 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:05:48',
                 'deleted_at' => NULL,
             ),
-            54 => 
+            80 => 
+            array (
+                'id' => 'd244995b-bff6-47e4-887a-2ee071cfbd1d',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Yulia Manca',
+                'latitude' => '-1.365032269031',
+                'longitude' => '120.06134033203',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 14:58:06',
+                'updated_at' => '2022-11-12 14:58:06',
+                'deleted_at' => NULL,
+            ),
+            81 => 
+            array (
+                'id' => 'd71e7535-94fe-42a2-a11b-99b6fee83958',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Hamsen Suroi',
+                'latitude' => '-1.405348029576',
+                'longitude' => '120.03438949584',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 15:20:14',
+                'updated_at' => '2022-11-12 15:20:14',
+                'deleted_at' => NULL,
+            ),
+            82 => 
+            array (
+                'id' => 'da7e7736-d4ce-4ead-8ca6-818f65ba9799',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Esau Palugu',
+                'latitude' => '-1.395603438813',
+                'longitude' => '120.06082534790',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 14:50:45',
+                'updated_at' => '2022-11-12 14:50:45',
+                'deleted_at' => NULL,
+            ),
+            83 => 
             array (
                 'id' => 'dbbce63b-71df-421f-870c-dad9c557bddf',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c20',
@@ -734,7 +1111,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 14:57:34',
                 'deleted_at' => NULL,
             ),
-            55 => 
+            84 => 
             array (
                 'id' => 'dcb11a92-4c3a-40f0-a5f2-1c9e0c466a6d',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -747,7 +1124,33 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:20:07',
                 'deleted_at' => NULL,
             ),
-            56 => 
+            85 => 
+            array (
+                'id' => 'dd8932ca-0fe8-4fa5-9e3e-23a5a7356703',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak David',
+                'latitude' => '-1.373183856629',
+                'longitude' => '120.06202697753',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 15:18:25',
+                'updated_at' => '2022-11-12 15:18:25',
+                'deleted_at' => NULL,
+            ),
+            86 => 
+            array (
+                'id' => 'df4d546c-ccff-410d-8bd0-edddd7d3d4db',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Derik',
+                'latitude' => '-1.377927853178',
+                'longitude' => '120.04255414009',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 14:57:32',
+                'updated_at' => '2022-11-12 14:57:32',
+                'deleted_at' => NULL,
+            ),
+            87 => 
             array (
                 'id' => 'dfcf92f5-e31d-48c1-8e0a-ace7add43e20',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -760,7 +1163,20 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:34:25',
                 'deleted_at' => NULL,
             ),
-            57 => 
+            88 => 
+            array (
+                'id' => 'e12aefc0-0bf7-45e2-9275-d9327f8fa746',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Tindo Lago',
+                'latitude' => '-1.389958877535',
+                'longitude' => '120.06091117858',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 15:06:23',
+                'updated_at' => '2022-11-12 15:06:23',
+                'deleted_at' => NULL,
+            ),
+            89 => 
             array (
                 'id' => 'e2b99e34-8f35-4576-b76c-c82dba979dfd',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -773,7 +1189,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:34:12',
                 'deleted_at' => NULL,
             ),
-            58 => 
+            90 => 
             array (
                 'id' => 'e38b11df-6e58-45d9-8124-b7799d187ae6',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c20',
@@ -786,7 +1202,20 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 19:51:36',
                 'deleted_at' => NULL,
             ),
-            59 => 
+            91 => 
+            array (
+                'id' => 'e9a8a64b-575b-48e4-a665-8f7e14b91c4e',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Molu Labaru',
+                'latitude' => '-1.383909587403',
+                'longitude' => '120.04301548004',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 15:12:50',
+                'updated_at' => '2022-11-12 15:12:50',
+                'deleted_at' => NULL,
+            ),
+            92 => 
             array (
                 'id' => 'ee59f14d-388b-4a91-ba69-483d8cbd8c67',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c20',
@@ -799,7 +1228,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 19:52:52',
                 'deleted_at' => NULL,
             ),
-            60 => 
+            93 => 
             array (
                 'id' => 'ee5d8ebc-1195-4002-a2b4-5b30f27aab6c',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -812,7 +1241,20 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:19:36',
                 'deleted_at' => NULL,
             ),
-            61 => 
+            94 => 
+            array (
+                'id' => 'eeb4f1c0-1915-487e-aa20-378abe51712d',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Budiman L. Tosuo',
+                'latitude' => '-1.395737864293',
+                'longitude' => '120.05069732666',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 15:12:13',
+                'updated_at' => '2022-11-12 15:12:13',
+                'deleted_at' => NULL,
+            ),
+            95 => 
             array (
                 'id' => 'ef35ae57-76af-4cbb-ba8b-1a25efdbaefc',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -825,7 +1267,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:05:06',
                 'deleted_at' => NULL,
             ),
-            62 => 
+            96 => 
             array (
                 'id' => 'f191b086-9b22-4dc0-a1aa-ebbfb8144abe',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -838,7 +1280,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:37:49',
                 'deleted_at' => NULL,
             ),
-            63 => 
+            97 => 
             array (
                 'id' => 'f1f322a1-43be-44d4-8972-41ecb0348b36',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -851,7 +1293,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:23:26',
                 'deleted_at' => NULL,
             ),
-            64 => 
+            98 => 
             array (
                 'id' => 'f2565a97-dcb4-4fe8-9d6a-aba7a278e904',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -864,7 +1306,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:33:11',
                 'deleted_at' => NULL,
             ),
-            65 => 
+            99 => 
             array (
                 'id' => 'f4d24852-1f31-4b8f-bfd9-984e22c49c36',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -877,7 +1319,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 20:32:45',
                 'deleted_at' => NULL,
             ),
-            66 => 
+            100 => 
             array (
                 'id' => 'f84f9e8d-8d26-4829-8ff0-0143e1ed0165',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c20',
@@ -890,7 +1332,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-10-21 19:53:41',
                 'deleted_at' => NULL,
             ),
-            67 => 
+            101 => 
             array (
                 'id' => 'f958fbee-4c04-488e-83c3-7d228ffdfa5f',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -903,7 +1345,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:11:53',
                 'deleted_at' => NULL,
             ),
-            68 => 
+            102 => 
             array (
                 'id' => 'fa277220-e0c2-4780-8fa7-1bbc45a4aa84',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
@@ -916,7 +1358,7 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'updated_at' => '2022-11-12 14:16:50',
                 'deleted_at' => NULL,
             ),
-            69 => 
+            103 => 
             array (
                 'id' => 'fcfb1a77-1b2e-4750-8a34-e6e4e5ab91f9',
                 'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c22',
@@ -927,6 +1369,19 @@ class ProductionLokasiHewanTableSeeder extends Seeder
                 'status' => 1,
                 'created_at' => '2022-10-21 20:40:30',
                 'updated_at' => '2022-10-21 20:40:30',
+                'deleted_at' => NULL,
+            ),
+            104 => 
+            array (
+                'id' => 'fd8c696e-18f3-4528-a52c-75a9e9e99f9e',
+                'desa_id' => '0065b51c-49c0-4e81-a3b3-a6b4e21b3c23',
+                'nama' => 'Ternak Data Bande',
+                'latitude' => '-1.366147751075',
+                'longitude' => '120.05219936370',
+                'deskripsi' => '-',
+                'status' => 1,
+                'created_at' => '2022-11-12 15:16:42',
+                'updated_at' => '2022-11-12 15:16:42',
                 'deleted_at' => NULL,
             ),
         ));

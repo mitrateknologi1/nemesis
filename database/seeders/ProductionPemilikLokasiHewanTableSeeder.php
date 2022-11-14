@@ -222,9 +222,9 @@ class ProductionPemilikLokasiHewanTableSeeder extends Seeder
                 'id' => '406e9a99-8db1-4201-9548-2e3cafe55b40',
                 'lokasi_hewan_id' => '6a514fdc-fe8a-46d8-abdf-d7d4f1b01541',
                 'penduduk_id' => 'd12576f6-4926-472c-a25b-d3bd826eeeea',
-                'deleted_at' => NULL,
+                'deleted_at' => '2022-11-14 09:57:10',
                 'created_at' => '2022-10-21 20:05:52',
-                'updated_at' => '2022-10-21 20:05:52',
+                'updated_at' => '2022-11-14 09:57:10',
             ),
             23 => 
             array (
@@ -483,9 +483,9 @@ class ProductionPemilikLokasiHewanTableSeeder extends Seeder
                 'id' => '859205f7-c106-401f-afc5-9a5f44849478',
                 'lokasi_hewan_id' => '72183a0e-3058-43db-afed-71e4c2deb12e',
                 'penduduk_id' => '4751e608-3494-4971-8e5a-659c17bff4a5',
-                'deleted_at' => NULL,
+                'deleted_at' => '2022-11-14 10:00:18',
                 'created_at' => '2022-11-12 14:17:58',
-                'updated_at' => '2022-11-12 14:17:58',
+                'updated_at' => '2022-11-14 10:00:18',
             ),
             52 => 
             array (
@@ -960,9 +960,9 @@ class ProductionPemilikLokasiHewanTableSeeder extends Seeder
                 'id' => 'fbb81289-d1b4-4fe5-ac62-13ef183be7ff',
                 'lokasi_hewan_id' => '05f0ad5b-a23e-4b04-8a40-fc303266b13d',
                 'penduduk_id' => 'dd998d05-fe63-4ce7-b3d1-7a3abc47f50c',
-                'deleted_at' => NULL,
+                'deleted_at' => '2022-11-13 22:06:34',
                 'created_at' => '2022-11-12 14:45:28',
-                'updated_at' => '2022-11-12 14:45:28',
+                'updated_at' => '2022-11-13 22:06:34',
             ),
         ));
         

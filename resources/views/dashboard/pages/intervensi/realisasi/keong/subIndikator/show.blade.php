@@ -281,7 +281,7 @@
             var pinIcon = new pin({
                 iconUrl: "{{ asset('assets/dashboard/img/pin/pin_red_x.png') }}",
                 iconSize: [40, 40],
-                iconAnchor: [25, 20],
+                iconAnchor: [16, 40],
                 popupAnchor: [-4, -20]
             });
 

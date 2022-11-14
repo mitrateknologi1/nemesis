@@ -575,7 +575,15 @@ class RealisasiHewanController extends Controller
 
     public function hasilRealisasi(Request $request)
     {
+        $tahun = $request->tahun;
+        $tahun_filter = $request->tahun_filter;
+
         $habitatHewan = LokasiRealisasiHewan::where('status', 1)
+            ->whereHas('realisasiHewan', function ($q) use ($tahun_filter) {
+                if ($tahun_filter && $tahun_filter != 'Semua') {
+                    $q->whereYear('created_at', $tahun_filter);
+                }
+            })
             ->groupBy('lokasi_hewan_id')
             ->pluck('lokasi_hewan_id')
             ->toArray();
@@ -586,7 +594,7 @@ class RealisasiHewanController extends Controller
             $data = $dataHabitatHewan
                 // filtering
                 ->where(function ($query) use ($request) {
-                    if ($request->opd_filter && $request->opd_filter != 'semua') {
+                    if ($request->opd_filter && $request->opd_filter != 'Semua') {
                         $query->whereHas('listIndikator', function ($query2) use ($request) {
                             $query2->whereHas('realisasiHewan', function ($query3) use ($request) {
                                 $query3->whereHas('perencanaanHewan', function ($query4) use ($request) {
@@ -597,30 +605,22 @@ class RealisasiHewanController extends Controller
                                         });
                                     });
                                 });
-                                if ($request->tahun_filter && $request->tahun_filter != 'semua') {
+                                if ($request->tahun_filter && $request->tahun_filter != 'Semua') {
                                     $query3->whereYear('created_at', $request->tahun_filter);
                                 }
                             });
                         });
                     }
 
-                    if ($request->indikator_filter && $request->indikator_filter != 'semua') {
+                    if ($request->indikator_filter && $request->indikator_filter != 'Semua') {
                         $query->whereHas('listIndikator', function ($query2) use ($request) {
                             $query2->whereHas('realisasiHewan', function ($query3) use ($request) {
                                 $query3->whereHas('perencanaanHewan', function ($query4) use ($request) {
                                     $query4->where('id', $request->indikator_filter);
                                 });
-                                if ($request->tahun_filter && $request->tahun_filter != 'semua') {
+                                if ($request->tahun_filter && $request->tahun_filter != 'Semua') {
                                     $query3->whereYear('created_at', $request->tahun_filter);
                                 }
-                            });
-                        });
-                    }
-
-                    if ($request->tahun_filter && $request->tahun_filter != 'semua') {
-                        $query->whereHas('listIndikator', function ($query2) use ($request) {
-                            $query2->whereHas('realisasiHewan', function ($query3) use ($request) {
-                                $query3->whereYear('created_at', $request->tahun_filter);
                             });
                         });
                     }
@@ -637,7 +637,7 @@ class RealisasiHewanController extends Controller
                 ->addColumn('list_indikator', function ($row) use ($request) {
                     $list = '<ol class="mb-0">';
                     foreach ($row->listIndikator as $row2) {
-                        if ($request->tahun_filter && $request->tahun_filter != 'semua') {
+                        if ($request->tahun_filter && $request->tahun_filter != 'Semua') {
                             if (Carbon::parse($row2->realisasiHewan->created_at)->format('Y') == $request->tahun_filter) {
                                 $list .= '<li>' . $row2->realisasiHewan->perencanaanHewan->sub_indikator . '</li>';
                             }
@@ -652,7 +652,7 @@ class RealisasiHewanController extends Controller
                 ->addColumn('list_opd', function ($row) use ($request) {
                     $list = '<ol class="mb-0">';
                     foreach ($row->listIndikator as $row2) {
-                        if ($request->tahun_filter && $request->tahun_filter != 'semua') {
+                        if ($request->tahun_filter && $request->tahun_filter != 'Semua') {
                             if (Carbon::parse($row2->realisasiHewan->created_at)->format('Y') == $request->tahun_filter) {
                                 $list .= '<li class="font-weight-bold">' . $row2->realisasiHewan->perencanaanHewan->opd->nama . '</li>';
                                 if ($row2->realisasiHewan->perencanaanHewan->opdTerkaitHewan) {
@@ -677,7 +677,7 @@ class RealisasiHewanController extends Controller
                 ->addColumn('tanggal_intervensi', function ($row) use ($request) {
                     $list = '<ol class="mb-0">';
                     foreach ($row->listIndikator as $row2) {
-                        if ($request->tahun_filter && $request->tahun_filter != 'semua') {
+                        if ($request->tahun_filter && $request->tahun_filter != 'Semua') {
                             if (Carbon::parse($row2->realisasiHewan->created_at)->format('Y') == $request->tahun_filter) {
                                 $list .= '<li>' . Carbon::parse($row2->realisasiHewan->created_at)->translatedFormat('d F Y') . '</li>';
                             }
@@ -730,9 +730,9 @@ class RealisasiHewanController extends Controller
 
         $filterSubIndikator = $this->unique_multidim_array($filterSubIndikator, 'id');
         $filterOpd = $this->unique_multidim_array($filterOpd, 'id');
-        $filterTahun = $this->unique_multidim_array($filterSubIndikator, 'tahun');
+        $filterTahun = array_column($this->unique_multidim_array($filterSubIndikator, 'tahun'), 'tahun');
 
-        return view('dashboard.pages.hasilRealisasi.hewan.index', ['filterSubIndikator' => $filterSubIndikator, 'filterOpd' => $filterOpd, 'filterTahun' => $filterTahun]);
+        return view('dashboard.pages.hasilRealisasi.hewan.index', ['filterSubIndikator' => $filterSubIndikator, 'filterOpd' => $filterOpd, 'daftarTahun' => $filterTahun, 'tahun' => $tahun]);
     }
 
     public function export()
@@ -754,18 +754,30 @@ class RealisasiHewanController extends Controller
         return Excel::download(new RealisasiHewanExport($dataRealisasi), "Export Data Realisasi Lokasi Hewan Ternak" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
     }
 
-    public function exportHasilRealisasi()
+    public function exportHasilRealisasi(Request $request)
     {
+        $tahun_filter = $request->tahun_filter;
+
+        $tahun = '';
+        if ($tahun_filter != 'Semua') {
+            $tahun = 'Tahun ' . $tahun_filter;
+        }
+
         $habitatHewan = LokasiRealisasiHewan::where('status', 1)
+            ->whereHas('realisasiHewan', function ($q) use ($tahun_filter) {
+                if ($tahun_filter && $tahun_filter != 'Semua') {
+                    $q->whereYear('created_at', $tahun_filter);
+                }
+            })
             ->groupBy('lokasi_hewan_id')
             ->pluck('lokasi_hewan_id')
             ->toArray();
 
         $dataRealisasi = LokasiHewan::with('listIndikator', 'desa')->whereIn('id', $habitatHewan)->get();
-        // return view('dashboard.pages.hasilRealisasi.hewan.export', ['dataRealisasi' => $dataRealisasi]);
+        // return view('dashboard.pages.hasilRealisasi.hewan.export', ['dataRealisasi' => $dataRealisasi, 'tahun_filter' => $tahun_filter]);
 
         $tanggal = Carbon::parse(Carbon::now())->translatedFormat('d F Y');
 
-        return Excel::download(new HasilRealisasiHewanExport($dataRealisasi), "Export Data Hasil Realisasi Lokasi Hewan Ternak" . "-" . $tanggal . "-" . rand(1, 9999) . '.xlsx');
+        return Excel::download(new HasilRealisasiHewanExport($dataRealisasi, $tahun_filter), "Export Data Hasil Realisasi Lokasi Hewan Ternak "  . $tahun . " - " . $tanggal . " - " . rand(1, 9999) . '.xlsx');
     }
 }

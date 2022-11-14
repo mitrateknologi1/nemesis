@@ -20,6 +20,11 @@
         </thead>
         <tbody>
             @foreach ($dataRealisasi as $item)
+                @php
+                    $no_1 = 1;
+                    $no_2 = 1;
+                    $no_3 = 1;
+                @endphp
                 <tr style="vertical-align: center;border: 1px solid black;">
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
                         {{ $loop->iteration }}</td>
@@ -27,18 +32,45 @@
                         {{ $item->nama }}</td>
                     <td style="vertical-align: center;border: 1px solid black;" align="left">
                         @forelse ($item->listIndikator as $item2)
-                            <p>{{ $loop->iteration }}. {{ $item2->realisasiKeong->perencanaanKeong->sub_indikator }}</p>
+                            @if ($tahun_filter && $tahun_filter != 'Semua')
+                                @if ($item2->realisasiKeong->created_at->format('Y') == $tahun_filter)
+                                    <p>{{ $no_1 }}.
+                                        {{ $item2->realisasiKeong->perencanaanKeong->sub_indikator }}</p>
+                                    @php
+                                        $no_1++;
+                                    @endphp
+                                @endif
+                            @else
+                                <p>{{ $loop->iteration }}. {{ $item2->realisasiKeong->perencanaanKeong->sub_indikator }}
+                                </p>
+                            @endif
                         @empty
                             <p>-</p>
                         @endforelse
                     </td>
                     <td style="vertical-align: center;border: 1px solid black;" align="left">
                         @forelse ($item->listIndikator as $item2)
-                            <p>{{ $loop->iteration }}. {{ $item2->realisasiKeong->perencanaanKeong->opd->nama }}</p>
-                            @if ($item2->realisasiKeong->perencanaanKeong->opdTerkaitKeong)
-                                @foreach ($item2->realisasiKeong->perencanaanKeong->opdTerkaitKeong as $item3)
-                                    <p>-{{ $item3->opd->nama }}</p>
-                                @endforeach
+                            @if ($tahun_filter && $tahun_filter != 'Semua')
+                                @if ($item2->realisasiKeong->created_at->format('Y') == $tahun_filter)
+                                    <p>{{ $no_2 }}. {{ $item2->realisasiKeong->perencanaanKeong->opd->nama }}
+                                    </p>
+                                    @if ($item2->realisasiKeong->perencanaanKeong->opdTerkaitKeong)
+                                        @foreach ($item2->realisasiKeong->perencanaanKeong->opdTerkaitKeong as $item3)
+                                            <p>-{{ $item3->opd->nama }}</p>
+                                        @endforeach
+                                    @endif
+                                    @php
+                                        $no_2++;
+                                    @endphp
+                                @endif
+                            @else
+                                <p>{{ $loop->iteration }}. {{ $item2->realisasiKeong->perencanaanKeong->opd->nama }}
+                                </p>
+                                @if ($item2->realisasiKeong->perencanaanKeong->opdTerkaitKeong)
+                                    @foreach ($item2->realisasiKeong->perencanaanKeong->opdTerkaitKeong as $item3)
+                                        <p>-{{ $item3->opd->nama }}</p>
+                                    @endforeach
+                                @endif
                             @endif
                         @empty
                             <p>-</p>
@@ -46,9 +78,20 @@
                     </td>
                     <td style="vertical-align: center;border: 1px solid black;" align="center">
                         @forelse ($item->listIndikator as $item2)
-                            <p>{{ $loop->iteration }}.
-                                {{ Carbon\Carbon::parse($item2->realisasiKeong->created_at)->translatedFormat('d F Y') }}
-                            </p>
+                            @if ($tahun_filter && $tahun_filter != 'Semua')
+                                @if ($item2->realisasiKeong->created_at->format('Y') == $tahun_filter)
+                                    <p>{{ $no_3 }}.
+                                        {{ Carbon\Carbon::parse($item2->realisasiKeong->created_at)->translatedFormat('d F Y') }}
+                                    </p>
+                                    @php
+                                        $no_3++;
+                                    @endphp
+                                @endif
+                            @else
+                                <p>{{ $loop->iteration }}.
+                                    {{ Carbon\Carbon::parse($item2->realisasiKeong->created_at)->translatedFormat('d F Y') }}
+                                </p>
+                            @endif
                         @empty
                             <p>-</p>
                         @endforelse

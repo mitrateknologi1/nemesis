@@ -384,17 +384,17 @@
 
         var pin = L.Icon.extend({
             options: {
-                iconSize: [50, 50],
-                iconAnchor: [22, 94],
+                iconSize: [40, 40],
+                iconAnchor: [16, 40],
                 shadowAnchor: [4, 62],
-                popupAnchor: [-3, -76],
+                popupAnchor: [-4, -20],
             },
         });
 
         var pinIcon = new pin({
             iconUrl: "{{ asset('assets/dashboard/img/pin/pin_red_x.png') }}",
             iconSize: [40, 40],
-            iconAnchor: [25, 20],
+            iconAnchor: [16, 40],
             popupAnchor: [-4, -20]
         });
 
